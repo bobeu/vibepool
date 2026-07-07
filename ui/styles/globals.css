@@ -1,0 +1,359 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* VibeCheck Production - Celo Yellow & MiniPay Green Aesthetic */
+
+@layer base {
+  :root {
+    /* Light theme foundation */
+    --background: 220 20% 97%;
+    --foreground: 220 15% 12%;
+
+    /* Celo Yellow - Primary accent for CTAs and highlights (Cooler Gold) */
+    --celo-yellow: 38 95% 50%;
+    --celo-yellow-bright: 38 95% 58%;
+    --celo-yellow-muted: 38 80% 40%;
+
+    /* MiniPay Green - Secondary accent for positive indicators */
+    --minipay-green: 145 69% 45%;
+    --minipay-green-light: 145 69% 55%;
+    --minipay-green-dark: 145 69% 35%;
+
+    /* Primary system using Celo Yellow (Cooler Gold) */
+    --primary: 38 95% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 38 95% 58%;
+    --primary-glow: 38 95% 64%;
+
+    /* Secondary system using MiniPay Green */
+    --secondary: 145 69% 45%;
+    --secondary-foreground: 0 0% 100%;
+    --secondary-light: 145 69% 55%;
+    --secondary-dark: 145 69% 35%;
+
+    /* Accent colors for scoring */
+    --accent: 38 95% 50%;
+    --accent-foreground: 0 0% 100%;
+    --accent-green: 145 69% 45%;
+    --accent-orange: 24 95% 48%;
+    --accent-red: 0 85% 55%;
+
+    /* Light neutral system */
+    --muted: 220 15% 92%;
+    --muted-foreground: 220 10% 45%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 15% 12%;
+    --border: 220 15% 88%;
+    --input: 220 15% 86%;
+    --ring: 38 95% 50%;
+
+    /* Popover and UI elements */
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 15% 12%;
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --radius: 12px;
+
+    /* VibeCheck Professional - Solid Color Aesthetic */
+    --gradient-celo: hsl(var(--celo-yellow));
+    --gradient-minipay: hsl(var(--minipay-green));
+    --gradient-fusion: hsl(var(--celo-yellow));
+    --gradient-success: hsl(var(--minipay-green));
+    --gradient-warning: hsl(var(--accent-orange));
+    --gradient-danger: hsl(var(--accent-red));
+    --gradient-bg: hsl(var(--background));
+
+    /* Scoring system colors */
+    --score-excellent: 145 69% 45%;
+    --score-good: 38 95% 50%;
+    --score-fair: 45 95% 55%;
+    --score-poor: 24 95% 48%;
+    --score-critical: 0 85% 55%;
+
+    /* Professional shadows */
+    --shadow-celo: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-minipay: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-glow: none;
+    --shadow-data: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+    /* Animations */
+    --transition-smooth: all 0.2s ease-in-out;
+    --transition-bounce: all 0.2s ease-in-out;
+  }
+
+  .dark {
+    /* Dark theme foundation */
+    --background: 220 13% 9%;
+    --foreground: 220 9% 95%;
+
+    /* Celo Yellow - Primary accent for CTAs and highlights (Cooler Gold) */
+    --celo-yellow: 38 95% 55%;
+    --celo-yellow-bright: 38 95% 62%;
+    --celo-yellow-muted: 38 80% 45%;
+
+    /* MiniPay Green - Secondary accent for positive indicators */
+    --minipay-green: 145 69% 53%;
+    --minipay-green-light: 145 69% 63%;
+    --minipay-green-dark: 145 69% 43%;
+
+    /* Primary system using Celo Yellow (Cooler Gold) */
+    --primary: 38 95% 55%;
+    --primary-foreground: 220 13% 9%;
+    --primary-light: 38 95% 62%;
+    --primary-glow: 38 95% 68%;
+
+    /* Secondary system using MiniPay Green */
+    --secondary: 145 69% 53%;
+    --secondary-foreground: 220 13% 9%;
+    --secondary-light: 145 69% 63%;
+    --secondary-dark: 145 69% 43%;
+
+    /* Accent colors for scoring */
+    --accent: 38 95% 55%;
+    --accent-foreground: 220 13% 9%;
+    --accent-green: 145 69% 53%;
+    --accent-orange: 24 95% 53%;
+    --accent-red: 0 85% 60%;
+
+    /* Dark neutral system */
+    --muted: 220 13% 15%;
+    --muted-foreground: 220 9% 60%;
+    --card: 220 13% 12%;
+    --card-foreground: 220 9% 95%;
+    --border: 220 13% 20%;
+    --input: 220 13% 18%;
+    --ring: 38 95% 55%;
+
+    /* Popover and UI elements */
+    --popover: 220 13% 12%;
+    --popover-foreground: 220 9% 95%;
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 220 9% 95%;
+
+    /* VibeCheck Professional - Solid Color Aesthetic */
+    --gradient-celo: hsl(var(--celo-yellow));
+    --gradient-minipay: hsl(var(--minipay-green));
+    --gradient-fusion: hsl(var(--celo-yellow));
+    --gradient-success: hsl(var(--minipay-green));
+    --gradient-warning: hsl(var(--accent-orange));
+    --gradient-danger: hsl(var(--accent-red));
+    --gradient-bg: hsl(var(--background));
+
+    /* Scoring system colors */
+    --score-excellent: 145 69% 53%;
+    --score-good: 38 95% 55%;
+    --score-fair: 45 95% 60%;
+    --score-poor: 24 95% 53%;
+    --score-critical: 0 85% 60%;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: 'Space Grotesk', sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    min-height: 100vh;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: hsl(var(--muted));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--gradient-celo);
+    border-radius: 4px;
+  }
+}
+
+/* Component-specific utilities */
+@layer utilities {
+  .gradient-celo {
+    background: var(--gradient-celo);
+  }
+
+  .gradient-minipay {
+    background: var(--gradient-minipay);
+  }
+
+  .gradient-fusion {
+    background: var(--gradient-fusion);
+  }
+
+  .gradient-success {
+    background: var(--gradient-success);
+  }
+
+  .gradient-warning {
+    background: var(--gradient-warning);
+  }
+
+  .gradient-danger {
+    background: var(--gradient-danger);
+  }
+
+  .gradient-bg {
+    background: var(--gradient-bg);
+  }
+
+  .shadow-celo {
+    box-shadow: var(--shadow-celo);
+  }
+
+  .shadow-minipay {
+    box-shadow: var(--shadow-minipay);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shadow-data {
+    box-shadow: var(--shadow-data);
+  }
+
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+
+  .transition-bounce {
+    transition: var(--transition-bounce);
+  }
+
+  /* Score-based text colors */
+  .text-score-excellent {
+    color: hsl(var(--score-excellent));
+  }
+
+  .text-score-good {
+    color: hsl(var(--score-good));
+  }
+
+  .text-score-fair {
+    color: hsl(var(--score-fair));
+  }
+
+  .text-score-poor {
+    color: hsl(var(--score-poor));
+  }
+
+  .text-score-critical {
+    color: hsl(var(--score-critical));
+  }
+
+  .text-celo {
+    color: hsl(var(--celo-yellow));
+  }
+
+  .text-minipay {
+    color: hsl(var(--minipay-green));
+  }
+
+  /* Animated effects - Removed as per CTO request */
+
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@keyframes hero-orbit-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes hero-orbit-counter-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+.hero-orbit-ring {
+  animation: hero-orbit-spin 20s linear infinite;
+}
+
+.hero-orbit-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.hero-orbit-item-trending {
+  transform: rotate(45deg) translateX(110px);
+}
+
+.hero-orbit-item-coins {
+  transform: rotate(225deg) translateX(110px);
+}
+
+.hero-orbit-counter {
+  margin: -1.5rem;
+  animation: hero-orbit-counter-spin 20s linear infinite;
+}
+
+/* Premium Retro Flat-Border Styling */
+.premium-card {
+  border-right-width: 4px !important;
+  border-bottom-width: 4px !important;
+  border-color: hsl(24 95% 45%) !important;
+  border-style: solid !important;
+}
+
+.premium-btn {
+  border-right-width: 4px !important;
+  border-bottom-width: 4px !important;
+  border-color: hsl(24 95% 40%) !important;
+  border-style: solid !important;
+  transition: all 0.1s ease-in-out;
+}
+
+.premium-btn:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  border-right-width: 2px !important;
+  border-bottom-width: 2px !important;
+}
+
+/* 8px Neobrutalist Shadow-Like Borders */
+.neobrutal-card {
+  border-right: 8px solid #000000 !important;
+  border-bottom: 8px solid #000000 !important;
+  border-top: 2px solid #000000 !important;
+  border-left: 2px solid #000000 !important;
+  border-style: solid !important;
+}
+
+.neobrutal-btn {
+  border-right: 8px solid #000000 !important;
+  border-bottom: 8px solid #000000 !important;
+  border-top: 2px solid #000000 !important;
+  border-left: 2px solid #000000 !important;
+  border-style: solid !important;
+  transition: transform 0.1s ease, border-width 0.1s ease;
+}
+
+.neobrutal-btn:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  border-right-width: 4px !important;
+  border-bottom-width: 4px !important;
+}
