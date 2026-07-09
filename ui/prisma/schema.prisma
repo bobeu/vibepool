@@ -1,0 +1,341 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserProfile {
+  id            String    @id @default(cuid()) @db.Uuid
+  wallet        String    @unique @db.VarChar(42)
+  username      String?   @db.VarChar(64)
+  avatar        String?   @db.Text
+  xp            Int       @default(0)
+  points        Int       @default(0)
+  spins         Int       @default(0)
+  level         Int       @default(0)
+  currentRank   Int?
+  lastLogin     DateTime? @db.Timestamp
+  totalActivity Int       @default(0)
+  status        UserStatus @default(ACTIVE)
+  createdAt     DateTime  @default(now()) @db.Timestamp
+  updatedAt     DateTime  @updatedAt @db.Timestamp
+
+  predictions        Prediction[]
+  userMissions       UserMission[]
+  spinLedgers        SpinLedger[]
+  rewardLedgers      RewardLedger[]
+  activities         Activity[]
+  leaderboardSnapshots LeaderboardSnapshot[]
+  notifications      Notification[]
+  sessions           Session[]
+  pendingRewards     PendingReward[]
+
+  @@index([wallet])
+  @@index([status])
+}
+
+model Tournament {
+  id            String          @id @default(cuid()) @db.Uuid
+  name          String          @db.VarChar(120)
+  startTime     DateTime        @db.Timestamp
+  endTime       DateTime        @db.Timestamp
+  status        TournamentStatus @default(UPCOMING)
+  rewardPool    Int
+  asset         String          @db.VarChar(42)
+  maxPlayers    Int
+  currentPlayers Int           @default(0)
+  seasonNumber  Int
+  dailyNumber   Int
+  actualValue   Int?
+  createdAt     DateTime        @default(now()) @db.Timestamp
+  updatedAt     DateTime        @updatedAt @db.Timestamp
+
+  predictions        Prediction[]
+  leaderboardSnapshots LeaderboardSnapshot[]
+  executions         GameExecution[]
+  pendingRewards     PendingReward[]
+
+  @@index([status, startTime])
+  @@index([seasonNumber, dailyNumber])
+}
+
+model Prediction {
+  id            String         @id @default(cuid()) @db.Uuid
+  tournamentId  String         @db.Uuid
+  userId        String         @db.Uuid
+  predictionValue Int
+  submittedValue Int?
+  actualValue   Int?
+  accuracy      Float?
+  rankPoints    Int            @default(0)
+  xpAwarded     Int            @default(0)
+  status        PredictionStatus @default(PENDING)
+  submittedAt   DateTime?      @db.Timestamp
+  createdAt     DateTime       @default(now()) @db.Timestamp
+  updatedAt     DateTime       @updatedAt @db.Timestamp
+
+  tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  user       UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tournamentId, userId])
+  @@index([userId, status])
+  @@unique([tournamentId, userId])
+}
+
+model DailyMission {
+  id          String      @id @default(cuid()) @db.Uuid
+  title       String      @db.VarChar(120)
+  description String      @db.Text
+  xpReward    Int
+  pointReward Int
+  spinReward  Int
+  missionType String      @db.VarChar(64)
+  status      MissionStatus @default(ACTIVE)
+  startDate   DateTime    @db.Timestamp
+  endDate     DateTime    @db.Timestamp
+  createdAt   DateTime    @default(now()) @db.Timestamp
+  updatedAt   DateTime    @updatedAt @db.Timestamp
+
+  userMissions UserMission[]
+
+  @@index([status, startDate])
+}
+
+model UserMission {
+  id           String    @id @default(cuid()) @db.Uuid
+  userId       String    @db.Uuid
+  missionId    String    @db.Uuid
+  completed    Boolean   @default(false)
+  completedAt  DateTime? @db.Timestamp
+  rewardClaimed Boolean @default(false)
+  createdAt    DateTime  @default(now()) @db.Timestamp
+  updatedAt    DateTime  @updatedAt @db.Timestamp
+
+  user    UserProfile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mission DailyMission  @relation(fields: [missionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, missionId])
+  @@index([userId, completed])
+}
+
+model SpinLedger {
+  id              String     @id @default(cuid()) @db.Uuid
+  userId          String     @db.Uuid
+  spinType        SpinType
+  amount          Int
+  reason          String?
+  transactionHash String?    @db.VarChar(66)
+  createdAt       DateTime   @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model RewardLedger {
+  id               String     @id @default(cuid()) @db.Uuid
+  userId           String     @db.Uuid
+  reward           String     @db.VarChar(120)
+  asset            String     @db.VarChar(42)
+  amount           Int
+  reason           String?
+  transactionHash  String?    @db.VarChar(66)
+  treasuryRequestId String?   @db.VarChar(66)
+  createdAt        DateTime   @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([treasuryRequestId])
+}
+
+model Activity {
+  id        String       @id @default(cuid()) @db.Uuid
+  userId    String       @db.Uuid
+  type      ActivityType
+  metadata  Json?
+  createdAt DateTime     @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type, createdAt])
+}
+
+model LeaderboardSnapshot {
+  id               String    @id @default(cuid()) @db.Uuid
+  tournamentId     String?   @db.Uuid
+  userId           String    @db.Uuid
+  rank             Int
+  xp               Int
+  points           Int
+  predictionAccuracy Float?
+  snapshotTime     DateTime  @db.Timestamp
+  createdAt        DateTime  @default(now()) @db.Timestamp
+
+  user       UserProfile    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tournament Tournament?   @relation(fields: [tournamentId], references: [id], onDelete: SetNull)
+
+  @@index([tournamentId, snapshotTime])
+  @@index([userId, snapshotTime])
+}
+
+model Notification {
+  id        String          @id @default(cuid()) @db.Uuid
+  userId    String          @db.Uuid
+  type      NotificationType
+  title     String          @db.VarChar(120)
+  body      String          @db.Text
+  read      Boolean         @default(false)
+  readAt    DateTime?       @db.Timestamp
+  createdAt DateTime        @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read, createdAt])
+}
+
+model Settings {
+  id        String   @id @default(cuid()) @db.Uuid
+  key       String   @unique @db.VarChar(120)
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt @db.Timestamp
+}
+
+model GameExecution {
+  id               String        @id @default(cuid()) @db.Uuid
+  tournamentId     String        @db.Uuid
+  engineVersion    String        @db.VarChar(64)
+  status           GameExecStatus @default(PENDING)
+  startedAt        DateTime      @default(now()) @db.Timestamp
+  completedAt      DateTime?     @db.Timestamp
+  errors           Json?
+  metadata         Json?
+
+  @@index([tournamentId, status])
+}
+
+model PendingReward {
+  id               String        @id @default(cuid()) @db.Uuid
+  userId           String        @db.Uuid
+  tournamentId     String?       @db.Uuid
+  predictionId     String?       @db.Uuid
+  reward           String        @db.VarChar(120)
+  asset            String        @db.VarChar(42)
+  amount           Int
+  reason           String?
+  treasuryRequestId String?      @db.VarChar(66)
+  status           RewardStatus  @default(PENDING)
+  transactionHash  String?       @db.VarChar(66)
+  txAttempts       Int           @default(0)
+  lastError        String?       @db.Text
+  createdAt        DateTime      @default(now()) @db.Timestamp
+  updatedAt        DateTime      @updatedAt @db.Timestamp
+
+  @@index([userId, status])
+  @@index([treasuryRequestId])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid()) @db.Uuid
+  actor     String?  @db.VarChar(42)
+  action    String   @db.VarChar(120)
+  entity    String?  @db.VarChar(120)
+  entityId  String?  @db.VarChar(42)
+  metadata  Json?
+  createdAt DateTime @default(now()) @db.Timestamp
+
+  @@index([action, createdAt])
+  @@index([entity, entityId])
+}
+
+model Session {
+  id           String    @id @default(cuid()) @db.Uuid
+  userId       String    @db.Uuid
+  wallet       String    @db.VarChar(42)
+  refreshToken String    @unique @db.VarChar(128)
+  userAgent    String?   @db.VarChar(255)
+  ip           String?   @db.VarChar(45)
+  expiresAt    DateTime  @db.Timestamp
+  revoked      Boolean   @default(false)
+  createdAt    DateTime  @default(now()) @db.Timestamp
+  updatedAt    DateTime  @updatedAt @db.Timestamp
+
+  user         UserProfile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refreshToken RefreshToken?
+
+  @@index([userId, revoked, expiresAt])
+}
+
+model RefreshToken {
+  id           String   @id @default(cuid()) @db.Uuid
+  sessionId    String   @db.Uuid
+  token        String   @unique @db.VarChar(128)
+  expiresAt    DateTime @db.Timestamp
+  revoked      Boolean  @default(false)
+  replacedBy   String?  @db.VarChar(128)
+  createdAt    DateTime @default(now()) @db.Timestamp
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, revoked, expiresAt])
+}
+
+enum SessionStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
+  COMPLETED
+}
+
+enum RefreshTokenStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
+}
+
+enum GameExecStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum RewardStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+}
+
+enum AuditAction {
+  TOURNAMENT_CREATED
+  TOURNAMENT_STARTED
+  TOURNAMENT_LOCKED
+  EVALUATION_STARTED
+  EVALUATION_COMPLETED
+  REWARD_GENERATED
+  REWARD_PAID
+  REWARD_FAILED
+  SETTINGS_CHANGED
+  AUTH_FAILED
+  ADMIN_ACTION
+  PREDICTION_SUBMITTED
+  PREDICTION_EVALUATED
+}
+
+model RateLimitEntry {
+  id          String    @id @default(cuid()) @db.Uuid
+  identifier  String    @db.VarChar(120)
+  endpoint    String    @db.VarChar(120)
+  count       Int       @default(1)
+  windowStart DateTime  @db.Timestamp
+  expiresAt   DateTime  @db.Timestamp
+  createdAt   DateTime  @default(now()) @db.Timestamp
+  updatedAt   DateTime  @updatedAt @db.Timestamp
+
+  @@index([identifier, endpoint, createdAt])
+  @@index([expiresAt])
+}

@@ -7,9 +7,9 @@ const DEPLOYMENTS_ROOT = path.join(__dirname, 'deployments');
 const NETWORK_PRIORITY = ['celo'];
 
 const CONTRACTS_TO_SYNC = [
-  'PredictionManager',
   'RewardTreasury',
   'PointsManager',
+  'ActivityRegistry',
   'SpinRewardManager'
 ];
 
@@ -97,10 +97,6 @@ import abis from './abis.json';
 import type { Address } from '@/types';
 
 export const CONTRACTS = {
-  PredictionManager: {
-    address: addresses.PredictionManager[42220] as Address,
-    abi: abis.PredictionManager,
-  },
   RewardTreasury: {
     address: addresses.RewardTreasury[42220] as Address,
     abi: abis.RewardTreasury,
@@ -108,6 +104,10 @@ export const CONTRACTS = {
   PointsManager: {
     address: addresses.PointsManager[42220] as Address,
     abi: abis.PointsManager,
+  },
+  ActivityRegistry: {
+    address: addresses.ActivityRegistry[42220] as Address,
+    abi: abis.ActivityRegistry,
   },
   SpinRewardManager: {
     address: addresses.SpinRewardManager[42220] as Address,

@@ -1,4 +1,4 @@
-import { HardhatRuntimeConfig } from "hardhat/config";
+import type { HardhatUserConfig } from "hardhat/config";
 import { DeployFunction } from "hardhat-deploy/types";
 import { config as dotconfig } from "dotenv";
 
@@ -9,34 +9,24 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeConfig) => {
   const { deployer } = await hre.deployments.getNamedAccounts();
 
   log("----------------------------------------------------");
-  log("Deploying PredictionManager...");
-  const prediction = await deploy("PredictionManager", {
-    from: deployer,
-    args: [],
-    log: true,
-    waitConfirmations: hre.network.live ? 5 : 1,
-  });
-  log(`PredictionManager deployed at ${prediction.address}`);
-
-  log("----------------------------------------------------");
   log("Deploying RewardTreasury...");
   const treasury = await deploy("RewardTreasury", {
     from: deployer,
-    args: [],
+    args: ["0x0000000000000000000000000000000000000000"],
     log: true,
     waitConfirmations: hre.network.live ? 5 : 1,
   });
   log(`RewardTreasury deployed at ${treasury.address}`);
 
   log("----------------------------------------------------");
-  log("Deploying PointsManager...");
-  const points = await deploy("PointsManager", {
+  log("Deploying ActivityRegistry...");
+  const activity = await deploy("ActivityRegistry", {
     from: deployer,
     args: [],
     log: true,
     waitConfirmations: hre.network.live ? 5 : 1,
   });
-  log(`PointsManager deployed at ${points.address}`);
+  log(`ActivityRegistry deployed at ${activity.address}`);
 
   log("----------------------------------------------------");
   log("Deploying SpinRewardManager...");
@@ -47,6 +37,16 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeConfig) => {
     waitConfirmations: hre.network.live ? 5 : 1,
   });
   log(`SpinRewardManager deployed at ${spin.address}`);
+
+  log("----------------------------------------------------");
+  log("Deploying PointsManager...");
+  const points = await deploy("PointsManager", {
+    from: deployer,
+    args: [activity.address, spin.address],
+    log: true,
+    waitConfirmations: hre.network.live ? 5 : 1,
+  });
+  log(`PointsManager deployed at ${points.address}`);
 };
 
 export default deploy;

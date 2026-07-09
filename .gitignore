@@ -34,3 +34,4 @@ contracts/broadcast/
 .DS_Store
 *.pem
 .vercel
+PROMPTS.md

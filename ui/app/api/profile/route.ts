@@ -1,15 +1,28 @@
-import type { NextRequest } from "next/server";
-import { notImplemented, checkRateLimit, getWalletFromRequest } from "@/lib/api/helpers";
+import { NextRequest } from "next/server";
+import { authenticatedHandler } from "@/lib/auth/middleware";
+import { ProfileService } from "@/services/serviceImpl";
+import { jsonResponse, apiError } from "@/lib/api/responses";
+import { profileSchema } from "@/lib/validation/schemas";
 
-export async function GET(req: NextRequest) {
-  const wallet = getWalletFromRequest(req);
-  const rl = checkRateLimit(wallet ?? req.ip ?? "anon");
-  if (!rl.allowed) {
-    return Response.json({ error: "Rate limit exceeded" }, { status: 429 });
-  }
-  return notImplemented("GET /api/profile");
-}
+export const GET = async (req: NextRequest) => {
+  return authenticatedHandler(req, async (wallet) => {
+    const profile = await ProfileService.getByWallet(wallet);
+    if (!profile) {
+      return apiError(new Error("Profile not found"));
+    }
+    return jsonResponse(profile);
+  });
+};
 
-export async function PUT(req: NextRequest) {
-  return notImplemented("PUT /api/profile");
-}
+export const POST = async (req: NextRequest) => {
+  return authenticatedHandler(req, async (wallet, req: NextRequest) => {
+    try {
+      const body = await req.json();
+      const parsed = profileSchema.parse(body);
+      const profile = await ProfileService.upsert(wallet, parsed);
+      return jsonResponse(profile, 201);
+    } catch (error) {
+      return apiError(error);
+    }
+  });
+};

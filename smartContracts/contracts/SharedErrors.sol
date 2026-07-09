@@ -1,10 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
+/// @title SharedErrors
+/// @notice Custom errors used across all Vibepool foundation contracts
+error UnsupportedAsset();
 error Unauthorized();
-error InvalidInput();
+error InvalidAmount();
+error InvalidAddress();
 error InsufficientBalance();
-error RoundNotActive();
-error RoundStillActive();
-error AlreadyClaimed();
-error ReplayDetected();
+error NoSpinRemaining();
+error AlreadyPaused();
+error NotPaused();
+error RewardFailed();
+error TransferFailed();
+error InvalidReceiver();
+error ZeroAddress();
+error DuplicateRequestId();
+error AssetDisabled();
+error AssetNotFound();

@@ -1,40 +1,39 @@
-# Sample Hardhat Project
+# Vibepool 2.0 — Smart Contract Foundation
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+Hardhat-based smart contract suite for Vibepool 2.0 on Celo.
 
-Try running some of the following tasks:
+## Contracts
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.ts
-```
+- `RewardTreasury.sol` — Central vault for reward funds (CELO + ERC20)
+- `PointsManager.sol` — On-chain player profile, XP, points, spins
+- `ActivityRegistry.sol` — Minimal activity history with streak tracking
+- `SpinRewardManager.sol` — Spin ticket accounting and reward recording
 
-## Commands
+## Libraries
 
-```shell
+- `libraries/AssetValidation.sol` — Asset enablement checks
+- `libraries/LevelMath.sol` — XP to level conversion
+- `libraries/TransferHelper.sol` — Safe native and ERC20 transfers
+
+## Getting Started
+
+```bash
+npm install
+cp .env.example .env
 npx hardhat compile
 npx hardhat test
-npx hardhat clean
+```
+
+## Deployment
+
+```bash
 npx hardhat deploy --network celo
 node scripts/sync-data.js
 ```
 
-## Setup
+## Testing
 
-1. Copy `.env.example` to `.env` and fill in your RPC keys and private keys.
-2. Install dependencies: `npm install` or `yarn install`.
-3. Compile: `npx hardhat compile`.
-4. Test: `npx hardhat test`.
-5. Deploy: `npx hardhat deploy --network celo`.
-
-## Sync to Frontend
-
-After deployment, run:
-```shell
-node scripts/sync-data.js
+```bash
+npx hardhat test
+REPORT_GAS=true npx hardhat test
 ```
-
-This mirrors the `vibecheck/smartContracts/sync-data.js` pattern — writes `addresses.json`, `abis.json`, and `index.ts` to `../lib/contracts/`.

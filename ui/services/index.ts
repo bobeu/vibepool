@@ -1,8 +1,11 @@
 export { PredictionService } from "./PredictionService";
-export { RewardService } from "./RewardService";
-export { SpinService } from "./SpinService";
-export { MissionService } from "./MissionService";
+export { TournamentService } from "./TournamentService";
 export { LeaderboardService } from "./LeaderboardService";
-export { XPService } from "./XPService";
-export { WalletService } from "./WalletService";
-export { ProfileService } from "./ProfileService";
+export { MissionService } from "./serviceImpl";
+export { RewardService } from "./serviceImpl";
+export { ActivityService } from "./serviceImpl";
+export { SpinService } from "./serviceImpl";
+export { NotificationService } from "./serviceImpl";
+export { ProfileService } from "./serviceImpl";
+export { SettingsService } from "./serviceImpl";
+export { BlockchainService } from "./serviceImpl";

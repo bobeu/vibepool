@@ -1,9 +1,28 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-event RoundStarted(uint256 indexed roundId, uint256 startPrice, uint256 timestamp);
-event RoundEnded(uint256 indexed roundId, uint256 endPrice, uint256 timestamp);
-event PredictionPlaced(address indexed user, uint256 indexed roundId, bool higher, uint256 amount);
-event RewardClaimed(address indexed user, uint256 indexed roundId, uint256 amount);
-event PointsAwarded(address indexed user, uint256 amount, string reason);
-event SpinExecuted(address indexed user, uint256 rewardAmount);
+/// @title SharedEvents
+/// @notice Events emitted across all Vibepool foundation contracts
+event XPGranted(address indexed player, uint256 amount, uint256 newTotalXP, bytes32 indexed requestId);
+event PointsGranted(address indexed player, uint256 amount, uint256 newTotalPoints, bytes32 indexed requestId);
+event PointsDeducted(address indexed player, uint256 amount, uint256 newTotalPoints, bytes32 indexed requestId);
+event SpinGranted(address indexed player, uint256 amount, uint256 newAvailableSpins, bytes32 indexed requestId);
+event SpinConsumed(address indexed player, uint256 newAvailableSpins, bytes32 indexed requestId);
+event RewardRecorded(address indexed player, uint256 amount, bytes32 indexed requestId);
+event RewardPaid(
+    address indexed recipient,
+    address indexed asset,
+    uint256 amount,
+    bytes32 indexed requestId,
+    uint256 timestamp
+);
+event ActivityRecorded(address indexed player, uint256 streak, uint256 longestStreak, uint256 activityCount);
+event StreakUpdated(address indexed player, uint256 streak, uint256 longestStreak);
+event AssetEnabled(address indexed asset, string symbol);
+event AssetDisabled(address indexed asset, string symbol);
+event TreasuryDeposit(address indexed asset, uint256 amount, uint256 timestamp);
+event TreasuryWithdrawal(address indexed asset, uint256 amount, address indexed to, uint256 timestamp);
+event LevelUp(address indexed player, uint256 newLevel, uint256 totalXP);
+event ProfileUpdated(address indexed player);
+event Paused();
+event Unpaused();
