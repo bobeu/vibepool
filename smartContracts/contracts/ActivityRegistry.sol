@@ -52,6 +52,7 @@ contract ActivityRegistry is AccessControl, IActivityRegistry {
 
             if (profile.lastActivityTimestamp == 0) {
                 profile.currentStreak = 1;
+                profile.longestStreak = 1;
                 activityStats.totalUniquePlayers += 1;
             } else if (today == lastDay + 1) {
                 profile.currentStreak += 1;

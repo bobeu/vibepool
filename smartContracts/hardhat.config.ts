@@ -9,6 +9,7 @@ import { zeroAddress } from "viem";
 dotconfig();
 
 const config: HardhatUserConfig = {
+  
   networks: {
     sepolia: {
       url: "https://forno.celo-sepolia.celo-testnet.org",
@@ -18,8 +19,10 @@ const config: HardhatUserConfig = {
     },
     celo: {
       accounts: [process.env.KEY_FAR ? process.env.KEY_FAR.replace(/[^a-fA-F0-9x]/g, '').slice(0, 66) : "0x0000000000000000000000000000000000000000000000000000000000000001"],
-      url: "https://forno.celo.org",
+      url: 'https://forno.celo.org', // || 'https://celo.drpc.org'
       chainId: 42220,
+      // gas: 8000000,
+      // gasPrice: 1000000000,
       saveDeployments: true
     }
   },
@@ -30,50 +33,51 @@ const config: HardhatUserConfig = {
     artifacts: "./artifacts",
     deploy: "./deploy"
   },
+
   etherscan: {
     apiKey: process.env.CELOSCAN_API_KEY ?? '',
     customChains: [
       {
         chainId: 11142220,
-        network: "celoSepolia",
+        network: 'celoSepolia',
         urls: {
-          apiURL: "https://api.etherscan.io/v2/api",
-          browserURL: "https://sepolia.celoscan.io"
-        }
+          apiURL: 'https://api.etherscan.io/v2/api',
+          browserURL: 'https://sepolia.celoscan.io',
+        },
       },
       {
         chainId: 42220,
-        network: "celo",
+        network: 'celo',
         urls: {
-          apiURL: "https://api.etherscan.io/v2/api",
-          browserURL: "https://celoscan.io/"
-        }
-      }
-    ]
+          apiURL: 'https://api.etherscan.io/v2/api',
+          browserURL: 'https://celoscan.io/',
+        },
+      },
+    ],
   },
   sourcify: {
-    enabled: false
+    enabled: false,
   },
   namedAccounts: {
     deployer: {
       default: 0,
       11142220: `privatekey://${process.env.KEY_ROUTE}`,
-      42220: `privatekey://${process.env.KEY_FAR}`
+      42220: `privatekey://${process.env.KEY_FAR}`,
     },
     feeReceiver: {
       default: 0,
       11142220: `privatekey://${process.env.TREASURE}`,
-      42220: `privatekey://${process.env.TREASURE}`
+      42220: `privatekey://${process.env.TREASURE}`,
     },
     oracleAddress: {
       default: 0,
       11142220: `privatekey://${process.env.TEST_ORACLE}`,
-      42220: `privatekey://${process.env.MAIN_ORACLE}`
+      42220: `privatekey://${process.env.MAIN_ORACLE}`,
     },
     allowedAgent: {
       default: 0,
       11142220: `privatekey://${process.env.TEST_ORACLE}`,
-      42220: `privatekey://${process.env.MAIN_ORACLE}`
+      42220: `privatekey://${process.env.MAIN_ORACLE}`,
     },
     pythAddress: {
       42220: "0xff1a0f4744e8582DF1aE09D5611b887B6a12925C",
@@ -88,16 +92,17 @@ const config: HardhatUserConfig = {
       11142220: zeroAddress
     }
   },
+
   solidity: {
     version: "0.8.28",
-    settings: {
+    settings: {          // See the solidity docs for advice about optimization and evmVersion
       optimizer: {
         enabled: true,
-        runs: 200
+        runs: 200,
       },
-      evmVersion: "cancun"
-    }
-  }
+      evmVersion: 'cancun',
+      }
+    },
 };
 
 export default config;

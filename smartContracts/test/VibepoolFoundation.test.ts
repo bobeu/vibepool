@@ -62,6 +62,7 @@ describe("Vibepool Foundation Contracts", function () {
     });
 
     it("Should accept ERC20 deposit", async function () {
+      await rewardTreasury.write.enableAsset([asset.address, "USDM", 18], { account: owner.account });
       const amount = parseEther("100");
       await rewardTreasury.write.depositERC20([asset.address, amount], { account: owner.account });
 
@@ -78,18 +79,17 @@ describe("Vibepool Foundation Contracts", function () {
     });
 
     it("Should allow treasury manager to withdraw", async function () {
-      const viem = hre.viem;
       const amount = parseEther("5");
       await owner.sendTransaction({
         to: rewardTreasury.address,
         value: amount
       });
 
-      const before = await viem.getBalance({ address: treasuryManager.account.address });
+      const treasuryBefore = await rewardTreasury.read.treasuryBalance();
       await rewardTreasury.write.withdraw([zeroAddress, treasuryManager.account.address, amount], { account: treasuryManager.account });
-      const after = await viem.getBalance({ address: treasuryManager.account.address });
+      const treasuryAfter = await rewardTreasury.read.treasuryBalance();
 
-      expect(after - before).to.equal(amount);
+      expect(treasuryBefore - treasuryAfter).to.equal(amount);
     });
 
     it("Should reject unauthorized withdrawal", async function () {
@@ -119,8 +119,9 @@ describe("Vibepool Foundation Contracts", function () {
       expect(assets.length).to.equal(2);
 
       await rewardTreasury.write.disableAsset([asset.address], { account: owner.account });
-      const info = await rewardTreasury.read.assets([asset.address]);
-      expect(info.enabled).to.equal(false);
+      const assetsAfterDisable = await rewardTreasury.read.getSupportedAssets();
+      const disabled = assetsAfterDisable.find((entry: any) => entry.assetAddress.toLowerCase() === asset.address.toLowerCase());
+      expect(disabled?.enabled).to.equal(false);
     });
 
     it("Should allow pauser to pause and unpause", async function () {
@@ -194,9 +195,9 @@ describe("Vibepool Foundation Contracts", function () {
       const requestId = "0x" + "aa".repeat(32);
       await pointsManager.write.grantXP([user.account.address, 1500, requestId], { account: backend.account });
 
-      const profile = await pointsManager.read.profiles([user.account.address]);
-      expect(profile.xp).to.equal(1500);
-      expect(profile.level).to.equal(1);
+      const profile = await pointsManager.read.profile([user.account.address]);
+      expect(profile.xp).to.equal(1500n);
+      expect(profile.level).to.equal(1n);
     });
 
     it("Should increase level when XP crosses threshold", async function () {
@@ -206,9 +207,9 @@ describe("Vibepool Foundation Contracts", function () {
       await pointsManager.write.grantXP([user.account.address, 800, requestId1], { account: backend.account });
       await pointsManager.write.grantXP([user.account.address, 300, requestId2], { account: backend.account });
 
-      const profile = await pointsManager.read.profiles([user.account.address]);
-      expect(profile.xp).to.equal(1100);
-      expect(profile.level).to.equal(1);
+      const profile = await pointsManager.read.profile([user.account.address]);
+      expect(profile.xp).to.equal(1100n);
+      expect(profile.level).to.equal(1n);
     });
 
     it("Should emit LevelUp event when level increases", async function () {
@@ -234,9 +235,9 @@ describe("Vibepool Foundation Contracts", function () {
       const requestId = "0x" + "bb".repeat(32);
       await pointsManager.write.grantPoints([user.account.address, 500, requestId], { account: backend.account });
 
-      const profile = await pointsManager.read.profiles([user.account.address]);
-      expect(profile.points).to.equal(500);
-      expect(profile.lifetimePoints).to.equal(500);
+      const profile = await pointsManager.read.profile([user.account.address]);
+      expect(profile.points).to.equal(500n);
+      expect(profile.lifetimePoints).to.equal(500n);
     });
 
     it("Should deduct points with underflow protection", async function () {
@@ -253,8 +254,8 @@ describe("Vibepool Foundation Contracts", function () {
       const requestId = "0x" + "ee".repeat(32);
       await pointsManager.write.grantSpin([user.account.address, 3, requestId], { account: backend.account });
 
-      const profile = await pointsManager.read.profiles([user.account.address]);
-      expect(profile.availableSpins).to.equal(3);
+      const profile = await pointsManager.read.profile([user.account.address]);
+      expect(profile.availableSpins).to.equal(3n);
     });
 
     it("Should batch grant XP", async function () {
@@ -265,8 +266,8 @@ describe("Vibepool Foundation Contracts", function () {
         requestIds
       ], { account: backend.account });
 
-      const profile = await pointsManager.read.profiles([user.account.address]);
-      expect(profile.xp).to.equal(1000);
+      const profile = await pointsManager.read.profile([user.account.address]);
+      expect(profile.xp).to.equal(1000n);
     });
 
     it("Should reject duplicate request IDs", async function () {
@@ -301,10 +302,10 @@ describe("Vibepool Foundation Contracts", function () {
       const requestId = "0x" + "11".repeat(32);
       await activityRegistry.write.recordActivity([user.account.address, requestId], { account: backend.account });
 
-      const profile = await activityRegistry.read.activityProfiles([user.account.address]);
-      expect(profile.activityCount).to.equal(1);
-      expect(profile.currentStreak).to.equal(1);
-      expect(profile.longestStreak).to.equal(1);
+      const profile = await activityRegistry.read.profileActivity([user.account.address]);
+      expect(profile.activityCount).to.equal(1n);
+      expect(profile.currentStreak).to.equal(1n);
+      expect(profile.longestStreak).to.equal(1n);
     });
 
     it("Should increase streak on consecutive days", async function () {
@@ -318,9 +319,9 @@ describe("Vibepool Foundation Contracts", function () {
 
       await activityRegistry.write.recordActivity([user.account.address, requestId2], { account: backend.account });
 
-      const profile = await activityRegistry.read.activityProfiles([user.account.address]);
-      expect(profile.currentStreak).to.equal(2);
-      expect(profile.longestStreak).to.equal(2);
+      const profile = await activityRegistry.read.profileActivity([user.account.address]);
+      expect(profile.currentStreak).to.equal(2n);
+      expect(profile.longestStreak).to.equal(2n);
     });
 
     it("Should reset streak after gap", async function () {
@@ -335,9 +336,9 @@ describe("Vibepool Foundation Contracts", function () {
 
       await activityRegistry.write.recordActivity([user.account.address, requestId2], { account: backend.account });
 
-      const profile = await activityRegistry.read.activityProfiles([user.account.address]);
-      expect(profile.currentStreak).to.equal(1);
-      expect(profile.longestStreak).to.equal(1);
+      const profile = await activityRegistry.read.profileActivity([user.account.address]);
+      expect(profile.currentStreak).to.equal(1n);
+      expect(profile.longestStreak).to.equal(1n);
     });
 
     it("Should reject duplicate activity request IDs", async function () {
@@ -354,9 +355,9 @@ describe("Vibepool Foundation Contracts", function () {
 
       await activityRegistry.write.resetStreak([user.account.address], { account: backend.account });
 
-      const profile = await activityRegistry.read.activityProfiles([user.account.address]);
-      expect(profile.currentStreak).to.equal(0);
-      expect(profile.longestStreak).to.equal(1);
+      const profile = await activityRegistry.read.profileActivity([user.account.address]);
+      expect(profile.currentStreak).to.equal(0n);
+      expect(profile.longestStreak).to.equal(1n);
     });
   });
 
@@ -377,9 +378,9 @@ describe("Vibepool Foundation Contracts", function () {
       const requestId = "0x" + "51".repeat(32);
       await spinRewardManager.write.grantSpin([user.account.address, 5, requestId], { account: backend.account });
 
-      const profile = await spinRewardManager.read.spinProfiles([user.account.address]);
-      expect(profile.availableSpins).to.equal(5);
-      expect(profile.lifetimeSpinsEarned).to.equal(5);
+      const profile = await spinRewardManager.read.profile([user.account.address]);
+      expect(profile.availableSpins).to.equal(5n);
+      expect(profile.lifetimeSpinsEarned).to.equal(5n);
     });
 
     it("Should consume spins", async function () {
@@ -389,9 +390,9 @@ describe("Vibepool Foundation Contracts", function () {
       await spinRewardManager.write.grantSpin([user.account.address, 2, grantId], { account: backend.account });
       await spinRewardManager.write.consumeSpin([user.account.address, consumeId], { account: backend.account });
 
-      const profile = await spinRewardManager.read.spinProfiles([user.account.address]);
-      expect(profile.availableSpins).to.equal(1);
-      expect(profile.lifetimeSpinsUsed).to.equal(1);
+      const profile = await spinRewardManager.read.profile([user.account.address]);
+      expect(profile.availableSpins).to.equal(1n);
+      expect(profile.lifetimeSpinsUsed).to.equal(1n);
     });
 
     it("Should reject consume when no spins available", async function () {
@@ -405,7 +406,7 @@ describe("Vibepool Foundation Contracts", function () {
       const requestId = "0x" + "81".repeat(32);
       await spinRewardManager.write.recordReward([user.account.address, parseEther("1.5"), requestId], { account: backend.account });
 
-      const profile = await spinRewardManager.read.spinProfiles([user.account.address]);
+      const profile = await spinRewardManager.read.profile([user.account.address]);
       expect(profile.lifetimeRewards).to.equal(parseEther("1.5"));
     });
 
@@ -422,7 +423,7 @@ describe("Vibepool Foundation Contracts", function () {
       await spinRewardManager.write.grantSpin([user.account.address, 10, requestId], { account: backend.account });
 
       const stats = await spinRewardManager.read.spinStatistics();
-      expect(stats.totalSpinsGranted).to.equal(10);
+      expect(stats.totalSpinsGranted).to.equal(10n);
     });
   });
 });

@@ -1,13 +1,13 @@
-import type { HardhatUserConfig } from "hardhat/config";
+import { HardhatRuntimeEnvironment, } from 'hardhat/types';
 import { DeployFunction } from "hardhat-deploy/types";
 import { config as dotconfig } from "dotenv";
 
 dotconfig();
 
-const deploy: DeployFunction = async (hre: HardhatRuntimeConfig) => {
-  const { deploy, log } = hre.deployments;
-  const { deployer } = await hre.deployments.getNamedAccounts();
-
+const deploy: DeployFunction = async (hre:HardhatRuntimeEnvironment) => {
+  const { deployments, getNamedAccounts, network } = hre;
+	const { deploy, log, read, execute } = deployments;
+  let { deployer } = await getNamedAccounts();
   log("----------------------------------------------------");
   log("Deploying RewardTreasury...");
   const treasury = await deploy("RewardTreasury", {
