@@ -6,7 +6,7 @@ export const USDM_CELO: Address = "0x765DE816845861e75A25fCA122bb6898B8B1282a";
 
 export const NAV_ITEMS = [
   { href: "/", label: "Home", key: "home" },
-  { href: "/prediction", label: "Prediction", key: "prediction" },
+  { href: "/tournament", label: "Tournament", key: "tournament" },
   { href: "/spin", label: "Spin", key: "spin" },
   { href: "/leaderboard", label: "Leaderboard", key: "leaderboard" },
   { href: "/rewards", label: "Rewards", key: "rewards" },

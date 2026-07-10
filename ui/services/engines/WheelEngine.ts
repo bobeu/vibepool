@@ -19,15 +19,15 @@ export class WheelEngine implements IWheelEngine {
       return { reward: null, message: "No active wheel rewards" };
     }
 
-    const weights = rewards.map((r) => r.weight);
-    const totalWeight = weights.reduce((sum, w) => sum + w, 0);
-    let random = await randomProvider.next();
-    random *= totalWeight;
+    const seed = crypto.randomUUID();
+    const rawRandom = await randomProvider.next();
+    const random = rawRandom * rewards.reduce((sum, r) => sum + r.weight, 0);
 
     let selected = rewards[0];
+    let remaining = random;
     for (let i = 0; i < rewards.length; i++) {
-      random -= weights[i];
-      if (random <= 0) {
+      remaining -= rewards[i].weight;
+      if (remaining <= 0) {
         selected = rewards[i];
         break;
       }
@@ -41,6 +41,9 @@ export class WheelEngine implements IWheelEngine {
         asset: selected.asset,
         amount: selected.amount,
         reason: selected.rarity,
+        seed,
+        randomNumber: rawRandom.toString(),
+        weightUsed: selected.weight,
       },
     });
 
@@ -52,15 +55,21 @@ export class WheelEngine implements IWheelEngine {
       asset: selected.asset,
       amount: selected.amount,
       rarity: selected.rarity,
+      seed,
+      randomNumber: rawRandom,
+      weightUsed: selected.weight,
     });
 
-    logger.info("Wheel spin generated", { userId, reward: selected.name });
+    logger.info("Wheel spin generated", { userId, reward: selected.name, seed });
     return {
       spinId: spinHistory.id,
       reward: selected.name,
       asset: selected.asset,
       amount: selected.amount,
       rarity: selected.rarity,
+      seed,
+      randomNumber: rawRandom,
+      weightUsed: selected.weight,
     };
   }
 
@@ -78,6 +87,9 @@ export class WheelEngine implements IWheelEngine {
       reward: history.reward,
       asset: history.asset,
       amount: history.amount,
+      seed: history.seed,
+      randomNumber: history.randomNumber,
+      weightUsed: history.weightUsed,
     };
   }
 
@@ -96,6 +108,9 @@ export class WheelEngine implements IWheelEngine {
       asset: h.asset,
       amount: h.amount,
       reason: h.reason,
+      seed: h.seed,
+      randomNumber: h.randomNumber,
+      weightUsed: h.weightUsed,
       createdAt: h.createdAt,
     }));
   }

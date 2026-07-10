@@ -31,13 +31,11 @@ export function AppShell({ children, activeNav }: AppShellProps) {
 
       <header className="relative z-10 flex items-center justify-between px-4 py-3 border-b border-border/30 backdrop-blur-md bg-card/60">
         <Link href="/" className="flex items-center gap-2">
-          <img
-            src={theme === "dark" ? "/logodark.png" : "/logo.png"}
-            alt="Vibepool"
-            className="w-8 h-8 rounded-lg"
-          />
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent-purple flex items-center justify-center">
+            <span className="text-xs font-black text-white">N</span>
+          </div>
           <span className="text-sm font-black uppercase tracking-tight">
-            Vibe<span className="text-primary">pool</span>
+            Nex<span className="text-primary">ora</span>
           </span>
         </Link>
         <div className="flex items-center gap-2">

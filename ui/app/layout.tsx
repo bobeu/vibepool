@@ -5,14 +5,11 @@ import '@/styles/globals.css';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {
-    title: 'Vibepool - Yield-Backed Price Volatility Prediction Game on Celo',
-    description: 'Predict CELO token price volatility and earn a share of the losing pool, integrated with dynamic yield from Aave protocol pools on Celo.',
-    keywords: ['crypto', 'volatility', 'prediction market', 'Celo', 'MiniPay', 'Aave', 'yield', 'Vibepool'],
+    title: 'NEXORA — Home of Web3 Competitive Games',
+    description: 'Compete in daily tournaments, spin rewards, and climb the leaderboard on Celo. The next generation gaming platform.',
+    keywords: ['gaming', 'tournaments', 'prediction', 'leaderboard', 'rewards', 'Celo', 'MiniPay', 'NEXORA'],
     icons: {
         icon: '/logo.png',
-    },
-    other: {
-        'talentapp:project_verification': 'a951a60cce43f90c1a84d1c55f7412f73f589c7eae2462103d148da7d10792e7323ff0da2cd9c49d4bc71f04377bb277941fe2a46f9be7012599c41be32370e8',
     },
 };
 

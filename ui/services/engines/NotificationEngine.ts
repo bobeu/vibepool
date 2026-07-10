@@ -18,7 +18,8 @@ export class NotificationEngine implements INotificationEngine {
     priority = "NORMAL",
     expiresAt?: Date,
     scheduledAt?: Date,
-    recurring = false
+    recurring = false,
+    channel: string = "IN_APP"
   ): Promise<Record<string, unknown>> {
     const notification = await prisma().notification.create({
       data: {
@@ -30,6 +31,8 @@ export class NotificationEngine implements INotificationEngine {
         expiresAt,
         scheduledAt,
         recurring,
+        channel: channel as any,
+        deliveryStatus: "PENDING",
       },
     });
 
@@ -42,9 +45,10 @@ export class NotificationEngine implements INotificationEngine {
       priority,
       scheduledAt: scheduledAt?.toISOString(),
       recurring,
+      channel,
     });
 
-    logger.info("Notification sent", { userId, type, title, scheduledAt });
+    logger.info("Notification sent", { userId, type, title, channel, scheduledAt });
     return { id: notification.id };
   }
 

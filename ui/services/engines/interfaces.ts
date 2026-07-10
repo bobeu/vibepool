@@ -78,11 +78,11 @@ export interface IStatisticsEngine extends IEngine {
 }
 
 export interface IEventStore {
-  append(event: { aggregateId: string; aggregateType: string; eventType: string; payload?: Record<string, unknown> }, version?: number): Promise<string>;
+  append(event: { aggregateId: string; aggregateType: string; eventType: string; payload?: Record<string, unknown>; schemaVersion?: number }, version?: number): Promise<string>;
   getEventsForAggregate(aggregateId: string): Promise<Record<string, unknown>[]>;
   getUnprocessed(limit?: number): Promise<Record<string, unknown>[]>;
   markProcessed(eventId: string): Promise<void>;
-  replay(aggregateId: string): Promise<Record<string, unknown>[]>;
+  replay(filters?: { aggregateId?: string; userId?: string; tournamentId?: string; eventType?: string; startDate?: Date; endDate?: Date }): Promise<Record<string, unknown>[]>;
 }
 
 export interface IMissionRuleEngine extends IEngine {
@@ -111,6 +111,33 @@ export interface IGamificationEngine extends IEngine {
   getLevelProgress(userId: string): Promise<Record<string, unknown>>;
   getPlayerRank(userId: string): Promise<Record<string, unknown>>;
   getEngagementMetrics(userId: string): Promise<Record<string, unknown>>;
+}
+
+export interface IAchievementEngine extends IEngine {
+  evaluateAchievements(userId: string): Promise<Record<string, unknown>[]>;
+  getAchievements(userId: string): Promise<Record<string, unknown>[]>;
+  getAchievementProgress(userId: string, achievementId: string): Promise<Record<string, unknown>>;
+  unlockAchievement(userId: string, achievementId: string): Promise<Record<string, unknown>>;
+}
+
+export interface IIdentityEngine extends IEngine {
+  getIdentity(userId: string): Promise<Record<string, unknown>>;
+  updateIdentity(userId: string, data: Record<string, unknown>): Promise<Record<string, unknown>>;
+}
+
+export interface IProgressionEngine extends IEngine {
+  getProgression(userId: string): Promise<Record<string, unknown>>;
+  snapshotProgress(userId: string, type: string): Promise<Record<string, unknown>>;
+}
+
+export interface ITitleEngine extends IEngine {
+  getAvailableTitles(userId: string): Promise<Record<string, unknown>[]>;
+  equipTitle(userId: string, titleSlug: string): Promise<Record<string, unknown>>;
+}
+
+export interface IBadgeEngine extends IEngine {
+  getAvailableBadges(userId: string): Promise<Record<string, unknown>[]>;
+  equipBadge(userId: string, badgeSlug: string): Promise<Record<string, unknown>>;
 }
 
 export interface IRandomProvider {

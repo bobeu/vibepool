@@ -7,6 +7,7 @@ export interface DomainEvent {
   aggregateType: string;
   eventType: string;
   payload?: Record<string, unknown>;
+  schemaVersion?: number;
 }
 
 export class EventStore implements IEventStore {
@@ -74,7 +75,56 @@ export class EventStore implements IEventStore {
     });
   }
 
-  async replay(aggregateId: string): Promise<Record<string, unknown>[]> {
-    return this.getEventsForAggregate(aggregateId);
+  async replay(filters?: {
+    aggregateId?: string;
+    userId?: string;
+    tournamentId?: string;
+    eventType?: string;
+    startDate?: Date;
+    endDate?: Date;
+  }): Promise<Record<string, unknown>[]> {
+    const where: Record<string, unknown> = {};
+
+    if (filters?.aggregateId) {
+      where.aggregateId = filters.aggregateId;
+    }
+
+    if (filters?.eventType) {
+      where.eventType = filters.eventType;
+    }
+
+    if (filters?.startDate || filters?.endDate) {
+      const occurredAt: Record<string, Date> = {};
+      if (filters.startDate) occurredAt.gte = filters.startDate;
+      if (filters.endDate) occurredAt.lte = filters.endDate;
+      where.occurredAt = occurredAt;
+    }
+
+    const events = await prisma().domainEvent.findMany({
+      where,
+      orderBy: { occurredAt: "asc" },
+    });
+
+    const results = events.map((e) => ({
+      id: e.id,
+      aggregateId: e.aggregateId,
+      aggregateType: e.aggregateType,
+      eventType: e.eventType,
+      payload: e.payload,
+      version: e.version,
+      processed: e.processed,
+      occurredAt: e.occurredAt,
+    }));
+
+    if (filters?.userId || filters?.tournamentId) {
+      return results.filter((e) => {
+        const payload = e.payload as Record<string, unknown> || {};
+        if (filters.userId && payload.userId !== filters.userId) return false;
+        if (filters.tournamentId && payload.tournamentId !== filters.tournamentId) return false;
+        return true;
+      });
+    }
+
+    return results;
   }
 }

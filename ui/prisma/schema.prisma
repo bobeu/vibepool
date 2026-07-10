@@ -36,6 +36,10 @@ model UserProfile {
   pendingRewards     PendingReward[]
   playerStats        PlayerStatistic[]
   notificationPrefs  NotificationPreference[]
+  playerIdentity     PlayerIdentity?
+  userAchievements   UserAchievement[]
+  progressSnapshots  ProgressSnapshot[]
+  unlockAnimations   UnlockAnimation[]
 
   @@index([wallet])
   @@index([status])
@@ -221,6 +225,8 @@ model Notification {
   expiresAt DateTime?       @db.Timestamp
   scheduledAt DateTime?     @db.Timestamp
   recurring  Boolean        @default(false)
+  channel   NotificationChannel @default(IN_APP)
+  deliveryStatus String?    @db.VarChar(32)
   createdAt DateTime        @default(now()) @db.Timestamp
 
   user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -351,6 +357,133 @@ model NotificationPreference {
   @@index([userId])
 }
 
+model Achievement {
+  id          String            @id @default(cuid()) @db.Uuid
+  slug        String            @unique @db.VarChar(120)
+  title       String            @db.VarChar(120)
+  description String            @db.Text
+  category    AchievementCategory @default(DAILY)
+  rarity      AchievementRarity @default(COMMON)
+  xpReward    Int               @default(0)
+  pointsReward Int              @default(0)
+  icon        String?           @db.VarChar(120)
+  criteria    Json?
+  active      Boolean           @default(true)
+  createdAt   DateTime          @default(now()) @db.Timestamp
+  updatedAt   DateTime          @updatedAt @db.Timestamp
+
+  rules       AchievementRule[]
+  userAchievements UserAchievement[]
+}
+
+model AchievementRule {
+  id            String   @id @default(cuid()) @db.Uuid
+  achievementId String   @db.Uuid
+  statType      StatisticType
+  operator      String   @db.VarChar(16)
+  targetValue   Int
+  windowDays    Int      @default(0)
+  createdAt     DateTime @default(now()) @db.Timestamp
+
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@index([achievementId])
+  @@index([statType])
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid()) @db.Uuid
+  userId        String   @db.Uuid
+  achievementId String   @db.Uuid
+  progress      Int      @default(0)
+  target        Int      @default(1)
+  unlocked      Boolean  @default(false)
+  unlockedAt    DateTime? @db.Timestamp
+  notified      Boolean  @default(false)
+  createdAt     DateTime @default(now()) @db.Timestamp
+  updatedAt     DateTime @updatedAt @db.Timestamp
+
+  user        UserProfile    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement   @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId, unlocked])
+}
+
+model Badge {
+  id        String       @id @default(cuid()) @db.Uuid
+  slug      String       @unique @db.VarChar(120)
+  name      String       @db.VarChar(120)
+  tier      BadgeTier     @default(BRONZE)
+  icon      String?      @db.VarChar(120)
+  createdAt DateTime     @default(now()) @db.Timestamp
+  updatedAt DateTime     @updatedAt @db.Timestamp
+}
+
+model Title {
+  id          String       @id @default(cuid()) @db.Uuid
+  slug        String       @unique @db.VarChar(120)
+  name        String       @db.VarChar(120)
+  rarity      TitleRarity   @default(COMMON)
+  requirement String?      @db.Text
+  createdAt   DateTime      @default(now()) @db.Timestamp
+  updatedAt   DateTime      @updatedAt @db.Timestamp
+}
+
+model AvatarFrame {
+  id        String   @id @default(cuid()) @db.Uuid
+  slug      String   @unique @db.VarChar(120)
+  name      String   @db.VarChar(120)
+  rarity    TitleRarity @default(COMMON)
+  cssClass  String?  @db.VarChar(255)
+  createdAt DateTime @default(now()) @db.Timestamp
+  updatedAt DateTime @updatedAt @db.Timestamp
+}
+
+model PlayerIdentity {
+  id            String   @id @default(cuid()) @db.Uuid
+  userId        String   @unique @db.Uuid
+  displayName   String?  @db.VarChar(64)
+  selectedTitle String?  @db.VarChar(120)
+  selectedBadge String?  @db.VarChar(120)
+  selectedFrame String?  @db.VarChar(120)
+  theme         String?  @db.VarChar(32)
+  updatedAt     DateTime @updatedAt @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ProgressSnapshot {
+  id            String   @id @default(cuid()) @db.Uuid
+  userId        String   @db.Uuid
+  snapshotType  String   @db.VarChar(64)
+  level         Int      @default(0)
+  xp            Int      @default(0)
+  points        Int      @default(0)
+  currentStreak Int      @default(0)
+  longestStreak Int      @default(0)
+  metadata      Json?
+  createdAt     DateTime @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, snapshotType, createdAt])
+}
+
+model UnlockAnimation {
+  id            String   @id @default(cuid()) @db.Uuid
+  userId        String   @db.Uuid
+  type          String   @db.VarChar(64)
+  referenceId   String?  @db.VarChar(42)
+  payload       Json?
+  viewed        Boolean  @default(false)
+  createdAt     DateTime @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, viewed])
+}
+
 model RateLimitEntry {
   id          String    @id @default(cuid()) @db.Uuid
   identifier  String    @db.VarChar(120)
@@ -405,6 +538,9 @@ model SpinHistory {
   amount          Int
   reason          String?
   transactionHash String?    @db.VarChar(66)
+  seed            String?    @db.VarChar(64)
+  randomNumber    String?    @db.VarChar(64)
+  weightUsed      Int?
   createdAt       DateTime   @default(now()) @db.Timestamp
 
   user       UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -438,6 +574,7 @@ model RewardQueue {
   source           RewardSource
   reason           String?
   status           RewardStatus @default(PENDING)
+  priority         RewardPriority @default(NORMAL)
   attempts         Int       @default(0)
   maxAttempts      Int       @default(3)
   lastError        String?   @db.Text
@@ -449,6 +586,7 @@ model RewardQueue {
 
   @@index([userId, status])
   @@index([status, scheduledAt])
+  @@index([status, priority])
 }
 
 model RewardSource {
@@ -584,6 +722,13 @@ enum RewardStatus {
   FAILED
 }
 
+enum RewardPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
 enum AuditAction {
   TOURNAMENT_CREATED
   TOURNAMENT_STARTED
@@ -618,4 +763,40 @@ enum RewardSource {
   STREAK
   SPIN
   ADMIN
+}
+
+enum AchievementCategory {
+  DAILY
+  WEEKLY
+  LIFETIME
+  HIDDEN
+  LEGENDARY
+  SEASONAL
+  COMMUNITY
+  REFERRAL
+  TOURNAMENT
+  SKILL
+}
+
+enum AchievementRarity {
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+enum BadgeTier {
+  BRONZE
+  SILVER
+  GOLD
+  DIAMOND
+  MASTER
+  LEGEND
+}
+
+enum TitleRarity {
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
 }

@@ -46,6 +46,7 @@ export class EventBus {
         aggregateType: (event.aggregateType as string) || "Domain",
         eventType: event.event as string,
         payload: event,
+        schemaVersion: 1,
       });
     } catch (error) {
       console.error("EventBus persist error:", error);
