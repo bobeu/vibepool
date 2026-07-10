@@ -23,8 +23,8 @@ export function VibepoolProvider({ children }: { children: React.ReactNode }) {
   const config = useConfig();
   const [chainData, setChainData] = useState<AppChainData | null>(null);
 
-  const predictionAddr = CONTRACTS.PredictionManager.address ?? ZERO_ADDRESS;
-  const predictionAbi = CONTRACTS.PredictionManager.abi;
+  const predictionAddr = CONTRACTS?.PredictionManager?.address ?? ZERO_ADDRESS;
+  const predictionAbi = CONTRACTS?.PredictionManager?.abi;
 
   const { data: contractsData, refetch: refreshChainData } = useReadContracts({
     config,

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.28;
+pragma solidity 0.8.28;
 
 import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol";
 import { SharedErrors } from "./SharedErrors.sol";
@@ -11,21 +11,6 @@ import { ISpinRewardManager } from "./interfaces/ISpinRewardManager.sol";
 /// @dev Backend-authorized only. Wheel logic remains off-chain.
 contract SpinRewardManager is AccessControl, ISpinRewardManager {
     bytes32 public constant BACKEND_ROLE = keccak256("BACKEND_ROLE");
-
-    /// @notice Spin profile for a player
-    struct SpinProfile {
-        uint64 availableSpins;
-        uint64 lifetimeSpinsEarned;
-        uint64 lifetimeSpinsUsed;
-        uint256 lifetimeRewards;
-    }
-
-    /// @notice Aggregated spin statistics
-    struct SpinStatistics {
-        uint256 totalSpinsGranted;
-        uint256 totalSpinsConsumed;
-        uint256 totalRewardsRecorded;
-    }
 
     /// @notice Mapping of player address to spin profile
     mapping(address => SpinProfile) public spinProfiles;
@@ -43,7 +28,7 @@ contract SpinRewardManager is AccessControl, ISpinRewardManager {
 
     /// @notice Initializes the SpinRewardManager
     constructor() {
-        __AccessControl_init();
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(BACKEND_ROLE, msg.sender);
     }
 
@@ -60,16 +45,16 @@ contract SpinRewardManager is AccessControl, ISpinRewardManager {
 
         processedRequestIds[requestId] = true;
 
-        SpinProfile storage profile = spinProfiles[player];
+        SpinProfile storage spinProfile = spinProfiles[player];
 
         unchecked {
-            profile.availableSpins += uint64(amount);
-            profile.lifetimeSpinsEarned += uint64(amount);
+            spinProfile.availableSpins += uint64(amount);
+            spinProfile.lifetimeSpinsEarned += uint64(amount);
         }
 
         spinStats.totalSpinsGranted += amount;
 
-        emit SharedEvents.SpinGranted(player, amount, profile.availableSpins, requestId);
+        emit SharedEvents.SpinGranted(player, amount, spinProfile.availableSpins, requestId);
     }
 
     /// @notice Consumes one spin ticket from a player
@@ -81,19 +66,19 @@ contract SpinRewardManager is AccessControl, ISpinRewardManager {
     {
         if (processedRequestIds[requestId]) revert SharedErrors.DuplicateRequestId();
 
-        SpinProfile storage profile = spinProfiles[player];
-        if (profile.availableSpins == 0) revert SharedErrors.NoSpinRemaining();
+        SpinProfile storage spinProfile = spinProfiles[player];
+        if (spinProfile.availableSpins == 0) revert SharedErrors.NoSpinRemaining();
 
         processedRequestIds[requestId] = true;
 
         unchecked {
-            profile.availableSpins -= 1;
-            profile.lifetimeSpinsUsed += 1;
+            spinProfile.availableSpins -= 1;
+            spinProfile.lifetimeSpinsUsed += 1;
         }
 
         spinStats.totalSpinsConsumed += 1;
 
-        emit SharedEvents.SpinConsumed(player, profile.availableSpins, requestId);
+        emit SharedEvents.SpinConsumed(player, spinProfile.availableSpins, requestId);
     }
 
     /// @notice Records a reward won from a spin
@@ -109,10 +94,10 @@ contract SpinRewardManager is AccessControl, ISpinRewardManager {
 
         processedRequestIds[requestId] = true;
 
-        SpinProfile storage profile = spinProfiles[player];
+        SpinProfile storage spinProfile = spinProfiles[player];
 
         unchecked {
-            profile.lifetimeRewards += amount;
+            spinProfile.lifetimeRewards += amount;
         }
 
         spinStats.totalRewardsRecorded += amount;

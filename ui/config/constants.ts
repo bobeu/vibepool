@@ -9,7 +9,8 @@ export const NAV_ITEMS = [
   { href: "/tournament", label: "Tournament", key: "tournament" },
   { href: "/spin", label: "Spin", key: "spin" },
   { href: "/leaderboard", label: "Leaderboard", key: "leaderboard" },
-  { href: "/rewards", label: "Rewards", key: "rewards" },
+  { href: "/friends", label: "Friends", key: "friends" },
+  { href: "/community", label: "Community", key: "community" },
   { href: "/profile", label: "Profile", key: "profile" },
 ] as const;
 

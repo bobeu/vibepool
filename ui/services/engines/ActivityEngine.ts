@@ -10,35 +10,60 @@ export class ActivityEngine implements IActivityEngine {
     return input;
   }
 
-  async record(userId: string, type: string, metadata?: Record<string, unknown>): Promise<Record<string, unknown>> {
+  async record(wallet: string, type: string, metadata?: Record<string, unknown>): Promise<Record<string, unknown>> {
+    let user = await prisma().userProfile.findUnique({
+      where: { wallet },
+      select: { id: true, wallet: true },
+    });
+    if (!user) {
+      user = await prisma().userProfile.findUnique({
+        where: { id: wallet },
+        select: { id: true, wallet: true },
+      });
+    }
+    if (!user) throw new Error("User not found");
+
     const activity = await prisma().activity.create({
       data: {
-        userId,
+        userId: user.id,
         type: type as any,
         metadata,
       },
     });
 
     await prisma().userProfile.update({
-      where: { id: userId },
+      where: { id: user.id },
       data: { totalActivity: { increment: 1 } },
     });
 
     eventBus.publish({
       event: "ActivityRecorded",
-      userId,
+      userId: user.id,
+      wallet: user.wallet,
       activityType: type,
       metadata,
       timestamp: new Date().toISOString(),
     });
 
-    logger.info("Activity recorded", { userId, type });
+    logger.info("Activity recorded", { userId: user.id, type });
     return { id: activity.id };
   }
 
-  async getRecent(userId: string, limit = 20): Promise<Record<string, unknown>[]> {
+  async getRecent(wallet: string, limit = 20): Promise<Record<string, unknown>[]> {
+    let user = await prisma().userProfile.findUnique({
+      where: { wallet },
+      select: { id: true },
+    });
+    if (!user) {
+      user = await prisma().userProfile.findUnique({
+        where: { id: wallet },
+        select: { id: true },
+      });
+    }
+    if (!user) return [];
+
     const activities = await prisma().activity.findMany({
-      where: { userId },
+      where: { userId: user.id },
       orderBy: { createdAt: "desc" },
       take: limit,
     });

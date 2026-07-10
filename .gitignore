@@ -25,13 +25,14 @@ next-env.d.ts
 # prisma
 prisma/migrations/**/migration.sql.bak
 
-# foundry
-contracts/cache/
-contracts/out/
-contracts/broadcast/
+# hardhat
+smartContracts/cache/
+smartContracts/out/
+smartContracts/broadcast/
 
 # misc
 .DS_Store
 *.pem
 .vercel
 PROMPTS.md
+ARCHIVED_PROMPTS.md

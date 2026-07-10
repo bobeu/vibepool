@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -7,6 +8,8 @@ import { Sun, Moon } from "lucide-react";
 import { NAV_ITEMS } from "@/config/constants";
 import { cn } from "@/utils/format";
 import { useTheme } from "@/app/providers";
+import { useAuth } from "@/lib/auth/useAuth";
+import { UnlockAnimationToast } from "@/components/social/UnlockAnimationToast";
 import type { NavKey } from "@/types";
 
 interface AppShellProps {
@@ -17,15 +20,28 @@ interface AppShellProps {
 export function AppShell({ children, activeNav }: AppShellProps) {
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
+  const { session } = useAuth();
+
+  useEffect(() => {
+    if (!session?.wallet) return;
+    const ping = (status: string) =>
+      fetch("/api/presence", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      }).catch(() => {});
+    ping("ONLINE");
+    const interval = setInterval(() => ping("ONLINE"), 3 * 60 * 1000);
+    return () => {
+      clearInterval(interval);
+      ping("OFFLINE");
+    };
+  }, [session?.wallet]);
 
   return (
     <div className={`min-h-screen flex flex-col bg-background ${theme}`}>
       <div
-        className="fixed inset-0 bg-cover bg-center pointer-events-none opacity-30 z-0"
-        style={{
-          backgroundImage:
-            theme === "dark" ? "url('/backgrounddark.png')" : "url('/backgroundlight.png')",
-        }}
+        className="fixed inset-0 pointer-events-none opacity-40 z-0 bg-gradient-to-b from-background via-background/95 to-background"
       />
       <div className="fixed inset-0 bg-[radial-gradient(circle_at_20%_20%,hsl(var(--accent-orange)/0.12),transparent_40%),radial-gradient(circle_at_80%_80%,hsl(var(--accent-purple)/0.12),transparent_40%)] pointer-events-none z-0" />
 
@@ -51,6 +67,7 @@ export function AppShell({ children, activeNav }: AppShellProps) {
         </div>
       </header>
 
+      <UnlockAnimationToast />
       <main className="relative z-10 flex-1 overflow-y-auto no-scrollbar px-4 py-4 pb-24">
         {children}
       </main>

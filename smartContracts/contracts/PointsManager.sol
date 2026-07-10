@@ -13,30 +13,6 @@ import { IPointsManager } from "./interfaces/IPointsManager.sol";
 contract PointsManager is AccessControl, IPointsManager {
     bytes32 public constant BACKEND_ROLE = keccak256("BACKEND_ROLE");
 
-    /// @notice Player profile data
-    struct Profile {
-        uint256 xp;
-        uint256 level;
-        uint256 points;
-        uint256 lifetimePoints;
-        uint256 lifetimeXP;
-        uint256 availableSpins;
-        uint256 rewardClaims;
-        uint64 currentStreak;
-        uint64 longestStreak;
-        uint64 lastActivity;
-        uint64 registrationTime;
-    }
-
-    /// @notice Aggregated player statistics
-    struct PlayerStatistics {
-        uint256 totalXPGranted;
-        uint256 totalPointsGranted;
-        uint256 totalPointsDeducted;
-        uint256 totalSpinsGranted;
-        uint256 totalRewardClaims;
-    }
-
     /// @notice Mapping of player address to profile
     mapping(address => Profile) public profiles;
     /// @notice Mapping of request ID to processed status for replay protection
@@ -70,7 +46,7 @@ contract PointsManager is AccessControl, IPointsManager {
         activityRegistry = _activityRegistry;
         spinRewardManager = _spinRewardManager;
 
-        __AccessControl_init();
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(BACKEND_ROLE, msg.sender);
     }
 
@@ -86,21 +62,21 @@ contract PointsManager is AccessControl, IPointsManager {
         if (processedRequestIds[requestId]) revert SharedErrors.DuplicateRequestId();
         processedRequestIds[requestId] = true;
 
-        Profile storage profile = profiles[player];
-        uint256 oldLevel = profile.level;
+        Profile storage playerProfile = profiles[player];
+        uint256 oldLevel = playerProfile.level;
 
         unchecked {
-            profile.xp += amount;
-            profile.level = LevelMath.calculateLevel(profile.xp);
-            profile.lifetimeXP += amount;
+            playerProfile.xp += amount;
+            playerProfile.level = LevelMath.calculateLevel(playerProfile.xp);
+            playerProfile.lifetimeXP += amount;
         }
 
         playerStats.totalXPGranted += amount;
 
-        emit SharedEvents.XPGranted(player, amount, profile.xp, requestId);
+        emit SharedEvents.XPGranted(player, amount, playerProfile.xp, requestId);
 
-        if (profile.level > oldLevel) {
-            emit SharedEvents.LevelUp(player, profile.level, profile.xp);
+        if (playerProfile.level > oldLevel) {
+            emit SharedEvents.LevelUp(player, playerProfile.level, playerProfile.xp);
         }
 
         emit SharedEvents.ProfileUpdated(player);
@@ -118,16 +94,16 @@ contract PointsManager is AccessControl, IPointsManager {
         if (processedRequestIds[requestId]) revert SharedErrors.DuplicateRequestId();
         processedRequestIds[requestId] = true;
 
-        Profile storage profile = profiles[player];
+        Profile storage playerProfile = profiles[player];
 
         unchecked {
-            profile.points += amount;
-            profile.lifetimePoints += amount;
+            playerProfile.points += amount;
+            playerProfile.lifetimePoints += amount;
         }
 
         playerStats.totalPointsGranted += amount;
 
-        emit SharedEvents.PointsGranted(player, amount, profile.points, requestId);
+        emit SharedEvents.PointsGranted(player, amount, playerProfile.points, requestId);
         emit SharedEvents.ProfileUpdated(player);
     }
 
@@ -143,16 +119,16 @@ contract PointsManager is AccessControl, IPointsManager {
         if (processedRequestIds[requestId]) revert SharedErrors.DuplicateRequestId();
         processedRequestIds[requestId] = true;
 
-        Profile storage profile = profiles[player];
-        if (profile.points < amount) revert SharedErrors.InsufficientBalance();
+        Profile storage playerProfile = profiles[player];
+        if (playerProfile.points < amount) revert SharedErrors.InsufficientBalance();
 
         unchecked {
-            profile.points -= amount;
+            playerProfile.points -= amount;
         }
 
         playerStats.totalPointsDeducted += amount;
 
-        emit SharedEvents.PointsDeducted(player, amount, profile.points, requestId);
+        emit SharedEvents.PointsDeducted(player, amount, playerProfile.points, requestId);
         emit SharedEvents.ProfileUpdated(player);
     }
 
@@ -168,15 +144,15 @@ contract PointsManager is AccessControl, IPointsManager {
         if (processedRequestIds[requestId]) revert SharedErrors.DuplicateRequestId();
         processedRequestIds[requestId] = true;
 
-        Profile storage profile = profiles[player];
+        Profile storage playerProfile = profiles[player];
 
         unchecked {
-            profile.availableSpins += amount;
+            playerProfile.availableSpins += amount;
         }
 
         playerStats.totalSpinsGranted += amount;
 
-        emit SharedEvents.SpinGranted(player, amount, profile.availableSpins, requestId);
+        emit SharedEvents.SpinGranted(player, amount, playerProfile.availableSpins, requestId);
         emit SharedEvents.ProfileUpdated(player);
     }
 
@@ -190,10 +166,10 @@ contract PointsManager is AccessControl, IPointsManager {
         if (processedRequestIds[requestId]) revert SharedErrors.DuplicateRequestId();
         processedRequestIds[requestId] = true;
 
-        Profile storage profile = profiles[player];
+        Profile storage playerProfile = profiles[player];
 
         unchecked {
-            profile.rewardClaims += 1;
+            playerProfile.rewardClaims += 1;
         }
 
         playerStats.totalRewardClaims += 1;
@@ -232,21 +208,21 @@ contract PointsManager is AccessControl, IPointsManager {
 
             processedRequestIds[requestIds[i]] = true;
 
-            Profile storage profile = profiles[players[i]];
-            uint256 oldLevel = profile.level;
+            Profile storage playerProfile = profiles[players[i]];
+            uint256 oldLevel = playerProfile.level;
 
             unchecked {
-                profile.xp += amounts[i];
-                profile.level = LevelMath.calculateLevel(profile.xp);
-                profile.lifetimeXP += amounts[i];
+                playerProfile.xp += amounts[i];
+                playerProfile.level = LevelMath.calculateLevel(playerProfile.xp);
+                playerProfile.lifetimeXP += amounts[i];
             }
 
             playerStats.totalXPGranted += amounts[i];
 
-            emit SharedEvents.XPGranted(players[i], amounts[i], profile.xp, requestIds[i]);
+            emit SharedEvents.XPGranted(players[i], amounts[i], playerProfile.xp, requestIds[i]);
 
-            if (profile.level > oldLevel) {
-                emit SharedEvents.LevelUp(players[i], profile.level, profile.xp);
+            if (playerProfile.level > oldLevel) {
+                emit SharedEvents.LevelUp(players[i], playerProfile.level, playerProfile.xp);
             }
         }
     }
@@ -268,16 +244,16 @@ contract PointsManager is AccessControl, IPointsManager {
 
             processedRequestIds[requestIds[i]] = true;
 
-            Profile storage profile = profiles[players[i]];
+            Profile storage playerProfile = profiles[players[i]];
 
             unchecked {
-                profile.points += amounts[i];
-                profile.lifetimePoints += amounts[i];
+                playerProfile.points += amounts[i];
+                playerProfile.lifetimePoints += amounts[i];
             }
 
             playerStats.totalPointsGranted += amounts[i];
 
-            emit SharedEvents.PointsGranted(players[i], amounts[i], profile.points, requestIds[i]);
+            emit SharedEvents.PointsGranted(players[i], amounts[i], playerProfile.points, requestIds[i]);
         }
     }
 }

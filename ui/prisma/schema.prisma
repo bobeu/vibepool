@@ -4,7 +4,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model UserProfile {
@@ -34,12 +33,29 @@ model UserProfile {
   notifications      Notification[]
   sessions           Session[]
   pendingRewards     PendingReward[]
+  spinHistories      SpinHistory[]
+  rewardClaims       RewardClaim[]
   playerStats        PlayerStatistic[]
   notificationPrefs  NotificationPreference[]
   playerIdentity     PlayerIdentity?
   userAchievements   UserAchievement[]
   progressSnapshots  ProgressSnapshot[]
   unlockAnimations   UnlockAnimation[]
+
+  friendRequestsSent     FriendRequest[] @relation("FriendRequestSender")
+  friendRequestsReceived FriendRequest[] @relation("FriendRequestReceiver")
+  friendsAsUser          Friendship[]    @relation("FriendshipUser")
+  friendsAsFriend        Friendship[]    @relation("FriendshipFriend")
+  referralsMade          Referral[]       @relation("ReferralReferrer")
+  referralsReceived      Referral[]       @relation("ReferralReferred")
+  inviteCodes            InviteCode[]
+  communityPosts         CommunityPost[]
+  feedItemsOwned         FeedItem[] @relation("FeedItemOwner")
+  feedItemsActed         FeedItem[] @relation("FeedItemActor")
+  presences              Presence[]
+  relationshipsInitiated PlayerRelationship[] @relation("RelationshipInitiator")
+  relationshipsTargeted  PlayerRelationship[] @relation("RelationshipTarget")
+  socialSettings         SocialSettings?
 
   @@index([wallet])
   @@index([status])
@@ -253,6 +269,8 @@ model GameExecution {
   errors           Json?
   metadata         Json?
 
+  tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+
   @@index([tournamentId, status])
 }
 
@@ -272,6 +290,9 @@ model PendingReward {
   lastError        String?       @db.Text
   createdAt        DateTime      @default(now()) @db.Timestamp
   updatedAt        DateTime      @updatedAt @db.Timestamp
+
+  user       UserProfile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tournament Tournament?  @relation(fields: [tournamentId], references: [id], onDelete: SetNull)
 
   @@index([userId, status])
   @@index([treasuryRequestId])
@@ -307,15 +328,15 @@ model Session {
   createdAt    DateTime  @default(now()) @db.Timestamp
   updatedAt    DateTime  @updatedAt @db.Timestamp
 
-  user         UserProfile   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  refreshToken RefreshToken?
+  user        UserProfile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenRecord RefreshToken?
 
   @@index([userId, revoked, expiresAt])
 }
 
 model RefreshToken {
   id           String   @id @default(cuid()) @db.Uuid
-  sessionId    String   @db.Uuid
+  sessionId    String   @unique @db.Uuid
   token        String   @unique @db.VarChar(128)
   expiresAt    DateTime @db.Timestamp
   revoked      Boolean  @default(false)
@@ -374,21 +395,36 @@ model Achievement {
 
   rules       AchievementRule[]
   userAchievements UserAchievement[]
+  ruleGroups AchievementRuleGroup[]
 }
 
 model AchievementRule {
   id            String   @id @default(cuid()) @db.Uuid
   achievementId String   @db.Uuid
+  groupId       String?  @db.Uuid
   statType      StatisticType
   operator      String   @db.VarChar(16)
   targetValue   Int
   windowDays    Int      @default(0)
   createdAt     DateTime @default(now()) @db.Timestamp
 
-  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  achievement Achievement        @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  group      AchievementRuleGroup? @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
   @@index([achievementId])
   @@index([statType])
+}
+
+model AchievementRuleGroup {
+  id            String   @id @default(cuid()) @db.Uuid
+  achievementId String   @db.Uuid
+  logic         RuleLogic @default(AND)
+  createdAt     DateTime @default(now()) @db.Timestamp
+
+  achievement Achievement     @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  rules       AchievementRule[]
+
+  @@index([achievementId])
 }
 
 model UserAchievement {
@@ -448,9 +484,29 @@ model PlayerIdentity {
   selectedBadge String?  @db.VarChar(120)
   selectedFrame String?  @db.VarChar(120)
   theme         String?  @db.VarChar(32)
+  schemaVersion Int      @default(1)
   updatedAt     DateTime @updatedAt @db.Timestamp
 
-  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     UserProfile           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  versions PlayerIdentityVersion[]
+}
+
+model PlayerIdentityVersion {
+  id            String   @id @default(cuid()) @db.Uuid
+  identityId    String   @db.Uuid
+  userId        String   @db.Uuid
+  version       Int
+  displayName   String?  @db.VarChar(64)
+  selectedTitle String?  @db.VarChar(120)
+  selectedBadge String?  @db.VarChar(120)
+  selectedFrame String?  @db.VarChar(120)
+  theme         String?  @db.VarChar(32)
+  snapshot      Json?
+  createdAt     DateTime @default(now()) @db.Timestamp
+
+  identity PlayerIdentity @relation(fields: [identityId], references: [id], onDelete: Cascade)
+
+  @@index([userId, version])
 }
 
 model ProgressSnapshot {
@@ -477,11 +533,15 @@ model UnlockAnimation {
   referenceId   String?  @db.VarChar(42)
   payload       Json?
   viewed        Boolean  @default(false)
+  priority      String   @db.VarChar(16) @default("NORMAL")
+  interrupt     Boolean  @default(false)
+  position      Int      @default(0)
   createdAt     DateTime @default(now()) @db.Timestamp
 
   user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, viewed])
+  @@index([userId, priority])
 }
 
 model RateLimitEntry {
@@ -526,7 +586,6 @@ model SpinReward {
   updatedAt DateTime   @updatedAt @db.Timestamp
 
   spinHistories SpinHistory[]
-  rewardQueues  RewardQueue[]
 }
 
 model SpinHistory {
@@ -589,7 +648,7 @@ model RewardQueue {
   @@index([status, priority])
 }
 
-model RewardSource {
+model RewardSourceCatalog {
   id        String   @id @default(cuid()) @db.Uuid
   name      String   @db.VarChar(64)
   active    Boolean  @default(true)
@@ -763,6 +822,7 @@ enum RewardSource {
   STREAK
   SPIN
   ADMIN
+  REFERRAL
 }
 
 enum AchievementCategory {
@@ -799,4 +859,234 @@ enum TitleRarity {
   RARE
   EPIC
   LEGENDARY
+}
+
+enum RuleLogic {
+  AND
+  OR
+}
+
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  BLOCKED
+}
+
+enum RelationshipType {
+  BLOCKED
+  MUTED
+  FRIEND
+}
+
+enum PresenceStatus {
+  ONLINE
+  OFFLINE
+  PLAYING_TOURNAMENT
+  SPINNING
+  VIEWING_LEADERBOARD
+  AWAY
+  INVISIBLE
+}
+
+enum FeedItemType {
+  ACHIEVEMENT
+  REWARD
+  TOURNAMENT
+  BADGE
+  MISSION
+  REFERRAL
+  SYSTEM
+  FRIEND_REQUEST
+  PRESENCE
+  LEVEL_UP
+  SPIN
+}
+
+enum CommunityPostType {
+  ANNOUNCEMENT
+  FEATURED
+  HIGHLIGHT
+  CHAMPION
+  SEASONAL
+}
+
+enum InviteType {
+  DEEP_LINK
+  INVITE_CODE
+  QR
+  MINIPAY
+}
+
+enum ReferralMilestone {
+  REGISTERED
+  FIRST_PREDICTION
+  FIRST_TOURNAMENT
+  THIRD_ACTIVE_DAY
+  FIRST_REWARD
+}
+
+enum Visibility {
+  PUBLIC
+  FRIENDS
+  PRIVATE
+}
+
+model FriendRequest {
+  id         String             @id @default(cuid()) @db.Uuid
+  senderId   String             @db.Uuid
+  receiverId String             @db.Uuid
+  status     FriendRequestStatus @default(PENDING)
+  message    String?            @db.VarChar(280)
+  respondedAt DateTime?         @db.Timestamp
+  createdAt  DateTime           @default(now()) @db.Timestamp
+  updatedAt  DateTime           @updatedAt @db.Timestamp
+
+  sender   UserProfile @relation("FriendRequestSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver UserProfile @relation("FriendRequestReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@index([receiverId, status])
+  @@index([senderId, status])
+}
+
+model Friendship {
+  id        String   @id @default(cuid()) @db.Uuid
+  userId    String   @db.Uuid
+  friendId  String   @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamp
+
+  user   UserProfile @relation("FriendshipUser", fields: [userId], references: [id], onDelete: Cascade)
+  friend UserProfile @relation("FriendshipFriend", fields: [friendId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, friendId])
+  @@index([friendId])
+}
+
+model Referral {
+  id          String   @id @default(cuid()) @db.Uuid
+  referrerId  String   @db.Uuid
+  referredId  String   @db.Uuid
+  code        String   @db.VarChar(64)
+  status      String   @db.VarChar(32) @default("PENDING")
+  rewardClaimed Boolean @default(false)
+  createdAt   DateTime @default(now()) @db.Timestamp
+
+  referrer UserProfile    @relation("ReferralReferrer", fields: [referrerId], references: [id], onDelete: Cascade)
+  referred UserProfile    @relation("ReferralReferred", fields: [referredId], references: [id], onDelete: Cascade)
+  rewards   ReferralReward[]
+
+  @@unique([referredId])
+  @@index([referrerId])
+  @@index([code])
+}
+
+model ReferralReward {
+  id          String            @id @default(cuid()) @db.Uuid
+  referralId  String            @db.Uuid
+  milestone   ReferralMilestone
+  rewardType  String            @db.VarChar(32)
+  amount      Int
+  claimed     Boolean           @default(false)
+  claimedAt   DateTime?         @db.Timestamp
+  createdAt   DateTime          @default(now()) @db.Timestamp
+
+  referral Referral @relation(fields: [referralId], references: [id], onDelete: Cascade)
+
+  @@unique([referralId, milestone])
+  @@index([referralId, claimed])
+}
+
+model InviteCode {
+  id        String     @id @default(cuid()) @db.Uuid
+  ownerId   String     @db.Uuid
+  code      String     @db.VarChar(64)
+  type      InviteType @default(INVITE_CODE)
+  url       String?    @db.Text
+  deepLink  String?    @db.Text
+  usedBy    String?    @db.Uuid
+  uses      Int        @default(0)
+  createdAt DateTime   @default(now()) @db.Timestamp
+
+  owner UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@unique([code])
+  @@index([ownerId])
+}
+
+model CommunityPost {
+  id          String            @id @default(cuid()) @db.Uuid
+  authorId    String            @db.Uuid
+  type        CommunityPostType
+  title       String            @db.VarChar(160)
+  body        String            @db.Text
+  referenceId String?           @db.VarChar(64)
+  active      Boolean           @default(true)
+  createdAt   DateTime          @default(now()) @db.Timestamp
+  updatedAt   DateTime          @updatedAt @db.Timestamp
+
+  author UserProfile @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([type, active, createdAt])
+}
+
+model FeedItem {
+  id            String        @id @default(cuid()) @db.Uuid
+  userId        String        @db.Uuid
+  actorId       String?       @db.Uuid
+  type          FeedItemType
+  title         String        @db.VarChar(160)
+  body          String        @db.Text
+  referenceType String?       @db.VarChar(64)
+  referenceId   String?       @db.VarChar(64)
+  visibility    Visibility    @default(PUBLIC)
+  createdAt     DateTime      @default(now()) @db.Timestamp
+
+  user  UserProfile  @relation("FeedItemOwner", fields: [userId], references: [id], onDelete: Cascade)
+  actor UserProfile? @relation("FeedItemActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([type, createdAt])
+}
+
+model Presence {
+  id         String        @id @default(cuid()) @db.Uuid
+  userId     String        @db.Uuid
+  status     PresenceStatus @default(OFFLINE)
+  lastActive DateTime      @default(now()) @db.Timestamp
+  expiresAt  DateTime?     @db.Timestamp
+  createdAt  DateTime      @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+  @@index([status])
+}
+
+model PlayerRelationship {
+  id         String           @id @default(cuid()) @db.Uuid
+  userId     String           @db.Uuid
+  relatedId  String           @db.Uuid
+  type       RelationshipType @default(BLOCKED)
+  createdAt  DateTime         @default(now()) @db.Timestamp
+
+  initiator UserProfile @relation("RelationshipInitiator", fields: [userId], references: [id], onDelete: Cascade)
+  target    UserProfile @relation("RelationshipTarget", fields: [relatedId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, relatedId, type])
+  @@index([userId, type])
+}
+
+model SocialSettings {
+  id               String    @id @default(cuid()) @db.Uuid
+  userId           String    @unique @db.Uuid
+  profileVisibility Visibility @default(PUBLIC)
+  activityVisibility Visibility @default(FRIENDS)
+  onlineStatus     Boolean   @default(true)
+  friendRequests   Boolean   @default(true)
+  referralVisibility Visibility @default(PRIVATE)
+  createdAt        DateTime  @default(now()) @db.Timestamp
+  updatedAt        DateTime  @updatedAt @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

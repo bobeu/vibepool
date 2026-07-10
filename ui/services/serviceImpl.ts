@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/auth/session";
+import { logger } from "@/lib/logging";
 import { ActivityEngine } from "@/services/engines/ActivityEngine";
 import { MissionEngine } from "@/services/engines/MissionEngine";
 import { StreakEngine } from "@/services/engines/StreakEngine";
@@ -9,6 +10,14 @@ import { SpinEngine } from "@/services/engines/SpinEngine";
 import { WheelEngine } from "@/services/engines/WheelEngine";
 import { RewardClaimEngine } from "@/services/engines/RewardClaimEngine";
 import { GamificationEngine } from "@/services/engines/GamificationEngine";
+import { FriendEngine } from "@/services/engines/FriendEngine";
+import { ReferralEngine } from "@/services/engines/ReferralEngine";
+import { CommunityEngine } from "@/services/engines/CommunityEngine";
+import { PresenceEngine } from "@/services/engines/PresenceEngine";
+import { FeedEngine } from "@/services/engines/FeedEngine";
+import { InviteEngine } from "@/services/engines/InviteEngine";
+import { UnlockAnimationEngine } from "@/services/engines/UnlockAnimationEngine";
+import { SocialSettingsEngine } from "@/services/engines/SocialSettingsEngine";
 import { eventBus } from "@/services/engines/EventBus";
 import type {
   IMissionService,
@@ -32,9 +41,39 @@ const spinEngine = new SpinEngine();
 const wheelEngine = new WheelEngine();
 const rewardClaimEngine = new RewardClaimEngine();
 const gamificationEngine = new GamificationEngine();
+const friendEngine = new FriendEngine();
+const referralEngine = new ReferralEngine();
+const communityEngine = new CommunityEngine();
+const presenceEngine = new PresenceEngine();
+const feedEngine = new FeedEngine();
+const inviteEngine = new InviteEngine();
+const unlockAnimationEngine = new UnlockAnimationEngine();
+const socialSettingsEngine = new SocialSettingsEngine();
 
 eventBus.subscribe("ActivityRecorded", async (payload) => {
-  await progressEngine.handleActivity(payload.userId as string, payload.activityType as string, payload.metadata);
+  const userId = payload.userId as string;
+  const activityType = payload.activityType as string;
+  const wallet = payload.wallet as string | undefined;
+
+  await progressEngine.handleActivity(userId, activityType, payload.metadata);
+
+  if (activityType === "PREDICTION" && wallet) {
+    await referralEngine.recordMilestone(wallet, "FIRST_PREDICTION");
+  }
+  if (activityType === "TOURNAMENT" && wallet) {
+    await referralEngine.recordMilestone(wallet, "FIRST_TOURNAMENT");
+  }
+  if (activityType === "REWARD" && wallet) {
+    await referralEngine.recordMilestone(wallet, "FIRST_REWARD");
+  }
+  if (activityType === "LOGIN" && wallet) {
+    const stats = await prisma().playerStatistic.findUnique({
+      where: { userId_type: { userId, type: "LOGIN_DAYS" } },
+    });
+    if ((stats?.value ?? 0) >= 3) {
+      await referralEngine.recordMilestone(wallet, "THIRD_ACTIVE_DAY");
+    }
+  }
 });
 
 eventBus.subscribe("StreakUpdated", async (payload) => {
@@ -43,6 +82,153 @@ eventBus.subscribe("StreakUpdated", async (payload) => {
 
 eventBus.subscribe("SpinGranted", async (payload) => {
   await statisticsEngine.increment(payload.userId as string, "SPINS_EARNED", 1);
+});
+
+async function publishFeed(data: Record<string, unknown>): Promise<void> {
+  try {
+    await feedEngine.publish(data);
+  } catch (error) {
+    logger.error("Feed publish failed", { error: String(error) });
+  }
+}
+
+eventBus.subscribe("FriendRequestSent", async (payload) => {
+  await notificationEngine.send(
+    payload.receiverId as string,
+    "INFO",
+    "New friend request",
+    "You have a new friend request.",
+    "NORMAL"
+  );
+  await publishFeed({
+    userId: payload.receiverId as string,
+    actorId: payload.userId as string,
+    type: "FRIEND_REQUEST",
+    title: "New friend request",
+    body: "You have a new friend request.",
+    visibility: "FRIENDS",
+  });
+});
+
+eventBus.subscribe("FriendAccepted", async (payload) => {
+  await notificationEngine.send(
+    payload.friendId as string,
+    "INFO",
+    "Friend request accepted",
+    "You are now friends!",
+    "NORMAL"
+  );
+  await publishFeed({
+    userId: payload.friendId as string,
+    actorId: payload.userId as string,
+    type: "FRIEND_REQUEST",
+    title: "You are now friends",
+    body: "A new friendship has begun.",
+    visibility: "FRIENDS",
+  });
+  await feedEngine.publishForFriends(payload.userId as string, {
+    type: "FRIEND_REQUEST",
+    title: "New friend joined your circle",
+    body: "A player accepted your friend request.",
+  });
+});
+
+eventBus.subscribe("ReferralCompleted", async (payload) => {
+  await notificationEngine.send(
+    payload.userId as string,
+    "REWARD",
+    "Referral reward unlocked",
+    `${payload.milestone} milestone reached.`,
+    "HIGH"
+  );
+  await publishFeed({
+    userId: payload.userId as string,
+    type: "REFERRAL",
+    title: "Referral reward unlocked",
+    body: `${payload.milestone} milestone reached.`,
+    referenceType: "Referral",
+    referenceId: payload.aggregateId as string,
+    visibility: "PRIVATE",
+  });
+});
+
+eventBus.subscribe("ReferralRegistered", async (payload) => {
+  await referralEngine.recordMilestoneByUserId(payload.referredId as string, "REGISTERED");
+  await notificationEngine.send(
+    payload.userId as string,
+    "INFO",
+    "Referral success",
+    "A new player joined using your invite.",
+    "NORMAL"
+  );
+});
+
+eventBus.subscribe("PresenceChanged", async () => {
+  // Presence feed noise is optional; skip by default.
+});
+
+eventBus.subscribe("AchievementUnlocked", async (payload) => {
+  const userId = payload.userId as string;
+  await unlockAnimationEngine.enqueue(
+    userId,
+    "ACHIEVEMENT",
+    payload.achievementId as string,
+    { title: payload.title, category: payload.category },
+    payload.rarity as string | undefined
+  );
+  await notificationEngine.send(
+    userId,
+    "REWARD",
+    "Achievement unlocked",
+    (payload.title as string) ?? "You unlocked an achievement.",
+    payload.rarity === "LEGENDARY" ? "URGENT" : "HIGH"
+  );
+  await publishFeed({
+    userId,
+    type: "ACHIEVEMENT",
+    title: (payload.title as string) ?? "Achievement unlocked",
+    body: "An achievement was unlocked.",
+    referenceType: "Achievement",
+    referenceId: payload.achievementId as string,
+    visibility: "FRIENDS",
+  });
+  await feedEngine.publishForFriends(userId, {
+    type: "ACHIEVEMENT",
+    title: (payload.title as string) ?? "Friend unlocked an achievement",
+    body: "A friend reached a new milestone.",
+    referenceType: "Achievement",
+    referenceId: payload.achievementId as string,
+  });
+});
+
+eventBus.subscribe("CommunityAnnouncement", async (payload) => {
+  await notificationEngine.send(
+    payload.userId as string,
+    "SYSTEM",
+    (payload.title as string) ?? "Community announcement",
+    (payload.body as string) ?? "",
+    "NORMAL"
+  );
+});
+
+eventBus.subscribe("BadgeEquipped", async (payload) => {
+  await publishFeed({
+    userId: payload.userId as string,
+    type: "BADGE",
+    title: "New badge equipped",
+    body: (payload.badge as string) ?? "Badge",
+    referenceType: "Badge",
+  });
+});
+
+eventBus.subscribe("TitleEquipped", async (payload) => {
+  await publishFeed({
+    userId: payload.userId as string,
+    type: "BADGE",
+    title: "New title equipped",
+    body: (payload.title as string) ?? "Title",
+    referenceType: "Title",
+  });
 });
 
 export class MissionService implements IMissionService {
@@ -252,5 +438,142 @@ export class ProgressionService implements IProgressionService {
 
   async getEngagementMetrics(wallet: string): Promise<Record<string, unknown>> {
     return gamificationEngine.getEngagementMetrics(wallet);
+  }
+}
+
+export class FriendService {
+  name = "FriendService";
+
+  async getFriends(wallet: string) {
+    return friendEngine.getFriends(wallet);
+  }
+
+  async getPending(wallet: string) {
+    return friendEngine.getPending(wallet);
+  }
+
+  async sendRequest(wallet: string, receiverWallet: string, message?: string) {
+    return friendEngine.sendRequest(wallet, receiverWallet, message);
+  }
+
+  async respond(wallet: string, requestId: string, accept: boolean) {
+    return friendEngine.respond(wallet, requestId, accept);
+  }
+
+  async removeFriend(wallet: string, friendWallet: string) {
+    return friendEngine.removeFriend(wallet, friendWallet);
+  }
+
+  async block(wallet: string, targetWallet: string) {
+    return friendEngine.block(wallet, targetWallet);
+  }
+
+  async unblock(wallet: string, targetWallet: string) {
+    return friendEngine.unblock(wallet, targetWallet);
+  }
+}
+
+export class ReferralService {
+  name = "ReferralService";
+
+  async getReferrals(wallet: string) {
+    return referralEngine.getReferrals(wallet);
+  }
+
+  async getRewards(wallet: string) {
+    return referralEngine.getRewards(wallet);
+  }
+
+  async recordMilestone(referredWallet: string, milestone: string) {
+    return referralEngine.recordMilestone(referredWallet, milestone);
+  }
+
+  async claimReward(wallet: string, rewardId: string) {
+    return referralEngine.claimReward(wallet, rewardId);
+  }
+}
+
+export class CommunityService {
+  name = "CommunityService";
+
+  async getPosts(limit = 20) {
+    return communityEngine.getPosts(limit);
+  }
+
+  async createPost(authorWallet: string, data: Record<string, unknown>) {
+    return communityEngine.createPost(authorWallet, data);
+  }
+}
+
+export class PresenceService {
+  name = "PresenceService";
+
+  async setPresence(wallet: string, status: string) {
+    return presenceEngine.setPresence(wallet, status);
+  }
+
+  async getPresence(wallet: string) {
+    return presenceEngine.getPresence(wallet);
+  }
+
+  async getFriendsPresence(wallet: string) {
+    return presenceEngine.getFriendsPresence(wallet);
+  }
+}
+
+export class FeedService {
+  name = "FeedService";
+
+  async getFeed(wallet: string, limit = 30) {
+    return feedEngine.getFeed(wallet, limit);
+  }
+
+  async publish(data: Record<string, unknown>) {
+    return feedEngine.publish(data);
+  }
+}
+
+export class InviteService {
+  name = "InviteService";
+
+  async generate(wallet: string, type: string) {
+    return inviteEngine.generate(wallet, type);
+  }
+
+  async getInvites(wallet: string) {
+    return inviteEngine.getInvites(wallet);
+  }
+
+  async redeem(code: string, referredWallet: string) {
+    return inviteEngine.redeem(code, referredWallet);
+  }
+}
+
+export class SocialSettingsService {
+  name = "SocialSettingsService";
+
+  async getSettings(wallet: string) {
+    return socialSettingsEngine.getSettings(wallet);
+  }
+
+  async updateSettings(wallet: string, data: Record<string, unknown>) {
+    return socialSettingsEngine.updateSettings(wallet, data);
+  }
+}
+
+export class UnlockAnimationService {
+  name = "UnlockAnimationService";
+
+  async getPending(wallet: string) {
+    const user = await prisma().userProfile.findUnique({ where: { wallet }, select: { id: true } });
+    if (!user) return [];
+    return unlockAnimationEngine.getPending(user.id);
+  }
+
+  async markViewed(wallet: string, animationId: string) {
+    const user = await prisma().userProfile.findUnique({ where: { wallet }, select: { id: true } });
+    if (!user) throw new Error("User not found");
+    await unlockAnimationEngine.markViewed(user.id, animationId);
+    return { viewed: true };
   }
 }

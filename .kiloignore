@@ -1,0 +1,34 @@
+# Sentry - Zero-Bandwidth Ignore List
+
+# Environment & Configuration
+.env
+.env.*
+!.env.example
+
+# Database
+core/prisma/migrations/
+core/prisma/*.db
+core/prisma/*.db-journal
+
+# Build Artifacts
+node_modules/
+dist/
+build/
+*.lock
+
+# Logs
+*.log
+logs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Reports (keep in source control but not indexed for low RAM)
+# REPORT.md is intentionally NOT ignored - it's documentation

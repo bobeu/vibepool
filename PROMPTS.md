@@ -8425,3 +8425,803 @@ At the end of Prompt 9, NEXORA should no longer feel like a crypto application.
 It should feel like a premium competitive gaming platform where blockchain is simply the invisible infrastructure enabling ownership, rewards, and trust.
 
 From Prompt 10 onward, we'll begin making the world feel alive through friends, referrals, community presence, creator ecosystems, and eventually the redesigned **Vibe Duel** (which we'll likely rename to better match the NEXORA brand). I also recommend that before Prompt 10 we finalize the complete visual asset library (logos, heroes, icons, illustrations, cards, badges, frames, and effects) so every new feature launches with a consistent art direction.
+
+---
+
+# IMPLEMENTATION COMPLETE — Phase 2 Prompt 9 Summary
+
+## What Was Completed
+
+### Database Changes (`prisma/schema.prisma`)
+
+New models:
+- `Achievement` — configurable achievements with category, rarity, criteria, rewards
+- `AchievementRule` — stat-based unlock rules with operators and targets
+- `UserAchievement` — per-user progress, unlock state, notification flag
+- `Badge` — tiered badge catalog
+- `Title` — title catalog with rarity
+- `AvatarFrame` — cosmetic frame catalog
+- `PlayerIdentity` — user-selected title, badge, frame, theme
+- `ProgressSnapshot` — dated progression snapshots for timeline
+- `UnlockAnimation` — animation queue for unlocks
+
+New enums:
+- `AchievementCategory` — DAILY, WEEKLY, LIFETIME, HIDDEN, LEGENDARY, SEASONAL, COMMUNITY, REFERRAL, TOURNAMENT, SKILL
+- `AchievementRarity` — COMMON, RARE, EPIC, LEGENDARY
+- `BadgeTier` — BRONZE, SILVER, GOLD, DIAMOND, MASTER, LEGEND
+- `TitleRarity` — COMMON, RARE, EPIC, LEGENDARY
+
+### Engine Layer (`services/engines/`)
+
+- `AchievementEngine` — evaluates rules against `PlayerStatistic`, tracks progress, unlocks achievements, emits `AchievementUnlocked` events
+- `IdentityEngine` — manages display name and equipped title/badge/frame/theme
+- `ProgressionEngine` — central progression viewer, snapshot creation for timeline
+- `TitleEngine` — title catalog, unlock gating, equip/unequip
+- `BadgeEngine` — badge catalog, equip logic
+
+### API Routes
+
+- `GET/POST /api/achievements`
+- `GET/POST /api/profile/identity`
+- `GET/POST /api/profile/title`
+- `GET/POST /api/profile/badge`
+- `GET /api/profile/timeline`
+
+### Frontend
+
+- Expanded `ProfilePage` with identity, titles, badges, achievements, timeline, and Framer Motion
+- New `AchievementsPage` — category-grouped achievement cards with rarity styling and progress bars
+- Asset pipeline: `assets/index.ts` with centralized exports for heroes, backgrounds, icons, illustrations, avatars, effects, logos, badges, titles, frames, cards
+- Hero component library: `HeroBanner`, `ArenaBackground`, `GlassContainer`, `SectionDivider`, `FloatingParticles`, `RewardExplosion`, `XPAnimation`, `GlowBorder`
+- Motion system: `lib/motion/variants.ts` with container, item, fade, slide, scale, pop, reward, shimmer variants
+- Fixed `duration-[3000ms]` ambiguity warning in `app/spin/page.tsx`
+- Fixed missing `@/components/ui/button` import in `app/not-found.tsx`
+
+## Remaining Work (Deferred to Prompt 10+)
+
+- Accessibility: reduced-motion mode, high-contrast theme, WCAG AA contrast validation, keyboard navigation
+- Social Layer (friends, referrals, community)
+- Vibe Duel 2.0 / Arena / Guilds / Seasons / Battle Pass
+- Admin Console
+- Analytics & Intelligence
+- Production Hardening
+
+This prompt adds long-term progression and player identity to NEXORA. Achievements, titles, badges, frames, and a progress timeline give players permanent goals beyond daily play, while the asset pipeline and hero component library provide the visual foundation for the remainder of Phase 2.
+
+---
+
+# CTO Said:
+
+This is another very strong implementation. At this point, the architecture has reached a level where adding new capabilities should mostly mean plugging into the existing engine layer rather than introducing new foundations.
+
+## CTO Review — Prompt 9
+
+**Overall score: 9.9/10**
+
+The separation between gameplay, identity, progression, and presentation is exactly where I wanted the platform to be.
+
+### What's Excellent
+
+* Achievement engine is event-driven.
+* Identity is separated from gameplay.
+* Progress snapshots prepare you for seasonal progression.
+* Asset pipeline is centralized.
+* Motion system is centralized.
+* Profile has evolved into a real player identity rather than just a wallet page.
+
+---
+
+## Things I'd Improve Before Prompt 10
+
+### 1. Identity Versioning
+
+PlayerIdentity should become versioned.
+
+Example:
+
+```text
+Player Identity
+
+↓
+
+Version 1
+
+↓
+
+Version 2
+
+↓
+
+Version 3
+```
+
+This lets you support future cosmetics, migrations, seasonal resets, and NFT-backed identities without breaking older profiles.
+
+---
+
+### 2. Timeline
+
+Current timeline appears snapshot-driven.
+
+Expand it into a real **Activity Timeline**.
+
+It should combine:
+
+* Achievement unlocked
+* Reward claimed
+* Tournament won
+* Mission completed
+* New badge
+* New title
+* New level
+* Spin reward
+* Referral reward (future)
+
+Think of it as a player's history.
+
+---
+
+### 3. Achievement Rules
+
+Current rule engine compares statistics.
+
+Good.
+
+Now support compound rules.
+
+Example:
+
+```
+100 Predictions
+
+AND
+
+Top 10
+
+5 Days
+
+```
+
+or
+
+```
+Complete Mission A
+
+OR
+
+Mission B
+```
+
+Introduce rule groups.
+
+---
+
+### 4. Unlock Animations
+
+Don't just queue animations.
+
+Support priorities.
+
+Example:
+
+Legendary Achievement
+
+↓
+
+interrupt current animation
+
+↓
+
+play full celebration
+
+Common XP
+
+↓
+
+small toast
+
+---
+
+### 5. Asset Manifest
+
+Instead of importing every asset individually, introduce an Asset Manifest.
+
+Example:
+
+```
+AssetManifest
+
+↓
+
+Hero
+
+↓
+
+Mission
+
+↓
+
+Reward
+
+↓
+
+Badge
+
+↓
+
+Frame
+
+↓
+
+Theme
+```
+
+Future seasonal themes become much easier.
+
+---
+
+## CTO Decision
+
+We have enough progression.
+
+Now we need **people**.
+
+Games become sticky because of community.
+
+Prompt 10 begins the social layer.
+
+---
+
+# PHASE 2 — PROMPT 10
+
+# Social Platform, Friends, Referrals & Community Layer
+
+The objective is to transform NEXORA from a single-player experience into a living competitive community.
+
+The social layer must remain lightweight, privacy-conscious, and fully compatible with MiniPay.
+
+---
+
+# Core Philosophy
+
+Players return because of:
+
+Competition
+
+Recognition
+
+Friends
+
+Shared progress
+
+Community
+
+Not just rewards.
+
+---
+
+# New Engines
+
+Create
+
+```text
+FriendEngine.ts
+ReferralEngine.ts
+CommunityEngine.ts
+PresenceEngine.ts
+FeedEngine.ts
+InviteEngine.ts
+```
+
+Interfaces
+
+```text
+IFriendEngine
+IReferralEngine
+ICommunityEngine
+IPresenceEngine
+IFeedEngine
+IInviteEngine
+```
+
+---
+
+# Database
+
+Add
+
+```text
+FriendRequest
+Friend
+Referral
+ReferralReward
+Invite
+CommunityPost
+FeedItem
+Presence
+PlayerRelationship
+SocialSettings
+```
+
+Everything normalized.
+
+---
+
+# Friends
+
+Support
+
+Send Request
+
+Accept
+
+Reject
+
+Block
+
+Remove Friend
+
+Pending
+
+Mutual Friends (future)
+
+Friend Limits configurable.
+
+---
+
+# Player Presence
+
+Support
+
+Online
+
+Offline
+
+Playing Tournament
+
+Spinning
+
+Viewing Leaderboard
+
+Away
+
+Invisible
+
+Presence expires automatically.
+
+No permanent polling records.
+
+---
+
+# Activity Feed
+
+Every important event can appear in a player's feed.
+
+Examples:
+
+Friend reached Level 10
+
+Friend unlocked Legendary Badge
+
+Friend won Tournament
+
+Friend claimed reward
+
+Friend started streak
+
+Feed items must reference Domain Events where applicable.
+
+---
+
+# Referral System
+
+Referrals must reward **engagement**, not merely sign-ups.
+
+Example milestones:
+
+* New user registers
+* First prediction submitted
+* First tournament completed
+* Third active day
+* First reward claimed
+
+Rewards are configurable and flow through the existing RewardEngine and SettlementEngine.
+
+---
+
+# Invite Engine
+
+Generate:
+
+* Deep links
+* Invite codes
+* QR codes
+* MiniPay share links
+
+Track attribution securely.
+
+---
+
+# Community
+
+Do **not** build a full social network.
+
+Support:
+
+* Announcements
+* Featured players
+* Community highlights
+* Tournament champions
+* Seasonal announcements
+
+Admin-controlled.
+
+---
+
+# Privacy
+
+Every player controls:
+
+* Profile visibility
+* Activity visibility
+* Online status
+* Friend requests
+* Referral visibility
+
+Implement `SocialSettings`.
+
+---
+
+# Notifications
+
+Support:
+
+Friend Request
+
+Referral Success
+
+Friend Achievement
+
+Friend Tournament Win
+
+Community Announcement
+
+Presence changes (optional)
+
+---
+
+# APIs
+
+Implement:
+
+```text
+GET /api/friends
+POST /api/friends/request
+POST /api/friends/respond
+DELETE /api/friends
+
+GET /api/feed
+
+GET /api/referrals
+POST /api/referrals
+
+GET /api/invites
+
+GET /api/presence
+
+GET /api/community
+```
+
+---
+
+# Frontend
+
+New pages:
+
+Friends
+
+Community
+
+Activity Feed
+
+Referral Center
+
+Invite Friends
+
+Expanded Profile Social Tab
+
+---
+
+# Profile Enhancements
+
+Display:
+
+Friend Count
+
+Followers (future placeholder)
+
+Referral Count
+
+Referral Rewards
+
+Community Rank
+
+Recent Activity
+
+---
+
+# Feed UI
+
+Cards should support:
+
+Achievement
+
+Reward
+
+Tournament
+
+Badge
+
+Mission
+
+Referral
+
+System announcement
+
+Reuse existing design system.
+
+---
+
+# Referral Dashboard
+
+Show:
+
+Invites sent
+
+Successful referrals
+
+Pending referrals
+
+Milestones
+
+Rewards earned
+
+Next milestone
+
+---
+
+# Community Home
+
+Add a section to Home:
+
+Community Spotlight
+
+Today's Champions
+
+Trending Players
+
+Season Countdown (placeholder)
+
+---
+
+# Event Integration
+
+Publish and persist events:
+
+FriendRequestSent
+
+FriendAccepted
+
+ReferralCompleted
+
+PresenceChanged
+
+CommunityAnnouncement
+
+FeedItemCreated
+
+Everything through EventBus and EventStore.
+
+---
+
+# Testing
+
+Friend Engine
+
+Referral Engine
+
+Presence Engine
+
+Feed Engine
+
+Invite Engine
+
+API tests
+
+Privacy tests
+
+Event replay tests
+
+Coverage target: 95%+
+
+---
+
+# Documentation
+
+Generate:
+
+Social architecture
+
+Referral flow
+
+Presence model
+
+Privacy model
+
+Feed model
+
+Invite system
+
+Community module
+
+---
+
+# Fixes From Prompt 9
+
+Implement the following improvements:
+
+### 1. Versioned Player Identity
+
+Add version tracking and migration support for `PlayerIdentity`.
+
+---
+
+### 2. Rich Activity Timeline
+
+Replace snapshot-only timeline with a unified event-driven activity timeline.
+
+---
+
+### 3. Compound Achievement Rules
+
+Support grouped conditions (`AND` / `OR`) in `AchievementRuleEngine`.
+
+---
+
+### 4. Animation Priority
+
+Implement animation priorities so high-value unlocks can supersede low-priority effects.
+
+---
+
+### 5. Asset Manifest
+
+Introduce a centralized `AssetManifest` that maps logical asset names to actual resources. This should support future seasonal theme overrides without changing component code.
+
+---
+
+# Deliverables
+
+Provide:
+
+1. Friend Engine
+2. Referral Engine
+3. Community Engine
+4. Presence Engine
+5. Feed Engine
+6. Invite Engine
+7. Social database schema
+8. Social APIs
+9. Friends UI
+10. Referral Center
+11. Community pages
+12. Activity Feed
+13. Updated Profile
+14. Event integration
+15. Tests
+16. Documentation
+17. Recommendations before **Prompt 11 (Competitive Arena & Head-to-Head Mode)**
+
+---
+
+## CTO Direction
+
+From this point onward, every major feature should deepen engagement rather than broaden the architecture. The engine foundation is mature; the focus should be on making NEXORA feel alive through social interaction, shared progression, and community while continuing to route all rewards, events, notifications, and persistence through the platform services you've already established.
+
+---
+
+# IMPLEMENTATION COMPLETE — Phase 2 Prompt 10 Summary
+
+## What Was Completed
+
+### Prompt 9 Fixes (bundled into Prompt 10)
+
+1. **Versioned Player Identity** — `PlayerIdentityVersion` snapshots on every identity update via `IdentityEngine` (already scaffolded; validated in schema).
+2. **Rich Activity Timeline** — `/api/profile/timeline` merges progress snapshots, feed items, and activities; profile UI now renders unified `{ kind, title, body }` entries.
+3. **Compound Achievement Rules** — `AchievementEngine` evaluates `AND`/`OR` rule groups correctly with per-rule operator comparison.
+4. **Animation Priority** — `UnlockAnimationEngine` queues unlocks with `URGENT`/`HIGH`/`NORMAL`/`LOW` priority, interrupt support, and `UnlockAnimationToast` in `AppShell`.
+5. **Asset Manifest** — `lib/assets/manifest.ts` centralizes logical asset resolution with seasonal override hooks; AppShell uses CSS gradients until physical assets are copied to `public/assets/`.
+
+### Social Database (`prisma/schema.prisma`)
+
+- Fixed schema validation: `FeedItem` dual relations, `ReferralReward` unique constraint, `RewardSource`/`RewardSourceCatalog` naming conflict, `RefreshToken.sessionId` uniqueness, missing back-relations.
+- Added `prisma.config.ts` for Prisma 7 datasource configuration.
+- Social models active: `FriendRequest`, `Friendship`, `Referral`, `ReferralReward`, `InviteCode`, `CommunityPost`, `FeedItem`, `Presence`, `PlayerRelationship`, `SocialSettings`.
+
+### Engine Layer (`services/engines/`)
+
+| Engine | Status |
+|--------|--------|
+| `FriendEngine` | Requests, accept/reject, block/unblock, friend limits, privacy gate |
+| `ReferralEngine` | Milestone tracking, reward claims, `recordMilestoneByUserId` |
+| `InviteEngine` | Code/deep link/MiniPay/QR generation + `redeem()` attribution |
+| `FeedEngine` | Friend-scoped feed, privacy-aware visibility, `publishForFriends()` |
+| `PresenceEngine` | TTL expiry, friends presence, online-status privacy |
+| `CommunityEngine` | Announcements with `CommunityAnnouncement` events |
+| `SocialSettingsEngine` | Profile/activity visibility, friend requests, online status |
+| `UnlockAnimationEngine` | Priority queue with interrupt semantics |
+
+### Event Integration (`services/serviceImpl.ts`)
+
+- Friend request/accept → notifications + feed
+- Referral register/complete → milestones + notifications
+- Achievement unlock → animation queue + friend feed fan-out
+- Activity recorded → automatic referral milestone hooks
+- Community posts → announcement notifications
+
+### API Routes
+
+| Route | Methods |
+|-------|---------|
+| `/api/friends` | GET, DELETE |
+| `/api/friends/request`, `/respond`, `/block`, `/unblock` | POST |
+| `/api/feed` | GET |
+| `/api/referrals` | GET, POST |
+| `/api/invites` | GET, POST |
+| `/api/presence` | GET, POST |
+| `/api/community` | GET, POST (admin via `ADMIN_WALLETS`) |
+| `/api/social/settings` | GET, POST |
+| `/api/animations` | GET, POST |
+| `/api/profile/timeline` | GET |
+| `/api/auth/login` | POST (accepts optional `refCode` for referral attribution) |
+
+### Frontend
+
+- **Friends** — tabs for friends/requests/add, block + remove actions
+- **Feed** — typed activity cards with rarity styling
+- **Referrals** — milestone tracker, reward claims, invite generation (code/deep link/QR/MiniPay)
+- **Community** — spotlight + announcements
+- **Profile** — social stats, privacy toggles, feed/referral links, fixed activity timeline
+- **Home** — fixed broken `useAuth` import; community spotlight section
+- **AppShell** — CSS gradient backgrounds (no missing PNG 404s), unlock animation toast, presence heartbeat
+
+### Tests
+
+- `__tests__/social.test.ts` — 21 tests passing (engines, compound rules, animation priority, invite redeem, social settings)
+- Improved mock Prisma with relation includes and deterministic resets
+
+### Documentation
+
+- `ui/docs/SOCIAL.md` — architecture, referral flow, presence, privacy, feed, invite system, recommendations for Prompt 11
+
+## Remaining Work (Deferred to Prompt 11+)
+
+- Competitive Arena & Head-to-Head mode
+- Physical asset files under `public/assets/` (copy from vibecheck per `public/README.md`)
+- Live presence/feed via SSE or WebSockets
+- Accessibility: reduced-motion, high-contrast, keyboard nav
+- API integration tests and 95%+ coverage target across all suites
+- Pre-existing test failures in `engines.test.ts`, `missions_activity.test.ts`, `frontend.test.tsx`
+- Admin console for community moderation UI
+- Guild-scoped feeds and mutual friends
+
+## Recommendations Before Prompt 11 (Competitive Arena & Head-to-Head Mode)
+
+1. Populate the visual asset library so arena UI launches with consistent art direction.
+2. Add tournament win events to friend feed fan-out.
+3. Introduce rate limiting on social endpoints (friend requests, invite generation).
+4. Build a lightweight matchmaking queue table before head-to-head mode.
+5. Fix remaining pre-existing test suite failures and add API route integration tests.
+6. Consider SSE for live arena presence during matches.
+
+Prompt 10 completes the social foundation. NEXORA now supports friends, referrals, community announcements, activity feeds, privacy controls, and priority unlock celebrations — all routed through the existing engine, event, and reward infrastructure.

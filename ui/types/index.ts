@@ -2,10 +2,13 @@ export type Address = `0x${string}`;
 
 export type NavKey =
   | "home"
+  | "tournament"
   | "prediction"
   | "spin"
   | "leaderboard"
   | "rewards"
+  | "friends"
+  | "community"
   | "profile";
 
 export interface UserProfile {

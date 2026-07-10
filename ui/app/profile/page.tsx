@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { AppShell } from "@/components/layout/AppShell";
@@ -84,6 +85,51 @@ export default function ProfilePage() {
     enabled: !!session,
   });
 
+  const { data: social } = useQuery({
+    queryKey: ["profile", "social"],
+    queryFn: async () => {
+      const [friendsRes, referralsRes, feedRes] = await Promise.all([
+        fetch("/api/friends"),
+        fetch("/api/referrals"),
+        fetch("/api/feed"),
+      ]);
+      const friends = friendsRes.ok ? await friendsRes.json() : { friends: [] };
+      const referrals = referralsRes.ok ? await referralsRes.json() : { total: 0, successful: 0 };
+      const feed = feedRes.ok ? await feedRes.json() : { feed: [] };
+      return {
+        friendCount: friends.friends?.length ?? 0,
+        referralCount: referrals.total ?? 0,
+        referralRewards: referrals.successful ?? 0,
+        activity: feed.feed?.slice(0, 3) ?? [],
+      };
+    },
+    staleTime: 15_000,
+    enabled: !!session,
+  });
+
+  const { data: socialSettings } = useQuery({
+    queryKey: ["social-settings"],
+    queryFn: async () => {
+      const res = await fetch("/api/social/settings");
+      if (!res.ok) throw new Error("Failed to fetch social settings");
+      return res.json();
+    },
+    staleTime: 15_000,
+    enabled: !!session,
+  });
+
+  const updateSettingsMutation = useMutation({
+    mutationFn: async (patch: Record<string, unknown>) => {
+      const res = await fetch("/api/social/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+      if (!res.ok) throw new Error("Failed to update settings");
+      return res.json();
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["social-settings"] }),
+  });
   const evaluateMutation = useMutation({
     mutationFn: async () => {
       const res = await fetch("/api/achievements", { method: "POST" });
@@ -227,6 +273,46 @@ export default function ProfilePage() {
         </motion.section>
 
         <motion.section variants={item} className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-bold uppercase tracking-tight">Social</h2>
+            <div className="flex gap-2">
+              <Link href="/feed" className="text-xs font-semibold text-primary">Feed</Link>
+              <Link href="/referrals" className="text-xs font-semibold text-primary">Referrals</Link>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <SocialStat label="Friends" value={social?.friendCount ?? 0} href="/friends" />
+            <SocialStat label="Referrals" value={social?.referralCount ?? 0} href="/referrals" />
+            <SocialStat label="Rewarded" value={social?.referralRewards ?? 0} href="/referrals" />
+            <SocialStat label="Followers" value={0} href="/profile" />
+          </div>
+          <GlassContainer className="p-4 space-y-3">
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">Privacy</p>
+            <SettingToggle
+              label="Show online status"
+              checked={socialSettings?.settings?.onlineStatus ?? true}
+              onChange={(onlineStatus) => updateSettingsMutation.mutate({ onlineStatus })}
+            />
+            <SettingToggle
+              label="Accept friend requests"
+              checked={socialSettings?.settings?.friendRequests ?? true}
+              onChange={(friendRequests) => updateSettingsMutation.mutate({ friendRequests })}
+            />
+          </GlassContainer>
+          {social?.activity?.length > 0 && (
+            <GlassContainer className="p-4 space-y-2">
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">Recent Activity</p>
+              {social.activity.map((a: any) => (
+                <div key={a.id} className="flex items-center justify-between rounded-xl border border-border/40 bg-muted/30 p-3">
+                  <p className="font-bold text-sm">{a.title}</p>
+                  <span className="text-[10px] text-muted-foreground uppercase">{a.type}</span>
+                </div>
+              ))}
+            </GlassContainer>
+          )}
+        </motion.section>
+
+        <motion.section variants={item} className="space-y-3">
           <h2 className="text-lg font-bold uppercase tracking-tight">Progress Timeline</h2>
           <GlassContainer className="p-4">
             {timelineLoading ? (
@@ -238,19 +324,20 @@ export default function ProfilePage() {
             ) : (
               <div className="space-y-2">
                 {timeline?.timeline?.length === 0 && (
-                  <p className="text-sm text-muted-foreground text-center py-6">No snapshots yet.</p>
+                  <p className="text-sm text-muted-foreground text-center py-6">No activity yet.</p>
                 )}
-                {timeline?.timeline?.map((snapshot: any) => (
-                  <div key={snapshot.id} className="flex items-center justify-between rounded-xl border border-border/40 bg-muted/30 p-3">
+                {timeline?.timeline?.map((entry: any) => (
+                  <div key={entry.id} className="flex items-center justify-between rounded-xl border border-border/40 bg-muted/30 p-3">
                     <div>
-                      <p className="font-bold text-sm">{snapshot.snapshotType}</p>
-                      <p className="text-xs text-muted-foreground">
-                        Level {snapshot.level} · {snapshot.xp?.toLocaleString()} XP
-                      </p>
+                      <p className="font-bold text-sm">{entry.title}</p>
+                      <p className="text-xs text-muted-foreground">{entry.body}</p>
                     </div>
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(snapshot.createdAt).toLocaleDateString()}
-                    </span>
+                    <div className="text-right">
+                      <span className="block text-[10px] uppercase text-muted-foreground">{entry.kind}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(entry.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -268,5 +355,39 @@ function StatCard({ label, value }: { label: string; value: string }) {
       <p className="text-xs text-muted-foreground uppercase tracking-wider">{label}</p>
       <p className="mt-1 text-lg font-bold">{value}</p>
     </div>
+  );
+}
+
+function SocialStat({ label, value, href }: { label: string; value: number; href: string }) {
+  return (
+    <Link
+      href={href}
+      className="rounded-xl border border-border/50 bg-card/60 p-4 text-center transition-all hover:border-primary/50"
+    >
+      <p className="text-xs text-muted-foreground uppercase tracking-wider">{label}</p>
+      <p className="mt-1 text-lg font-bold">{value}</p>
+    </Link>
+  );
+}
+
+function SettingToggle({
+  label,
+  checked,
+  onChange,
+}: {
+  label: string;
+  checked: boolean;
+  onChange: (value: boolean) => void;
+}) {
+  return (
+    <label className="flex items-center justify-between gap-3 text-sm">
+      <span>{label}</span>
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="h-4 w-4 accent-primary"
+      />
+    </label>
   );
 }

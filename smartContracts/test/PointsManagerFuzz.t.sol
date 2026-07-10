@@ -12,14 +12,14 @@ contract PointsManagerFuzzTest is Test {
   }
 
   function testFuzz_GrantXP(uint256 amount) public {
-    bytes32 requestId = keccak256(abi.encodePacked(block.timestamp, msg.sender, amount));
-    vm.prank(address(this));
+    vm.assume(amount > 0);
+    bytes32 requestId = keccak256(abi.encodePacked(block.timestamp, msg.sender, amount, "xp"));
     pointsManager.grantXP(msg.sender, amount, requestId);
   }
 
   function testFuzz_GrantPoints(uint256 amount) public {
-    bytes32 requestId = keccak256(abi.encodePacked(block.timestamp, msg.sender, amount));
-    vm.prank(address(this));
+    vm.assume(amount > 0);
+    bytes32 requestId = keccak256(abi.encodePacked(block.timestamp, msg.sender, amount, "points"));
     pointsManager.grantPoints(msg.sender, amount, requestId);
   }
 }

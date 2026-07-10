@@ -74,3 +74,18 @@ export const CARDS = {
   reward: "/assets/cards/reward.webp",
   achievement: "/assets/cards/achievement.webp",
 } as const;
+
+export const ASSETS = {
+  HEROES,
+  BACKGROUNDS,
+  ICONS,
+  ILLUSTRATIONS,
+  AVATARS,
+  EFFECTS,
+  LOGOS,
+  BADGES,
+  TITLES,
+  CARDS,
+} as const;
+
+export type AssetManifest = typeof ASSETS;

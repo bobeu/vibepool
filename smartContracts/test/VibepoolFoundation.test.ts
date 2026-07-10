@@ -28,15 +28,15 @@ describe("Vibepool Foundation Contracts", function () {
       ]);
 
       await rewardTreasury.write.grantRole([
-        rewardTreasury.read.TREASURY_MANAGER_ROLE(),
+        await rewardTreasury.read.TREASURY_MANAGER_ROLE(),
         treasuryManager.account.address
       ], { account: owner.account });
       await rewardTreasury.write.grantRole([
-        rewardTreasury.read.REWARD_MANAGER_ROLE(),
+        await rewardTreasury.read.REWARD_MANAGER_ROLE(),
         rewardManager.account.address
       ], { account: owner.account });
       await rewardTreasury.write.grantRole([
-        rewardTreasury.read.PAUSER_ROLE(),
+        await rewardTreasury.read.PAUSER_ROLE(),
         pauser.account.address
       ], { account: owner.account });
 
@@ -70,6 +70,7 @@ describe("Vibepool Foundation Contracts", function () {
     });
 
     it("Should reject unsupported asset deposits", async function () {
+      const viem = hre.viem;
       const unsupported = await viem.deployContract("MockERC20", ["Bad", "BAD", 18]);
       await expect(
         rewardTreasury.write.depositERC20([unsupported.address, parseEther("10")], { account: owner.account })
@@ -77,19 +78,18 @@ describe("Vibepool Foundation Contracts", function () {
     });
 
     it("Should allow treasury manager to withdraw", async function () {
+      const viem = hre.viem;
       const amount = parseEther("5");
       await owner.sendTransaction({
         to: rewardTreasury.address,
         value: amount
       });
 
-      const before = await owner.getBalance();
-      const tx = await rewardTreasury.write.withdraw([zeroAddress, treasuryManager.account.address, amount], { account: treasuryManager.account });
-      const receipt = await viem.waitForTransactionReceipt({ hash: tx });
-      const gasUsed = receipt.gasUsed * receipt.effectiveGasPrice;
-      const after = await owner.getBalance();
+      const before = await viem.getBalance({ address: treasuryManager.account.address });
+      await rewardTreasury.write.withdraw([zeroAddress, treasuryManager.account.address, amount], { account: treasuryManager.account });
+      const after = await viem.getBalance({ address: treasuryManager.account.address });
 
-      expect(after - before + gasUsed).to.equal(amount);
+      expect(after - before).to.equal(amount);
     });
 
     it("Should reject unauthorized withdrawal", async function () {
@@ -187,7 +187,7 @@ describe("Vibepool Foundation Contracts", function () {
         zeroAddress
       ]);
 
-      await pointsManager.write.grantRole([pointsManager.read.BACKEND_ROLE(), backend.account.address], { account: owner.account });
+      await pointsManager.write.grantRole([await pointsManager.read.BACKEND_ROLE(), backend.account.address], { account: owner.account });
     });
 
     it("Should grant XP and auto-calculate level", async function () {
@@ -212,13 +212,22 @@ describe("Vibepool Foundation Contracts", function () {
     });
 
     it("Should emit LevelUp event when level increases", async function () {
+      const viem = hre.viem;
+      const publicClient = await viem.getPublicClient();
       const requestId = "0x" + "a3".repeat(32);
-      await pointsManager.write.grantXP([user.account.address, 1001, requestId], { account: backend.account });
+      const hash = await pointsManager.write.grantXP([user.account.address, 1001, requestId], { account: backend.account });
+      const receipt = await publicClient.waitForTransactionReceipt({ hash });
 
-      const filter = pointsManager.functions.LevelUp.filter(user.account.address);
-      const logs = await pointsManager.queryFilter(filter);
+      const logs = await publicClient.getContractEvents({
+        address: pointsManager.address,
+        abi: pointsManager.abi,
+        eventName: "LevelUp",
+        fromBlock: receipt.blockNumber,
+        toBlock: receipt.blockNumber,
+      });
+
       expect(logs.length).to.equal(1);
-      expect(logs[0].args.newLevel).to.equal(1);
+      expect(logs[0].args.newLevel).to.equal(1n);
     });
 
     it("Should grant points and lifetime points", async function () {
@@ -285,7 +294,7 @@ describe("Vibepool Foundation Contracts", function () {
 
       activityRegistry = await viem.deployContract("contracts/ActivityRegistry.sol:ActivityRegistry");
 
-      await activityRegistry.write.grantRole([activityRegistry.read.BACKEND_ROLE(), backend.account.address], { account: owner.account });
+      await activityRegistry.write.grantRole([await activityRegistry.read.BACKEND_ROLE(), backend.account.address], { account: owner.account });
     });
 
     it("Should record activity and initialize streak", async function () {
@@ -304,9 +313,8 @@ describe("Vibepool Foundation Contracts", function () {
 
       await activityRegistry.write.recordActivity([user.account.address, requestId1], { account: backend.account });
 
-      const viem = hre.viem;
       const time = (await import("@nomicfoundation/hardhat-network-helpers")).time;
-      await time.increase(1 days);
+      await time.increase(86400);
 
       await activityRegistry.write.recordActivity([user.account.address, requestId2], { account: backend.account });
 
@@ -323,7 +331,7 @@ describe("Vibepool Foundation Contracts", function () {
 
       const viem = hre.viem;
       const time = (await import("@nomicfoundation/hardhat-network-helpers")).time;
-      await time.increase(2 days);
+      await time.increase(86400 * 2);
 
       await activityRegistry.write.recordActivity([user.account.address, requestId2], { account: backend.account });
 
@@ -362,7 +370,7 @@ describe("Vibepool Foundation Contracts", function () {
 
       spinRewardManager = await viem.deployContract("contracts/SpinRewardManager.sol:SpinRewardManager");
 
-      await spinRewardManager.write.grantRole([spinRewardManager.read.BACKEND_ROLE(), backend.account.address], { account: owner.account });
+      await spinRewardManager.write.grantRole([await spinRewardManager.read.BACKEND_ROLE(), backend.account.address], { account: owner.account });
     });
 
     it("Should grant spins", async function () {

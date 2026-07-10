@@ -140,6 +140,50 @@ export interface IBadgeEngine extends IEngine {
   equipBadge(userId: string, badgeSlug: string): Promise<Record<string, unknown>>;
 }
 
+export interface IFriendEngine extends IEngine {
+  getFriends(wallet: string): Promise<Record<string, unknown>[]>;
+  getPending(wallet: string): Promise<Record<string, unknown>>;
+  sendRequest(wallet: string, receiverWallet: string, message?: string): Promise<Record<string, unknown>>;
+  respond(wallet: string, requestId: string, accept: boolean): Promise<Record<string, unknown>>;
+  removeFriend(wallet: string, friendWallet: string): Promise<Record<string, unknown>>;
+  block(wallet: string, targetWallet: string): Promise<Record<string, unknown>>;
+  unblock(wallet: string, targetWallet: string): Promise<Record<string, unknown>>;
+}
+
+export interface IReferralEngine extends IEngine {
+  getReferrals(wallet: string): Promise<Record<string, unknown>>;
+  getRewards(wallet: string): Promise<Record<string, unknown>[]>;
+  recordMilestone(referredWallet: string, milestone: string): Promise<Record<string, unknown>[]>;
+  claimReward(wallet: string, rewardId: string): Promise<Record<string, unknown>>;
+}
+
+export interface ICommunityEngine extends IEngine {
+  getPosts(limit?: number): Promise<Record<string, unknown>[]>;
+  createPost(authorWallet: string, data: Record<string, unknown>): Promise<Record<string, unknown>>;
+}
+
+export interface IPresenceEngine extends IEngine {
+  setPresence(wallet: string, status: string): Promise<Record<string, unknown>>;
+  getPresence(wallet: string): Promise<Record<string, unknown>>;
+  getFriendsPresence(wallet: string): Promise<Record<string, unknown>[]>;
+}
+
+export interface IFeedEngine extends IEngine {
+  getFeed(wallet: string, limit?: number): Promise<Record<string, unknown>[]>;
+  publish(data: Record<string, unknown>): Promise<Record<string, unknown>>;
+}
+
+export interface IInviteEngine extends IEngine {
+  generate(wallet: string, type: string): Promise<Record<string, unknown>>;
+  getInvites(wallet: string): Promise<Record<string, unknown>[]>;
+  redeem(code: string, referredWallet: string): Promise<Record<string, unknown>>;
+}
+
+export interface IAnimationPriority {
+  order(animations: Record<string, unknown>[]): Record<string, unknown>[];
+  shouldInterrupt(incoming: Record<string, unknown>, current: Record<string, unknown> | null): boolean;
+}
+
 export interface IRandomProvider {
   next(): Promise<number>;
   range(min: number, max: number): Promise<number>;

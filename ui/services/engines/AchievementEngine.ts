@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/auth/session";
+﻿import { prisma } from "@/lib/auth/session";
 import { logger } from "@/lib/logging";
 import { eventBus } from "./EventBus";
 import type { IAchievementEngine } from "./interfaces";
@@ -13,6 +13,10 @@ export class AchievementEngine implements IAchievementEngine {
   async evaluateAchievements(userId: string): Promise<Record<string, unknown>[]> {
     const achievements = await prisma().achievement.findMany({
       where: { active: true },
+      include: {
+        rules: true,
+        ruleGroups: { include: { rules: true } },
+      },
     });
 
     const results: Record<string, unknown>[] = [];
@@ -160,30 +164,107 @@ export class AchievementEngine implements IAchievementEngine {
     };
   }
 
-  private async evaluateRule(userId: string, achievement: { id: string; rules: { statType: string; operator: string; targetValue: number; windowDays: number }[] }): Promise<{ current: number; target: number } | null> {
-    const rules = (achievement as any).rules || [];
-    if (rules.length === 0) {
+  private async evaluateRule(
+    userId: string,
+    achievement: {
+      id: string;
+      rules: { statType: string; operator: string; targetValue: number; windowDays: number }[];
+      ruleGroups?: { logic: "AND" | "OR"; rules: { statType: string; operator: string; targetValue: number; windowDays: number }[] }[];
+    }
+  ): Promise<{ current: number; target: number } | null> {
+    const baseRules = achievement.rules || [];
+    const groups = achievement.ruleGroups || [];
+
+    if (baseRules.length === 0 && groups.length === 0) {
       return null;
     }
 
-    let current = 0;
-    let target = 0;
+    const sets = [
+      ...(baseRules.length > 0 ? [await this.evalRuleSet(userId, baseRules, "AND")] : []),
+      ...(await Promise.all(groups.map((group) => this.evalRuleSet(userId, group.rules, group.logic)))),
+    ].filter((set) => set.target > 0);
 
-    for (const rule of rules) {
-      const stats = await prisma().playerStatistic.findUnique({
-        where: {
-          userId_type: {
-            userId,
-            type: rule.statType as any,
-          },
-        },
-      });
-
-      const value = stats?.value || 0;
-      current += value;
-      target += rule.targetValue;
+    if (sets.length === 0) {
+      return null;
     }
 
-    return { current, target };
+    const passed = sets.every((set) => set.passed);
+
+    if (baseRules.length === 0 && groups.length > 0) {
+      return { current: passed ? 1 : 0, target: 1 };
+    }
+
+    const progress = passed
+      ? Math.max(...sets.map((set) => set.progress))
+      : Math.min(...sets.map((set) => set.progress));
+    const target = Math.max(...sets.map((set) => set.target));
+
+    return { current: progress, target };
+  }
+
+  private compareStat(value: number, operator: string, target: number): boolean {
+    switch (operator) {
+      case "GT":
+        return value > target;
+      case "GTE":
+        return value >= target;
+      case "EQ":
+        return value === target;
+      case "LTE":
+        return value <= target;
+      case "LT":
+        return value < target;
+      default:
+        return value >= target;
+    }
+  }
+
+  private async evalRuleSet(
+    userId: string,
+    rules: { statType: string; operator: string; targetValue: number; windowDays: number }[],
+    logic: "AND" | "OR"
+  ): Promise<{ progress: number; target: number; passed: boolean }> {
+    if (rules.length === 0) {
+      return { progress: 0, target: 0, passed: true };
+    }
+
+    const results = await Promise.all(
+      rules.map(async (rule) => {
+        const stats = await prisma().playerStatistic.findUnique({
+          where: {
+            userId_type: {
+              userId,
+              type: rule.statType as any,
+            },
+          },
+        });
+        const value = stats?.value ?? 0;
+        const met = this.compareStat(value, rule.operator, rule.targetValue);
+        return { value, target: rule.targetValue, met };
+      })
+    );
+
+    if (logic === "OR") {
+      const passed = results.some((result) => result.met);
+      const best = results.reduce((a, b) => (a.value / a.target > b.value / b.target ? a : b));
+      return {
+        progress: passed ? best.value : best.value,
+        target: best.target,
+        passed,
+      };
+    }
+
+    const passed = results.every((result) => result.met);
+    const progress = Math.min(...results.map((result) => result.value));
+    const target = Math.max(...results.map((result) => result.target));
+    return { progress, target, passed };
+  }
+
+  private async evalRules(
+    userId: string,
+    rules: { statType: string; operator: string; targetValue: number; windowDays: number }[]
+  ): Promise<{ current: number; target: number }> {
+    const set = await this.evalRuleSet(userId, rules, "AND");
+    return { current: set.progress, target: set.target };
   }
 }

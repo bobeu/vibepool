@@ -41,7 +41,9 @@ export class IdentityEngine implements IIdentityEngine {
   }
 
   async updateIdentity(userId: string, data: Record<string, unknown>): Promise<Record<string, unknown>> {
-    const identity = await prisma().playerIdentity.upsert({
+    const current = await prisma().playerIdentity.findUnique({ where: { userId } });
+
+    const result = await prisma().playerIdentity.upsert({
       where: { userId },
       update: {
         displayName: (data.displayName as string) || undefined,
@@ -49,6 +51,7 @@ export class IdentityEngine implements IIdentityEngine {
         selectedBadge: (data.selectedBadge as string) || undefined,
         selectedFrame: (data.selectedFrame as string) || undefined,
         theme: (data.theme as string) || undefined,
+        schemaVersion: (current?.schemaVersion ?? 1) + 1,
       },
       create: {
         userId,
@@ -57,15 +60,43 @@ export class IdentityEngine implements IIdentityEngine {
         selectedBadge: (data.selectedBadge as string) || null,
         selectedFrame: (data.selectedFrame as string) || null,
         theme: (data.theme as string) || null,
+        schemaVersion: 1,
       },
     });
 
+    if (current) {
+      const version = await prisma().playerIdentityVersion.count({
+        where: { identityId: current.id },
+      });
+
+      await prisma().playerIdentityVersion.create({
+        data: {
+          identityId: current.id,
+          userId,
+          version: version + 1,
+          displayName: current.displayName,
+          selectedTitle: current.selectedTitle,
+          selectedBadge: current.selectedBadge,
+          selectedFrame: current.selectedFrame,
+          theme: current.theme,
+          snapshot: {
+            displayName: current.displayName,
+            selectedTitle: current.selectedTitle,
+            selectedBadge: current.selectedBadge,
+            selectedFrame: current.selectedFrame,
+            theme: current.theme,
+          },
+        },
+      });
+    }
+
     return {
-      displayName: identity.displayName,
-      selectedTitle: identity.selectedTitle,
-      selectedBadge: identity.selectedBadge,
-      selectedFrame: identity.selectedFrame,
-      theme: identity.theme,
+      displayName: result.displayName,
+      selectedTitle: result.selectedTitle,
+      selectedBadge: result.selectedBadge,
+      selectedFrame: result.selectedFrame,
+      theme: result.theme,
+      schemaVersion: result.schemaVersion,
     };
   }
 }

@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { TournamentCard } from "@/components/tournament/TournamentCard";
 import { CountdownTimer } from "@/components/ui/CountdownTimer";
 import { LevelProgress } from "@/components/ui/LevelProgress";
-import { useAuth } from "@/lib/auth/middleware";
+import { useAuth } from "@/lib/auth/useAuth";
 
 const SECTIONS = [
   { key: "tournament", label: "Daily Tournament", href: "/tournament" },
@@ -53,6 +53,16 @@ export function HomeHub() {
     queryFn: async () => {
       const res = await fetch("/api/spins");
       if (!res.ok) throw new Error("Failed to fetch spins");
+      return res.json();
+    },
+    staleTime: 15_000,
+  });
+
+  const { data: community } = useQuery({
+    queryKey: ["community-spotlight"],
+    queryFn: async () => {
+      const res = await fetch("/api/community");
+      if (!res.ok) throw new Error("Failed to load community");
       return res.json();
     },
     staleTime: 15_000,
@@ -146,6 +156,30 @@ export function HomeHub() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
+        className="space-y-3"
+      >
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold uppercase tracking-tight">Community Spotlight</h2>
+          <Link href="/community" className="text-xs font-semibold text-primary">View all</Link>
+        </div>
+        <Link href="/community" className="glass-card block p-4 hover:bg-card/90 transition-colors">
+          <p className="text-sm font-black uppercase tracking-tight text-transparent bg-gradient-to-r from-primary to-accent-purple bg-clip-text">
+            Today's Champions
+          </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            {(community?.posts ?? []).slice(0, 1).map((p: any) => p.title).join("") || "Climb the ranks and earn your place among the legends."}
+          </p>
+          <div className="mt-3 flex items-center gap-2 text-xs">
+            <span className="px-2 py-1 rounded-full bg-accent-cyan/10 text-accent-cyan capitalize">Trending Players</span>
+            <span className="px-2 py-1 rounded-full bg-accent-purple/10 text-accent-purple capitalize">Season Countdown</span>
+          </div>
+        </Link>
+      </motion.section>
+
+      <motion.section
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
         className="space-y-3"
       >
         <h2 className="text-lg font-bold uppercase tracking-tight">Quick Actions</h2>

@@ -59,8 +59,9 @@ export default function SpinPage() {
             className={`
               flex h-48 w-48 items-center justify-center rounded-full border-4 border-primary/40 bg-gradient-to-br from-primary/10 to-accent-purple/10
               ${isSpinning ? "animate-spin" : ""}
-              transition-transform duration-[3000ms] ease-out
+              transition-transform ease-out
             `}
+            style={{ transitionDuration: isSpinning ? "3000ms" : "0ms" }}
           >
             <div className="text-center space-y-1">
               <p className="text-4xl font-black">{spins?.available ?? 0}</p>

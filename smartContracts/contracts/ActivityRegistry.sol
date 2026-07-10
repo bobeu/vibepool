@@ -12,20 +12,6 @@ import { IActivityRegistry } from "./interfaces/IActivityRegistry.sol";
 contract ActivityRegistry is AccessControl, IActivityRegistry {
     bytes32 public constant BACKEND_ROLE = keccak256("BACKEND_ROLE");
 
-    /// @notice Activity profile for a player
-    struct ActivityProfile {
-        uint64 lastActivityTimestamp;
-        uint64 activityCount;
-        uint64 currentStreak;
-        uint64 longestStreak;
-    }
-
-    /// @notice Aggregated activity statistics
-    struct ActivityStatistics {
-        uint256 totalActivities;
-        uint256 totalUniquePlayers;
-    }
-
     /// @notice Mapping of player address to activity profile
     mapping(address => ActivityProfile) public activityProfiles;
     /// @notice Mapping of request ID to processed status for replay protection
@@ -42,7 +28,7 @@ contract ActivityRegistry is AccessControl, IActivityRegistry {
 
     /// @notice Initializes the ActivityRegistry
     constructor() {
-        __AccessControl_init();
+        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(BACKEND_ROLE, msg.sender);
     }
 
