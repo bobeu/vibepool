@@ -14,7 +14,8 @@ export class AuditEngine implements IAuditEngine {
     entity?: string,
     entityId?: string,
     metadata?: Record<string, unknown>,
-    actor?: string
+    actor?: string,
+    options?: { eventId?: string; sessionId?: string; correlationId?: string }
   ): Promise<void> {
     await prisma().auditLog.create({
       data: {
@@ -22,10 +23,13 @@ export class AuditEngine implements IAuditEngine {
         action,
         entity,
         entityId,
+        eventId: options?.eventId,
+        sessionId: options?.sessionId,
+        correlationId: options?.correlationId,
         metadata,
       },
     });
 
-    logger.info("Audit logged", { action, entity, entityId });
+    logger.info("Audit logged", { action, entity, entityId, eventId: options?.eventId, correlationId: options?.correlationId });
   }
 }

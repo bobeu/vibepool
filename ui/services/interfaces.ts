@@ -61,3 +61,9 @@ export interface ISettingsService extends IService {
   set(key: string, value: string): Promise<void>;
   getAll(): Promise<Record<string, string>>;
 }
+
+export interface IProgressionService extends IService {
+  getLevelProgress(wallet: string): Promise<Record<string, unknown>>;
+  getPlayerRank(wallet: string): Promise<Record<string, unknown>>;
+  getEngagementMetrics(wallet: string): Promise<Record<string, unknown>>;
+}

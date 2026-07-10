@@ -9,3 +9,4 @@ export { NotificationService } from "./serviceImpl";
 export { ProfileService } from "./serviceImpl";
 export { SettingsService } from "./serviceImpl";
 export { BlockchainService } from "./serviceImpl";
+export { ProgressionService } from "./serviceImpl";

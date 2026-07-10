@@ -19,6 +19,8 @@ model UserProfile {
   currentRank   Int?
   lastLogin     DateTime? @db.Timestamp
   totalActivity Int       @default(0)
+  currentStreak Int       @default(0)
+  longestStreak Int       @default(0)
   status        UserStatus @default(ACTIVE)
   createdAt     DateTime  @default(now()) @db.Timestamp
   updatedAt     DateTime  @updatedAt @db.Timestamp
@@ -32,6 +34,8 @@ model UserProfile {
   notifications      Notification[]
   sessions           Session[]
   pendingRewards     PendingReward[]
+  playerStats        PlayerStatistic[]
+  notificationPrefs  NotificationPreference[]
 
   @@index([wallet])
   @@index([status])
@@ -86,21 +90,26 @@ model Prediction {
 }
 
 model DailyMission {
-  id          String      @id @default(cuid()) @db.Uuid
-  title       String      @db.VarChar(120)
-  description String      @db.Text
+  id          String       @id @default(cuid()) @db.Uuid
+  title       String       @db.VarChar(120)
+  description String       @db.Text
   xpReward    Int
   pointReward Int
   spinReward  Int
-  missionType String      @db.VarChar(64)
+  missionType String       @db.VarChar(64)
+  category    MissionCategory @default(DAILY)
+  targetValue Int
+  config      Json?
   status      MissionStatus @default(ACTIVE)
-  startDate   DateTime    @db.Timestamp
-  endDate     DateTime    @db.Timestamp
-  createdAt   DateTime    @default(now()) @db.Timestamp
-  updatedAt   DateTime    @updatedAt @db.Timestamp
+  startDate   DateTime     @db.Timestamp
+  endDate     DateTime     @db.Timestamp
+  createdAt   DateTime     @default(now()) @db.Timestamp
+  updatedAt   DateTime     @updatedAt @db.Timestamp
 
   userMissions UserMission[]
+  rewards MissionReward[]
 
+  @@index([category, status])
   @@index([status, startDate])
 }
 
@@ -108,8 +117,14 @@ model UserMission {
   id           String    @id @default(cuid()) @db.Uuid
   userId       String    @db.Uuid
   missionId    String    @db.Uuid
+  category     MissionCategory @default(DAILY)
+  currentValue Int       @default(0)
+  targetValue  Int
   completed    Boolean   @default(false)
   completedAt  DateTime? @db.Timestamp
+  claimable    Boolean   @default(false)
+  claimed      Boolean   @default(false)
+  claimedAt    DateTime? @db.Timestamp
   rewardClaimed Boolean @default(false)
   createdAt    DateTime  @default(now()) @db.Timestamp
   updatedAt    DateTime  @updatedAt @db.Timestamp
@@ -119,6 +134,18 @@ model UserMission {
 
   @@unique([userId, missionId])
   @@index([userId, completed])
+}
+
+model MissionReward {
+  id        String       @id @default(cuid()) @db.Uuid
+  missionId String       @db.Uuid
+  rewardType RewardAssetType
+  amount    Int
+  createdAt DateTime     @default(now()) @db.Timestamp
+
+  mission DailyMission @relation(fields: [missionId], references: [id], onDelete: Cascade)
+
+  @@index([missionId])
 }
 
 model SpinLedger {
@@ -190,11 +217,17 @@ model Notification {
   body      String          @db.Text
   read      Boolean         @default(false)
   readAt    DateTime?       @db.Timestamp
+  priority  NotificationPriority @default(NORMAL)
+  expiresAt DateTime?       @db.Timestamp
+  scheduledAt DateTime?     @db.Timestamp
+  recurring  Boolean        @default(false)
   createdAt DateTime        @default(now()) @db.Timestamp
 
   user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, read, createdAt])
+  @@index([userId, priority, createdAt])
+  @@index([scheduledAt])
 }
 
 model Settings {
@@ -239,16 +272,21 @@ model PendingReward {
 }
 
 model AuditLog {
-  id        String   @id @default(cuid()) @db.Uuid
-  actor     String?  @db.VarChar(42)
-  action    String   @db.VarChar(120)
-  entity    String?  @db.VarChar(120)
-  entityId  String?  @db.VarChar(42)
-  metadata  Json?
-  createdAt DateTime @default(now()) @db.Timestamp
+  id          String   @id @default(cuid()) @db.Uuid
+  actor       String?  @db.VarChar(42)
+  action      String   @db.VarChar(120)
+  entity      String?  @db.VarChar(120)
+  entityId    String?  @db.VarChar(42)
+  eventId     String?  @db.VarChar(42)
+  sessionId   String?  @db.VarChar(42)
+  correlationId String? @db.VarChar(64)
+  metadata    Json?
+  createdAt   DateTime @default(now()) @db.Timestamp
 
   @@index([action, createdAt])
   @@index([entity, entityId])
+  @@index([eventId])
+  @@index([correlationId])
 }
 
 model Session {
@@ -281,6 +319,242 @@ model RefreshToken {
   session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@index([sessionId, revoked, expiresAt])
+}
+
+model PlayerStatistic {
+  id        String       @id @default(cuid()) @db.Uuid
+  userId    String       @db.Uuid
+  type      StatisticType
+  value     Int          @default(0)
+  metadata  Json?
+  createdAt DateTime     @default(now()) @db.Timestamp
+  updatedAt DateTime     @updatedAt @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type])
+  @@index([userId, type])
+}
+
+model NotificationPreference {
+  id        String   @id @default(cuid()) @db.Uuid
+  userId    String   @db.Uuid
+  eventType String   @db.VarChar(64)
+  enabled   Boolean  @default(true)
+  channels  Json?
+  createdAt DateTime @default(now()) @db.Timestamp
+  updatedAt DateTime @updatedAt @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventType])
+  @@index([userId])
+}
+
+model RateLimitEntry {
+  id          String    @id @default(cuid()) @db.Uuid
+  identifier  String    @db.VarChar(120)
+  endpoint    String    @db.VarChar(120)
+  count       Int       @default(1)
+  windowStart DateTime  @db.Timestamp
+  expiresAt   DateTime  @db.Timestamp
+  createdAt   DateTime  @default(now()) @db.Timestamp
+  updatedAt   DateTime  @updatedAt @db.Timestamp
+
+  @@index([identifier, endpoint, createdAt])
+  @@index([expiresAt])
+}
+
+model DomainEvent {
+  id            String   @id @default(cuid()) @db.Uuid
+  aggregateId   String   @db.VarChar(42)
+  aggregateType String   @db.VarChar(64)
+  eventType     String   @db.VarChar(120)
+  payload       Json?
+  occurredAt    DateTime @default(now()) @db.Timestamp
+  version       Int      @default(1)
+  processed     Boolean  @default(false)
+
+  @@index([aggregateId, occurredAt])
+  @@index([eventType, processed])
+  @@index([occurredAt])
+}
+
+model SpinReward {
+  id        String     @id @default(cuid()) @db.Uuid
+  name      String     @db.VarChar(120)
+  asset     String     @db.VarChar(42)
+  amount    Int
+  weight    Int        @default(1)
+  rarity    String     @db.VarChar(32)
+  config    Json?
+  active    Boolean    @default(true)
+  createdAt DateTime   @default(now()) @db.Timestamp
+  updatedAt DateTime   @updatedAt @db.Timestamp
+
+  spinHistories SpinHistory[]
+  rewardQueues  RewardQueue[]
+}
+
+model SpinHistory {
+  id              String     @id @default(cuid()) @db.Uuid
+  userId          String     @db.Uuid
+  spinRewardId    String?   @db.Uuid
+  reward          String     @db.VarChar(120)
+  asset           String     @db.VarChar(42)
+  amount          Int
+  reason          String?
+  transactionHash String?    @db.VarChar(66)
+  createdAt       DateTime   @default(now()) @db.Timestamp
+
+  user       UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  spinReward SpinReward? @relation(fields: [spinRewardId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+}
+
+model RewardClaim {
+  id               String    @id @default(cuid()) @db.Uuid
+  userId           String    @db.Uuid
+  reward           String    @db.VarChar(120)
+  asset            String    @db.VarChar(42)
+  amount           Int
+  reason           String?
+  transactionHash  String?   @db.VarChar(66)
+  status           RewardStatus @default(PENDING)
+  createdAt        DateTime  @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model RewardQueue {
+  id               String    @id @default(cuid()) @db.Uuid
+  userId           String    @db.Uuid
+  reward           String    @db.VarChar(120)
+  asset            String    @db.VarChar(42)
+  amount           Int
+  source           RewardSource
+  reason           String?
+  status           RewardStatus @default(PENDING)
+  attempts         Int       @default(0)
+  maxAttempts      Int       @default(3)
+  lastError        String?   @db.Text
+  deadLetter       Boolean   @default(false)
+  scheduledAt      DateTime?
+  processedAt      DateTime?
+  createdAt        DateTime  @default(now()) @db.Timestamp
+  updatedAt        DateTime  @updatedAt @db.Timestamp
+
+  @@index([userId, status])
+  @@index([status, scheduledAt])
+}
+
+model RewardSource {
+  id        String   @id @default(cuid()) @db.Uuid
+  name      String   @db.VarChar(64)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp
+
+  @@unique([name])
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+}
+
+enum TournamentStatus {
+  UPCOMING
+  OPEN
+  LOCKED
+  EVALUATING
+  COMPLETED
+  ARCHIVED
+}
+
+enum PredictionStatus {
+  PENDING
+  EVALUATED
+  REWARDED
+}
+
+enum MissionStatus {
+  ACTIVE
+  COMPLETED
+  EXPIRED
+}
+
+enum ActivityType {
+  LOGIN
+  PREDICTION
+  MISSION
+  SPIN
+  REWARD
+  SOCIAL
+  TOURNAMENT
+}
+
+enum NotificationType {
+  INFO
+  REWARD
+  SYSTEM
+  ALERT
+}
+
+enum SpinType {
+  DAILY
+  REWARD
+  PURCHASE
+  EVENT
+}
+
+enum MissionCategory {
+  DAILY
+  WEEKLY
+  MILESTONE
+  HIDDEN
+}
+
+enum RewardAssetType {
+  XP
+  POINTS
+  SPINS
+  CELO
+  USDT
+  USDM
+}
+
+enum StatisticType {
+  PREDICTIONS_SUBMITTED
+  PREDICTIONS_WON
+  PREDICTION_ACCURACY
+  XP_EARNED
+  POINTS_EARNED
+  REWARDS_EARNED
+  SPINS_EARNED
+  SPINS_USED
+  LOGIN_DAYS
+  CURRENT_STREAK
+  LONGEST_STREAK
+  MISSION_COMPLETION_PERCENTAGE
+  TOURNAMENT_WINS
+  LEADERBOARD_FINISHES
+}
+
+enum NotificationChannel {
+  IN_APP
+  EMAIL
+  PUSH
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
 }
 
 enum SessionStatus {
@@ -324,18 +598,24 @@ enum AuditAction {
   ADMIN_ACTION
   PREDICTION_SUBMITTED
   PREDICTION_EVALUATED
+  MISSION_CREATED
+  MISSION_COMPLETED
+  MISSION_CLAIMED
+  NOTIFICATION_SENT
+  NOTIFICATION_READ
+  STREAK_UPDATED
+  CACHE_INVALIDATED
+  SETTLEMENT_RETRY
+  SPIN_STARTED
+  SPIN_COMPLETED
+  REWARD_CLAIMED
 }
 
-model RateLimitEntry {
-  id          String    @id @default(cuid()) @db.Uuid
-  identifier  String    @db.VarChar(120)
-  endpoint    String    @db.VarChar(120)
-  count       Int       @default(1)
-  windowStart DateTime  @db.Timestamp
-  expiresAt   DateTime  @db.Timestamp
-  createdAt   DateTime  @default(now()) @db.Timestamp
-  updatedAt   DateTime  @updatedAt @db.Timestamp
-
-  @@index([identifier, endpoint, createdAt])
-  @@index([expiresAt])
+enum RewardSource {
+  TOURNAMENT
+  MISSION
+  DAILY_LOGIN
+  STREAK
+  SPIN
+  ADMIN
 }

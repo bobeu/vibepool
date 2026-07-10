@@ -167,4 +167,3 @@ describe("GameEngine", () => {
     expect(result).toHaveProperty("tournamentId");
   });
 });
-});

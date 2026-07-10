@@ -1,20 +1,15 @@
 import { NextRequest } from "next/server";
 import { authenticatedHandler } from "@/lib/auth/middleware";
-import { MissionService } from "@/services/serviceImpl";
+import { RewardClaimEngine } from "@/services/engines/RewardClaimEngine";
 import { jsonResponse, apiError } from "@/lib/api/responses";
 
-export const GET = async (req: NextRequest) => {
-  return authenticatedHandler(req, async (wallet) => {
-    const missions = await MissionService.getActiveMissions(wallet);
-    return jsonResponse({ missions });
-  });
-};
+const rewardClaimEngine = new RewardClaimEngine();
 
 export const POST = async (req: NextRequest) => {
   return authenticatedHandler(req, async (wallet, req: NextRequest) => {
     try {
       const body = await req.json();
-      const result = await MissionService.claimMission(wallet, body.missionId as string);
+      const result = await rewardClaimEngine.claimReward(wallet, body.rewardId as string);
       return jsonResponse(result, 201);
     } catch (error) {
       return apiError(error);

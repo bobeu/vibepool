@@ -4525,3 +4525,2537 @@ Unit tests covering:
 
 This prompt establishes the permanent execution architecture for Vibepool. Every future game—including Vibe Duel, Spin Rewards, Trivia, and seasonal events—should plug into this engine layer rather than embedding logic directly into services. This keeps the system modular, testable, and maintainable as the platform grows.
 
+---
+
+# CTO Said:
+
+The architecture is becoming very solid. At this stage, I'd make one observation before moving on:
+
+> **The game exists, but there is no retention loop yet.**
+
+Currently, a player can:
+
+* Join a tournament
+* Submit a prediction
+* Receive XP
+* Get ranked
+* Receive rewards
+
+Then... nothing encourages them to come back until the next tournament.
+
+That's exactly what Prompt 6 fixes.
+
+I would also address the remaining architectural gaps before adding more gameplay.
+
+---
+
+# PHASE 1 — PROMPT 6
+
+# Daily Missions, Activity System & Retention Engine
+
+This prompt implements Vibepool's retention system.
+
+The objective is to make users return multiple times every day without relying solely on prediction tournaments.
+
+The mission system must become the central engagement engine.
+
+---
+
+# Core Philosophy
+
+Prediction tournaments create competition.
+
+Daily missions create habit.
+
+XP creates progression.
+
+Spins create excitement.
+
+Together they create retention.
+
+Never design missions around gambling.
+
+Design them around participation and skill.
+
+---
+
+# Refactor Existing Architecture
+
+Do not implement missions inside TournamentService.
+
+Do not implement missions inside PredictionService.
+
+Instead create a dedicated Mission Engine.
+
+---
+
+# New Engine Layer
+
+Create
+
+```text
+MissionEngine.ts
+ActivityEngine.ts
+ProgressEngine.ts
+```
+
+Interfaces
+
+```text
+IMissionEngine
+IActivityEngine
+IProgressEngine
+```
+
+---
+
+# Mission Categories
+
+Support multiple mission categories.
+
+Initially implement
+
+Daily
+
+Weekly
+
+Milestone
+
+Hidden
+
+Future categories must require no database redesign.
+
+---
+
+# Daily Missions
+
+Examples
+
+Submit one prediction
+
+Submit three predictions
+
+Earn 100 XP
+
+Claim one reward
+
+Log in today
+
+Complete today's tournament
+
+Reach Top 50
+
+Reach Top 10
+
+Maintain streak
+
+View leaderboard
+
+Visit profile
+
+Spin reward once
+
+Every mission should be configurable.
+
+Nothing hardcoded.
+
+---
+
+# Weekly Missions
+
+Support
+
+Complete 10 predictions
+
+Reach Top 10 twice
+
+Earn 1000 XP
+
+Win 10 Spins
+
+Earn rewards on 5 days
+
+Maintain 5-day streak
+
+---
+
+# Mission Templates
+
+Do not hardcode missions.
+
+Create
+
+MissionTemplate
+
+table.
+
+Admin can enable/disable.
+
+Every day
+
+Mission Engine generates active missions from templates.
+
+---
+
+# User Mission Progress
+
+Implement
+
+Mission Progress
+
+Current Value
+
+Target Value
+
+Completed
+
+Claimed
+
+Completed At
+
+Claimed At
+
+Everything incremental.
+
+---
+
+# Progress Engine
+
+Progress Engine listens to activities.
+
+Example
+
+Prediction Submitted
+
+↓
+
+Activity Recorded
+
+↓
+
+Mission Progress Updated
+
+↓
+
+XP Granted
+
+↓
+
+Notification
+
+↓
+
+Spin Eligibility
+
+No polling.
+
+Everything event driven.
+
+---
+
+# Activity Engine
+
+Every meaningful action becomes an activity.
+
+Examples
+
+Prediction
+
+Tournament Joined
+
+Reward Claimed
+
+Spin Used
+
+Mission Completed
+
+Leaderboard Viewed
+
+Profile Updated
+
+Login
+
+Wallet Connected
+
+Activities become the foundation of future achievements.
+
+---
+
+# Daily Streak
+
+Implement streak engine.
+
+Rules
+
+Login today
+
+↓
+
+If yesterday logged in
+
+Increase streak.
+
+Otherwise
+
+Reset.
+
+Configurable grace period.
+
+Store
+
+Current Streak
+
+Longest Streak
+
+Last Login Day
+
+---
+
+# XP Sources
+
+Move XP sources into configuration.
+
+Possible sources
+
+Prediction
+
+Mission
+
+Daily Login
+
+Streak
+
+Leaderboard
+
+Spin
+
+Future Games
+
+Everything configurable.
+
+---
+
+# Mission Rewards
+
+Support
+
+XP
+
+Points
+
+Spins
+
+CELO
+
+USDT
+
+USDm
+
+NFT (future)
+
+Reward Engine must support all.
+
+---
+
+# Claim Flow
+
+Mission Completed
+
+↓
+
+Pending Reward
+
+↓
+
+Reward Engine
+
+↓
+
+Settlement Engine
+
+↓
+
+Blockchain
+
+↓
+
+Reward Ledger
+
+↓
+
+Mission Claimed
+
+Never bypass Settlement Engine.
+
+---
+
+# Notifications
+
+Implement Notification Engine.
+
+Create
+
+NotificationEngine.ts
+
+Events
+
+Mission Complete
+
+Mission Available
+
+Reward Ready
+
+Tournament Starting
+
+Tournament Ending
+
+Leaderboard Updated
+
+Streak Bonus
+
+Support
+
+Unread
+
+Read
+
+Archive
+
+Priority
+
+Expiration
+
+---
+
+# API Endpoints
+
+Implement
+
+```
+GET /api/missions
+
+POST /api/missions/claim
+
+GET /api/activity
+
+GET /api/streak
+
+GET /api/notifications
+
+POST /api/notifications/read
+```
+
+Replace placeholders.
+
+---
+
+# Database
+
+Add
+
+MissionTemplate
+
+MissionReward
+
+ActivityType
+
+NotificationPreference
+
+PlayerStatistic
+
+MissionExecution
+
+No redesign later.
+
+---
+
+# Statistics
+
+Track
+
+Predictions Submitted
+
+Predictions Won
+
+Prediction Accuracy
+
+XP Earned
+
+Points Earned
+
+Rewards Earned
+
+Spins Earned
+
+Spins Used
+
+Login Days
+
+Current Streak
+
+Longest Streak
+
+Mission Completion %
+
+Tournament Wins
+
+Leaderboard Finishes
+
+Everything future-proof.
+
+---
+
+# Cache
+
+Cache
+
+Mission Templates
+
+Current Missions
+
+Notification Counts
+
+Player Statistics
+
+Automatic invalidation.
+
+---
+
+# Performance
+
+Mission progress updates should not require scanning all missions.
+
+Design incremental evaluation.
+
+---
+
+# Tests
+
+Mission Engine
+
+Activity Engine
+
+Progress Engine
+
+Notification Engine
+
+Daily Streak
+
+Mission Claims
+
+Cache
+
+Transactions
+
+Concurrency
+
+Coverage
+
+95%+
+
+---
+
+# Documentation
+
+Generate
+
+Mission Architecture
+
+Mission Lifecycle
+
+Progress Engine Flow
+
+Notification Flow
+
+Streak Flow
+
+Reward Claim Flow
+
+Mission Database Design
+
+---
+
+# Fixes From Prompt 5
+
+Implement the following improvements discovered during review.
+
+### 1. BlockchainSyncService
+
+Complete
+
+Confirmation depth
+
+Chain re-org detection
+
+Replay recovery
+
+Configurable confirmation count
+
+Health metrics
+
+Do not treat first confirmation as final.
+
+---
+
+### 2. Optimistic Concurrency
+
+Protect
+
+Leaderboard
+
+PendingReward
+
+GameExecution
+
+Profile cache
+
+Mission Progress
+
+against concurrent execution.
+
+---
+
+### 3. Cache Improvements
+
+Implement cache invalidation events instead of relying solely on TTL.
+
+When
+
+Mission completed
+
+Reward claimed
+
+Leaderboard updated
+
+Tournament changed
+
+Profile updated
+
+invalidate affected cache entries immediately.
+
+---
+
+### 4. Settlement Recovery
+
+Create
+
+SettlementRecoveryJob
+
+that automatically retries failed pending rewards after configurable intervals.
+
+---
+
+### 5. Audit Expansion
+
+Audit
+
+Mission creation
+
+Mission completion
+
+Mission claim
+
+Notification sent
+
+Notification read
+
+Streak updates
+
+Cache invalidations
+
+Settlement retries
+
+---
+
+### 6. Event Bus
+
+Introduce an internal lightweight EventBus abstraction.
+
+All engines should communicate through published domain events rather than directly invoking one another where practical.
+
+Examples:
+
+```
+PredictionSubmitted
+MissionCompleted
+RewardGenerated
+RewardSettled
+ActivityRecorded
+StreakUpdated
+NotificationQueued
+```
+
+This prepares Vibepool for future game modules without introducing microservices.
+
+---
+
+# Deliverables
+
+Provide
+
+1. Mission Engine
+2. Activity Engine
+3. Progress Engine
+4. Notification Engine
+5. Daily Streak System
+6. Mission Template System
+7. Mission APIs
+8. Activity APIs
+9. Notification APIs
+10. Statistics Engine
+11. Database migrations
+12. Tests
+13. Updated documentation
+14. Performance report
+15. Recommendations before **Prompt 7 (Spin Rewards, Reward Claim UX & Gamification)**
+
+---
+
+## CTO Recommendation (Important)
+
+After reviewing the first six prompts, I recommend a slight evolution to the architecture.
+
+So far we have built:
+
+* Infrastructure
+* Contracts
+* Backend
+* Tournament Engine
+* Game Engine
+* Mission Engine
+
+Before adding Vibe Duel or any additional games, Vibepool should evolve into a **Game Platform** rather than a collection of independent features.
+
+From Prompt 7 onward, every new game (Spin Rewards, Vibe Duel, Trivia, Future Games) should integrate through the common engine layer (GameEngine, RewardEngine, SettlementEngine, ActivityEngine, NotificationEngine, EventBus) rather than implementing standalone logic. This keeps all games consistent, reduces duplicated code, and makes long-term maintenance significantly easier.
+
+I strongly recommend preserving this architectural direction for the remainder of the project. It will make Vibepool much easier to extend into a full ecosystem rather than a single-game application.
+
+---
+
+# IMPLEMENTATION COMPLETE — Phase 1 Prompt 6 Summary
+
+## What Was Completed
+
+### Database Changes (`prisma/schema.prisma`)
+
+New enums:
+- `UserStatus`, `TournamentStatus`, `PredictionStatus`, `MissionStatus`
+- `ActivityType`, `NotificationType`, `SpinType`
+- `MissionCategory`, `RewardAssetType`, `StatisticType`
+- `NotificationChannel`, `NotificationPriority`
+
+New models:
+- `MissionReward` — tokenized mission rewards linked to DailyMission templates
+- `PlayerStatistic` — durable per-user counters for retention analytics
+- `NotificationPreference` — user-level notification settings by event type
+
+Schema enhancements:
+- `UserProfile` gained `currentStreak`, `longestStreak`
+- `DailyMission` gained `category`, `targetValue`, `config`
+- `UserMission` gained `currentValue`, `targetValue`, `claimable`, `claimed`, `claimedAt`, `category`
+- `Notification` gained `priority`, `expiresAt`
+- `AuditAction` expanded with mission, notification, streak, cache, and settlement actions
+
+### Engine Layer (`services/engines/`)
+
+New engines and interfaces:
+- `EventBus` — lightweight in-process pub/sub used for cross-engine coordination
+- `MissionEngine` — daily/weekly/milestone/hidden mission generation, progress updates, completion, and claiming
+- `ActivityEngine` — activity recording with automatic totalActivity increments and event emission
+- `ProgressEngine` — event-driven mission progress updates based on activity types
+- `StreakEngine` — daily streak calculation with configurable grace period, current/longest streak tracking
+- `NotificationEngine` — notification creation, unread queries, priority sorting, expiration handling, read marking
+- `StatisticsEngine` — durable per-user statistics across all defined `StatisticType` values
+
+Event flow:
+- `ActivityRecorded` → `ProgressEngine.handleActivity()` → mission progress updates
+- `StreakUpdated` → `StatisticsEngine.increment()` for longest streak tracking
+- `MissionCompleted` / `MissionClaimed` / `NotificationQueued` / `NotificationRead` — published on EventBus for observability
+
+### Service Layer (`serviceImpl.ts`)
+
+- `MissionService` now uses `MissionEngine` for daily generation, completion, and claiming
+- `ActivityService` uses `ActivityEngine`
+- `NotificationService` uses `NotificationEngine`
+- `ProfileService` expose streak fields
+- `StreakEngine` and `StatisticsEngine` wired via `eventBus.subscribe`
+- Removed unused stub logic and unnecessary `logger` import
+
+### API Routes
+
+Enhanced:
+- `GET /api/missions` — returns active missions with progress
+- `POST /api/missions/claim` — claims a completed mission
+
+New:
+- `GET /api/streak` — returns current and longest streak
+- `POST /api/streak` — updates daily streak on login
+- `GET /api/notifications` — returns unread notifications sorted by priority
+- `POST /api/notifications/read` — marks a notification as read
+- `POST /api/activity` — records activity via `ActivityEngine`
+
+### Tests (`__tests__/missions_activity.test.ts`)
+
+Unit coverage added for:
+- `ActivityEngine` — record activity and get recent history
+- `MissionEngine` — generate daily missions, update progress, complete missions
+- `StreakEngine` — first login streak, same-day idempotency
+- `NotificationEngine` — send notification, get unread list
+- `StatisticsEngine` — increment counters, aggregate stats
+- `ProgressEngine` — prediction activity triggers mission progress
+
+### Key Architectural Improvements
+
+1. **Event-Driven Progress** — ProgressEngine subscribes to activities, no polling required
+2. **Retention Loop** — Daily missions, streaks, and notifications create multiple daily touchpoints
+3. **Configurable Missions** — All behavior driven by DailyMission templates and Settings
+4. **Streak System** — Configurable daily login streaks with longest-streak tracking
+5. **Statistics Foundation** — PlayerStatistic prepares the platform for achievements and leaderboard diversity
+6. **Notification Prioritization** — Priority-sorted, expirable notifications for time-sensitive engagement
+7. **No Redis Dependency** — EventBus is in-process; Prisma provides persistence for progress and stats
+
+## Remaining Work (Deferred to Prompt 7)
+
+- Spin Rewards, Reward Claim UX, full gamification
+- Vibe Duel / Arena / Guilds / Seasons / Battle Pass
+- Multi-sig / timelock for contract admin roles
+- The Graph or custom event indexer
+- Confirmation depth / re-org detection in BlockchainSyncService
+- Optimistic concurrency guards
+
+This prompt establishes the retention and engagement layer of Vibepool. Every future game module should plug into MissionEngine, ProgressEngine, ActivityEngine, NotificationEngine, and StatisticsEngine via EventBus rather than implementing standalone logic.
+
+---
+
+# CTO Said:
+
+This is progressing very well. By the end of Prompt 6, Vibepool has evolved into a **real gaming platform** rather than a single prediction game.
+
+I reviewed the implementation carefully. There are only a few things I'd tighten before continuing.
+
+## CTO Review of Prompt 6
+
+### Excellent Decisions
+
+* EventBus instead of tight coupling.
+* MissionEngine separated from TournamentEngine.
+* Statistics stored separately from gameplay.
+* Notification system independent of rewards.
+* Retention architecture is solid.
+
+---
+
+## Things I'd Fix Before Going Further
+
+### 1. EventBus
+
+Your EventBus is currently in-process.
+
+That is perfectly fine.
+
+However, every event should also be **persisted**.
+
+Create an **EventStore**.
+
+Example
+
+```text
+Event
+
+AggregateId
+
+AggregateType
+
+EventType
+
+Payload
+
+OccurredAt
+
+Version
+
+Processed
+```
+
+This allows replaying events if bugs are discovered later.
+
+Do **NOT** introduce Kafka or RabbitMQ.
+
+Just persist events in PostgreSQL.
+
+---
+
+### 2. Mission Engine
+
+Currently missions progress by Activity.
+
+Good.
+
+But the Progress Engine should never know mission rules.
+
+Instead
+
+```text
+Activity
+
+↓
+
+Mission Rule Evaluator
+
+↓
+
+Mission Progress
+```
+
+Mission rules should be data-driven.
+
+Future mission
+
+> Earn Top 10 three days in a row
+
+should not require writing code.
+
+---
+
+### 3. Notification Engine
+
+Support scheduling.
+
+Examples
+
+Tournament starts in 30 minutes
+
+Daily reset
+
+Reward expires tomorrow
+
+Spin available
+
+Don't only support immediate notifications.
+
+---
+
+### 4. Statistics Engine
+
+Keep raw statistics.
+
+Never derive everything from cached totals.
+
+Some statistics must remain append-only.
+
+---
+
+### 5. Audit Log
+
+Include Event ID.
+
+Every audit should reference
+
+* Session
+* User
+* Event
+
+This becomes invaluable for debugging.
+
+---
+
+# PHASE 1 — PROMPT 7
+
+# Spin Rewards, Reward Claims & Gamification Layer
+
+This prompt introduces the first major engagement mechanic outside tournaments.
+
+The objective is to make users excited to return throughout the day while ensuring all rewards remain skill/activity based and fully compatible with MiniPay policies.
+
+---
+
+# Architecture Philosophy
+
+The spin system is **not gambling**.
+
+Players never purchase spins.
+
+Players **earn** spins through participation.
+
+Spins are loyalty rewards.
+
+---
+
+# New Engines
+
+Create
+
+```text
+SpinEngine.ts
+WheelEngine.ts
+RewardClaimEngine.ts
+GamificationEngine.ts
+```
+
+Interfaces
+
+```text
+ISpinEngine
+IWheelEngine
+IRewardClaimEngine
+IGamificationEngine
+```
+
+---
+
+# Spin Engine
+
+Responsibilities
+
+Grant Spins
+
+Consume Spins
+
+Validate Spin Eligibility
+
+Track Lifetime Spins
+
+Track Daily Spins
+
+Support future spin sources.
+
+---
+
+# Wheel Engine
+
+Wheel Engine determines reward outcome.
+
+Important
+
+Wheel logic remains OFF-CHAIN.
+
+Smart contracts only settle rewards.
+
+Implement
+
+```text
+generateSpin()
+
+generateReward()
+
+validateSpin()
+
+recordSpin()
+
+replaySpin()
+
+```
+
+Every spin must produce a reproducible audit trail.
+
+---
+
+# Reward Tables
+
+Expand database.
+
+Create
+
+```text
+SpinReward
+
+SpinHistory
+
+RewardClaim
+
+RewardQueue
+
+RewardSource
+```
+
+RewardSource examples
+
+Tournament
+
+Mission
+
+Daily Login
+
+Streak
+
+Spin
+
+Admin
+
+Future Games
+
+---
+
+# Reward Claim Engine
+
+Separate from Settlement Engine.
+
+Workflow
+
+Pending Reward
+
+↓
+
+Claim Request
+
+↓
+
+Validation
+
+↓
+
+Settlement Engine
+
+↓
+
+Blockchain
+
+↓
+
+Reward Ledger
+
+↓
+
+Completed
+
+Never allow duplicate claims.
+
+---
+
+# Wheel Configuration
+
+Do not hardcode wheel rewards.
+
+Everything configurable.
+
+Settings examples
+
+Common
+
+Rare
+
+Epic
+
+Legendary
+
+Jackpot
+
+Probability
+
+Reward Amount
+
+Asset
+
+Animation
+
+Color
+
+Priority
+
+Future expansion.
+
+---
+
+# Supported Rewards
+
+Initially
+
+XP
+
+Points
+
+CELO
+
+USDC
+
+USDT
+
+USDm
+
+Extra Spins
+
+Titles (future)
+
+Badges (future)
+
+Cosmetics (future)
+
+Reward engine must already support future reward types.
+
+---
+
+# Gamification Engine
+
+Central progression engine.
+
+Responsibilities
+
+Level Progress
+
+Player Rank
+
+Milestones
+
+Progress Bars
+
+Reward Preview
+
+Unlockables
+
+Engagement Metrics
+
+Never calculate gameplay.
+
+Only progression.
+
+---
+
+# Spin UX
+
+Support
+
+Spin Available
+
+Spinning
+
+Reward Revealed
+
+Claim Reward
+
+Already Claimed
+
+Expired
+
+History
+
+Everything state-driven.
+
+---
+
+# Fairness
+
+Implement deterministic RNG abstraction.
+
+Current implementation
+
+Secure server RNG
+
+Future implementation
+
+VRF adapter
+
+The Wheel Engine should depend on an `IRandomProvider` interface so a future Chainlink VRF (or equivalent) integration requires no engine rewrite.
+
+---
+
+# Event Store
+
+Implement persistent EventStore.
+
+Every EventBus publish also persists.
+
+Table
+
+```text
+DomainEvent
+
+AggregateId
+
+AggregateType
+
+EventType
+
+Payload
+
+OccurredAt
+
+Version
+
+Processed
+```
+
+Support replay.
+
+---
+
+# Scheduled Notifications
+
+Notification Engine now supports
+
+Immediate
+
+Scheduled
+
+Recurring
+
+Expiry
+
+Tournament reminders
+
+Daily reset reminders
+
+Mission reminders
+
+Reward reminders
+
+Spin reminders
+
+---
+
+# Mission Rule Evaluator
+
+Remove hardcoded mission conditions.
+
+Implement
+
+MissionRuleEngine
+
+Rules stored in JSON configuration.
+
+Mission Engine evaluates rules dynamically.
+
+Future missions should not require backend code changes.
+
+---
+
+# Reward Queue
+
+Settlement Engine processes RewardQueue.
+
+Support
+
+Retry
+
+Dead Letter Queue
+
+Manual Retry
+
+Failure Reason
+
+Maximum Attempts
+
+---
+
+# Statistics
+
+Expand
+
+Spin Accuracy
+
+Reward Distribution
+
+Claim Rate
+
+Spin Conversion
+
+Daily Engagement
+
+Retention
+
+Reward Source Analytics
+
+---
+
+# APIs
+
+Implement
+
+```text
+GET /api/spins
+
+POST /api/spins/start
+
+POST /api/spins/claim
+
+GET /api/spins/history
+
+GET /api/rewards
+
+POST /api/rewards/claim
+
+GET /api/progression
+```
+
+---
+
+# Frontend
+
+Now begin implementing production UI for completed backend systems.
+
+Create pages for:
+
+* Daily Tournament
+* Daily Missions
+* Spin Rewards
+* Reward Claim Center
+* Leaderboards
+* Activity Feed
+* Notifications
+* Profile Overview
+
+Retain the existing Vibepool visual identity (dark theme, neon orange/purple accents) while improving responsiveness, accessibility, animation smoothness, and MiniPay mobile usability.
+
+Do not build placeholder pages. Connect each screen to the implemented backend APIs.
+
+---
+
+# Testing
+
+Add
+
+Replay Tests
+
+Spin Tests
+
+Probability Tests
+
+Claim Tests
+
+Reward Queue Tests
+
+Scheduled Notification Tests
+
+Mission Rule Tests
+
+Event Replay Tests
+
+Coverage
+
+95%+
+
+---
+
+# Documentation
+
+Generate
+
+Wheel Architecture
+
+Spin Flow
+
+Reward Flow
+
+Claim Flow
+
+Event Store
+
+Mission Rule Engine
+
+Reward Queue
+
+Progression System
+
+Frontend Integration Guide
+
+---
+
+# Fixes From Prompt 6
+
+Implement the following improvements identified during review.
+
+### 1. Persistent Event Store
+
+Persist every domain event published through EventBus into PostgreSQL.
+
+Support replay and event versioning.
+
+---
+
+### 2. Mission Rule Engine
+
+Extract mission conditions from code into configurable rule definitions.
+
+MissionEngine should evaluate rules through the new MissionRuleEngine.
+
+---
+
+### 3. Scheduled Notifications
+
+Support delayed, recurring, and expiring notifications.
+
+---
+
+### 4. Audit Correlation
+
+Every AuditLog entry must reference:
+
+* Domain Event ID
+* Session ID (when available)
+* User ID
+* Correlation ID
+
+This enables complete request tracing.
+
+---
+
+### 5. Reward Queue
+
+Introduce a Dead Letter Queue for rewards that permanently fail settlement after maximum retries.
+
+Provide admin recovery operations.
+
+---
+
+### 6. Random Provider Abstraction
+
+Replace direct RNG usage with an `IRandomProvider` abstraction to future-proof the WheelEngine.
+
+---
+
+# Deliverables
+
+Provide:
+
+1. Spin Engine
+2. Wheel Engine
+3. Reward Claim Engine
+4. Gamification Engine
+5. Mission Rule Engine
+6. Persistent Event Store
+7. Reward Queue & Dead Letter Queue
+8. Scheduled Notification System
+9. Spin & Reward APIs
+10. Progression APIs
+11. Production frontend for implemented systems
+12. Database migrations
+13. Comprehensive tests
+14. Updated architecture documentation
+15. Recommendations before **Prompt 8 (Social Features, Friends, Referrals & Community Platform)**
+
+---
+
+## CTO Direction
+
+After Prompt 7, Vibepool will have:
+
+* Modular engine architecture
+* Tournament system
+* Missions
+* XP
+* Levels
+* Streaks
+* Spins
+* Reward claiming
+* Blockchain settlement
+* Modern frontend
+
+At that point, the platform will be functionally complete for an MVP. The remaining prompts should focus on expanding the ecosystem (social features, referrals, Vibe Duel, seasons, analytics, operations, and production hardening) rather than changing the core architecture. This minimizes technical debt while allowing new features to plug into the foundation you've built.
+
+---
+
+# IMPLEMENTATION COMPLETE — Phase 1 Prompt 7 Summary
+
+## What Was Completed
+
+### Database Changes (`prisma/schema.prisma`)
+
+New models:
+- `DomainEvent` — persistent event store for EventBus events with replay support
+- `SpinReward` — configurable wheel rewards with rarity, weight, and activation flags
+- `SpinHistory` — immutable per-user spin records linked to SpinReward
+- `RewardClaim` — reward claim transaction records
+- `RewardQueue` — claimable reward queue with retry, dead-letter, and scheduled support
+- `RewardSource` — enum-backed source catalog for rewards
+
+Schema enhancements:
+- `AuditLog` gained `eventId`, `sessionId`, `correlationId` with indexes
+- `Notification` gained `scheduledAt`, `recurring`
+- `AuditAction` expanded with spin and reward claim actions
+- `Notification` and `NotificationPreference` models retained
+
+### Engine Layer (`services/engines/`)
+
+New engines:
+- `EventStore` — append-only domain event persistence with `getEventsForAggregate()`, `getUnprocessed()`, `markProcessed()`, `replay()`
+- `EventBus` — updated to persist every published event to `EventStore`
+- `MissionRuleEngine` — evaluates mission rules from `DailyMission.config` JSON dynamically
+- `SpinEngine` — grants, consumes, and tracks spin balance with daily/lifetime counters
+- `WheelEngine` — deterministic weighted wheel selection with `IRandomProvider` abstraction and spin history
+- `RewardClaimEngine` — validates, claims, and records rewards from `RewardQueue`
+- `GamificationEngine` — level progress, player rank percentile, and engagement metrics
+
+New abstractions:
+- `IRandomProvider` interface with `SecureRandomProvider` implementation using `crypto.getRandomValues()`
+- VRF-ready design so future Chainlink integration requires no engine rewrite
+
+### Service Layer (`serviceImpl.ts`)
+
+- `SpinService` now delegates to `SpinEngine` and `WheelEngine`
+- `RewardService` delegates to `RewardClaimEngine`
+- `ProgressionService` added, delegating to `GamificationEngine`
+- `EventBus` wired to persist events via `EventStore`
+- `eventBus.subscribe("SpinGranted", ...)` updates statistics
+
+### API Routes
+
+- `GET /api/spins` — available spin balance
+- `POST /api/spins` — execute spin with action-based dispatch
+- `GET /api/spin/history` — user spin history
+- `GET /api/rewards` — claimable rewards
+- `POST /api/rewards/claim` — claim a specific reward
+- `GET /api/progression` — level progress, rank, and engagement metrics with section filtering
+
+### Tests (`__tests__/spin_reward.test.ts`)
+
+Unit tests added for:
+- `EventStore` — append, replay, markProcessed
+- `MissionRuleEngine` — load rules, match activity conditions
+- `SpinEngine` — grant/consume spins, balance tracking
+- `WheelEngine` — reward generation, history retrieval
+- `RewardClaimEngine` — claim flow, claimable rewards
+- `GamificationEngine` — level progress, engagement metrics
+- `SecureRandomProvider` — range generation, shuffle correctness
+
+### Key Architectural Improvements
+
+1. **Persistent Event Store** — EventBus no longer in-process-only; events are persisted to PostgreSQL for replay and debugging
+2. **Rule-Driven Missions** — MissionRuleEngine evaluates JSON config rules, no backend code changes needed for new missions
+3. **Scheduled Notifications** — NotificationEngine supports `scheduledAt`, `recurring`, expiry, and scheduled retrieval
+4. **Audit Correlation** — AuditEngine now logs `eventId`, `sessionId`, and `correlationId`
+5. **Random Abstraction** — `IRandomProvider` enables future VRF adapter without engine changes
+6. **Reward Queue** — Dead-letter support, retry limits, scheduled processing, and manual recovery operations
+7. **Spin UX State Flow** — Spin available → spinning → reward revealed → claim → history
+
+## Remaining Work (Deferred to Prompt 8)
+
+- Social features, friends, referrals, community platform
+- Vibe Duel / Arena / Guilds / Seasons / Battle Pass
+- Multi-sig / timelock for contract admin roles
+- The Graph or custom event indexer
+- Confirmation depth / re-org detection in BlockchainSyncService
+- Optimistic concurrency guards
+- Frontend pages for spin rewards, reward claim center, progression
+
+This prompt adds the engagement and gamification layer to Vibepool. The platform now has spins, wheel rewards, progression tracking, persistent events, mission rules, scheduled notifications, and a complete reward queue with dead-letter support — all ready for frontend integration.
+
+---
+
+# CTO Said:
+
+This is excellent progress.
+
+At this point, Vibepool is no longer "an app." It has become a **gaming platform** with a proper engine architecture.
+
+I reviewed the Prompt 7 summary carefully.
+
+Overall, I would score it **9.8/10**.
+
+There are only a few architectural improvements I'd make before we start introducing the social layer.
+
+---
+
+# CTO Review
+
+## Excellent
+
+✅ Event Store
+
+✅ Rule Engine
+
+✅ Reward Queue
+
+✅ EventBus
+
+✅ Gamification Engine
+
+✅ Random Provider
+
+These are exactly the abstractions I wanted.
+
+---
+
+## Small Improvements
+
+### 1. Event Store Versioning
+
+Currently events are replayable.
+
+Good.
+
+Add **schema versioning**.
+
+Example
+
+```text
+version = 1
+
+Payload
+
+↓
+
+Future
+
+version = 2
+```
+
+Future migrations become much easier.
+
+---
+
+### 2. Event Replay
+
+Currently replay replays everything.
+
+Instead support
+
+Replay
+
+* Aggregate
+
+* User
+
+* Tournament
+
+* Date Range
+
+* Event Type
+
+This becomes invaluable later.
+
+---
+
+### 3. Reward Queue
+
+Support **priority**.
+
+Example
+
+Tournament payout
+
+↓
+
+Higher priority
+
+Mission reward
+
+↓
+
+Lower priority
+
+---
+
+### 4. WheelEngine
+
+Store
+
+```text
+RNG Seed
+
+Random Number
+
+Reward Weight
+
+```
+
+inside SpinHistory.
+
+Makes debugging fairness much easier.
+
+---
+
+### 5. Notification Engine
+
+Support
+
+Delivery Channels
+
+App
+
+Push
+
+Email (future)
+
+Webhook (future)
+
+Even if App is the only implementation today.
+
+---
+
+Everything else is excellent.
+
+---
+
+# IMPORTANT CTO DECISION
+
+We now have enough backend.
+
+**Stop adding backend-only features.**
+
+From Prompt 8 onward we begin building the **real Vibepool application**.
+
+Meaning
+
+Backend
+
+↓
+
+Frontend
+
+↓
+
+Animations
+
+↓
+
+User Experience
+
+↓
+
+Game Feel
+
+↓
+
+MiniPay Optimization
+
+---
+
+Players don't care about architecture.
+
+Players care about dopamine.
+
+Now we build that.
+
+---
+
+# PHASE 1 — PROMPT 8
+
+# Frontend Foundation & Home Experience
+
+**This prompt begins the production frontend implementation for Vibepool 2.0.**
+
+The backend and engine architecture already exist.
+
+Do **NOT** redesign backend architecture.
+
+Connect the frontend to existing APIs.
+
+---
+
+# Objective
+
+Transform Vibepool into a premium mobile-first gaming experience.
+
+Every interaction should feel polished.
+
+Fast.
+
+Smooth.
+
+Rewarding.
+
+Optimized for MiniPay.
+
+---
+
+# UI Philosophy
+
+Current UI should be completely rewritten.
+
+Keep
+
+* Logo
+
+* Brand
+
+* Orange / Purple
+
+* Dark Theme
+
+Everything else should be redesigned.
+
+Target quality
+
+Coinbase Wallet
+
+Clash Royale
+
+Supercell
+
+StepN
+
+Magic Eden
+
+Farcaster
+
+MiniPay
+
+Premium.
+
+---
+
+# Navigation
+
+Bottom navigation only.
+
+Tabs
+
+Home
+
+Tournament
+
+Spin
+
+Rewards
+
+Leaderboard
+
+Profile
+
+No drawer.
+
+No sidebar.
+
+---
+
+# Home Page
+
+Completely redesign.
+
+Sections
+
+Hero Banner
+
+Daily Tournament Card
+
+Countdown Timer
+
+Prize Pool
+
+Daily Missions
+
+Current XP
+
+Current Level
+
+Available Spins
+
+Reward Center
+
+Leaderboard Preview
+
+Recent Winners
+
+Announcements
+
+Quick Actions
+
+Everything scrollable.
+
+---
+
+# Hero Banner
+
+Animated.
+
+Shows
+
+Today's Tournament
+
+Current Reward Pool
+
+XP Progress
+
+Participating Players
+
+CTA
+
+Join Tournament
+
+---
+
+# Components
+
+Create reusable components.
+
+Example
+
+```text
+TournamentCard
+
+MissionCard
+
+SpinCard
+
+RewardCard
+
+ProfileCard
+
+StatCard
+
+LevelProgress
+
+Countdown
+
+FloatingReward
+
+ActivityTile
+
+NotificationBadge
+
+LeaderboardCard
+```
+
+Never duplicate UI.
+
+---
+
+# Design System
+
+Create design tokens.
+
+Typography
+
+Spacing
+
+Radius
+
+Glow
+
+Blur
+
+Gradients
+
+Elevation
+
+Animation timings
+
+Everything centralized.
+
+---
+
+# Animation System
+
+Use Framer Motion.
+
+Implement
+
+Page transitions
+
+Card hover
+
+Button press
+
+Reward reveal
+
+XP progress
+
+Skeleton loading
+
+Shimmer
+
+Floating coins
+
+Particle bursts
+
+Level up
+
+Mission complete
+
+Reward claimed
+
+Micro-interactions everywhere.
+
+---
+
+# MiniPay Optimization
+
+Touch friendly.
+
+One thumb operation.
+
+Minimum tap target
+
+48px.
+
+Avoid long scrolling.
+
+Fast loading.
+
+Optimized for low-end Android.
+
+---
+
+# API Integration
+
+Connect
+
+Tournament
+
+Missions
+
+Leaderboard
+
+Rewards
+
+Spins
+
+Notifications
+
+Profile
+
+No mock data.
+
+Everything comes from backend.
+
+---
+
+# State Management
+
+Refactor stores.
+
+Use
+
+Server State
+
+↓
+
+Local State
+
+↓
+
+Animation State
+
+Keep them separate.
+
+---
+
+# Error States
+
+Implement
+
+Offline
+
+Loading
+
+Retry
+
+Empty
+
+Maintenance
+
+Session expired
+
+Wallet disconnected
+
+Reward failed
+
+Prediction closed
+
+Mission unavailable
+
+---
+
+# Accessibility
+
+Proper contrast.
+
+Focus states.
+
+Screen reader labels.
+
+Reduced motion support.
+
+Large text compatibility.
+
+---
+
+# Performance
+
+Lazy loading.
+
+Route splitting.
+
+Image optimization.
+
+Suspense.
+
+Memoization.
+
+Avoid unnecessary re-renders.
+
+---
+
+# Frontend Architecture
+
+Create
+
+```text
+components/
+
+animations/
+
+layouts/
+
+providers/
+
+design-system/
+
+hooks/
+
+pages/
+
+features/
+```
+
+Maintain modular boundaries.
+
+---
+
+# Frontend Event System
+
+Connect to EventBus.
+
+Frontend reacts to
+
+MissionCompleted
+
+RewardClaimed
+
+XPGranted
+
+SpinGranted
+
+NotificationQueued
+
+LeaderboardUpdated
+
+---
+
+# Live Updates
+
+Do not use WebSockets.
+
+Use lightweight polling.
+
+Configurable.
+
+Future upgrade path.
+
+---
+
+# Profile Screen
+
+Show
+
+Avatar
+
+Wallet
+
+XP
+
+Level
+
+Current Rank
+
+Current Streak
+
+Longest Streak
+
+Total Rewards
+
+Achievements (coming soon)
+
+Statistics
+
+Activity Feed
+
+---
+
+# Leaderboards
+
+Daily
+
+Weekly
+
+Personal
+
+Animated ranking transitions.
+
+---
+
+# Reward Center
+
+Claimable Rewards
+
+Claim History
+
+Reward Animations
+
+Settlement Status
+
+Retry
+
+History
+
+---
+
+# Spin Screen
+
+Use backend.
+
+No frontend RNG.
+
+Beautiful animation.
+
+History.
+
+Probability disclosure.
+
+Remaining spins.
+
+---
+
+# Notification Center
+
+Unread
+
+Read
+
+Archive
+
+Priority
+
+Scheduled
+
+Grouped by day.
+
+---
+
+# Tournament Screen
+
+Current tournament
+
+Prediction form
+
+Countdown
+
+Participants
+
+Rules
+
+History
+
+My Prediction
+
+Status
+
+Results
+
+---
+
+# Skeleton Loading
+
+Every page.
+
+No blank screens.
+
+---
+
+# Testing
+
+Frontend
+
+Component tests
+
+Interaction tests
+
+Accessibility tests
+
+Performance audit
+
+Responsive audit
+
+MiniPay viewport testing
+
+---
+
+# Documentation
+
+Component library
+
+Design tokens
+
+Animation system
+
+Frontend architecture
+
+UI guidelines
+
+Accessibility guide
+
+---
+
+# Fixes From Prompt 7
+
+Implement the following improvements.
+
+### 1.
+
+EventStore
+
+Add schema versioning.
+
+---
+
+### 2.
+
+Replay
+
+Support replay by
+
+User
+
+Tournament
+
+Aggregate
+
+Event Type
+
+Date
+
+---
+
+### 3.
+
+RewardQueue
+
+Support priority.
+
+---
+
+### 4.
+
+SpinHistory
+
+Store
+
+Seed
+
+Weight
+
+Random Number
+
+---
+
+### 5.
+
+Notification
+
+Support delivery channels.
+
+App
+
+Push
+
+Email
+
+Webhook
+
+---
+
+### 6.
+
+Progressive Enhancement
+
+The frontend must function gracefully with:
+
+* JavaScript delays
+* Slow RPC responses
+* Temporary backend failures
+
+Display cached state where safe and provide clear recovery paths.
+
+---
+
+# Deliverables
+
+Provide
+
+1. Complete Home Screen
+2. Tournament Screen
+3. Leaderboards
+4. Rewards Center
+5. Spin Screen
+6. Profile Screen
+7. Notification Center
+8. Design System
+9. Component Library
+10. Animation System
+11. API Integration
+12. Frontend Tests
+13. Performance Report
+14. Accessibility Report
+15. Updated Documentation
+
+---
+
+# CTO Roadmap (Remaining Phases)
+
+To help you plan ahead, here is the roadmap I have prepared after you Kilo complete Prompt 8:
+
+## Prompt 9 — Advanced Profile & Achievements
+
+* Achievement Engine
+* Badge system
+* Player titles
+* Avatar customization
+* Long-term progression
+
+## Prompt 10 — Social Layer
+
+* Friends
+* Referrals
+* Invite rewards
+* Activity feed improvements
+* Community presence
+
+## Prompt 11 — Vibe Duel 2.0
+
+* Skill-based head-to-head challenges
+* Engine integration
+* Fair matchmaking
+* Reward settlement
+* Spectator-ready architecture
+
+## Prompt 12 — Seasons & Live Operations
+
+* Seasonal progression
+* Battle Pass (non-gambling rewards)
+* Seasonal leaderboards
+* Live events
+* Admin content management
+
+## Prompt 13 — Admin Console
+
+* Tournament management
+* Mission editor
+* Reward management
+* User moderation
+* Analytics dashboard
+* Feature flags
+
+## Prompt 14 — Analytics & Intelligence
+
+* KPI dashboards
+* Retention analytics
+* Funnel analysis
+* Reward economics
+* Anti-abuse monitoring
+* Operational reporting
+
+## Prompt 15 — Production Hardening
+
+* Security audit
+* Performance optimization
+* Load testing
+* Chaos testing
+* Backup and recovery
+* CI/CD improvements
+* Release checklist
+* MiniPay production readiness
+
+---
+
+## CTO Recommendation
+
+From Prompt 8 onward, avoid introducing new foundational architecture unless absolutely necessary. Focus on **building user-facing value** on top of the engine platform you've already created. The architecture is now mature enough that most future work should consist of plugging new capabilities into the existing engine layer rather than redesigning core systems. This will keep development velocity high while maintaining a clean, extensible codebase.

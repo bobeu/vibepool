@@ -35,5 +35,86 @@ export interface ISettlementEngine extends IEngine {
 }
 
 export interface IAuditEngine extends IEngine {
-  log(action: string, entity?: string, entityId?: string, metadata?: Record<string, unknown>): Promise<void>;
+  log(action: string, entity?: string, entityId?: string, metadata?: Record<string, unknown>, actor?: string, options?: { eventId?: string; sessionId?: string; correlationId?: string }): Promise<void>;
+}
+
+export interface IEventBus {
+  publish(event: Record<string, unknown>): void;
+  subscribe(eventName: string, handler: (payload: Record<string, unknown>) => void): () => void;
+}
+
+export interface IMissionEngine extends IEngine {
+  generateDailyMissions(userId: string): Promise<Record<string, unknown>[]>;
+  getActiveMissions(userId: string): Promise<Record<string, unknown>[]>;
+  updateProgress(userId: string, missionId: string, increment: number): Promise<Record<string, unknown>>;
+  completeMission(userId: string, missionId: string): Promise<Record<string, unknown>>;
+  claimMission(userId: string, missionId: string): Promise<Record<string, unknown>>;
+}
+
+export interface IActivityEngine extends IEngine {
+  record(userId: string, type: string, metadata?: Record<string, unknown>): Promise<Record<string, unknown>>;
+  getRecent(userId: string, limit?: number): Promise<Record<string, unknown>[]>;
+}
+
+export interface IProgressEngine extends IEngine {
+  handleActivity(userId: string, activityType: string, metadata?: Record<string, unknown>): Promise<void>;
+}
+
+export interface IStreakEngine extends IEngine {
+  updateStreak(userId: string): Promise<{ current: number; longest: number }>;
+  getStreak(userId: string): Promise<{ current: number; longest: number }>;
+}
+
+export interface INotificationEngine extends IEngine {
+  send(userId: string, type: string, title: string, body: string, priority?: string, expiresAt?: Date, scheduledAt?: Date, recurring?: boolean): Promise<Record<string, unknown>>;
+  getUnread(userId: string): Promise<Record<string, unknown>[]>;
+  getScheduled(limit?: number): Promise<Record<string, unknown>[]>;
+  markRead(notificationId: string, userId: string): Promise<void>;
+}
+
+export interface IStatisticsEngine extends IEngine {
+  increment(userId: string, type: string, value?: number, metadata?: Record<string, unknown>): Promise<void>;
+  getStats(userId: string): Promise<Record<string, unknown>>;
+}
+
+export interface IEventStore {
+  append(event: { aggregateId: string; aggregateType: string; eventType: string; payload?: Record<string, unknown> }, version?: number): Promise<string>;
+  getEventsForAggregate(aggregateId: string): Promise<Record<string, unknown>[]>;
+  getUnprocessed(limit?: number): Promise<Record<string, unknown>[]>;
+  markProcessed(eventId: string): Promise<void>;
+  replay(aggregateId: string): Promise<Record<string, unknown>[]>;
+}
+
+export interface IMissionRuleEngine extends IEngine {
+  evaluate(userId: string, activityType: string, metadata?: Record<string, unknown>): Promise<Record<string, unknown>[]>;
+  loadRules(): Promise<Record<string, unknown>[]>;
+}
+
+export interface ISpinEngine extends IEngine {
+  grantSpin(userId: string, source: string, reason?: string): Promise<Record<string, unknown>>;
+  consumeSpin(userId: string): Promise<boolean>;
+  getSpinBalance(userId: string): Promise<{ available: number; daily: number; lifetime: number }>;
+}
+
+export interface IWheelEngine extends IEngine {
+  generateSpin(userId: string, randomProvider: IRandomProvider): Promise<Record<string, unknown>>;
+  generateReward(spinId: string, randomProvider: IRandomProvider): Promise<Record<string, unknown>>;
+  getSpinHistory(userId: string, limit?: number): Promise<Record<string, unknown>[]>;
+}
+
+export interface IRewardClaimEngine extends IEngine {
+  claimReward(userId: string, rewardId: string): Promise<Record<string, unknown>>;
+  getClaimableRewards(userId: string): Promise<Record<string, unknown>[]>;
+}
+
+export interface IGamificationEngine extends IEngine {
+  getLevelProgress(userId: string): Promise<Record<string, unknown>>;
+  getPlayerRank(userId: string): Promise<Record<string, unknown>>;
+  getEngagementMetrics(userId: string): Promise<Record<string, unknown>>;
+}
+
+export interface IRandomProvider {
+  next(): Promise<number>;
+  range(min: number, max: number): Promise<number>;
+  shuffle<T>(items: T[]): Promise<T[]>;
 }
