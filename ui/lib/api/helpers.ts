@@ -1,10 +1,26 @@
 import type { NextRequest } from "next/server";
 import type { ApiErrorResponse } from "@/types";
+import { isRuntimeEnabled } from "@/lib/runtime/productionConfig";
 
 export function notImplemented(module: string): Response {
   return Response.json(
     { error: `${module} not implemented — Phase 1 Prompt 2`, code: "NOT_IMPLEMENTED" } satisfies ApiErrorResponse,
     { status: 501 }
+  );
+}
+
+/** Returns 410 for legacy routes disconnected at launch (Prompt 15). */
+export function dormantLegacyRoute(module: string, replacement: string): Response {
+  if (isRuntimeEnabled("enableLegacyStubRoutes")) {
+    return notImplemented(module);
+  }
+  return Response.json(
+    {
+      error: `${module} is dormant for MiniPay launch. Use ${replacement}.`,
+      code: "DORMANT_ROUTE",
+      replacement,
+    } satisfies ApiErrorResponse,
+    { status: 410, headers: { "X-Nexora-Route-Status": "DORMANT" } }
   );
 }
 

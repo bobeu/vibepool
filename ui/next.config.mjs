@@ -8,7 +8,12 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Environment variables to expose to the browser
+  experimental: {
+    optimizePackageImports: ["lucide-react", "recharts", "@radix-ui/react-icons"],
+  },
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || "/api",
   },

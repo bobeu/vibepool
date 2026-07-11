@@ -12689,3 +12689,796 @@ New pages: Observability, Alerts, Trace Explorer, Experiments, Global Search. Up
 6. Implement audit chain verification as a scheduled integrity check with alerting.
 7. Seed default alert rules for arena queue, settlement backlog, and scheduler dead-letter counts.
 
+---
+
+# CTO Said:
+
+I actually like this approach much better.
+
+I **would not delete anything** at this stage.
+
+The codebase is mature enough that deleting systems before you have production experience could create unnecessary risk.
+
+Instead, let's treat Prompt 15 as a **Production Readiness & Optimization Sprint**.
+
+The objective is to **inventory, optimize, disconnect, benchmark, and document** the platform—not to redesign it.
+
+This is exactly what many mature engineering teams do before their first public launch.
+
+---
+
+# PHASE 3 — PROMPT 15
+
+# Production Readiness, Performance Audit & Launch Optimization
+
+**Objective**
+
+The architecture is considered **feature complete**.
+
+Do **NOT** introduce any new gameplay systems, engines, Prisma models, feature modules, or architectural layers unless absolutely required to fix a defect discovered during this audit.
+
+Instead, inspect the entire platform, optimize it, and prepare it for production launch on MiniPay.
+
+---
+
+# Engineering Rule
+
+Treat this prompt as a production readiness sprint.
+
+Assume the platform launches immediately after this work.
+
+Every recommendation should prioritize:
+
+* performance
+* reliability
+* maintainability
+* launch readiness
+
+rather than introducing additional functionality.
+
+---
+
+# 1. Architecture Freeze
+
+Freeze the current architecture.
+
+No new
+
+* engines
+* services
+* Prisma models
+* event types
+* feature modules
+
+unless fixing a critical production issue.
+
+Document any requested architectural improvements as future recommendations instead of implementing them.
+
+---
+
+# 2. Full Project Audit
+
+Inspect the entire repository.
+
+Produce a report containing:
+
+### Active Modules
+
+Modules actively used in production flows.
+
+---
+
+### Dormant Modules
+
+Modules implemented but currently disconnected from user flows.
+
+Do **NOT** delete them.
+
+Simply classify them as
+
+```text
+Dormant
+
+Reason
+
+Current references
+
+Future purpose
+```
+
+---
+
+### Experimental Modules
+
+Identify modules suitable for future development.
+
+Mark them clearly.
+
+---
+
+### Dead Code
+
+Identify
+
+* unused files
+* unreachable components
+* unused APIs
+* duplicate helpers
+* duplicate utilities
+* obsolete interfaces
+
+Do **NOT** delete them.
+
+Generate a report.
+
+Disconnect them where safe.
+
+Leave clear TODO markers.
+
+---
+
+# 3. Dependency Graph
+
+Generate
+
+Architecture Dependency Report
+
+Include
+
+Module
+
+Dependencies
+
+Dependents
+
+Circular dependency detection
+
+Layer violations
+
+Import violations
+
+Unused exports
+
+---
+
+# 4. Runtime Performance Audit
+
+Measure
+
+Frontend
+
+Backend
+
+Database
+
+Blockchain
+
+MiniPay
+
+Generate report.
+
+Include
+
+Cold Start
+
+Warm Start
+
+Route Performance
+
+API Latency
+
+Memory Usage
+
+CPU Usage
+
+Bundle Size
+
+Largest JS Chunks
+
+Hydration
+
+React Render Counts
+
+Cache Hit Ratio
+
+Prisma Query Counts
+
+Slow Queries
+
+---
+
+# 5. Bundle Optimization
+
+Audit
+
+Dynamic imports
+
+Tree shaking
+
+Unused packages
+
+Heavy dependencies
+
+Large assets
+
+Code splitting
+
+Image loading
+
+Font loading
+
+Generate optimization recommendations.
+
+Implement safe optimizations only.
+
+---
+
+# 6. Database Audit
+
+Review
+
+Indexes
+
+Relations
+
+Query plans
+
+Transactions
+
+Prisma usage
+
+Migration consistency
+
+Connection usage
+
+Generate
+
+Database Optimization Report.
+
+---
+
+# 7. API Audit
+
+Review every API.
+
+Identify
+
+Unused endpoints
+
+Duplicate endpoints
+
+Version conflicts
+
+Authentication consistency
+
+Response consistency
+
+Validation consistency
+
+Rate limiting coverage
+
+Generate API inventory.
+
+Do not remove endpoints.
+
+Mark dormant ones.
+
+---
+
+# 8. Engine Audit
+
+Review every Engine.
+
+For each engine report
+
+Purpose
+
+Current usage
+
+Performance cost
+
+Dependencies
+
+Future value
+
+Status
+
+Use one of
+
+```text
+ACTIVE
+
+DORMANT
+
+EXPERIMENTAL
+
+LEGACY
+```
+
+Do not delete.
+
+Disconnect dormant engines from runtime initialization if they are not required for current gameplay.
+
+They must remain in the repository.
+
+---
+
+# 9. Frontend Audit
+
+Inspect
+
+Every page
+
+Every component
+
+Every hook
+
+Every provider
+
+Every context
+
+Every store
+
+Generate
+
+UI Component Inventory
+
+Unused Component Report
+
+Duplicate Component Report
+
+Accessibility Report
+
+---
+
+# 10. Asset Audit
+
+Review
+
+Logos
+
+Icons
+
+Heroes
+
+Illustrations
+
+Backgrounds
+
+Cards
+
+Effects
+
+Animations
+
+Find
+
+Missing assets
+
+Placeholder assets
+
+Duplicate assets
+
+Oversized assets
+
+Generate Asset Inventory.
+
+Do not remove anything.
+
+---
+
+# 11. Gameplay Flow Audit
+
+Verify complete player journeys.
+
+Prediction
+
+Arena
+
+Mission
+
+Spin
+
+Rewards
+
+Leaderboard
+
+Profile
+
+Achievements
+
+Friends
+
+Referrals
+
+Community
+
+For every journey identify
+
+Broken flow
+
+Missing UI
+
+Placeholder
+
+Disconnected API
+
+Incomplete state
+
+Generate report.
+
+---
+
+# 12. MiniPay Optimization
+
+Audit
+
+Touch targets
+
+Wallet reconnect
+
+Safe areas
+
+Low memory devices
+
+Offline mode
+
+Loading states
+
+Animation smoothness
+
+Route transitions
+
+Network failures
+
+Transaction UX
+
+Generate
+
+MiniPay Readiness Report.
+
+---
+
+# 13. Security Audit
+
+Review
+
+Authentication
+
+Authorization
+
+Replay protection
+
+Session handling
+
+Admin APIs
+
+Environment variables
+
+Rate limiting
+
+Input validation
+
+Secrets
+
+Generate
+
+Security Readiness Report.
+
+---
+
+# 14. Testing Audit
+
+Review
+
+Coverage
+
+Broken tests
+
+Skipped tests
+
+Missing integration tests
+
+Missing E2E
+
+Flaky tests
+
+Generate
+
+Testing Report.
+
+Do not rewrite unrelated tests.
+
+---
+
+# 15. Disconnect Dormant Systems
+
+Do **NOT** delete code.
+
+Instead
+
+Disconnect
+
+* initialization
+* scheduled execution
+* automatic registration
+* event subscriptions
+* dependency injection
+
+for modules classified as Dormant.
+
+Document every disconnection.
+
+The objective is to reduce runtime overhead while preserving future work.
+
+---
+
+# 16. Feature Inventory
+
+Generate
+
+FEATURE_MATRIX.md
+
+Example
+
+| Feature | Status | Connected | UI | API | Engine |
+| ------- | ------ | --------- | -- | --- | ------ |
+
+Status
+
+Production Ready
+
+Beta
+
+Experimental
+
+Dormant
+
+Planned
+
+---
+
+# 17. Technical Debt Report
+
+Generate
+
+TECHNICAL_DEBT.md
+
+Include
+
+Known issues
+
+Future improvements
+
+Refactoring opportunities
+
+Deferred architecture
+
+Performance opportunities
+
+Testing gaps
+
+Security observations
+
+Nothing should be fixed automatically unless low risk.
+
+---
+
+# 18. Launch Checklist
+
+Generate
+
+LAUNCH_CHECKLIST.md
+
+Include
+
+Environment Variables
+
+Build
+
+Deployment
+
+Database
+
+Contracts
+
+MiniPay
+
+Monitoring
+
+Backups
+
+Rollback
+
+Support
+
+Analytics
+
+Alert Verification
+
+Security
+
+Smoke Tests
+
+---
+
+# 19. Performance Budget
+
+Define budgets.
+
+Example
+
+Initial JS
+
+Home Page
+
+Arena
+
+API
+
+Database
+
+Images
+
+Fonts
+
+Memory
+
+Network
+
+Use realistic targets.
+
+---
+
+# 20. Reports
+
+Generate
+
+```text
+ARCHITECTURE_AUDIT.md
+
+ENGINE_AUDIT.md
+
+API_AUDIT.md
+
+DATABASE_AUDIT.md
+
+PERFORMANCE_AUDIT.md
+
+MINIPAY_READINESS.md
+
+SECURITY_AUDIT.md
+
+TESTING_AUDIT.md
+
+ASSET_INVENTORY.md
+
+FEATURE_MATRIX.md
+
+TECHNICAL_DEBT.md
+
+LAUNCH_CHECKLIST.md
+```
+
+---
+
+# Constraints
+
+Do **NOT**
+
+* delete files
+* remove Prisma models
+* remove APIs
+* remove Engines
+* remove EventBus
+* redesign architecture
+
+Instead
+
+disconnect
+
+document
+
+benchmark
+
+classify
+
+optimize
+
+---
+
+# Acceptance Criteria
+
+The prompt is complete only if:
+
+* No architectural expansion occurred.
+* Runtime performance improves where safe.
+* Dormant systems are disconnected, not deleted.
+* Every subsystem has been inventoried and classified.
+* Reports are generated for future cleanup.
+* The application remains fully functional.
+* Existing gameplay loops continue to work without regression.
+* The repository is cleaner, easier to understand, and ready for a production launch decision.
+
+---
+
+# Deliverables
+
+1. Architecture Audit
+2. Engine Audit
+3. API Audit
+4. Database Audit
+5. Performance Audit
+6. MiniPay Readiness Report
+7. Security Audit
+8. Testing Audit
+9. Asset Inventory
+10. Feature Matrix
+11. Technical Debt Report
+12. Launch Checklist
+13. Performance Budget
+14. Safe runtime optimizations
+15. Dormant module disconnection report
+16. Final production readiness assessment
+
+---
+
+# CTO Final Direction
+
+This is **not** a feature sprint.
+
+This is a **release engineering sprint**.
+
+Treat the existing platform as a product preparing for its first production launch. The goal is to maximize confidence in performance, stability, and maintainability while preserving every subsystem you've built. If a module is not required for the initial MiniPay release, classify it as dormant and disconnect it from runtime execution instead of removing it. The resulting reports should give us a clear roadmap for future iterations without forcing irreversible decisions before we have real user feedback.
+
+---
+
+# Prompt 15 Implementation Summary
+
+**Date:** 2026-07-11  
+**Status:** Complete  
+**Verdict:** Conditional Go for MiniPay soft launch (off-chain gameplay)
+
+## What Changed
+
+### Architecture Freeze
+- Added `ui/lib/runtime/productionConfig.ts` — runtime flags for dormant systems (no deletions)
+
+### Safe Runtime Optimizations
+- **Unified scheduler:** `ui/services/schedulerRegistry.ts` — singleton with all job handlers; fixes admin scheduler executing jobs without handlers
+- **Permission fix:** `SchedulerService` uses `scheduler:execute` (was invalid `scheduler:run`)
+- **Legacy routes:** Return `410 DORMANT_ROUTE` with replacement URL (`/api/spin` → `/api/spins`, etc.)
+- **Rating strategies:** Experimental algorithms lazy-loaded on demand; `simple` only at startup
+- **PresenceChanged:** EventBus subscription disconnected (was no-op)
+- **Bundle:** `optimizePackageImports` for lucide/recharts; AVIF/WebP image formats in `next.config.mjs`
+
+### Audit Reports (14 documents)
+All in `ui/docs/audit/`:
+ARCHITECTURE_AUDIT, ENGINE_AUDIT, API_AUDIT, DATABASE_AUDIT, PERFORMANCE_AUDIT, MINIPAY_READINESS, SECURITY_AUDIT, TESTING_AUDIT, ASSET_INVENTORY, FEATURE_MATRIX, TECHNICAL_DEBT, LAUNCH_CHECKLIST, DORMANT_DISCONNECTIONS, PRODUCTION_READINESS_ASSESSMENT
+
+### Tests
+- **39/39 passing** — admin, arena, liveops, observability regression
+- Minimal test update for on-demand rating strategy loading
+
+## Intentionally Deferred
+- No file/model/API/engine deletions
+- No new gameplay systems or Prisma models
+- XPRewardEngine syntax fix (pre-existing, documented in TECHNICAL_DEBT.md)
+- E2E tests, rate limiting rollout, blockchain API wiring
+- DB index migrations (documented recommendations only)
+- Dynamic wagmi import (documented in PERFORMANCE_AUDIT)
+
+## Dormant Disconnections
+See `ui/docs/audit/DORMANT_DISCONNECTIONS.md` — legacy API routes, experimental rating init, presence feed handler. All re-enableable via `productionConfig.ts`.
+
+## Production Readiness Assessment
+**Conditional Go** — core gameplay loops verified. Blockers for full production: on-chain settlement (intentionally off), production DB migration, automated E2E smoke tests, JS bundle over budget (wallet libs).
+
+## Recommendations Before Prompt 16
+1. Run LAUNCH_CHECKLIST.md items against staging
+2. Wire BlockchainSyncService when on-chain rewards launch
+3. Add Playwright smoke tests for critical journeys
+4. Apply rate limiting to auth + admin endpoints
+5. Lazy-load wagmi/RainbowKit to meet performance budget
+6. Run `db:push` on production and seed alert rules
+

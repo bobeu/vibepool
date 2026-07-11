@@ -1,5 +1,5 @@
-import { notImplemented } from "@/lib/api/helpers";
+import { dormantLegacyRoute } from "@/lib/api/helpers";
 
 export async function POST() {
-  return notImplemented("POST /api/wallet");
+  return dormantLegacyRoute("POST /api/wallet", "POST /api/auth/login");
 }

@@ -27,9 +27,10 @@ import { SeasonEngine } from "@/services/engines/SeasonEngine";
 import { ContentEngine } from "@/services/engines/ContentEngine";
 import { FeatureFlagEngine } from "@/services/engines/FeatureFlagEngine";
 import { LiveOpsEngine } from "@/services/engines/LiveOpsEngine";
-import { SchedulerEngine } from "@/services/engines/SchedulerEngine";
 import { CampaignEngine } from "@/services/engines/CampaignEngine";
 import { eventBus } from "@/services/engines/EventBus";
+import { getSchedulerEngine } from "@/services/schedulerRegistry";
+import { isRuntimeEnabled } from "@/lib/runtime/productionConfig";
 import type {
   IMissionService,
   IRewardService,
@@ -69,35 +70,10 @@ const seasonEngine = new SeasonEngine();
 const contentEngine = new ContentEngine();
 const featureFlagEngine = new FeatureFlagEngine();
 const liveOpsEngine = new LiveOpsEngine();
-const schedulerEngine = new SchedulerEngine();
+const schedulerEngine = getSchedulerEngine();
 const campaignEngine = new CampaignEngine();
 
-schedulerEngine.registerHandler("SEASON_ROLLOVER", async (_payload, options) => {
-  if (options?.dryRun) return { simulated: true, action: "season_rollover" };
-  return seasonEngine.rollover();
-});
-schedulerEngine.registerHandler("CAMPAIGN_START", async (payload, options) => {
-  if (options?.dryRun) return { simulated: true, action: "campaign_start", campaignId: payload.campaignId };
-  const id = payload.campaignId as string;
-  return id ? campaignEngine.startCampaign(id) : { skipped: true };
-});
-schedulerEngine.registerHandler("CAMPAIGN_END", async (payload, options) => {
-  if (options?.dryRun) return { simulated: true, action: "campaign_end", campaignId: payload.campaignId };
-  const id = payload.campaignId as string;
-  return id ? campaignEngine.completeCampaign(id) : { skipped: true };
-});
-schedulerEngine.registerHandler("CLEANUP", async (_payload, options) => {
-  if (options?.dryRun) return { simulated: true, action: "cleanup" };
-  const { MatchEngine } = await import("@/services/engines/MatchEngine");
-  const { MatchmakingEngine } = await import("@/services/engines/MatchmakingEngine");
-  const matchEngine = new MatchEngine();
-  const matchmakingEngine = new MatchmakingEngine();
-  const expiredMatches = await matchEngine.expireWaitingMatches();
-  const expiredQueues = await matchmakingEngine.expireStaleQueues();
-  const activatedEvents = await liveOpsEngine.activateDueEvents();
-  const activatedCampaigns = await campaignEngine.activateDueCampaigns();
-  return { expiredMatches, expiredQueues, activatedEvents, activatedCampaigns };
-});
+// Scheduler handlers registered in schedulerRegistry.ts
 
 eventBus.subscribe("ActivityRecorded", async (payload) => {
   const userId = payload.userId as string;
@@ -212,9 +188,12 @@ eventBus.subscribe("ReferralRegistered", async (payload) => {
   );
 });
 
-eventBus.subscribe("PresenceChanged", async () => {
-  // Presence feed noise is optional; skip by default.
-});
+// TODO(Prompt15-DORMANT): Presence feed side effects disabled at launch — re-enable via PRODUCTION_RUNTIME.enablePresenceFeedSideEffects
+if (isRuntimeEnabled("enablePresenceFeedSideEffects")) {
+  eventBus.subscribe("PresenceChanged", async () => {
+    // Optional presence feed updates
+  });
+}
 
 eventBus.subscribe("AchievementUnlocked", async (payload) => {
   const userId = payload.userId as string;
@@ -1008,13 +987,13 @@ export class SchedulerService {
 
   async runDueJobs(wallet: string, limit = 20) {
     const { requireAdmin } = await import("@/lib/admin/auth");
-    await requireAdmin(wallet, "scheduler:run");
+    await requireAdmin(wallet, "scheduler:execute");
     return schedulerEngine.runDueJobs(limit);
   }
 
   async schedule(wallet: string, jobType: string, scheduledAt: Date, payload?: Record<string, unknown>, options?: Record<string, unknown>) {
     const { requireAdmin } = await import("@/lib/admin/auth");
-    await requireAdmin(wallet, "scheduler:run");
+    await requireAdmin(wallet, "scheduler:execute");
     return schedulerEngine.schedule(jobType, scheduledAt, payload, {
       idempotencyKey: options?.idempotencyKey as string | undefined,
       dependsOnJobIds: options?.dependsOnJobIds as string[] | undefined,

@@ -1,5 +1,5 @@
-import { notImplemented } from "@/lib/api/helpers";
+import { dormantLegacyRoute } from "@/lib/api/helpers";
 
 export async function GET() {
-  return notImplemented("GET /api/notification");
+  return dormantLegacyRoute("GET /api/notification", "GET /api/notifications");
 }

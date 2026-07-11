@@ -1,9 +1,9 @@
-import { notImplemented } from "@/lib/api/helpers";
+import { dormantLegacyRoute } from "@/lib/api/helpers";
 
 export async function GET() {
-  return notImplemented("GET /api/spin");
+  return dormantLegacyRoute("GET /api/spin", "GET /api/spins");
 }
 
 export async function POST() {
-  return notImplemented("POST /api/spin");
+  return dormantLegacyRoute("POST /api/spin", "POST /api/spins");
 }

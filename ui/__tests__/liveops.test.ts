@@ -182,9 +182,9 @@ describe("Arena improvements", () => {
   });
 
   it("lists rating strategies", () => {
+    expect(RatingStrategyRegistry.get("elo")).toBeDefined();
     const strategies = RatingStrategyRegistry.list();
     expect(strategies).toContain("simple");
     expect(strategies).toContain("elo");
-    expect(RatingStrategyRegistry.get("elo")).toBeDefined();
   });
 });

@@ -1,9 +1,9 @@
 import { NextRequest } from "next/server";
 import { adminHandler, jsonResponse } from "@/lib/admin/apiHandler";
 import { auditAdminAction } from "@/lib/admin/auth";
-import { SchedulerEngine } from "@/services/engines/SchedulerEngine";
+import { getSchedulerEngine } from "@/services/schedulerRegistry";
 
-const engine = new SchedulerEngine();
+const engine = getSchedulerEngine();
 
 export const GET = (req: NextRequest) =>
   adminHandler(req, "scheduler:read", async (_wallet, request) => {
