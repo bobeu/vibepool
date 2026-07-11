@@ -9225,3 +9225,969 @@ From this point onward, every major feature should deepen engagement rather than
 6. Consider SSE for live arena presence during matches.
 
 Prompt 10 completes the social foundation. NEXORA now supports friends, referrals, community announcements, activity feeds, privacy controls, and priority unlock celebrations — all routed through the existing engine, event, and reward infrastructure.
+
+---
+
+# CTO Said:
+
+# CTO Review — Prompt 10
+
+Overall Score
+
+**9.9 / 10**
+
+I honestly don't have many architectural complaints anymore.
+
+The project has matured significantly.
+
+What I care about now is **polish, scalability, and production readiness**.
+
+---
+
+# Things I'd Improve Before Prompt 11
+
+## 1. Presence
+
+Current
+
+```text
+Presence
+
+↓
+
+TTL
+```
+
+Good.
+
+I'd add
+
+Presence Sessions
+
+Example
+
+```text
+User
+
+↓
+
+Device
+
+↓
+
+Session
+
+↓
+
+Presence
+```
+
+One player may have
+
+MiniPay
+
+Web
+
+Tablet
+
+Desktop
+
+later.
+
+---
+
+## 2. Feed
+
+Current feed stores events.
+
+Great.
+
+I'd add
+
+Feed Ranking.
+
+Not every feed item deserves equal attention.
+
+Example
+
+Tournament Champion
+
+↓
+
+Pinned
+
+Friend Login
+
+↓
+
+Low Priority
+
+---
+
+## 3. Referral
+
+Referral currently rewards milestones.
+
+Perfect.
+
+Add fraud detection.
+
+Example
+
+```text
+Same Device
+
+↓
+
+Same Wallet Cluster
+
+↓
+
+Multiple Fake Accounts
+
+↓
+
+Repeated IP
+
+↓
+
+Cooldown
+```
+
+RewardEngine should never pay suspicious referrals.
+
+---
+
+## 4. Invite Links
+
+Current invite links work.
+
+I'd also generate
+
+Short IDs
+
+instead of long hashes.
+
+Much better UX.
+
+---
+
+## 5. Community
+
+Current
+
+Announcements.
+
+I'd also support
+
+Featured Tournament
+
+Featured Player
+
+Featured Achievement
+
+Weekly Spotlight
+
+Everything admin controlled.
+
+---
+
+## 6. Unlock Animations
+
+I'd centralize
+
+Animation Registry.
+
+Instead of components registering animations individually.
+
+---
+
+Everything else is excellent.
+
+---
+
+# CTO Decision
+
+Now comes the biggest feature.
+
+This is the feature that will define NEXORA.
+
+Not Prediction.
+
+Not Spins.
+
+Not Missions.
+
+---
+
+The Arena.
+
+---
+
+But...
+
+I don't think **Vibe Duel** is the right name anymore.
+
+The project has outgrown it.
+
+---
+
+I'd rename it
+
+# NEXORA ARENA
+
+Simple.
+
+Strong.
+
+Premium.
+
+---
+
+The game modes become
+
+Arena
+
+Prediction
+
+Spin
+
+Missions
+
+Leaderboard
+
+instead of
+
+Vibe Duel
+
+Prediction
+
+etc.
+
+Much cleaner.
+
+---
+
+# PHASE 2
+
+# PROMPT 11
+
+# NEXORA ARENA
+
+## Competitive Head-to-Head Platform
+
+**This prompt replaces the original Vibe Duel concept with a modular Arena system that supports today's head-to-head gameplay and future competitive game modes.**
+
+---
+
+# Philosophy
+
+Arena is not gambling.
+
+Arena is a competitive challenge platform.
+
+Players compete using skill-based mechanics.
+
+Rewards come through the existing RewardEngine and SettlementEngine.
+
+Arena becomes a first-class citizen of NEXORA.
+
+---
+
+# Architecture
+
+Do **NOT** build Arena as a standalone module.
+
+Arena plugs into
+
+GameEngine
+
+RewardEngine
+
+SettlementEngine
+
+ActivityEngine
+
+MissionEngine
+
+StatisticsEngine
+
+NotificationEngine
+
+Social Layer
+
+Everything already exists.
+
+Reuse it.
+
+---
+
+# New Engines
+
+Create
+
+```text
+ArenaEngine.ts
+
+MatchmakingEngine.ts
+
+MatchEngine.ts
+
+ResultEngine.ts
+
+SpectatorEngine.ts
+```
+
+Interfaces
+
+```text
+IArenaEngine
+
+IMatchmakingEngine
+
+IMatchEngine
+
+IResultEngine
+
+ISpectatorEngine
+```
+
+---
+
+# Database
+
+Add
+
+```text
+Arena
+
+ArenaMatch
+
+ArenaQueue
+
+ArenaInvitation
+
+ArenaResult
+
+ArenaReplay
+
+ArenaSeasonStatistic
+
+ArenaRating
+
+MatchParticipant
+
+ArenaPresence
+```
+
+Everything normalized.
+
+---
+
+# Matchmaking
+
+Support
+
+Quick Match
+
+Friend Challenge
+
+Invite Code
+
+Private Match
+
+Rematch
+
+Future Tournament Queue
+
+---
+
+# Queue
+
+Queue states
+
+Searching
+
+Matched
+
+Accepted
+
+Declined
+
+Expired
+
+Cancelled
+
+---
+
+Support timeout.
+
+---
+
+# Match Lifecycle
+
+Waiting
+
+Accepted
+
+Countdown
+
+Playing
+
+Finished
+
+Settling
+
+Completed
+
+Archived
+
+No other states.
+
+---
+
+# Match Types
+
+Initially
+
+Prediction Duel
+
+Future
+
+Trivia
+
+Puzzle
+
+Strategy
+
+Reaction
+
+Creator Events
+
+All supported through GameEngine adapters.
+
+---
+
+# Arena Rating
+
+Implement
+
+Skill Rating
+
+Rating Deviation
+
+Win Rate
+
+Matches Played
+
+Current Streak
+
+Best Streak
+
+Everything future-proof.
+
+Do not hardcode an Elo implementation. Create an `IRatingStrategy` interface so rating algorithms (Elo, Glicko, TrueSkill, etc.) can be swapped later.
+
+---
+
+# Result Engine
+
+Determines
+
+Winner
+
+Loser
+
+Draw
+
+Reward Eligibility
+
+XP
+
+Statistics
+
+Replay
+
+Audit
+
+Never touches blockchain directly.
+
+---
+
+# Settlement
+
+Result
+
+↓
+
+RewardEngine
+
+↓
+
+SettlementEngine
+
+↓
+
+RewardLedger
+
+↓
+
+Notification
+
+Reuse existing pipeline.
+
+---
+
+# Arena Presence
+
+Player
+
+Searching
+
+Matched
+
+Playing
+
+Spectating
+
+Offline
+
+---
+
+# Invitations
+
+Support
+
+Friend Invite
+
+QR
+
+Deep Link
+
+MiniPay Share
+
+Time-limited.
+
+---
+
+# Replay
+
+Store
+
+Metadata
+
+Timeline
+
+Result
+
+Statistics
+
+No video.
+
+Future proof.
+
+---
+
+# Spectator Mode
+
+Initial implementation
+
+Read-only.
+
+Future
+
+Live.
+
+Architecture must support both.
+
+---
+
+# Frontend
+
+Pages
+
+Arena Home
+
+Quick Match
+
+Private Match
+
+Friend Challenge
+
+Queue Screen
+
+Match Screen
+
+Result Screen
+
+Replay Screen
+
+Rating Screen
+
+---
+
+# Arena Home
+
+Display
+
+Current Rating
+
+Current League
+
+Recent Matches
+
+Friends Online
+
+Quick Match
+
+Private Match
+
+Leaderboards
+
+Season
+
+---
+
+# Animations
+
+Queue
+
+Countdown
+
+Victory
+
+Defeat
+
+Draw
+
+Rating Increase
+
+Reward Reveal
+
+Use Framer Motion.
+
+---
+
+# APIs
+
+Implement
+
+```text
+GET /api/arena
+
+POST /api/arena/queue
+
+POST /api/arena/accept
+
+POST /api/arena/cancel
+
+GET /api/arena/match
+
+GET /api/arena/history
+
+GET /api/arena/replay
+
+GET /api/arena/rating
+
+POST /api/arena/invite
+```
+
+---
+
+# Social Integration
+
+Friend challenge
+
+Friend activity
+
+Arena victories
+
+Arena statistics
+
+Feed integration
+
+Presence integration
+
+Referral milestone
+
+Achievement unlock
+
+Everything event driven.
+
+---
+
+# Security
+
+Prevent
+
+Queue spam
+
+Duplicate matches
+
+Fake results
+
+Replay attacks
+
+Timeout abuse
+
+Reward duplication
+
+All results flow through the existing event, reward, and settlement systems.
+
+---
+
+# Tests
+
+Arena
+
+Queue
+
+Rating
+
+Replay
+
+Settlement
+
+Friend Challenge
+
+Presence
+
+API
+
+Coverage
+
+95%+
+
+---
+
+# Documentation
+
+Arena architecture
+
+Matchmaking
+
+Queue lifecycle
+
+Replay model
+
+Rating system
+
+Arena APIs
+
+Sequence diagrams
+
+---
+
+# Fixes From Prompt 10
+
+Implement the following improvements:
+
+### 1. Presence Sessions
+
+Support multiple concurrent device sessions with aggregated presence.
+
+---
+
+### 2. Feed Ranking
+
+Introduce feed priority and ranking so important events surface first.
+
+---
+
+### 3. Referral Fraud Detection
+
+Implement configurable fraud heuristics:
+
+* repeated IP/device
+* wallet clustering signals
+* referral cooldowns
+* suspicious velocity
+
+Flag referrals for manual review instead of automatically rewarding when thresholds are exceeded.
+
+---
+
+### 4. Short Invite Codes
+
+Generate short, human-friendly invite codes in addition to deep links.
+
+---
+
+### 5. Community Highlights
+
+Support:
+
+* Featured Tournament
+* Featured Player
+* Featured Achievement
+* Weekly Spotlight
+
+---
+
+### 6. Animation Registry
+
+Centralize animation registration and lookup through an AnimationRegistry.
+
+---
+
+# Deliverables
+
+Provide:
+
+1. Arena Engine
+2. Matchmaking Engine
+3. Match Engine
+4. Result Engine
+5. Spectator Engine
+6. Arena database schema
+7. Arena APIs
+8. Arena frontend
+9. Rating framework
+10. Replay framework
+11. Social integration
+12. Tests
+13. Documentation
+14. Performance recommendations
+15. Recommendations before **Prompt 12 (Seasons, Live Operations & Content Management)**
+
+---
+
+# CTO Direction
+
+After Prompt 11, the core player experience of NEXORA should be complete:
+
+* Daily tournaments
+* Missions
+* Spins
+* Achievements
+* Friends
+* Referrals
+* Community
+* Arena
+
+From Prompt 12 onward, the focus shifts to **operating** the platform rather than adding foundational gameplay. That means seasonal progression, live events, content management, analytics, moderation, and production hardening. The architecture should now be treated as stable, with new capabilities extending existing engines instead of introducing parallel systems.
+
+---
+
+# IMPLEMENTATION COMPLETE — Phase 2 Prompt 11 Summary
+
+## What Was Completed
+
+### NEXORA Arena (replaces Vibe Duel)
+
+Modular competitive head-to-head platform integrated with existing GameEngine, RewardEngine, SettlementEngine, ActivityEngine, MissionEngine, StatisticsEngine, NotificationEngine, and Social Layer.
+
+### Arena Database (`prisma/schema.prisma`)
+
+Added normalized models:
+
+| Model | Purpose |
+|-------|---------|
+| `Arena` | Season-scoped arena configuration |
+| `ArenaMatch` | Match lifecycle state machine |
+| `ArenaQueue` | Matchmaking queue entries |
+| `ArenaInvitation` | Friend challenges with time-limited codes |
+| `MatchParticipant` | Per-player predictions, scores, outcomes |
+| `ArenaResult` | Winner/loser/draw + audit hash |
+| `ArenaReplay` | Timeline + statistics (no video) |
+| `ArenaRating` | Skill rating, deviation, streaks, league |
+| `ArenaSeasonStatistic` | Per-season W/L/D and peak rating |
+| `ArenaPresence` | Arena-specific presence (searching/playing/spectating) |
+
+Enums: `ArenaQueueStatus`, `ArenaMatchStatus`, `ArenaMatchType`, `ArenaQueueMode`, `ArenaPresenceStatus`, `MatchOutcome`, `FeedPriority`, `ReferralFraudStatus`.
+
+Extended `PresenceStatus` with `ARENA_*` states; `FeedItemType` with `ARENA_VICTORY` / `ARENA_MATCH`; `StatisticType` with `ARENA_MATCHES` / `ARENA_WINS`.
+
+### Arena Engine Layer (`services/engines/`)
+
+| Engine | Status |
+|--------|--------|
+| `ArenaEngine` | Home dashboard, rating, history, replay, friend challenge invites |
+| `MatchmakingEngine` | Quick match, private/invite/rematch/friend challenge queues |
+| `MatchEngine` | Accept/decline, prediction duel submissions, lifecycle transitions |
+| `ResultEngine` | Winner/loser/draw, rating updates, replay, settlement events |
+| `SpectatorEngine` | Read-only live match viewing (live-stream ready architecture) |
+| `SimpleRatingStrategy` | Pluggable `IRatingStrategy` default (Elo-like, swappable) |
+
+Supporting libs: `lib/arena/constants.ts`, `lib/feed/priority.ts`, `lib/animations/registry.ts`.
+
+### Prompt 10 Improvements (bundled)
+
+1. **Presence Sessions** — `PresenceSession` per device; aggregated `Presence` with priority-based status resolution
+2. **Feed Ranking** — `priority`, `pinned`, `rankScore` on `FeedItem`; ranked feed reads
+3. **Referral Fraud Detection** — `ReferralFraudEngine` with device/IP/velocity/cooldown heuristics; milestones blocked when flagged
+4. **Short Invite Codes** — 6-char `shortCode` on `InviteCode`; redeem accepts short or long codes
+5. **Community Highlights** — `FEATURED_TOURNAMENT`, `FEATURED_PLAYER`, `FEATURED_ACHIEVEMENT`, `WEEKLY_SPOTLIGHT` post types prioritized
+6. **Animation Registry** — centralized `lib/animations/registry.ts`; arena victory/defeat/draw/rating animations registered
+
+### Event Integration (`services/serviceImpl.ts`)
+
+- `ArenaQueueJoined` → arena presence SEARCHING
+- `ArenaMatchFound` / `ArenaInvitationSent` → notifications
+- `ArenaMatchStarted` → presence PLAYING
+- `ArenaMatchCompleted` → unlock animations, feed (pinned victories), stats, XP/points, friend fan-out, activity timeline
+- `ArenaRewardEligible` → profile XP/points increment via existing pipeline
+- `ReferralFlagged` → admin review notification
+
+### Arena APIs
+
+| Route | Methods |
+|-------|---------|
+| `/api/arena` | GET (home + queue + live) |
+| `/api/arena/queue` | GET, POST |
+| `/api/arena/accept` | POST |
+| `/api/arena/cancel` | POST |
+| `/api/arena/match` | GET, POST (prediction submit) |
+| `/api/arena/history` | GET |
+| `/api/arena/replay` | GET |
+| `/api/arena/rating` | GET |
+| `/api/arena/invite` | POST (friend challenge / join code / rematch) |
+
+### Frontend
+
+- **`/arena`** — Arena Home with rating/league/streak, Quick Match, Private Match, Friend Challenge, join-by-code, friends online, recent matches (Framer Motion queue/countdown/result animations)
+- **`/arena/replay`** — Replay timeline + audit hash viewer
+- Nav updated: **Arena** added to `config/constants.ts`
+
+### Tests
+
+- `__tests__/arena.test.ts` — 11 tests (matchmaking, result engine, rating strategy, spectator, fraud, feed ranking, animation registry)
+- `__tests__/social.test.ts` — 21 tests still passing (32 total across arena + social)
+
+### Documentation
+
+- `ui/docs/ARENA.md` — architecture, match lifecycle, queue states, replay model, rating framework, APIs, sequence diagrams, security, performance recommendations, Prompt 12 prep
+
+## Security Measures
+
+- Active queue guard prevents queue spam
+- Match participant uniqueness prevents duplicate matches
+- SHA-256 audit hash on results before settlement
+- Settled flag prevents reward duplication
+- Referral fraud gates milestone rewards
+
+## Performance Recommendations
+
+- Queue indexed by `(status, matchType, rating)` for fast pairing
+- Poll match/queue endpoints at 2–3s only during active states
+- Cache home/rating with 15s stale time
+- Archive matches >90 days to cold storage at scale
+- Background worker for queue pairing at high concurrency
+
+## Recommendations Before Prompt 12 (Seasons, Live Ops & CMS)
+
+- Season rollover job for ratings and `ArenaSeasonStatistic`
+- WebSocket spectator channel on `SpectatorEngine`
+- Admin dashboard for flagged referrals
+- Arena achievements and daily arena missions
+- Featured tournament/player CMS hooks in `CommunityEngine`
+- Cross-region queue sharding for latency-sensitive duels
+- Physical arena assets under `public/assets/` (see `public/README.md`)
+
+## Remaining Work (Deferred)
+
+- Live WebSocket presence/feed (noted since Prompt 10)
+- Full API integration test suite (route-level)
+- Pre-existing failures in other test suites (`engines.test.ts`, `frontend.test.tsx`, etc.)
+- On-chain arena settlement hooks (optional; events ready for RewardEngine integration)
+

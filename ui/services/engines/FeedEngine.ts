@@ -3,6 +3,7 @@ import { logger } from "@/lib/logging";
 import { eventBus } from "./EventBus";
 import { SocialSettingsEngine } from "./SocialSettingsEngine";
 import type { IFeedEngine } from "./interfaces";
+import { compareFeedItems, feedPriorityWeight } from "@/lib/feed/priority";
 
 const socialSettingsEngine = new SocialSettingsEngine();
 
@@ -45,8 +46,7 @@ export class FeedEngine implements IFeedEngine {
             : []),
         ],
       },
-      orderBy: { createdAt: "desc" },
-      take: limit * 2,
+      take: limit * 3,
       include: { actor: { select: { wallet: true, username: true } } },
     });
 
@@ -58,10 +58,18 @@ export class FeedEngine implements IFeedEngine {
       }
       const allowed = await socialSettingsEngine.canViewActivity(userId, item.userId);
       if (allowed) visible.push(item);
-      if (visible.length >= limit) break;
     }
 
-    return visible.slice(0, limit).map((item) => ({
+    const ranked = visible
+      .sort((a, b) =>
+        compareFeedItems(
+          { pinned: a.pinned, rankScore: a.rankScore, createdAt: a.createdAt },
+          { pinned: b.pinned, rankScore: b.rankScore, createdAt: b.createdAt }
+        )
+      )
+      .slice(0, limit);
+
+    return ranked.map((item) => ({
       id: item.id,
       type: item.type,
       title: item.title,
@@ -69,6 +77,9 @@ export class FeedEngine implements IFeedEngine {
       referenceType: item.referenceType,
       referenceId: item.referenceId,
       visibility: item.visibility,
+      priority: item.priority,
+      pinned: item.pinned,
+      rankScore: item.rankScore,
       actor: item.actor?.username ?? item.actor?.wallet ?? null,
       createdAt: item.createdAt,
     }));
@@ -76,20 +87,28 @@ export class FeedEngine implements IFeedEngine {
 
   async publish(data: Record<string, unknown>): Promise<Record<string, unknown>> {
     const userId = (data.userId as string) || "system";
+    const priority = (data.priority as string) ?? "NORMAL";
+    const pinned = Boolean(data.pinned);
+    const type = (data.type as string) ?? "SYSTEM";
+    const rankScore = feedPriorityWeight(priority, type, pinned);
+
     const item = await prisma().feedItem.create({
       data: {
         userId,
         actorId: (data.actorId as string) ?? null,
-        type: (data.type as any) ?? "SYSTEM",
+        type: type as any,
         title: (data.title as string) ?? "",
         body: (data.body as string) ?? "",
         referenceType: (data.referenceType as string) ?? null,
         referenceId: (data.referenceId as string) ?? null,
         visibility: (data.visibility as any) ?? "PUBLIC",
+        priority: priority as any,
+        pinned,
+        rankScore,
       },
     });
 
-    logger.info("Feed item published", { id: item.id, type: item.type });
+    logger.info("Feed item published", { id: item.id, type: item.type, rankScore });
     eventBus.publish({
       event: "FeedItemCreated",
       userId,
@@ -97,7 +116,7 @@ export class FeedEngine implements IFeedEngine {
       aggregateType: "FeedItem",
       feedType: item.type,
     });
-    return { id: item.id, type: item.type };
+    return { id: item.id, type: item.type, rankScore };
   }
 
   async publishForFriends(

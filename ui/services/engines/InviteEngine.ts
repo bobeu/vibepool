@@ -15,6 +15,15 @@ function generateCode(length = 8): string {
   return code;
 }
 
+function generateShortCode(length = 6): string {
+  const charset = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let code = "";
+  for (let i = 0; i < length; i++) {
+    code += charset[Math.floor(Math.random() * charset.length)];
+  }
+  return code;
+}
+
 export class InviteEngine implements IInviteEngine {
   name = "InviteEngine";
 
@@ -49,6 +58,7 @@ export class InviteEngine implements IInviteEngine {
     if (!ownerId) throw new Error("User not found");
 
     const code = generateCode();
+    const shortCode = generateShortCode(6);
     const inviteType = (type as any) ?? "INVITE_CODE";
     const { url, deepLink } = this.buildLinks(code, inviteType);
 
@@ -56,6 +66,7 @@ export class InviteEngine implements IInviteEngine {
       data: {
         ownerId,
         code,
+        shortCode,
         type: inviteType,
         url,
         deepLink,
@@ -66,6 +77,7 @@ export class InviteEngine implements IInviteEngine {
     return {
       id: invite.id,
       code: invite.code,
+      shortCode: invite.shortCode,
       type: invite.type,
       url: invite.url,
       deepLink: invite.deepLink,
@@ -84,6 +96,7 @@ export class InviteEngine implements IInviteEngine {
     return invites.map((i) => ({
       id: i.id,
       code: i.code,
+      shortCode: i.shortCode,
       type: i.type,
       url: i.url,
       uses: i.uses,
@@ -92,7 +105,7 @@ export class InviteEngine implements IInviteEngine {
     }));
   }
 
-  async redeem(code: string, referredWallet: string): Promise<Record<string, unknown>> {
+  async redeem(code: string, referredWallet: string, context?: Record<string, unknown>): Promise<Record<string, unknown>> {
     const referredId = await this.resolveId(referredWallet);
     if (!referredId) throw new Error("User not found");
 
@@ -101,9 +114,14 @@ export class InviteEngine implements IInviteEngine {
       return { alreadyReferred: true, referralId: existingReferral.id };
     }
 
-    const invite = await prisma().inviteCode.findFirst({ where: { code } });
+    const invite = await prisma().inviteCode.findFirst({
+      where: { OR: [{ code }, { shortCode: code }] },
+    });
     if (!invite) throw new Error("Invalid invite code");
     if (invite.ownerId === referredId) throw new Error("Cannot redeem your own invite");
+
+    const { ReferralFraudEngine } = await import("./ReferralFraudEngine");
+    const fraudEngine = new ReferralFraudEngine();
 
     const referral = await prisma().referral.create({
       data: {
@@ -111,7 +129,15 @@ export class InviteEngine implements IInviteEngine {
         referredId,
         code: invite.code,
         status: "PENDING",
+        deviceHash: context?.deviceHash ? String(context.deviceHash) : undefined,
+        ipHash: context?.ipHash ? String(context.ipHash) : undefined,
       },
+    });
+
+    const fraud = await fraudEngine.evaluateReferral(referral.id, {
+      deviceHash: context?.deviceHash ? String(context.deviceHash) : undefined,
+      ipHash: context?.ipHash ? String(context.ipHash) : undefined,
+      walletCluster: fraudEngine.walletCluster(referredWallet),
     });
 
     await prisma().inviteCode.update({
@@ -122,16 +148,27 @@ export class InviteEngine implements IInviteEngine {
       },
     });
 
-    eventBus.publish({
-      event: "ReferralRegistered",
-      userId: invite.ownerId,
-      aggregateId: referral.id,
-      aggregateType: "Referral",
-      referredId,
-      code,
-    });
+    if (fraud.allowed) {
+      eventBus.publish({
+        event: "ReferralRegistered",
+        userId: invite.ownerId,
+        aggregateId: referral.id,
+        aggregateType: "Referral",
+        referredId,
+        code: invite.shortCode ?? invite.code,
+      });
+    } else {
+      eventBus.publish({
+        event: "ReferralFlagged",
+        userId: invite.ownerId,
+        aggregateId: referral.id,
+        aggregateType: "Referral",
+        fraudScore: fraud.score,
+        status: fraud.status,
+      });
+    }
 
-    logger.info("Invite redeemed", { referralId: referral.id, code });
-    return { referralId: referral.id, referrerId: invite.ownerId };
+    logger.info("Invite redeemed", { referralId: referral.id, code, fraudStatus: fraud.status });
+    return { referralId: referral.id, referrerId: invite.ownerId, fraudStatus: fraud.status, allowed: fraud.allowed };
   }
 }

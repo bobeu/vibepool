@@ -163,7 +163,7 @@ export interface ICommunityEngine extends IEngine {
 }
 
 export interface IPresenceEngine extends IEngine {
-  setPresence(wallet: string, status: string): Promise<Record<string, unknown>>;
+  setPresence(wallet: string, status: string, options?: { deviceId?: string; deviceType?: string }): Promise<Record<string, unknown>>;
   getPresence(wallet: string): Promise<Record<string, unknown>>;
   getFriendsPresence(wallet: string): Promise<Record<string, unknown>[]>;
 }
@@ -176,7 +176,41 @@ export interface IFeedEngine extends IEngine {
 export interface IInviteEngine extends IEngine {
   generate(wallet: string, type: string): Promise<Record<string, unknown>>;
   getInvites(wallet: string): Promise<Record<string, unknown>[]>;
-  redeem(code: string, referredWallet: string): Promise<Record<string, unknown>>;
+  redeem(code: string, referredWallet: string, context?: Record<string, unknown>): Promise<Record<string, unknown>>;
+}
+
+export interface IArenaEngine extends IEngine {
+  getHome(wallet: string): Promise<Record<string, unknown>>;
+  getRating(wallet: string): Promise<Record<string, unknown>>;
+  getHistory(wallet: string, limit?: number): Promise<Record<string, unknown>[]>;
+  getReplay(wallet: string, matchId: string): Promise<Record<string, unknown>>;
+  setArenaPresence(wallet: string, status: string, matchId?: string): Promise<Record<string, unknown>>;
+  createInvite(wallet: string, friendWallet: string): Promise<Record<string, unknown>>;
+}
+
+export interface IMatchmakingEngine extends IEngine {
+  joinQueue(wallet: string, mode: string, matchType?: string, options?: Record<string, unknown>): Promise<Record<string, unknown>>;
+  cancelQueue(wallet: string): Promise<Record<string, unknown>>;
+  getQueueStatus(wallet: string): Promise<Record<string, unknown>>;
+  joinByInviteCode(wallet: string, inviteCode: string): Promise<Record<string, unknown>>;
+  createRematch(wallet: string, previousMatchId: string): Promise<Record<string, unknown>>;
+}
+
+export interface IMatchEngine extends IEngine {
+  acceptMatch(wallet: string, matchId: string): Promise<Record<string, unknown>>;
+  declineMatch(wallet: string, matchId: string): Promise<Record<string, unknown>>;
+  submitPrediction(wallet: string, matchId: string, prediction: number): Promise<Record<string, unknown>>;
+  getMatch(wallet: string, matchId: string): Promise<Record<string, unknown>>;
+}
+
+export interface IResultEngine extends IEngine {
+  finalizeMatch(matchId: string): Promise<Record<string, unknown>>;
+}
+
+export interface ISpectatorEngine extends IEngine {
+  getLiveMatches(limit?: number): Promise<Record<string, unknown>[]>;
+  watchMatch(matchId: string): Promise<Record<string, unknown>>;
+  setSpectating(wallet: string, matchId: string | null): Promise<Record<string, unknown>>;
 }
 
 export interface IAnimationPriority {

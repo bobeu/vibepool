@@ -1,25 +1,14 @@
 import { prisma } from "@/lib/auth/session";
 import { logger } from "@/lib/logging";
 import { orderAnimations, shouldInterrupt } from "@/lib/animations/priority";
-
-const PRIORITY_BY_TYPE: Record<string, { priority: string; interrupt: boolean }> = {
-  ACHIEVEMENT_LEGENDARY: { priority: "URGENT", interrupt: true },
-  ACHIEVEMENT_EPIC: { priority: "HIGH", interrupt: true },
-  ACHIEVEMENT: { priority: "NORMAL", interrupt: false },
-  BADGE: { priority: "HIGH", interrupt: true },
-  TITLE: { priority: "NORMAL", interrupt: false },
-  LEVEL_UP: { priority: "HIGH", interrupt: true },
-  REWARD: { priority: "NORMAL", interrupt: false },
-  XP: { priority: "LOW", interrupt: false },
-};
+import { getAnimationDefinition } from "@/lib/animations/registry";
 
 export class UnlockAnimationEngine {
   name = "UnlockAnimationEngine";
 
   private meta(type: string, rarity?: string): { priority: string; interrupt: boolean } {
-    if (type === "ACHIEVEMENT" && rarity === "LEGENDARY") return PRIORITY_BY_TYPE.ACHIEVEMENT_LEGENDARY;
-    if (type === "ACHIEVEMENT" && rarity === "EPIC") return PRIORITY_BY_TYPE.ACHIEVEMENT_EPIC;
-    return PRIORITY_BY_TYPE[type] ?? { priority: "NORMAL", interrupt: false };
+    const def = getAnimationDefinition(type, rarity);
+    return { priority: def.priority, interrupt: def.interrupt };
   }
 
   async enqueue(

@@ -11,14 +11,30 @@ export class CommunityEngine implements ICommunityEngine {
   }
 
   async getPosts(limit = 20): Promise<Record<string, unknown>[]> {
+    const highlightTypes = [
+      "WEEKLY_SPOTLIGHT",
+      "FEATURED_TOURNAMENT",
+      "FEATURED_PLAYER",
+      "FEATURED_ACHIEVEMENT",
+      "CHAMPION",
+      "FEATURED",
+    ];
+
     const posts = await prisma().communityPost.findMany({
       where: { active: true },
       orderBy: { createdAt: "desc" },
-      take: limit,
+      take: limit * 2,
       include: { author: { select: { wallet: true, username: true } } },
     });
 
-    return posts.map((p) => ({
+    const sorted = posts.sort((a, b) => {
+      const aHighlight = highlightTypes.includes(a.type) ? 1 : 0;
+      const bHighlight = highlightTypes.includes(b.type) ? 1 : 0;
+      if (aHighlight !== bHighlight) return bHighlight - aHighlight;
+      return b.createdAt.getTime() - a.createdAt.getTime();
+    });
+
+    return sorted.slice(0, limit).map((p) => ({
       id: p.id,
       type: p.type,
       title: p.title,

@@ -18,6 +18,11 @@ import { FeedEngine } from "@/services/engines/FeedEngine";
 import { InviteEngine } from "@/services/engines/InviteEngine";
 import { UnlockAnimationEngine } from "@/services/engines/UnlockAnimationEngine";
 import { SocialSettingsEngine } from "@/services/engines/SocialSettingsEngine";
+import { ArenaEngine } from "@/services/engines/ArenaEngine";
+import { MatchmakingEngine } from "@/services/engines/MatchmakingEngine";
+import { MatchEngine } from "@/services/engines/MatchEngine";
+import { ResultEngine } from "@/services/engines/ResultEngine";
+import { SpectatorEngine } from "@/services/engines/SpectatorEngine";
 import { eventBus } from "@/services/engines/EventBus";
 import type {
   IMissionService,
@@ -49,6 +54,11 @@ const feedEngine = new FeedEngine();
 const inviteEngine = new InviteEngine();
 const unlockAnimationEngine = new UnlockAnimationEngine();
 const socialSettingsEngine = new SocialSettingsEngine();
+const arenaEngine = new ArenaEngine();
+const matchmakingEngine = new MatchmakingEngine();
+const matchEngine = new MatchEngine();
+const resultEngine = new ResultEngine();
+const spectatorEngine = new SpectatorEngine();
 
 eventBus.subscribe("ActivityRecorded", async (payload) => {
   const userId = payload.userId as string;
@@ -229,6 +239,129 @@ eventBus.subscribe("TitleEquipped", async (payload) => {
     body: (payload.title as string) ?? "Title",
     referenceType: "Title",
   });
+});
+
+eventBus.subscribe("ArenaMatchFound", async (payload) => {
+  const playerIds = (payload.playerIds as string[]) ?? [];
+  for (const userId of playerIds) {
+    await notificationEngine.send(userId, "INFO", "Arena match found", "Accept your match to begin.", "HIGH");
+    await arenaEngine.setArenaPresence(
+      (await prisma().userProfile.findUnique({ where: { id: userId }, select: { wallet: true } }))?.wallet ?? "",
+      "MATCHED",
+      payload.aggregateId as string
+    );
+  }
+});
+
+eventBus.subscribe("ArenaInvitationSent", async (payload) => {
+  await notificationEngine.send(
+    payload.receiverId as string,
+    "INFO",
+    "Arena challenge",
+    "A friend challenged you to a duel.",
+    "HIGH"
+  );
+});
+
+eventBus.subscribe("ArenaMatchCompleted", async (payload) => {
+  const playerIds = (payload.playerIds as string[]) ?? [];
+  const winnerId = payload.winnerId as string | null;
+  const isDraw = Boolean(payload.isDraw);
+
+  for (const userId of playerIds) {
+    const user = await prisma().userProfile.findUnique({ where: { id: userId }, select: { wallet: true } });
+    if (!user) continue;
+
+    const won = !isDraw && userId === winnerId;
+    await arenaEngine.setArenaPresence(user.wallet, "OFFLINE");
+
+    await unlockAnimationEngine.enqueue(
+      userId,
+      won ? "ARENA_VICTORY" : isDraw ? "ARENA_DRAW" : "ARENA_DEFEAT",
+      payload.aggregateId as string,
+      { matchId: payload.aggregateId }
+    );
+
+    await activityEngine.record(user.wallet, "SOCIAL", {
+      kind: "ARENA_MATCH",
+      matchId: payload.aggregateId,
+      won,
+      isDraw,
+    });
+
+    await statisticsEngine.increment(userId, won ? "ARENA_WINS" : "ARENA_MATCHES", 1);
+
+    await publishFeed({
+      userId,
+      type: won ? "ARENA_VICTORY" : "ARENA_MATCH",
+      title: won ? "Arena victory" : isDraw ? "Arena draw" : "Arena match completed",
+      body: won ? "You won a head-to-head duel." : isDraw ? "The duel ended in a draw." : "Better luck next time.",
+      referenceType: "ArenaMatch",
+      referenceId: payload.aggregateId as string,
+      priority: won ? "HIGH" : "NORMAL",
+      pinned: won,
+      visibility: "FRIENDS",
+    });
+
+    if (won) {
+      await feedEngine.publishForFriends(userId, {
+        type: "ARENA_VICTORY",
+        title: "Friend won an arena duel",
+        body: "A friend claimed victory in NEXORA Arena.",
+        referenceType: "ArenaMatch",
+        referenceId: payload.aggregateId as string,
+        priority: "HIGH",
+      });
+
+      await referralEngine.recordMilestoneByUserId(userId, "FIRST_TOURNAMENT");
+    }
+  }
+});
+
+eventBus.subscribe("ArenaRewardEligible", async (payload) => {
+  const userId = payload.userId as string;
+  const xp = payload.xp as number;
+  if (xp > 0) {
+    await prisma().userProfile.update({
+      where: { id: userId },
+      data: { xp: { increment: xp } },
+    });
+  }
+  const points = payload.points as number;
+  if (points > 0) {
+    await prisma().userProfile.update({
+      where: { id: userId },
+      data: { points: { increment: points } },
+    });
+  }
+});
+
+eventBus.subscribe("ArenaQueueJoined", async (payload) => {
+  const userId = payload.userId as string;
+  const user = await prisma().userProfile.findUnique({ where: { id: userId }, select: { wallet: true } });
+  if (user) await arenaEngine.setArenaPresence(user.wallet, "SEARCHING");
+});
+
+eventBus.subscribe("ArenaMatchStarted", async (payload) => {
+  const match = await prisma().arenaMatch.findUnique({
+    where: { id: payload.aggregateId as string },
+    include: { participants: true },
+  });
+  if (!match) return;
+  for (const p of match.participants) {
+    const user = await prisma().userProfile.findUnique({ where: { id: p.userId }, select: { wallet: true } });
+    if (user) await arenaEngine.setArenaPresence(user.wallet, "PLAYING", match.id);
+  }
+});
+
+eventBus.subscribe("ReferralFlagged", async (payload) => {
+  await notificationEngine.send(
+    payload.userId as string,
+    "SYSTEM",
+    "Referral under review",
+    "A referral was flagged for manual review.",
+    "NORMAL"
+  );
 });
 
 export class MissionService implements IMissionService {
@@ -508,8 +641,8 @@ export class CommunityService {
 export class PresenceService {
   name = "PresenceService";
 
-  async setPresence(wallet: string, status: string) {
-    return presenceEngine.setPresence(wallet, status);
+  async setPresence(wallet: string, status: string, options?: { deviceId?: string; deviceType?: string }) {
+    return presenceEngine.setPresence(wallet, status, options);
   }
 
   async getPresence(wallet: string) {
@@ -544,8 +677,8 @@ export class InviteService {
     return inviteEngine.getInvites(wallet);
   }
 
-  async redeem(code: string, referredWallet: string) {
-    return inviteEngine.redeem(code, referredWallet);
+  async redeem(code: string, referredWallet: string, context?: Record<string, unknown>) {
+    return inviteEngine.redeem(code, referredWallet, context);
   }
 }
 
@@ -575,5 +708,73 @@ export class UnlockAnimationService {
     if (!user) throw new Error("User not found");
     await unlockAnimationEngine.markViewed(user.id, animationId);
     return { viewed: true };
+  }
+}
+
+export class ArenaService {
+  name = "ArenaService";
+
+  async getHome(wallet: string) {
+    return arenaEngine.getHome(wallet);
+  }
+
+  async getRating(wallet: string) {
+    return arenaEngine.getRating(wallet);
+  }
+
+  async getHistory(wallet: string, limit = 20) {
+    return arenaEngine.getHistory(wallet, limit);
+  }
+
+  async getReplay(wallet: string, matchId: string) {
+    return arenaEngine.getReplay(wallet, matchId);
+  }
+
+  async joinQueue(wallet: string, mode: string, matchType?: string, options?: Record<string, unknown>) {
+    return matchmakingEngine.joinQueue(wallet, mode, matchType, options);
+  }
+
+  async cancelQueue(wallet: string) {
+    return matchmakingEngine.cancelQueue(wallet);
+  }
+
+  async getQueueStatus(wallet: string) {
+    return matchmakingEngine.getQueueStatus(wallet);
+  }
+
+  async acceptMatch(wallet: string, matchId: string) {
+    return matchEngine.acceptMatch(wallet, matchId);
+  }
+
+  async declineMatch(wallet: string, matchId: string) {
+    return matchEngine.declineMatch(wallet, matchId);
+  }
+
+  async getMatch(wallet: string, matchId: string) {
+    return matchEngine.getMatch(wallet, matchId);
+  }
+
+  async submitPrediction(wallet: string, matchId: string, prediction: number) {
+    return matchEngine.submitPrediction(wallet, matchId, prediction);
+  }
+
+  async createInvite(wallet: string, friendWallet: string) {
+    return arenaEngine.createInvite(wallet, friendWallet);
+  }
+
+  async joinByInviteCode(wallet: string, inviteCode: string) {
+    return matchmakingEngine.joinByInviteCode(wallet, inviteCode);
+  }
+
+  async createRematch(wallet: string, previousMatchId: string) {
+    return matchmakingEngine.createRematch(wallet, previousMatchId);
+  }
+
+  async watchMatch(matchId: string) {
+    return spectatorEngine.watchMatch(matchId);
+  }
+
+  async getLiveMatches(limit = 20) {
+    return spectatorEngine.getLiveMatches(limit);
   }
 }

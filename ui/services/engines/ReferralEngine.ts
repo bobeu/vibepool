@@ -110,6 +110,11 @@ export class ReferralEngine implements IReferralEngine {
     });
     if (!referral) return [];
 
+    if (referral.fraudStatus === "REVIEW" || referral.fraudStatus === "REJECTED" || referral.fraudStatus === "FLAGGED") {
+      logger.warn("Referral milestone blocked by fraud status", { referralId: referral.id, milestone, fraudStatus: referral.fraudStatus });
+      return [];
+    }
+
     const created = await prisma().referralReward.upsert({
       where: {
         referralId_milestone: {
