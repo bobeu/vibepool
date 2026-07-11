@@ -42,6 +42,7 @@ function resetMock() {
     ],
     contentBlock: [],
     campaign: [],
+    campaignVersion: [],
     campaignTarget: [],
     scheduledJob: [],
     userProfile: [{ id: "u1", wallet: "0xA" }],
@@ -60,6 +61,7 @@ function resetMock() {
       if (where?.scheduledAt?.lte) {
         rows = rows.filter((r) => r.scheduledAt && r.scheduledAt <= where.scheduledAt.lte);
       }
+      if (where?.paused === false) rows = rows.filter((r) => !r.paused);
       if (orderBy?.scheduledAt === "asc") rows.sort((a, b) => (a.scheduledAt?.getTime?.() ?? 0) - (b.scheduledAt?.getTime?.() ?? 0));
       if (take) rows = rows.slice(0, take);
       return rows;
@@ -70,8 +72,9 @@ function resetMock() {
       if (where.key) return rows.find((r) => r.key === where.key) ?? null;
       if (where.id) return rows.find((r) => r.id === where.id) ?? null;
       if (where.idempotencyKey) return rows.find((r) => r.idempotencyKey === where.idempotencyKey) ?? null;
-      if (where.userId_seasonId) {
-        return rows.find((r) => r.userId === where.userId_seasonId.userId && r.seasonId === where.userId_seasonId.seasonId) ?? null;
+      if (where.id) return rows.find((r) => r.id === where.id) ?? null;
+      if (where.campaignId_version) {
+        return rows.find((r) => r.campaignId === where.campaignId_version.campaignId && r.version === where.campaignId_version.version) ?? null;
       }
       if (where.wallet) return rows.find((r) => r.wallet === where.wallet) ?? null;
       return null;

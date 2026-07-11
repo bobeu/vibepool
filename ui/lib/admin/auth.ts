@@ -1,5 +1,9 @@
 import { prisma } from "@/lib/auth/session";
+import { AuditEngine } from "@/services/engines/AuditEngine";
 import { hasPermission, resolveRoleFromEnv, type AdminRole } from "./permissions";
+import { createEventMetadata } from "@/lib/events/metadata";
+
+const auditEngine = new AuditEngine();
 
 export async function getAdminRole(wallet: string): Promise<AdminRole | null> {
   const envRole = resolveRoleFromEnv(wallet);
@@ -17,4 +21,18 @@ export async function requireAdmin(wallet: string, permission: string): Promise<
   if (!role) throw new Error("Forbidden: admin access required");
   if (!hasPermission(role, permission)) throw new Error("Forbidden: insufficient permissions");
   return role;
+}
+
+export async function auditAdminAction(
+  wallet: string,
+  action: string,
+  resource: string,
+  resourceId?: string,
+  metadata?: Record<string, unknown>
+): Promise<void> {
+  const meta = createEventMetadata();
+  await auditEngine.log(action, resource, resourceId, { ...metadata, adminWallet: wallet }, wallet, {
+    correlationId: meta.correlationId,
+    sessionId: meta.requestId,
+  });
 }

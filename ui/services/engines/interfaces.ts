@@ -243,6 +243,7 @@ export interface IFeatureFlagEngine extends IEngine {
 
 export interface IContentEngine extends IEngine {
   getBlocks(placement?: string, locale?: string): Promise<Record<string, unknown>[]>;
+  listLocales(placement?: string): Promise<string[]>;
   createBlock(data: Record<string, unknown>): Promise<Record<string, unknown>>;
   getHeroBanner(wallet?: string): Promise<Record<string, unknown> | null>;
 }
@@ -258,16 +259,27 @@ export interface ILiveOpsEngine extends IEngine {
 }
 
 export interface ISchedulerEngine extends IEngine {
-  registerHandler(jobType: string, handler: (payload: Record<string, unknown>) => Promise<Record<string, unknown>>): void;
-  schedule(jobType: string, scheduledAt: Date, payload?: Record<string, unknown>, idempotencyKey?: string): Promise<Record<string, unknown>>;
+  registerHandler(jobType: string, handler: (payload: Record<string, unknown>, options?: { dryRun?: boolean }) => Promise<Record<string, unknown>>): void;
+  schedule(jobType: string, scheduledAt: Date, payload?: Record<string, unknown>, options?: { idempotencyKey?: string; dependsOnJobIds?: string[]; dryRun?: boolean }): Promise<Record<string, unknown>>;
+  listJobs(filter?: { status?: string; limit?: number }): Promise<Record<string, unknown>[]>;
   runDueJobs(limit?: number): Promise<Record<string, unknown>[]>;
-  runJob(jobId: string): Promise<Record<string, unknown>>;
+  runJob(jobId: string, options?: { dryRun?: boolean }): Promise<Record<string, unknown>>;
+  dryRunJob(jobId: string): Promise<Record<string, unknown>>;
+  pauseJob(jobId: string): Promise<Record<string, unknown>>;
+  resumeJob(jobId: string): Promise<Record<string, unknown>>;
+  cancelJob(jobId: string): Promise<Record<string, unknown>>;
+  getDependencyGraph(): Promise<Record<string, unknown>[]>;
 }
 
 export interface ICampaignEngine extends IEngine {
   listCampaigns(status?: string): Promise<Record<string, unknown>[]>;
   createCampaign(data: Record<string, unknown>): Promise<Record<string, unknown>>;
   startCampaign(campaignId: string): Promise<Record<string, unknown>>;
+  pauseCampaign(campaignId: string): Promise<Record<string, unknown>>;
+  resumeCampaign(campaignId: string): Promise<Record<string, unknown>>;
+  cloneCampaign(campaignId: string, createdBy?: string): Promise<Record<string, unknown>>;
+  rollbackCampaign(campaignId: string, version: number): Promise<Record<string, unknown>>;
+  getVersionHistory(campaignId: string): Promise<Record<string, unknown>[]>;
   completeCampaign(campaignId: string): Promise<Record<string, unknown>>;
   addTarget(campaignId: string, data: Record<string, unknown>): Promise<void>;
   activateDueCampaigns(): Promise<number>;

@@ -72,16 +72,22 @@ const liveOpsEngine = new LiveOpsEngine();
 const schedulerEngine = new SchedulerEngine();
 const campaignEngine = new CampaignEngine();
 
-schedulerEngine.registerHandler("SEASON_ROLLOVER", async () => seasonEngine.rollover());
-schedulerEngine.registerHandler("CAMPAIGN_START", async (payload) => {
+schedulerEngine.registerHandler("SEASON_ROLLOVER", async (_payload, options) => {
+  if (options?.dryRun) return { simulated: true, action: "season_rollover" };
+  return seasonEngine.rollover();
+});
+schedulerEngine.registerHandler("CAMPAIGN_START", async (payload, options) => {
+  if (options?.dryRun) return { simulated: true, action: "campaign_start", campaignId: payload.campaignId };
   const id = payload.campaignId as string;
   return id ? campaignEngine.startCampaign(id) : { skipped: true };
 });
-schedulerEngine.registerHandler("CAMPAIGN_END", async (payload) => {
+schedulerEngine.registerHandler("CAMPAIGN_END", async (payload, options) => {
+  if (options?.dryRun) return { simulated: true, action: "campaign_end", campaignId: payload.campaignId };
   const id = payload.campaignId as string;
   return id ? campaignEngine.completeCampaign(id) : { skipped: true };
 });
-schedulerEngine.registerHandler("CLEANUP", async () => {
+schedulerEngine.registerHandler("CLEANUP", async (_payload, options) => {
+  if (options?.dryRun) return { simulated: true, action: "cleanup" };
   const { MatchEngine } = await import("@/services/engines/MatchEngine");
   const { MatchmakingEngine } = await import("@/services/engines/MatchmakingEngine");
   const matchEngine = new MatchEngine();
@@ -1006,9 +1012,13 @@ export class SchedulerService {
     return schedulerEngine.runDueJobs(limit);
   }
 
-  async schedule(wallet: string, jobType: string, scheduledAt: Date, payload?: Record<string, unknown>) {
+  async schedule(wallet: string, jobType: string, scheduledAt: Date, payload?: Record<string, unknown>, options?: Record<string, unknown>) {
     const { requireAdmin } = await import("@/lib/admin/auth");
     await requireAdmin(wallet, "scheduler:run");
-    return schedulerEngine.schedule(jobType, scheduledAt, payload);
+    return schedulerEngine.schedule(jobType, scheduledAt, payload, {
+      idempotencyKey: options?.idempotencyKey as string | undefined,
+      dependsOnJobIds: options?.dependsOnJobIds as string[] | undefined,
+      dryRun: Boolean(options?.dryRun),
+    });
   }
 }

@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 240 10% 6%;
+  --foreground: 0 0% 100%;
+  --primary: 24 100% 54%;
+  --muted: 240 10% 12%;
+  --muted-foreground: 220 10% 65%;
+  --card: 240 10% 9%;
+  --border: 240 10% 18%;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+
+.admin-card {
+  @apply rounded-xl border border-border bg-card/80 p-4;
+}

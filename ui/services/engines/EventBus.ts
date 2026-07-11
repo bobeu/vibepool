@@ -1,4 +1,5 @@
 import { EventStore } from "./EventStore";
+import { enrichEvent } from "@/lib/events/metadata";
 import type { IEventStore } from "./interfaces";
 
 type Handler = (payload: Record<string, unknown>) => void;
@@ -12,19 +13,20 @@ export class EventBus {
   }
 
   publish(event: Record<string, unknown>): void {
-    const eventName = event.event as string;
+    const enriched = enrichEvent(event);
+    const eventName = enriched.event as string;
     const handlers = this.handlers.get(eventName);
-    if (!handlers) return;
-
-    for (const handler of handlers) {
-      try {
-        handler(event);
-      } catch (error) {
-        console.error(`EventBus handler error for ${eventName}:`, error);
+    if (handlers) {
+      for (const handler of handlers) {
+        try {
+          handler(enriched);
+        } catch (error) {
+          console.error(`EventBus handler error for ${eventName}:`, error);
+        }
       }
     }
 
-    this.persist(event).catch(() => {});
+    this.persist(enriched).catch(() => {});
   }
 
   subscribe(eventName: string, handler: Handler): () => void {
@@ -42,11 +44,11 @@ export class EventBus {
   private async persist(event: Record<string, unknown>): Promise<void> {
     try {
       await this.eventStore.append({
-        aggregateId: (event.aggregateId as string) || event.userId as string || "system",
+        aggregateId: (event.aggregateId as string) || (event.userId as string) || "system",
         aggregateType: (event.aggregateType as string) || "Domain",
         eventType: event.event as string,
         payload: event,
-        schemaVersion: 1,
+        schemaVersion: (event.schemaVersion as number) ?? 1,
       });
     } catch (error) {
       console.error("EventBus persist error:", error);

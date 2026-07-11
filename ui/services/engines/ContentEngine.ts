@@ -12,7 +12,7 @@ export class ContentEngine implements IContentEngine {
 
   async getBlocks(placement?: string, locale = "en"): Promise<Record<string, unknown>[]> {
     const now = new Date();
-    const blocks = await prisma().contentBlock.findMany({
+    let blocks = await prisma().contentBlock.findMany({
       where: {
         active: true,
         locale,
@@ -21,6 +21,18 @@ export class ContentEngine implements IContentEngine {
       },
       orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
     });
+
+    if (blocks.length === 0 && locale !== "en") {
+      blocks = await prisma().contentBlock.findMany({
+        where: {
+          active: true,
+          locale: "en",
+          ...(placement ? { placement: placement as any } : {}),
+          OR: [{ startAt: null }, { startAt: { lte: now } }],
+        },
+        orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
+      });
+    }
 
     return blocks
       .filter((b) => !b.endAt || b.endAt >= now)
@@ -35,7 +47,17 @@ export class ContentEngine implements IContentEngine {
         placement: b.placement,
         priority: b.priority,
         version: b.version,
+        locale: b.locale,
       }));
+  }
+
+  async listLocales(placement?: string): Promise<string[]> {
+    const blocks = await prisma().contentBlock.findMany({
+      where: { active: true, ...(placement ? { placement: placement as any } : {}) },
+      select: { locale: true },
+      distinct: ["locale"],
+    });
+    return blocks.map((b) => b.locale);
   }
 
   async createBlock(data: Record<string, unknown>): Promise<Record<string, unknown>> {

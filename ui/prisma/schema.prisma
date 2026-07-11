@@ -672,6 +672,7 @@ enum UserStatus {
   ACTIVE
   SUSPENDED
   BANNED
+  SHADOW_BANNED
 }
 
 enum TournamentStatus {
@@ -1088,6 +1089,7 @@ enum ScheduledJobStatus {
   COMPLETED
   FAILED
   DEAD_LETTER
+  CANCELLED
 }
 
 enum ScheduledJobType {
@@ -1112,15 +1114,26 @@ enum FeatureFlagTarget {
   REGION
   MINIPAY
   ENVIRONMENT
+  EXPERIMENT
 }
 
 enum AdminRole {
   SUPER_ADMIN
+  PLATFORM_ADMIN
   GAME_OPERATOR
   CONTENT_EDITOR
   SUPPORT
   ANALYST
+  FINANCE
   READ_ONLY
+}
+
+enum ModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ESCALATED
+  APPEALED
 }
 
 model FriendRequest {
@@ -1633,18 +1646,19 @@ model LiveEvent {
 }
 
 model FeatureFlag {
-  id          String            @id @default(cuid()) @db.Uuid
-  key         String            @unique @db.VarChar(64)
-  enabled     Boolean           @default(false)
-  targetType  FeatureFlagTarget @default(GLOBAL)
-  percentage  Int?
-  whitelist   Json?
-  regions     Json?
-  environments Json?
-  minipayOnly Boolean           @default(false)
-  metadata    Json?
-  createdAt   DateTime          @default(now()) @db.Timestamp
-  updatedAt   DateTime          @updatedAt @db.Timestamp
+  id               String            @id @default(cuid()) @db.Uuid
+  key              String            @unique @db.VarChar(64)
+  enabled          Boolean           @default(false)
+  targetType       FeatureFlagTarget @default(GLOBAL)
+  percentage       Int?
+  whitelist        Json?
+  regions          Json?
+  environments     Json?
+  minipayOnly      Boolean           @default(false)
+  experimentGroups Json?
+  metadata         Json?
+  createdAt        DateTime          @default(now()) @db.Timestamp
+  updatedAt        DateTime          @updatedAt @db.Timestamp
 
   @@index([key, enabled])
 }
@@ -1728,13 +1742,29 @@ model Campaign {
   startAt     DateTime?      @db.Timestamp
   endAt       DateTime?      @db.Timestamp
   config      Json?
+  version     Int            @default(1)
   createdAt   DateTime       @default(now()) @db.Timestamp
   updatedAt   DateTime       @updatedAt @db.Timestamp
 
-  season  Season?          @relation(fields: [seasonId], references: [id], onDelete: SetNull)
-  targets CampaignTarget[]
+  season   Season?           @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+  targets  CampaignTarget[]
+  versions CampaignVersion[]
 
   @@index([status, startAt])
+}
+
+model CampaignVersion {
+  id         String   @id @default(cuid()) @db.Uuid
+  campaignId String   @db.Uuid
+  version    Int
+  snapshot   Json
+  createdBy  String?  @db.VarChar(42)
+  createdAt  DateTime @default(now()) @db.Timestamp
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, version])
+  @@index([campaignId, version])
 }
 
 model CampaignTarget {
@@ -1752,22 +1782,68 @@ model CampaignTarget {
 }
 
 model ScheduledJob {
-  id            String             @id @default(cuid()) @db.Uuid
-  jobType       ScheduledJobType
-  status        ScheduledJobStatus @default(PENDING)
-  scheduledAt   DateTime           @db.Timestamp
-  startedAt     DateTime?          @db.Timestamp
-  completedAt   DateTime?          @db.Timestamp
-  payload       Json?
-  result        Json?
-  error         String?            @db.Text
-  retryCount    Int                @default(0)
-  maxRetries    Int                @default(3)
-  idempotencyKey String?           @unique @db.VarChar(120)
-  createdAt     DateTime           @default(now()) @db.Timestamp
+  id             String             @id @default(cuid()) @db.Uuid
+  jobType        ScheduledJobType
+  status         ScheduledJobStatus @default(PENDING)
+  scheduledAt    DateTime           @db.Timestamp
+  startedAt      DateTime?          @db.Timestamp
+  completedAt    DateTime?          @db.Timestamp
+  payload        Json?
+  result         Json?
+  error          String?            @db.Text
+  retryCount     Int                @default(0)
+  maxRetries     Int                @default(3)
+  dryRun         Boolean            @default(false)
+  paused         Boolean            @default(false)
+  idempotencyKey String?            @unique @db.VarChar(120)
+  createdAt      DateTime           @default(now()) @db.Timestamp
+
+  dependencies ScheduledJobDependency[] @relation("JobDependencies")
+  dependents   ScheduledJobDependency[] @relation("JobDependents")
 
   @@index([status, scheduledAt])
   @@index([jobType, status])
+}
+
+model ScheduledJobDependency {
+  id              String @id @default(cuid()) @db.Uuid
+  jobId           String @db.Uuid
+  dependsOnJobId  String @db.Uuid
+
+  job         ScheduledJob @relation("JobDependencies", fields: [jobId], references: [id], onDelete: Cascade)
+  dependsOn   ScheduledJob @relation("JobDependents", fields: [dependsOnJobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, dependsOnJobId])
+}
+
+model ModerationReport {
+  id           String           @id @default(cuid()) @db.Uuid
+  reporterId   String?          @db.Uuid
+  targetUserId String?          @db.Uuid
+  targetPostId String?          @db.Uuid
+  type         String           @db.VarChar(64)
+  reason       String           @db.Text
+  status       ModerationStatus @default(PENDING)
+  resolution   String?          @db.Text
+  resolvedBy   String?          @db.VarChar(42)
+  resolvedAt   DateTime?        @db.Timestamp
+  createdAt    DateTime         @default(now()) @db.Timestamp
+
+  @@index([status, createdAt])
+  @@index([targetUserId])
+  @@index([targetPostId])
+}
+
+model AdminSession {
+  id        String    @id @default(cuid()) @db.Uuid
+  wallet    String    @db.VarChar(42)
+  role      AdminRole
+  token     String    @unique @db.VarChar(128)
+  expiresAt DateTime  @db.Timestamp
+  revoked   Boolean   @default(false)
+  createdAt DateTime  @default(now()) @db.Timestamp
+
+  @@index([wallet, revoked, expiresAt])
 }
 
 model AdminPermission {

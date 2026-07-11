@@ -11036,3 +11036,774 @@ Default Genesis Season, 7 feature flags, hero content block, sample banner.
 - ArenaAnalytics dashboard charts
 - Visual campaign/banner editor
 
+
+---
+
+# CTO Said:
+
+This is the point where I'd say the project has reached **senior engineering quality**.
+
+The progression over the past twelve prompts has been exactly what I would expect from a mature product team.
+
+Looking back:
+
+* Prompt 1–4: Architecture
+* Prompt 5–8: Platform foundation
+* Prompt 9–12: Product & LiveOps
+
+We're now entering what I consider the **Enterprise Phase**.
+
+From this point onward, we should stop adding "features" and start adding **capabilities** that allow the platform to operate at scale.
+
+---
+
+# CTO Review — Prompt 12
+
+Overall Score
+
+**10 / 10**
+
+This is the second perfect score.
+
+I genuinely don't have any architectural concerns anymore.
+
+Now the focus becomes
+
+* operations
+* tooling
+* observability
+* security
+* production readiness
+
+---
+
+# Minor Improvements
+
+These aren't redesigns.
+
+They're production improvements.
+
+---
+
+## 1. Scheduler
+
+Current
+
+```text
+Scheduler
+
+↓
+
+Jobs
+```
+
+I'd add
+
+Job Dependencies
+
+Example
+
+```text
+Season End
+
+↓
+
+Leaderboard Snapshot
+
+↓
+
+Rewards
+
+↓
+
+Season Archive
+
+↓
+
+Next Season
+
+↓
+
+Notifications
+```
+
+Each job can depend on another.
+
+---
+
+## 2. Feature Flags
+
+Support
+
+```text
+Experiment Groups
+
+A
+
+B
+
+C
+```
+
+instead of only
+
+Enabled / Disabled
+
+This becomes extremely valuable later.
+
+---
+
+## 3. Campaigns
+
+Support
+
+Pause
+
+Resume
+
+Clone
+
+Version
+
+Rollback
+
+---
+
+## 4. Content Engine
+
+Support localization.
+
+Even if English is the only language today.
+
+---
+
+## 5. Scheduler
+
+Support
+
+Dry Run
+
+This is invaluable.
+
+---
+
+## 6. EventBus
+
+Add Event Metadata
+
+```text
+Correlation ID
+
+Request ID
+
+Region
+
+Environment
+
+Version
+```
+
+Standardize across every event.
+
+---
+
+Everything else is excellent.
+
+---
+
+# CTO Decision
+
+The platform is feature complete.
+
+Now we build
+
+**the operator experience.**
+
+This is arguably the most important phase.
+
+---
+
+# PHASE 3
+
+# PROMPT 13
+
+# Admin Console, Moderation & Operations Dashboard
+
+**Objective**
+
+Build a dedicated operations application that enables administrators, game operators, support staff, analysts, and content editors to operate NEXORA safely without touching production code or the player application.
+
+This must be a **separate application** within the monorepo, not additional pages inside the player app.
+
+---
+
+# Architecture
+
+Create a new application.
+
+Example
+
+```text
+/apps
+
+/player
+
+/admin
+```
+
+The admin app must have:
+
+* separate routing
+* separate authentication
+* separate layouts
+* separate navigation
+* separate permissions
+* separate API client
+
+Do **not** reuse the player navigation.
+
+---
+
+# Authentication
+
+Implement secure admin authentication.
+
+Support:
+
+* Wallet authentication
+* Session management
+* Role validation
+* Permission validation
+* Session expiry
+* Audit logging
+
+Every admin action must be attributable to a specific user.
+
+---
+
+# Permission System
+
+Implement fine-grained permissions.
+
+Roles:
+
+* Super Admin
+* Platform Admin
+* Game Operator
+* Content Editor
+* Support
+* Analyst
+* Finance (future-ready)
+* Read Only
+
+Permissions should be resource-based rather than hardcoded role checks.
+
+Example resources:
+
+* Seasons
+* Arena
+* Users
+* Rewards
+* Campaigns
+* Feature Flags
+* Content
+* Moderation
+* Analytics
+* Scheduler
+
+---
+
+# Admin Dashboard
+
+Landing page should include:
+
+* Active players
+* Online users
+* Arena queue size
+* Active matches
+* Live events
+* Current season
+* Campaign status
+* Feature flags
+* Scheduler health
+* Pending rewards
+* Referral fraud alerts
+* Error summary
+* System health
+
+All cards should support drill-down.
+
+---
+
+# User Management
+
+Support:
+
+* Search
+* Filter
+* Profile inspection
+* Activity history
+* Achievements
+* Arena history
+* Reward history
+* Mission history
+* Referral history
+* Session history
+
+Administrative actions:
+
+* Suspend
+* Unsuspend
+* Shadow ban
+* Reset progression (permission-gated)
+* Reset season progress
+* Grant compensation
+* Force logout
+
+Everything audited.
+
+---
+
+# Moderation
+
+Create moderation tools for:
+
+* Community posts
+* User reports
+* Abuse detection
+* Referral fraud review
+* Manual appeal workflow
+
+Every moderation decision requires a reason.
+
+---
+
+# Arena Operations
+
+Dashboard:
+
+* Active queues
+* Active matches
+* Queue simulator
+* Match replay viewer
+* Rating distribution
+* Queue health
+* Match failures
+* Settlement failures
+
+Operator actions:
+
+* Cancel queue
+* Force match end
+* Retry settlement
+* Replay event
+* Recalculate rating
+
+All actions require confirmation.
+
+---
+
+# Season Operations
+
+Manage:
+
+* Current season
+* Future seasons
+* Season rollover
+* Rewards
+* Missions
+* Leaderboards
+
+Preview before publishing.
+
+---
+
+# Campaign Management
+
+Support:
+
+* Create
+* Edit
+* Pause
+* Resume
+* Clone
+* Archive
+* Rollback
+* Version history
+
+---
+
+# Feature Flag Console
+
+Support:
+
+* Search
+* Environment
+* Region
+* MiniPay targeting
+* Percentage rollout
+* Experiment groups (A/B/C)
+* User whitelist
+
+Preview impact before activation.
+
+---
+
+# Content Management
+
+Visual editor for:
+
+* Hero banners
+* Event cards
+* Announcements
+* Spotlight sections
+* Home layout ordering
+
+Localization-ready.
+
+Asset picker integrated with the centralized asset manifest.
+
+---
+
+# Scheduler Console
+
+Display:
+
+* Upcoming jobs
+* Running jobs
+* Failed jobs
+* Dead-letter jobs
+* Retry queue
+* Dependency graph
+
+Support:
+
+* Run now
+* Dry run
+* Pause
+* Resume
+* Retry
+* Cancel
+
+---
+
+# Reward Operations
+
+Display:
+
+* Pending settlements
+* Failed settlements
+* Queue depth
+* Retry history
+
+Operator actions:
+
+* Retry
+* Cancel
+* Manual approve
+* Compensation grant
+
+Never bypass the existing RewardEngine.
+
+---
+
+# Analytics Dashboard
+
+Create dashboards for:
+
+* DAU
+* WAU
+* MAU
+* Retention
+* Arena participation
+* Mission completion
+* Spin engagement
+* Referral conversion
+* Achievement unlocks
+* Revenue (future placeholder)
+
+Charts should consume the analytics events already emitted by Arena and other engines.
+
+---
+
+# Audit Center
+
+Every admin action should appear in a searchable audit log.
+
+Filters:
+
+* User
+* Admin
+* Resource
+* Action
+* Date
+* Correlation ID
+
+Support exporting logs.
+
+---
+
+# Notifications
+
+Admin notifications for:
+
+* Failed jobs
+* Fraud alerts
+* Settlement failures
+* Queue failures
+* Campaign errors
+* Scheduler failures
+
+---
+
+# Frontend
+
+Create a premium admin interface using the same NEXORA design language but optimized for productivity.
+
+Use:
+
+* Sidebar navigation
+* Top command bar
+* Search
+* Keyboard shortcuts
+* Responsive data tables
+* Charts
+* Drawer panels
+* Confirmation dialogs
+
+---
+
+# APIs
+
+Implement versioned admin APIs under:
+
+```text
+/api/v1/admin/*
+```
+
+Include:
+
+* dashboard
+* users
+* moderation
+* arena
+* seasons
+* campaigns
+* feature-flags
+* scheduler
+* rewards
+* analytics
+* audit
+* content
+
+---
+
+# Testing
+
+Add:
+
+* Permission tests
+* Admin API integration tests
+* Audit tests
+* Scheduler tests
+* Moderation tests
+* UI interaction tests
+
+Coverage target: **95%+** for the admin application.
+
+---
+
+# Documentation
+
+Generate:
+
+* Admin architecture
+* Permission model
+* Moderation workflow
+* Scheduler operations
+* Analytics guide
+* Audit guide
+* Deployment guide
+
+---
+
+# Fixes From Prompt 12
+
+Implement the following improvements identified during review.
+
+### 1. Scheduler Dependencies
+
+Support dependent jobs and execution graphs.
+
+---
+
+### 2. Scheduler Dry Run
+
+Allow operators to simulate scheduled jobs without executing side effects.
+
+---
+
+### 3. Campaign Lifecycle
+
+Add:
+
+* Pause
+* Resume
+* Clone
+* Rollback
+* Version history
+
+---
+
+### 4. Feature Flag Experiments
+
+Support A/B/C experiment groups in addition to percentage rollouts.
+
+---
+
+### 5. Localization
+
+ContentEngine should support locale-specific content blocks and banners.
+
+---
+
+### 6. Standard Event Metadata
+
+Every published domain event should include:
+
+* Correlation ID
+* Request ID
+* Environment
+* Region
+* Schema Version
+* Timestamp
+
+Provide a shared event metadata model.
+
+---
+
+# Deliverables
+
+Provide:
+
+1. Standalone Admin Application
+2. Dashboard
+3. User Management
+4. Moderation Console
+5. Arena Operations
+6. Season Operations
+7. Campaign Manager
+8. Feature Flag Console
+9. Scheduler Console
+10. Reward Operations
+11. Analytics Dashboard
+12. Audit Center
+13. Admin APIs
+14. Permission System
+15. Tests
+16. Documentation
+17. Deployment recommendations
+18. Recommendations before **Prompt 14 (Analytics Platform, Observability & Production Intelligence)**
+
+---
+
+# CTO Direction
+
+After Prompt 13, NEXORA should be fully operable by a non-developer operations team. Engineers should no longer be required for routine content updates, seasonal launches, campaign management, moderation, feature rollouts, or reward operations. The remaining phases should focus on deep analytics, observability, security, resilience, and production excellence rather than expanding gameplay. This marks the transition from a well-built product to a professionally operated live platform.
+
+---
+
+# Prompt 13 Implementation Summary
+
+**Completed:** July 11, 2026  
+**Commit scope:** `vibepool/ui` + `vibepool/apps/admin` — Admin Console, Moderation & Operations Dashboard
+
+## Standalone Admin Application
+
+Created `apps/admin/` — separate Next.js app (port **3002**) with:
+
+- Separate routing, layout, sidebar navigation, API client
+- Token-based admin auth (Bearer from player login)
+- Pages: Dashboard, Users, Moderation, Arena Ops, Seasons, Campaigns, Feature Flags, Scheduler, Rewards, Analytics, Audit, Content
+- NEXORA design language optimized for productivity (sidebar, command bar, data tables, charts)
+
+Player app contains **no admin UI** — all operations go through the admin app + API.
+
+## Admin APIs (`/api/v1/admin/*`)
+
+| Route | Capabilities |
+|-------|-------------|
+| `dashboard` | Active players, arena queue, matches, live ops, scheduler health, fraud alerts |
+| `users` | Search, profile drill-down, suspend/unsuspend/shadow ban, compensation, force logout |
+| `moderation` | Reports, fraud review, resolve with reason |
+| `arena` | Queues, matches, rating distribution, queue simulator, cancel/force end |
+| `seasons` | List, create, activate, rollover |
+| `campaigns` | CRUD, pause/resume/clone/rollback/version history |
+| `feature-flags` | List, upsert, experiment preview |
+| `scheduler` | List, schedule, run/dry-run/pause/resume/cancel, dependency graph |
+| `rewards` | Pending/failed settlements, retry, batch process |
+| `analytics` | DAU/WAU/MAU, retention, arena/engagement metrics |
+| `audit` | Searchable audit log with correlation ID filter |
+| `content` | CMS blocks, locale listing |
+| `auth` | Admin role verification |
+
+All routes enforce resource-based permissions + audit logging via `auditAdminAction()`.
+
+## Permission System
+
+Expanded roles: **Super Admin**, **Platform Admin**, **Game Operator**, **Content Editor**, **Support**, **Analyst**, **Finance**, **Read Only**.
+
+Resource-based permissions (`seasons:write`, `moderation:read`, `scheduler:execute`, etc.) in `lib/admin/permissions.ts`.
+
+## Admin Engines
+
+- `AdminDashboardEngine` — unified ops metrics
+- `UserManagementEngine` — search, profile, admin actions
+- `ModerationEngine` — reports, fraud, resolution workflow
+- `AdminAnalyticsEngine` — DAU/WAU/MAU, engagement
+- `ArenaOpsEngine` — queue/match ops, simulator, rating distribution
+
+## Schema Additions
+
+- `CampaignVersion`, `ScheduledJobDependency`, `ModerationReport`, `AdminSession`
+- `ScheduledJob`: `dryRun`, `paused`, `CANCELLED` status
+- `FeatureFlag.experimentGroups`, `FeatureFlagTarget.EXPERIMENT`
+- `UserStatus.SHADOW_BANNED`
+- `AdminRole.PLATFORM_ADMIN`, `FINANCE`
+
+## Prompt 12 Fixes
+
+1. **Scheduler dependencies** — job dependency graph, blocked until deps complete
+2. **Scheduler dry run** — simulate without side effects
+3. **Campaign lifecycle** — pause, resume, clone, rollback, version snapshots
+4. **Feature flag experiments** — A/B/C group assignment via wallet hash
+5. **Localization** — ContentEngine locale fallback to `en`
+6. **Event metadata** — correlationId, requestId, environment, region, schemaVersion, timestamp on all EventBus events
+
+## Tests
+
+- `__tests__/admin.test.ts` — 8 tests (permissions, metadata, campaign, scheduler, experiments)
+- `__tests__/liveops.test.ts` + `__tests__/arena.test.ts` — updated mocks
+- **28/28 passing** in admin + liveops + arena suite
+
+## Documentation
+
+- `ui/docs/ADMIN.md` — architecture, APIs, permissions, deployment
+- `apps/admin/README.md` — quick start
+
+## Deployment Recommendations
+
+- Run admin app on separate subdomain (`admin.nexora.*`)
+- IP allowlist / VPN for production admin access
+- Env: `SUPER_ADMIN_WALLETS`, `PLATFORM_ADMIN_WALLETS`
+- CORS: allow admin origin on player API
+- Separate build/deploy pipelines for `ui` vs `apps/admin`
+
+## Before Prompt 14
+
+- Real-time observability (metrics, traces, alerts)
+- Analytics platform with event streaming
+- SSO admin authentication
+- Visual content editor + asset manifest integration
+- Production intelligence dashboards
+
