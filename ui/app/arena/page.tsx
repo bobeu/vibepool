@@ -28,6 +28,16 @@ export default function ArenaPage() {
   const [friendWallet, setFriendWallet] = useState("");
   const [lastResult, setLastResult] = useState<Record<string, unknown> | null>(null);
 
+  const { data: arenaFlag } = useQuery({
+    queryKey: ["feature-flag", "arena"],
+    queryFn: async () => {
+      const res = await fetch("/api/feature-flags?key=arena");
+      if (!res.ok) return { enabled: true };
+      return res.json() as Promise<{ enabled: boolean }>;
+    },
+    staleTime: 30_000,
+  });
+
   const { data, isLoading, error, refetch } = useQuery<ArenaHome>({
     queryKey: ["arena"],
     queryFn: async () => {
@@ -139,7 +149,7 @@ export default function ArenaPage() {
 
   if (isLoading) {
     return (
-      <AppShell>
+      <AppShell activeNav="arena">
         <div className="flex min-h-[50vh] items-center justify-center text-muted-foreground">Loading NEXORA Arena...</div>
       </AppShell>
     );
@@ -147,14 +157,26 @@ export default function ArenaPage() {
 
   if (error || !data) {
     return (
-      <AppShell>
+      <AppShell activeNav="arena">
         <div className="flex min-h-[50vh] items-center justify-center text-red-400">Failed to load arena</div>
       </AppShell>
     );
   }
 
+  if (arenaFlag && !arenaFlag.enabled) {
+    return (
+      <AppShell activeNav="arena">
+        <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center px-4">
+          <h2 className="text-xl font-bold">Arena temporarily unavailable</h2>
+          <p className="text-sm text-muted-foreground max-w-md">NEXORA Arena is currently disabled for maintenance or a staged rollout. Check the Event Center for updates.</p>
+          <Link href="/events" className="text-primary font-semibold text-sm">Go to Event Center</Link>
+        </div>
+      </AppShell>
+    );
+  }
+
   return (
-    <AppShell>
+    <AppShell activeNav="arena">
       <motion.div variants={container} initial="hidden" animate="show" className="mx-auto max-w-5xl space-y-8 px-4 py-8">
         <motion.div variants={item} className="text-center">
           <p className="text-sm uppercase tracking-[0.3em] text-cyan-300/80">NEXORA Arena</p>

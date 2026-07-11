@@ -1,11 +1,11 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../generated"
 }
 
 datasource db {
   provider = "postgresql"
 }
-
 model UserProfile {
   id            String    @id @default(cuid()) @db.Uuid
   wallet        String    @unique @db.VarChar(42)
@@ -64,6 +64,9 @@ model UserProfile {
   arenaInvitationsRecv   ArenaInvitation[] @relation("ArenaInvitationReceiver")
   arenaPresence          ArenaPresence?
   arenaSeasonStats       ArenaSeasonStatistic[]
+  seasonProgress         SeasonProgress[]
+  bannerDismissals       BannerDismissal[]
+  campaignTargets        CampaignTarget[]
 
   @@index([wallet])
   @@index([status])
@@ -721,6 +724,7 @@ enum MissionCategory {
   WEEKLY
   MILESTONE
   HIDDEN
+  SEASONAL
 }
 
 enum RewardAssetType {
@@ -1015,6 +1019,108 @@ enum MatchOutcome {
   WIN
   LOSS
   DRAW
+}
+
+enum SeasonStatus {
+  PRESEASON
+  ACTIVE
+  ENDED
+  ARCHIVED
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum CampaignType {
+  ONBOARDING
+  RETENTION
+  REENGAGEMENT
+  REFERRAL
+  SEASON_LAUNCH
+  LIVE_EVENT
+}
+
+enum LiveEventType {
+  WEEKEND
+  HOLIDAY
+  DOUBLE_XP
+  DOUBLE_SPINS
+  SPECIAL_TOURNAMENT
+  COMMUNITY_CHALLENGE
+  CREATOR
+  FLASH_MISSIONS
+  ARENA_MODE
+}
+
+enum LiveEventStatus {
+  SCHEDULED
+  ACTIVE
+  ENDED
+  CANCELLED
+}
+
+enum ContentBlockType {
+  HERO_BANNER
+  ANNOUNCEMENT
+  PROMO_CARD
+  ARENA_HIGHLIGHT
+  COMMUNITY_SPOTLIGHT
+  REWARD_PROMO
+}
+
+enum BannerPlacement {
+  HOME_HERO
+  ARENA
+  SEASON
+  EVENTS
+  GLOBAL
+}
+
+enum ScheduledJobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  DEAD_LETTER
+}
+
+enum ScheduledJobType {
+  SEASON_ROLLOVER
+  CAMPAIGN_START
+  CAMPAIGN_END
+  BANNER_PUBLISH
+  FEATURE_ACTIVATION
+  TOURNAMENT_GENERATE
+  MISSION_REFRESH
+  LEADERBOARD_SNAPSHOT
+  REWARD_PROCESSING
+  CLEANUP
+  MATCH_EXPIRE
+  QUEUE_EXPIRE
+}
+
+enum FeatureFlagTarget {
+  GLOBAL
+  PERCENTAGE
+  WHITELIST
+  REGION
+  MINIPAY
+  ENVIRONMENT
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  GAME_OPERATOR
+  CONTENT_EDITOR
+  SUPPORT
+  ANALYST
+  READ_ONLY
 }
 
 model FriendRequest {
@@ -1336,6 +1442,9 @@ model ArenaReplay {
   timeline   Json
   statistics Json?
   result     Json?
+  compressed Boolean  @default(false)
+  compressionFormat String? @db.VarChar(16)
+  checkpoints Json?
   createdAt  DateTime @default(now()) @db.Timestamp
 
   match ArenaMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
@@ -1389,4 +1498,284 @@ model ArenaPresence {
   user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([status])
+}
+
+model ArenaStateMachineDefinition {
+  id          String   @id @default(cuid()) @db.Uuid
+  name        String   @unique @db.VarChar(64)
+  version     Int      @default(1)
+  states      Json
+  transitions Json
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @db.Timestamp
+  updatedAt   DateTime @updatedAt @db.Timestamp
+}
+
+model ArenaAnalyticsMetric {
+  id         String   @id @default(cuid()) @db.Uuid
+  metricType String   @db.VarChar(64)
+  value      Float
+  metadata   Json?
+  recordedAt DateTime @default(now()) @db.Timestamp
+
+  @@index([metricType, recordedAt])
+}
+
+model Season {
+  id           String       @id @default(cuid()) @db.Uuid
+  number       Int          @unique
+  name         String       @db.VarChar(120)
+  description  String?      @db.Text
+  status       SeasonStatus @default(PRESEASON)
+  startAt      DateTime     @db.Timestamp
+  endAt        DateTime     @db.Timestamp
+  preseasonAt  DateTime?    @db.Timestamp
+  config       Json?
+  createdAt    DateTime     @default(now()) @db.Timestamp
+  updatedAt    DateTime     @updatedAt @db.Timestamp
+
+  tiers        SeasonTier[]
+  rewards      SeasonReward[]
+  missions     SeasonMission[]
+  leaderboards SeasonLeaderboard[]
+  progress     SeasonProgress[]
+  liveEvents   LiveEvent[]
+  campaigns    Campaign[]
+
+  @@index([status, startAt])
+}
+
+model SeasonTier {
+  id          String @id @default(cuid()) @db.Uuid
+  seasonId    String @db.Uuid
+  tierLevel   Int
+  name        String @db.VarChar(64)
+  xpRequired  Int
+  rewardType  String @db.VarChar(32)
+  rewardAmount Int   @default(0)
+
+  season Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@unique([seasonId, tierLevel])
+}
+
+model SeasonReward {
+  id          String @id @default(cuid()) @db.Uuid
+  seasonId    String @db.Uuid
+  tierLevel   Int
+  rewardType  String @db.VarChar(32)
+  amount      Int
+  description String? @db.VarChar(160)
+
+  season Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@index([seasonId, tierLevel])
+}
+
+model SeasonMission {
+  id          String @id @default(cuid()) @db.Uuid
+  seasonId    String @db.Uuid
+  missionId   String @db.Uuid
+  bonusXp     Int    @default(0)
+  active      Boolean @default(true)
+
+  season Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@unique([seasonId, missionId])
+}
+
+model SeasonLeaderboard {
+  id         String   @id @default(cuid()) @db.Uuid
+  seasonId   String   @db.Uuid
+  userId     String   @db.Uuid
+  rank       Int
+  score      Int
+  snapshotAt DateTime @default(now()) @db.Timestamp
+
+  season Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@index([seasonId, rank])
+  @@index([seasonId, userId])
+}
+
+model SeasonProgress {
+  id           String @id @default(cuid()) @db.Uuid
+  userId       String @db.Uuid
+  seasonId     String @db.Uuid
+  seasonXp     Int    @default(0)
+  seasonRank   Int    @default(0)
+  tierLevel    Int    @default(0)
+  matchesPlayed Int   @default(0)
+  rewardsClaimed Int  @default(0)
+
+  user   UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  season Season      @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, seasonId])
+  @@index([seasonId, seasonXp])
+}
+
+model LiveEvent {
+  id          String          @id @default(cuid()) @db.Uuid
+  seasonId    String?         @db.Uuid
+  type        LiveEventType
+  name        String          @db.VarChar(120)
+  description String?         @db.Text
+  status      LiveEventStatus @default(SCHEDULED)
+  startAt     DateTime        @db.Timestamp
+  endAt       DateTime        @db.Timestamp
+  config      Json?
+  createdAt   DateTime        @default(now()) @db.Timestamp
+
+  season Season? @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+
+  @@index([status, startAt])
+}
+
+model FeatureFlag {
+  id          String            @id @default(cuid()) @db.Uuid
+  key         String            @unique @db.VarChar(64)
+  enabled     Boolean           @default(false)
+  targetType  FeatureFlagTarget @default(GLOBAL)
+  percentage  Int?
+  whitelist   Json?
+  regions     Json?
+  environments Json?
+  minipayOnly Boolean           @default(false)
+  metadata    Json?
+  createdAt   DateTime          @default(now()) @db.Timestamp
+  updatedAt   DateTime          @updatedAt @db.Timestamp
+
+  @@index([key, enabled])
+}
+
+model ContentBlock {
+  id          String          @id @default(cuid()) @db.Uuid
+  type        ContentBlockType
+  title       String          @db.VarChar(160)
+  body        String          @db.Text
+  imageUrl    String?         @db.Text
+  ctaLabel    String?         @db.VarChar(64)
+  ctaUrl      String?         @db.Text
+  placement   BannerPlacement @default(HOME_HERO)
+  priority    Int             @default(0)
+  active      Boolean         @default(true)
+  startAt     DateTime?       @db.Timestamp
+  endAt       DateTime?       @db.Timestamp
+  audience    Json?
+  version     Int             @default(1)
+  locale      String          @default("en") @db.VarChar(8)
+  createdAt   DateTime        @default(now()) @db.Timestamp
+  updatedAt   DateTime        @updatedAt @db.Timestamp
+
+  @@index([type, active, placement, priority])
+}
+
+model Banner {
+  id          String          @id @default(cuid()) @db.Uuid
+  contentId   String?         @db.Uuid
+  title       String          @db.VarChar(160)
+  subtitle    String?         @db.Text
+  imageUrl    String?         @db.Text
+  ctaLabel    String?         @db.VarChar(64)
+  ctaUrl      String?         @db.Text
+  placement   BannerPlacement @default(HOME_HERO)
+  priority    Int             @default(0)
+  active      Boolean         @default(true)
+  startAt     DateTime?       @db.Timestamp
+  endAt       DateTime?       @db.Timestamp
+  audience    Json?
+  version     Int             @default(1)
+  locale      String          @default("en") @db.VarChar(8)
+  createdAt   DateTime        @default(now()) @db.Timestamp
+
+  dismissals BannerDismissal[]
+
+  @@index([placement, active, priority])
+}
+
+model BannerDismissal {
+  id        String   @id @default(cuid()) @db.Uuid
+  userId    String   @db.Uuid
+  bannerId  String   @db.Uuid
+  dismissedAt DateTime @default(now()) @db.Timestamp
+
+  user   UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  banner Banner      @relation(fields: [bannerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bannerId])
+}
+
+model AnnouncementSchedule {
+  id          String   @id @default(cuid()) @db.Uuid
+  title       String   @db.VarChar(160)
+  body        String   @db.Text
+  scheduledAt DateTime @db.Timestamp
+  published   Boolean  @default(false)
+  publishedAt DateTime? @db.Timestamp
+  createdAt   DateTime @default(now()) @db.Timestamp
+
+  @@index([scheduledAt, published])
+}
+
+model Campaign {
+  id          String         @id @default(cuid()) @db.Uuid
+  seasonId    String?        @db.Uuid
+  type        CampaignType
+  name        String         @db.VarChar(120)
+  description String?        @db.Text
+  status      CampaignStatus @default(DRAFT)
+  startAt     DateTime?      @db.Timestamp
+  endAt       DateTime?      @db.Timestamp
+  config      Json?
+  createdAt   DateTime       @default(now()) @db.Timestamp
+  updatedAt   DateTime       @updatedAt @db.Timestamp
+
+  season  Season?          @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+  targets CampaignTarget[]
+
+  @@index([status, startAt])
+}
+
+model CampaignTarget {
+  id         String  @id @default(cuid()) @db.Uuid
+  campaignId String  @db.Uuid
+  userId     String? @db.Uuid
+  segment    String? @db.VarChar(64)
+  metadata   Json?
+
+  campaign Campaign     @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user     UserProfile? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([userId])
+}
+
+model ScheduledJob {
+  id            String             @id @default(cuid()) @db.Uuid
+  jobType       ScheduledJobType
+  status        ScheduledJobStatus @default(PENDING)
+  scheduledAt   DateTime           @db.Timestamp
+  startedAt     DateTime?          @db.Timestamp
+  completedAt   DateTime?          @db.Timestamp
+  payload       Json?
+  result        Json?
+  error         String?            @db.Text
+  retryCount    Int                @default(0)
+  maxRetries    Int                @default(3)
+  idempotencyKey String?           @unique @db.VarChar(120)
+  createdAt     DateTime           @default(now()) @db.Timestamp
+
+  @@index([status, scheduledAt])
+  @@index([jobType, status])
+}
+
+model AdminPermission {
+  id        String    @id @default(cuid()) @db.Uuid
+  wallet    String    @unique @db.VarChar(42)
+  role      AdminRole @default(READ_ONLY)
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now()) @db.Timestamp
+
+  @@index([role, active])
 }

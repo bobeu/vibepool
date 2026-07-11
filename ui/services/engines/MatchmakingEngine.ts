@@ -2,14 +2,15 @@ import { createHash, randomBytes } from "crypto";
 import { prisma } from "@/lib/auth/session";
 import { logger } from "@/lib/logging";
 import {
-  CURRENT_SEASON,
   DEFAULT_RATING,
   INVITE_EXPIRY_MS,
   MATCH_ACCEPT_TIMEOUT_MS,
   QUEUE_TIMEOUT_MS,
   leagueForRating,
 } from "@/lib/arena/constants";
+import { arenaAnalytics } from "@/lib/arena/ArenaAnalytics";
 import { eventBus } from "./EventBus";
+import { getActiveSeasonNumber } from "./SeasonEngine";
 import type { IMatchmakingEngine } from "./interfaces";
 
 function shortCode(length = 6): string {
@@ -34,10 +35,11 @@ export class MatchmakingEngine implements IMatchmakingEngine {
   }
 
   private async getOrCreateRating(userId: string): Promise<number> {
+    const seasonNumber = await getActiveSeasonNumber();
     const rating = await prisma().arenaRating.upsert({
-      where: { userId_seasonNumber: { userId, seasonNumber: CURRENT_SEASON } },
+      where: { userId_seasonNumber: { userId, seasonNumber } },
       update: {},
-      create: { userId, seasonNumber: CURRENT_SEASON, skillRating: DEFAULT_RATING, league: leagueForRating(DEFAULT_RATING) },
+      create: { userId, seasonNumber, skillRating: DEFAULT_RATING, league: leagueForRating(DEFAULT_RATING) },
     });
     return rating.skillRating;
   }
@@ -205,6 +207,11 @@ export class MatchmakingEngine implements IMatchmakingEngine {
 
     if (!opponent) return null;
 
+    const queueRow = await prisma().arenaQueue.findUnique({ where: { id: queueId } });
+    const queueTimeMs = queueRow?.createdAt ? Date.now() - queueRow.createdAt.getTime() : 0;
+    await arenaAnalytics.record("QUEUE_TIME_MS", queueTimeMs, { queueId, userId });
+    await arenaAnalytics.record("RATING_DIFF", Math.abs(rating - opponent.rating), { queueId, userId, opponentId: opponent.userId });
+
     const targetValue = Math.floor(Math.random() * 9000) + 1000;
     const match = await prisma().arenaMatch.create({
       data: {
@@ -336,6 +343,8 @@ export class MatchmakingEngine implements IMatchmakingEngine {
         { userId: opponentId, matchId: match.id, mode: "REMATCH", matchType: match.matchType, status: "MATCHED", expiresAt: match.expiresAt },
       ],
     });
+
+    await arenaAnalytics.record("REMATCH_RATE", 1, { previousMatchId, matchId: match.id });
 
     return { matchId: match.id, status: "WAITING" };
   }

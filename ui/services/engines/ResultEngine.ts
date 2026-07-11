@@ -1,16 +1,18 @@
 import { createHash } from "crypto";
 import { prisma } from "@/lib/auth/session";
-import { logger } from "@/lib/logging";
+import { arenaAnalytics } from "@/lib/arena/ArenaAnalytics";
+import { ArenaStateMachine, type ArenaState } from "@/lib/arena/ArenaStateMachine";
+import { compressReplay } from "@/lib/arena/replayCompression";
 import {
   ARENA_POINTS_WIN,
   ARENA_XP_LOSS,
   ARENA_XP_WIN,
-  CURRENT_SEASON,
   DEFAULT_RATING,
   leagueForRating,
 } from "@/lib/arena/constants";
 import { eventBus } from "./EventBus";
-import { SimpleRatingStrategy } from "./rating/SimpleRatingStrategy";
+import { RatingStrategyRegistry } from "./rating/RatingStrategyRegistry";
+import { getActiveSeasonNumber } from "./SeasonEngine";
 import type { IResultEngine } from "./interfaces";
 import type { RatingSnapshot } from "./rating/IRatingStrategy";
 
@@ -21,10 +23,15 @@ function accuracy(prediction: number, actual: number): number {
 
 export class ResultEngine implements IResultEngine {
   name = "ResultEngine";
-  private ratingStrategy = new SimpleRatingStrategy();
+  private ratingStrategy = RatingStrategyRegistry.get();
 
   async execute(input: Record<string, unknown>): Promise<Record<string, unknown>> {
     return input;
+  }
+
+  private transitionStatus(current: string, event: Parameters<ArenaStateMachine["transition"]>[0]): ArenaState {
+    const sm = new ArenaStateMachine(current as ArenaState);
+    return sm.transition(event);
   }
 
   async finalizeMatch(matchId: string): Promise<Record<string, unknown>> {
@@ -48,9 +55,10 @@ export class ResultEngine implements IResultEngine {
     const winner = isDraw ? null : scored[0];
     const loser = isDraw ? null : scored[1];
 
+    const finishedStatus = this.transitionStatus(match.status, "SUBMIT_PREDICTIONS");
     await prisma().arenaMatch.update({
       where: { id: matchId },
-      data: { status: "FINISHED", targetValue: target, finishedAt: new Date() },
+      data: { status: finishedStatus, targetValue: target, finishedAt: new Date() },
     });
 
     for (const p of scored) {
@@ -84,29 +92,46 @@ export class ResultEngine implements IResultEngine {
       },
     });
 
+    const timeline = [
+      { at: match.startedAt, event: "MATCH_STARTED" },
+      ...scored.map((s) => ({ at: new Date(), event: "PREDICTION", userId: s.userId, prediction: s.prediction })),
+      { at: new Date(), event: "RESULT", target, winnerId: winner?.userId ?? null, isDraw },
+    ];
+    const compressed = compressReplay({
+      timeline,
+      statistics: { target, scores: scored.map((s) => ({ userId: s.userId, score: s.score })) },
+      result: { winnerId: winner?.userId ?? null, isDraw },
+    });
+
     await prisma().arenaReplay.create({
       data: {
         matchId,
-        timeline: [
-          { at: match.startedAt, event: "MATCH_STARTED" },
-          ...scored.map((s) => ({ at: new Date(), event: "PREDICTION", userId: s.userId, prediction: s.prediction })),
-          { at: new Date(), event: "RESULT", target, winnerId: winner?.userId ?? null, isDraw },
-        ],
-        statistics: { target, scores: scored.map((s) => ({ userId: s.userId, score: s.score })) },
-        result: { winnerId: winner?.userId ?? null, isDraw },
+        timeline: compressed.timeline as object,
+        statistics: compressed.statistics as object,
+        result: compressed.result as object,
+        compressed: compressed.compressed,
+        compressionFormat: compressed.compressionFormat,
+        checkpoints: compressed.checkpoints as object,
       },
     });
 
-    await prisma().arenaMatch.update({ where: { id: matchId }, data: { status: "SETTLING" } });
+    const settlingStatus = this.transitionStatus(finishedStatus, "FINALIZE");
+    await prisma().arenaMatch.update({ where: { id: matchId }, data: { status: settlingStatus } });
 
     const ratingUpdates = await this.updateRatings(matchId, scored, isDraw, winner?.userId, loser?.userId);
     await this.settleRewards(matchId, scored, isDraw, winner?.userId);
 
-    await prisma().arenaMatch.update({ where: { id: matchId }, data: { status: "COMPLETED" } });
+    const completedStatus = this.transitionStatus(settlingStatus, "SETTLE");
+    await prisma().arenaMatch.update({ where: { id: matchId }, data: { status: completedStatus } });
     await prisma().arenaQueue.updateMany({
       where: { matchId },
       data: { status: "ACCEPTED" },
     });
+
+    if (match.startedAt) {
+      await arenaAnalytics.record("MATCH_DURATION_MS", Date.now() - match.startedAt.getTime(), { matchId });
+    }
+    await arenaAnalytics.record("COMPLETION_RATE", 1, { matchId });
 
     eventBus.publish({
       event: "ArenaMatchCompleted",
@@ -118,7 +143,7 @@ export class ResultEngine implements IResultEngine {
       auditHash,
     });
 
-    return { matchId, status: "COMPLETED", winnerId: winner?.userId ?? null, isDraw, ratingUpdates, auditHash };
+    return { matchId, status: completedStatus, winnerId: winner?.userId ?? null, isDraw, ratingUpdates, auditHash };
   }
 
   private async updateRatings(
@@ -130,9 +155,10 @@ export class ResultEngine implements IResultEngine {
   ): Promise<Record<string, unknown>[]> {
     if (participants.length < 2) return [];
 
+    const seasonNumber = await getActiveSeasonNumber();
     const [a, b] = participants;
-    const ratingA = await this.getRatingSnapshot(a.userId);
-    const ratingB = await this.getRatingSnapshot(b.userId);
+    const ratingA = await this.getRatingSnapshot(a.userId, seasonNumber);
+    const ratingB = await this.getRatingSnapshot(b.userId, seasonNumber);
 
     const outcomeA = isDraw ? "DRAW" : a.userId === winnerId ? "WIN" : "LOSS";
     const outcomeB = isDraw ? "DRAW" : b.userId === winnerId ? "WIN" : "LOSS";
@@ -140,8 +166,10 @@ export class ResultEngine implements IResultEngine {
     const updatedA = this.ratingStrategy.updateRating({ player: ratingA, opponent: ratingB, outcome: outcomeA });
     const updatedB = this.ratingStrategy.updateRating({ player: ratingB, opponent: ratingA, outcome: outcomeB });
 
-    await this.persistRating(a.userId, updatedA, outcomeA);
-    await this.persistRating(b.userId, updatedB, outcomeB);
+    await arenaAnalytics.record("RATING_DIFF", Math.abs(ratingA.skillRating - ratingB.skillRating), { matchId });
+
+    await this.persistRating(a.userId, seasonNumber, updatedA, outcomeA);
+    await this.persistRating(b.userId, seasonNumber, updatedB, outcomeB);
 
     await prisma().matchParticipant.update({
       where: { matchId_userId: { matchId, userId: a.userId } },
@@ -158,11 +186,11 @@ export class ResultEngine implements IResultEngine {
     ];
   }
 
-  private async getRatingSnapshot(userId: string): Promise<RatingSnapshot> {
+  private async getRatingSnapshot(userId: string, seasonNumber: number): Promise<RatingSnapshot> {
     const row = await prisma().arenaRating.upsert({
-      where: { userId_seasonNumber: { userId, seasonNumber: CURRENT_SEASON } },
+      where: { userId_seasonNumber: { userId, seasonNumber } },
       update: {},
-      create: { userId, seasonNumber: CURRENT_SEASON, skillRating: DEFAULT_RATING, league: leagueForRating(DEFAULT_RATING) },
+      create: { userId, seasonNumber, skillRating: DEFAULT_RATING, league: leagueForRating(DEFAULT_RATING) },
     });
     return {
       skillRating: row.skillRating,
@@ -174,10 +202,10 @@ export class ResultEngine implements IResultEngine {
     };
   }
 
-  private async persistRating(userId: string, rating: RatingSnapshot, outcome: string): Promise<void> {
+  private async persistRating(userId: string, seasonNumber: number, rating: RatingSnapshot, outcome: string): Promise<void> {
     const league = leagueForRating(rating.skillRating);
     await prisma().arenaRating.update({
-      where: { userId_seasonNumber: { userId, seasonNumber: CURRENT_SEASON } },
+      where: { userId_seasonNumber: { userId, seasonNumber } },
       data: {
         skillRating: rating.skillRating,
         ratingDeviation: rating.ratingDeviation,
@@ -190,9 +218,9 @@ export class ResultEngine implements IResultEngine {
     });
 
     const stats = await prisma().arenaSeasonStatistic.upsert({
-      where: { userId_seasonNumber: { userId, seasonNumber: CURRENT_SEASON } },
+      where: { userId_seasonNumber: { userId, seasonNumber } },
       update: {},
-      create: { userId, seasonNumber: CURRENT_SEASON },
+      create: { userId, seasonNumber },
     });
 
     await prisma().arenaSeasonStatistic.update({

@@ -48,6 +48,10 @@ function resetMock() {
     referralFraudSignal: [],
     activity: [],
     playerStatistic: [],
+    season: [{ id: "s1", number: 1, name: "Season 1", status: "ACTIVE", startAt: new Date(), endAt: new Date(Date.now() + 86400000) }],
+    seasonTier: [],
+    seasonProgress: [],
+    arenaAnalyticsMetric: [],
   };
 
   const makeModel = (name: string) => ({
@@ -78,6 +82,7 @@ function resetMock() {
       }
       if (orderBy?.createdAt === "asc") return rows.sort((a, b) => (a.createdAt?.getTime?.() ?? 0) - (b.createdAt?.getTime?.() ?? 0))[0] ?? null;
       if (orderBy?.createdAt === "desc") return rows[rows.length - 1] ?? null;
+      if (orderBy?.number === "desc") return rows.sort((a, b) => (b.number ?? 0) - (a.number ?? 0))[0] ?? null;
       return rows[0] ?? null;
     }),
     findMany: vi.fn(async ({ where, include }: any) => {

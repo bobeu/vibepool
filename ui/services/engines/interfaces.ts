@@ -223,3 +223,52 @@ export interface IRandomProvider {
   range(min: number, max: number): Promise<number>;
   shuffle<T>(items: T[]): Promise<T[]>;
 }
+
+export interface ISeasonEngine extends IEngine {
+  getActiveSeason(): Promise<Record<string, unknown>>;
+  getActiveSeasonNumber(): Promise<number>;
+  listSeasons(): Promise<Record<string, unknown>[]>;
+  createSeason(data: Record<string, unknown>): Promise<Record<string, unknown>>;
+  activateSeason(seasonId: string): Promise<Record<string, unknown>>;
+  rollover(): Promise<Record<string, unknown>>;
+  getProgress(wallet: string): Promise<Record<string, unknown>>;
+  addSeasonXp(userId: string, amount: number): Promise<void>;
+}
+
+export interface IFeatureFlagEngine extends IEngine {
+  isEnabled(key: string, context?: Record<string, unknown>): Promise<boolean>;
+  listFlags(): Promise<Record<string, unknown>[]>;
+  upsertFlag(data: Record<string, unknown>): Promise<Record<string, unknown>>;
+}
+
+export interface IContentEngine extends IEngine {
+  getBlocks(placement?: string, locale?: string): Promise<Record<string, unknown>[]>;
+  createBlock(data: Record<string, unknown>): Promise<Record<string, unknown>>;
+  getHeroBanner(wallet?: string): Promise<Record<string, unknown> | null>;
+}
+
+export interface ILiveOpsEngine extends IEngine {
+  getDashboard(): Promise<Record<string, unknown>>;
+  listEvents(limit?: number): Promise<Record<string, unknown>[]>;
+  createEvent(data: Record<string, unknown>): Promise<Record<string, unknown>>;
+  activateDueEvents(): Promise<number>;
+  getBanners(placement?: string, wallet?: string): Promise<Record<string, unknown>[]>;
+  publishBanner(data: Record<string, unknown>): Promise<Record<string, unknown>>;
+  dismissBanner(wallet: string, bannerId: string): Promise<void>;
+}
+
+export interface ISchedulerEngine extends IEngine {
+  registerHandler(jobType: string, handler: (payload: Record<string, unknown>) => Promise<Record<string, unknown>>): void;
+  schedule(jobType: string, scheduledAt: Date, payload?: Record<string, unknown>, idempotencyKey?: string): Promise<Record<string, unknown>>;
+  runDueJobs(limit?: number): Promise<Record<string, unknown>[]>;
+  runJob(jobId: string): Promise<Record<string, unknown>>;
+}
+
+export interface ICampaignEngine extends IEngine {
+  listCampaigns(status?: string): Promise<Record<string, unknown>[]>;
+  createCampaign(data: Record<string, unknown>): Promise<Record<string, unknown>>;
+  startCampaign(campaignId: string): Promise<Record<string, unknown>>;
+  completeCampaign(campaignId: string): Promise<Record<string, unknown>>;
+  addTarget(campaignId: string, data: Record<string, unknown>): Promise<void>;
+  activateDueCampaigns(): Promise<number>;
+}

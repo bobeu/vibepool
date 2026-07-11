@@ -8,6 +8,8 @@ export const NAV_ITEMS = [
   { href: "/", label: "Home", key: "home" },
   { href: "/tournament", label: "Tournament", key: "tournament" },
   { href: "/arena", label: "Arena", key: "arena" },
+  { href: "/season", label: "Season", key: "season" },
+  { href: "/events", label: "Events", key: "events" },
   { href: "/spin", label: "Spin", key: "spin" },
   { href: "/leaderboard", label: "Leaderboard", key: "leaderboard" },
   { href: "/friends", label: "Friends", key: "friends" },

@@ -2,10 +2,12 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { TournamentCard } from "@/components/tournament/TournamentCard";
 import { CountdownTimer } from "@/components/ui/CountdownTimer";
 import { LevelProgress } from "@/components/ui/LevelProgress";
+import { HeroBanner } from "@/components/hero/HeroBanner";
 import { useAuth } from "@/lib/auth/useAuth";
 
 const SECTIONS = [
@@ -17,6 +19,30 @@ const SECTIONS = [
 ] as const;
 
 export function HomeHub() {
+  const router = useRouter();
+
+  const { data: heroData } = useQuery({
+    queryKey: ["hero-banner"],
+    queryFn: async () => {
+      const res = await fetch("/api/content?hero=1");
+      if (!res.ok) throw new Error("Failed to load hero");
+      return res.json() as Promise<{ hero: { title?: string; subtitle?: string; body?: string; ctaLabel?: string; ctaUrl?: string } }>;
+    },
+    staleTime: 30_000,
+  });
+
+  const { data: seasonData } = useQuery({
+    queryKey: ["season-end"],
+    queryFn: async () => {
+      const res = await fetch("/api/seasons");
+      if (!res.ok) return null;
+      return res.json();
+    },
+    staleTime: 60_000,
+  });
+
+  const hero = heroData?.hero;
+
   const { data: tournaments } = useQuery({
     queryKey: ["tournaments"],
     queryFn: async () => {
@@ -72,25 +98,24 @@ export function HomeHub() {
 
   return (
     <div className="space-y-6">
-      <motion.section
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-background to-accent-purple/10 p-5"
-      >
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,hsl(var(--accent-orange)/0.15),transparent_40%),radial-gradient(circle_at_80%_80%,hsl(var(--accent-purple)/0.15),transparent_40%)]" />
-        <div className="relative space-y-3">
-          <h1 className="text-2xl font-black">
-            Welcome to <span className="text-primary">NEXORA</span>
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            The home of Web3 competitive games. Compete, earn, and climb the ranks.
+      <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+        <HeroBanner
+          title={hero?.title ?? "Welcome to NEXORA"}
+          subtitle={hero?.subtitle ?? hero?.body ?? "The home of Web3 competitive games. Compete, earn, and climb the ranks."}
+          cta={hero?.ctaLabel ?? "Play Arena"}
+          onCta={() => router.push(hero?.ctaUrl ?? "/arena")}
+        />
+        {profile && (
+          <div className="pt-3">
+            <LevelProgress xp={profile.xp} level={profile.level} />
+          </div>
+        )}
+        {seasonData?.active?.endAt && (
+          <p className="text-xs text-muted-foreground mt-2 flex items-center gap-2">
+            <span className="inline-flex h-2 w-2 rounded-full bg-accent-purple animate-pulse" />
+            Season {seasonData.active.number} ends in <CountdownTimer endTime={seasonData.active.endAt} />
           </p>
-          {profile && (
-            <div className="pt-2">
-              <LevelProgress xp={profile.xp} level={profile.level} />
-            </div>
-          )}
-        </div>
+        )}
       </motion.section>
 
       {current && (

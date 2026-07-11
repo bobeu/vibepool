@@ -23,6 +23,12 @@ import { MatchmakingEngine } from "@/services/engines/MatchmakingEngine";
 import { MatchEngine } from "@/services/engines/MatchEngine";
 import { ResultEngine } from "@/services/engines/ResultEngine";
 import { SpectatorEngine } from "@/services/engines/SpectatorEngine";
+import { SeasonEngine } from "@/services/engines/SeasonEngine";
+import { ContentEngine } from "@/services/engines/ContentEngine";
+import { FeatureFlagEngine } from "@/services/engines/FeatureFlagEngine";
+import { LiveOpsEngine } from "@/services/engines/LiveOpsEngine";
+import { SchedulerEngine } from "@/services/engines/SchedulerEngine";
+import { CampaignEngine } from "@/services/engines/CampaignEngine";
 import { eventBus } from "@/services/engines/EventBus";
 import type {
   IMissionService,
@@ -59,6 +65,33 @@ const matchmakingEngine = new MatchmakingEngine();
 const matchEngine = new MatchEngine();
 const resultEngine = new ResultEngine();
 const spectatorEngine = new SpectatorEngine();
+const seasonEngine = new SeasonEngine();
+const contentEngine = new ContentEngine();
+const featureFlagEngine = new FeatureFlagEngine();
+const liveOpsEngine = new LiveOpsEngine();
+const schedulerEngine = new SchedulerEngine();
+const campaignEngine = new CampaignEngine();
+
+schedulerEngine.registerHandler("SEASON_ROLLOVER", async () => seasonEngine.rollover());
+schedulerEngine.registerHandler("CAMPAIGN_START", async (payload) => {
+  const id = payload.campaignId as string;
+  return id ? campaignEngine.startCampaign(id) : { skipped: true };
+});
+schedulerEngine.registerHandler("CAMPAIGN_END", async (payload) => {
+  const id = payload.campaignId as string;
+  return id ? campaignEngine.completeCampaign(id) : { skipped: true };
+});
+schedulerEngine.registerHandler("CLEANUP", async () => {
+  const { MatchEngine } = await import("@/services/engines/MatchEngine");
+  const { MatchmakingEngine } = await import("@/services/engines/MatchmakingEngine");
+  const matchEngine = new MatchEngine();
+  const matchmakingEngine = new MatchmakingEngine();
+  const expiredMatches = await matchEngine.expireWaitingMatches();
+  const expiredQueues = await matchmakingEngine.expireStaleQueues();
+  const activatedEvents = await liveOpsEngine.activateDueEvents();
+  const activatedCampaigns = await campaignEngine.activateDueCampaigns();
+  return { expiredMatches, expiredQueues, activatedEvents, activatedCampaigns };
+});
 
 eventBus.subscribe("ActivityRecorded", async (payload) => {
   const userId = payload.userId as string;
@@ -275,6 +308,12 @@ eventBus.subscribe("ArenaMatchCompleted", async (payload) => {
     const won = !isDraw && userId === winnerId;
     await arenaEngine.setArenaPresence(user.wallet, "OFFLINE");
 
+    if (won) {
+      await seasonEngine.addSeasonXp(userId, 50);
+    } else if (!isDraw) {
+      await seasonEngine.addSeasonXp(userId, 15);
+    }
+
     await unlockAnimationEngine.enqueue(
       userId,
       won ? "ARENA_VICTORY" : isDraw ? "ARENA_DRAW" : "ARENA_DEFEAT",
@@ -362,6 +401,63 @@ eventBus.subscribe("ReferralFlagged", async (payload) => {
     "A referral was flagged for manual review.",
     "NORMAL"
   );
+});
+
+eventBus.subscribe("SeasonStarted", async (payload) => {
+  await publishFeed({
+    type: "SEASON",
+    title: (payload.name as string) ?? "New season",
+    body: "Season progression has reset — climb the ranks again.",
+    visibility: "PUBLIC",
+  });
+});
+
+eventBus.subscribe("SeasonEnded", async (payload) => {
+  await publishFeed({
+    type: "SEASON",
+    title: "Season ended",
+    body: `Season ${payload.seasonNumber} has concluded.`,
+    visibility: "PUBLIC",
+  });
+});
+
+eventBus.subscribe("FeatureFlagChanged", async (payload) => {
+  logger.info("Feature flag changed", { key: payload.key, enabled: payload.enabled });
+});
+
+eventBus.subscribe("CampaignStarted", async (payload) => {
+  await publishFeed({
+    type: "CAMPAIGN",
+    title: (payload.name as string) ?? "Campaign started",
+    body: "A new live campaign is active.",
+    visibility: "PUBLIC",
+  });
+});
+
+eventBus.subscribe("CampaignCompleted", async (payload) => {
+  logger.info("Campaign completed", { name: payload.name });
+});
+
+eventBus.subscribe("BannerPublished", async (payload) => {
+  await publishFeed({
+    type: "ANNOUNCEMENT",
+    title: (payload.title as string) ?? "New banner",
+    body: "Check the home page for the latest promotion.",
+    visibility: "PUBLIC",
+  });
+});
+
+eventBus.subscribe("LiveEventStarted", async (payload) => {
+  await publishFeed({
+    type: "EVENT",
+    title: (payload.name as string) ?? "Live event",
+    body: "Join the event center for details.",
+    visibility: "PUBLIC",
+  });
+});
+
+eventBus.subscribe("LiveEventEnded", async () => {
+  logger.info("Live events ended batch");
 });
 
 export class MissionService implements IMissionService {
@@ -776,5 +872,143 @@ export class ArenaService {
 
   async getLiveMatches(limit = 20) {
     return spectatorEngine.getLiveMatches(limit);
+  }
+}
+
+export class SeasonService {
+  name = "SeasonService";
+
+  async getActiveSeason() {
+    return seasonEngine.getActiveSeason();
+  }
+
+  async listSeasons() {
+    return seasonEngine.listSeasons();
+  }
+
+  async getProgress(wallet: string) {
+    return seasonEngine.getProgress(wallet);
+  }
+
+  async createSeason(wallet: string, data: Record<string, unknown>) {
+    const { requireAdmin } = await import("@/lib/admin/auth");
+    await requireAdmin(wallet, "seasons:write");
+    return seasonEngine.createSeason(data);
+  }
+
+  async activateSeason(wallet: string, seasonId: string) {
+    const { requireAdmin } = await import("@/lib/admin/auth");
+    await requireAdmin(wallet, "seasons:write");
+    return seasonEngine.activateSeason(seasonId);
+  }
+}
+
+export class LiveOpsService {
+  name = "LiveOpsService";
+
+  async getDashboard(wallet: string) {
+    const { requireAdmin } = await import("@/lib/admin/auth");
+    await requireAdmin(wallet, "seasons:read");
+    return liveOpsEngine.getDashboard();
+  }
+
+  async listEvents(limit = 20) {
+    return liveOpsEngine.listEvents(limit);
+  }
+
+  async createEvent(wallet: string, data: Record<string, unknown>) {
+    const { requireAdmin } = await import("@/lib/admin/auth");
+    await requireAdmin(wallet, "events:write");
+    return liveOpsEngine.createEvent(data);
+  }
+
+  async getBanners(placement?: string, wallet?: string) {
+    return liveOpsEngine.getBanners(placement, wallet);
+  }
+
+  async publishBanner(wallet: string, data: Record<string, unknown>) {
+    const { requireAdmin } = await import("@/lib/admin/auth");
+    await requireAdmin(wallet, "banners:write");
+    return liveOpsEngine.publishBanner(data);
+  }
+
+  async dismissBanner(wallet: string, bannerId: string) {
+    return liveOpsEngine.dismissBanner(wallet, bannerId);
+  }
+}
+
+export class FeatureFlagService {
+  name = "FeatureFlagService";
+
+  async listFlags(wallet?: string) {
+    if (wallet) {
+      const { requireAdmin } = await import("@/lib/admin/auth");
+      await requireAdmin(wallet, "flags:read");
+    }
+    return featureFlagEngine.listFlags();
+  }
+
+  async isEnabled(key: string, context?: Record<string, unknown>) {
+    return featureFlagEngine.isEnabled(key, context);
+  }
+
+  async upsertFlag(wallet: string, data: Record<string, unknown>) {
+    const { requireAdmin } = await import("@/lib/admin/auth");
+    await requireAdmin(wallet, "flags:write");
+    return featureFlagEngine.upsertFlag(data);
+  }
+}
+
+export class ContentService {
+  name = "ContentService";
+
+  async getBlocks(placement?: string, locale?: string) {
+    return contentEngine.getBlocks(placement, locale);
+  }
+
+  async getHeroBanner(wallet?: string) {
+    return contentEngine.getHeroBanner(wallet);
+  }
+
+  async createBlock(wallet: string, data: Record<string, unknown>) {
+    const { requireAdmin } = await import("@/lib/admin/auth");
+    await requireAdmin(wallet, "content:write");
+    return contentEngine.createBlock(data);
+  }
+}
+
+export class CampaignService {
+  name = "CampaignService";
+
+  async listCampaigns(status?: string) {
+    return campaignEngine.listCampaigns(status);
+  }
+
+  async createCampaign(wallet: string, data: Record<string, unknown>) {
+    const { requireAdmin } = await import("@/lib/admin/auth");
+    await requireAdmin(wallet, "campaigns:write");
+    return campaignEngine.createCampaign(data);
+  }
+
+  async startCampaign(wallet: string, campaignId: string) {
+    const { requireAdmin } = await import("@/lib/admin/auth");
+    await requireAdmin(wallet, "campaigns:write");
+    return campaignEngine.startCampaign(campaignId);
+  }
+}
+
+export class SchedulerService {
+  name = "SchedulerService";
+
+  async runDueJobs(wallet: string, limit = 20) {
+    const { requireAdmin } = await import("@/lib/admin/auth");
+    await requireAdmin(wallet, "scheduler:run");
+    return schedulerEngine.runDueJobs(limit);
+  }
+
+  async schedule(wallet: string, jobType: string, scheduledAt: Date, payload?: Record<string, unknown>) {
+    const { requireAdmin } = await import("@/lib/admin/auth");
+    await requireAdmin(wallet, "scheduler:run");
+    return schedulerEngine.schedule(jobType, scheduledAt, payload);
   }
 }

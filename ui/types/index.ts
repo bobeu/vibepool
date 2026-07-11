@@ -3,6 +3,9 @@ export type Address = `0x${string}`;
 export type NavKey =
   | "home"
   | "tournament"
+  | "arena"
+  | "season"
+  | "events"
   | "prediction"
   | "spin"
   | "leaderboard"

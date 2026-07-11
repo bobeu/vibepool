@@ -10191,3 +10191,848 @@ Supporting libs: `lib/arena/constants.ts`, `lib/feed/priority.ts`, `lib/animatio
 - Pre-existing failures in other test suites (`engines.test.ts`, `frontend.test.tsx`, etc.)
 - On-chain arena settlement hooks (optional; events ready for RewardEngine integration)
 
+---
+
+# CTO Said:
+
+This is probably the strongest implementation so far.
+
+Something important happened during Prompt 11.
+
+Before Prompt 11, we were still building "features."
+
+After Prompt 11, we've built a **gaming platform**.
+
+The distinction is significant because the architecture now has clear domains (Arena, Social, Progression, Rewards, Missions, etc.) that can continue to evolve independently.
+
+---
+
+# CTO Review — Prompt 11
+
+**Overall Score: 10/10 (Architecture)**
+
+This is the first prompt where I don't see any architectural redesign that I'd recommend.
+
+The engine architecture is exactly where I wanted it.
+
+Now my focus shifts toward **operations, scalability, and long-term maintainability**.
+
+---
+
+# Minor Improvements Before Prompt 12
+
+## 1. Rating Strategy Registry
+
+You already have `IRatingStrategy`.
+
+Excellent.
+
+Instead of
+
+```
+SimpleRatingStrategy
+```
+
+create
+
+```
+RatingStrategyRegistry
+
+↓
+
+Simple
+
+↓
+
+Elo
+
+↓
+
+Glicko
+
+↓
+
+TrueSkill
+```
+
+Arena should never know which algorithm is active.
+
+It simply requests one.
+
+---
+
+## 2. Replay Compression
+
+ArenaReplay will become large.
+
+Support
+
+* compressed timeline
+* snapshot checkpoints
+* delta encoding
+
+Future-proof.
+
+---
+
+## 3. Queue Simulator
+
+Before production,
+
+create
+
+```
+QueueSimulator
+
+↓
+
+10 users
+
+↓
+
+100 users
+
+↓
+
+1000 users
+
+↓
+
+10000 users
+```
+
+Useful for tuning matchmaking.
+
+---
+
+## 4. Arena Analytics
+
+Arena should emit metrics.
+
+Example
+
+```
+Queue Time
+
+Average Rating Difference
+
+Match Duration
+
+Win Rate
+
+Completion Rate
+
+Abandonment
+
+Rematches
+
+Invite Acceptance
+```
+
+These will feed Prompt 14.
+
+---
+
+## 5. Match State Machine
+
+Generate
+
+```
+ArenaStateMachine.ts
+```
+
+instead of relying on switch statements.
+
+This makes adding future game modes much safer.
+
+---
+
+## 6. API Versioning
+
+Arena APIs should begin supporting
+
+```
+/api/v1/arena
+```
+
+Even if only v1 exists.
+
+You're now building a platform.
+
+---
+
+Everything else is excellent.
+
+---
+
+# CTO Decision
+
+This is where most game projects fail.
+
+They build games.
+
+They don't build **operations**.
+
+A live game is really a content platform.
+
+Prompt 12 changes NEXORA from software into a live service.
+
+---
+
+# PHASE 3
+
+Yes.
+
+We are officially entering Phase 3.
+
+---
+
+# PROMPT 12
+
+# Seasons, Live Operations, Content Management & Feature Control
+
+The objective is to enable NEXORA to operate continuously without requiring code deployments for every new event, tournament, mission, or promotion.
+
+This prompt introduces the operational layer for running a live game.
+
+---
+
+# Philosophy
+
+Developers build the platform.
+
+Operators run the game.
+
+Everything configurable.
+
+Nothing hardcoded.
+
+---
+
+# New Engines
+
+Create
+
+```
+SeasonEngine.ts
+
+ContentEngine.ts
+
+FeatureFlagEngine.ts
+
+LiveOpsEngine.ts
+
+SchedulerEngine.ts
+
+CampaignEngine.ts
+```
+
+Interfaces
+
+```
+ISeasonEngine
+
+IContentEngine
+
+IFeatureFlagEngine
+
+ILiveOpsEngine
+
+ISchedulerEngine
+
+ICampaignEngine
+```
+
+---
+
+# Database
+
+Add
+
+```
+Season
+
+SeasonReward
+
+SeasonTier
+
+SeasonMission
+
+SeasonLeaderboard
+
+LiveEvent
+
+FeatureFlag
+
+ContentBlock
+
+Campaign
+
+CampaignTarget
+
+Banner
+
+AnnouncementSchedule
+
+ScheduledJob
+
+ArenaStateMachineDefinition
+```
+
+Everything normalized.
+
+---
+
+# Seasons
+
+Support
+
+Start
+
+End
+
+Preseason
+
+Active
+
+Ended
+
+Archived
+
+One active season at a time.
+
+Season rollover should be automatic.
+
+---
+
+# Seasonal Progression
+
+Support
+
+Season XP
+
+Season Rank
+
+Season Rewards
+
+Season Missions
+
+Season Statistics
+
+Soft reset between seasons while preserving lifetime progression.
+
+---
+
+# Feature Flags
+
+Every major feature should be configurable.
+
+Example
+
+```
+Arena
+
+Prediction
+
+Spins
+
+Referrals
+
+Achievements
+
+Community
+
+Season
+
+Experimental
+```
+
+Support:
+
+* global enable/disable
+* percentage rollout
+* user whitelist
+* region targeting
+* MiniPay-only targeting
+* environment targeting
+
+---
+
+# Live Events
+
+Support
+
+Weekend Event
+
+Holiday Event
+
+Double XP
+
+Double Spins
+
+Special Tournament
+
+Community Challenge
+
+Creator Event
+
+Flash Missions
+
+Time-limited Arena Modes
+
+---
+
+# Campaign Engine
+
+Support
+
+Onboarding Campaign
+
+Retention Campaign
+
+Re-engagement Campaign
+
+Referral Campaign
+
+Season Launch Campaign
+
+Campaigns trigger notifications, missions, banners, and rewards.
+
+---
+
+# Content Engine
+
+Operators should be able to create:
+
+Hero banners
+
+Announcements
+
+Promotional cards
+
+Arena highlights
+
+Community spotlights
+
+Reward promotions
+
+Without code changes.
+
+---
+
+# Scheduler
+
+General-purpose scheduler.
+
+Runs
+
+Season rollover
+
+Campaigns
+
+Announcements
+
+Feature activation
+
+Tournament generation
+
+Mission refresh
+
+Leaderboard snapshot
+
+Reward processing
+
+Cleanup jobs
+
+Everything driven by schedules.
+
+---
+
+# Banner System
+
+Support
+
+Priority
+
+Schedule
+
+Placement
+
+Audience targeting
+
+Dismiss state
+
+Versioning
+
+Localization-ready
+
+---
+
+# LiveOps Dashboard APIs
+
+Implement
+
+```
+GET /api/liveops
+
+GET /api/seasons
+
+POST /api/seasons
+
+GET /api/feature-flags
+
+POST /api/feature-flags
+
+GET /api/content
+
+POST /api/content
+
+GET /api/campaigns
+
+POST /api/campaigns
+
+GET /api/banners
+
+GET /api/events
+```
+
+---
+
+# Admin Architecture
+
+Prepare a dedicated admin application.
+
+Separate routing.
+
+Separate authentication.
+
+Separate permissions.
+
+No admin logic inside player UI.
+
+---
+
+# Permissions
+
+Support roles
+
+Super Admin
+
+Game Operator
+
+Content Editor
+
+Support
+
+Analyst
+
+Read Only
+
+Everything permission-based.
+
+---
+
+# Frontend
+
+Create
+
+Season Page
+
+Season Rewards
+
+Season Progress
+
+Event Center
+
+Campaign Viewer
+
+Banner System
+
+Feature Flag Awareness
+
+Countdown widgets
+
+---
+
+# Hero Experience
+
+Hero banner now becomes dynamic.
+
+Served by ContentEngine.
+
+Not hardcoded.
+
+---
+
+# Arena Integration
+
+Arena
+
+Season Rating
+
+Season Rewards
+
+Season Leaderboard
+
+Season History
+
+Season Replay
+
+---
+
+# Mission Integration
+
+Daily
+
+Weekly
+
+Seasonal
+
+Live Event
+
+Campaign
+
+Unified through MissionEngine.
+
+---
+
+# Event Integration
+
+Publish
+
+SeasonStarted
+
+SeasonEnded
+
+FeatureFlagChanged
+
+CampaignStarted
+
+CampaignCompleted
+
+BannerPublished
+
+LiveEventStarted
+
+LiveEventEnded
+
+Everything through EventBus.
+
+---
+
+# Scheduler Safety
+
+Support
+
+Retry
+
+Dead-letter
+
+Audit
+
+Idempotency
+
+Distributed lock abstraction (future-ready)
+
+---
+
+# Tests
+
+Season
+
+Feature Flags
+
+Campaigns
+
+Scheduler
+
+Content
+
+Events
+
+Coverage
+
+95%+
+
+---
+
+# Documentation
+
+Season architecture
+
+LiveOps architecture
+
+Scheduler
+
+Feature flags
+
+Campaign system
+
+Admin architecture
+
+Content pipeline
+
+---
+
+# Fixes From Prompt 11
+
+Implement the following improvements.
+
+### 1. Rating Strategy Registry
+
+Introduce a registry that resolves the active rating strategy.
+
+---
+
+### 2. Replay Compression
+
+Support compressed replay payloads and snapshot checkpoints.
+
+---
+
+### 3. Queue Simulator
+
+Create tooling for matchmaking simulation and tuning.
+
+---
+
+### 4. Arena Analytics
+
+Emit queue time, match quality, rating delta, abandonment, rematch, and completion metrics.
+
+---
+
+### 5. Arena State Machine
+
+Replace lifecycle switch logic with a formal state machine implementation.
+
+---
+
+### 6. API Versioning
+
+Introduce `/api/v1/...` routing while preserving compatibility with existing routes.
+
+---
+
+# Deliverables
+
+Provide:
+
+1. Season Engine
+2. Content Engine
+3. Feature Flag Engine
+4. LiveOps Engine
+5. Scheduler Engine
+6. Campaign Engine
+7. Season database schema
+8. LiveOps APIs
+9. Season UI
+10. Event Center
+11. Dynamic Banner System
+12. Admin architecture
+13. Feature flag framework
+14. Scheduler framework
+15. Documentation
+16. Tests
+17. Performance recommendations
+18. Recommendations before **Prompt 13 (Admin Console, Moderation & Operations Dashboard)**
+
+---
+
+# CTO Direction
+
+After Prompt 12, NEXORA should be operable as a live service rather than a static application. Game operators should be able to launch seasons, activate events, schedule campaigns, publish banners, adjust feature rollouts, and coordinate content without modifying application code. This operational layer is the foundation that will support future growth, regional launches, creator partnerships, and long-term player retention while keeping the underlying gameplay engines stable and reusable.
+
+---
+
+# Prompt 12 Implementation Summary
+
+**Completed:** July 11, 2026  
+**Commit scope:** `vibepool/ui` — Seasons, LiveOps, Content Management & Feature Control + Prompt 11 fixes
+
+## Prompt 11 Fixes (Pre-12 Improvements)
+
+1. **RatingStrategyRegistry** — `simple`, `elo`, `glicko`, `trueskill` strategies; active via `ARENA_RATING_STRATEGY` env; `ResultEngine` uses registry instead of hardcoded strategy.
+2. **Replay compression** — gzip+base64 timeline, checkpoint snapshots, delta encoding helpers in `lib/arena/replayCompression.ts`; persisted on `ArenaReplay`.
+3. **QueueSimulator** — benchmark harness for 10/100/1000/10000 simulated players in `lib/arena/QueueSimulator.ts`.
+4. **ArenaAnalytics** — metrics for queue time, rating diff, match duration, completion rate, rematch rate; stored in `ArenaAnalyticsMetric`.
+5. **ArenaStateMachine** — formal FSM in `lib/arena/ArenaStateMachine.ts`; `MatchEngine` and `ResultEngine` use transitions instead of ad-hoc status updates.
+6. **API versioning** — `/api/v1/arena/*` and `/api/v1/{liveops,seasons,feature-flags,content,campaigns,banners,events}` re-export existing routes.
+
+## LiveOps Engines (6)
+
+| Engine | File | Key capabilities |
+|--------|------|------------------|
+| SeasonEngine | `services/engines/SeasonEngine.ts` | Active season lookup, create/activate, rollover, season XP & tier progression |
+| ContentEngine | `services/engines/ContentEngine.ts` | CMS blocks, dynamic hero banner |
+| FeatureFlagEngine | `services/engines/FeatureFlagEngine.ts` | Global/percentage/whitelist/minipay/environment targeting, 30s cache |
+| LiveOpsEngine | `services/engines/LiveOpsEngine.ts` | Operator dashboard, live events, banners, dismiss tracking |
+| SchedulerEngine | `services/engines/SchedulerEngine.ts` | Job registration, idempotent schedule, retries, dead-letter |
+| CampaignEngine | `services/engines/CampaignEngine.ts` | Campaign CRUD, start/complete, target segments, due activation |
+
+## Database Schema
+
+Added enums and models: `Season`, `SeasonTier`, `SeasonReward`, `SeasonMission`, `SeasonLeaderboard`, `SeasonProgress`, `LiveEvent`, `FeatureFlag`, `ContentBlock`, `Banner`, `BannerDismissal`, `AnnouncementSchedule`, `Campaign`, `CampaignTarget`, `ScheduledJob`, `AdminPermission`, `ArenaStateMachineDefinition`, `ArenaAnalyticsMetric`. Extended `ArenaReplay` with compression fields. Added `SEASONAL` mission category.
+
+## APIs
+
+- `GET /api/liveops` — admin dashboard
+- `GET|POST /api/seasons` — active season + progress / admin create & activate
+- `GET|POST /api/feature-flags` — per-key check or admin list/upsert
+- `GET|POST /api/content` — blocks & hero / admin create
+- `GET|POST /api/campaigns` — list / admin create & start
+- `GET|POST /api/banners` — placement banners / admin publish & dismiss
+- `GET|POST /api/events` — event center / admin create
+- `POST /api/internal/scheduler/run` — admin job runner
+- All mirrored under `/api/v1/...`
+
+## Admin Architecture
+
+- Roles: Super Admin, Game Operator, Content Editor, Support, Analyst, Read Only
+- `lib/admin/permissions.ts` + `lib/admin/auth.ts`
+- Env: `SUPER_ADMIN_WALLETS`, `ADMIN_WALLETS`
+- No admin UI in player app — API-only write paths with `requireAdmin()`
+
+## EventBus Wiring
+
+Subscribers added for: `SeasonStarted`, `SeasonEnded`, `FeatureFlagChanged`, `CampaignStarted`, `CampaignCompleted`, `BannerPublished`, `LiveEventStarted`, `LiveEventEnded`. Arena match completion now grants season XP.
+
+## Frontend
+
+- `/season` — season pass, progress, tiers, rewards, countdown
+- `/events` — Event Center (live/upcoming events, active campaigns)
+- Home hero — dynamic via `ContentEngine` (`/api/content?hero=1`)
+- Arena — respects `arena` feature flag (maintenance/rollout gate)
+- Nav updated: Season, Events
+
+## Seed Data
+
+Default Genesis Season, 7 feature flags, hero content block, sample banner.
+
+## Tests
+
+- `__tests__/liveops.test.ts` — 9 tests (engines, FSM, simulator, compression, rating registry)
+- `__tests__/arena.test.ts` — 11 tests (updated mocks for season lookup)
+- `__tests__/social.test.ts` — 21 tests
+- **41/41 passing** in arena + liveops + social suite
+
+## Documentation
+
+- `ui/docs/SEASONS.md` — season lifecycle, APIs, performance notes
+- `ui/docs/LIVEOPS.md` — full LiveOps architecture, scheduler, flags, admin, Prompt 13 prep
+
+## Performance Recommendations
+
+- Cache active season number (30s TTL) in hot paths
+- Batch scheduler runs (cap 20 jobs/tick)
+- CDN for banner assets
+- Index `ScheduledJob(status, scheduledAt)` and `Season.status`
+
+## Before Prompt 13
+
+- Standalone admin console app with dedicated auth
+- Season mission wiring to `MissionEngine`
+- Leaderboard snapshot jobs on season end
+- ArenaAnalytics dashboard charts
+- Visual campaign/banner editor
+

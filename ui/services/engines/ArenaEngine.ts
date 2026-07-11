@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/auth/session";
-import { CURRENT_SEASON, DEFAULT_RATING, leagueForRating } from "@/lib/arena/constants";
+import { DEFAULT_RATING, leagueForRating } from "@/lib/arena/constants";
 import { eventBus } from "./EventBus";
+import { getActiveSeasonNumber } from "./SeasonEngine";
 import type { IArenaEngine } from "./interfaces";
 
 export class ArenaEngine implements IArenaEngine {
@@ -19,10 +20,11 @@ export class ArenaEngine implements IArenaEngine {
     const userId = await this.resolveId(wallet);
     if (!userId) throw new Error("User not found");
 
+    const seasonNumber = await getActiveSeasonNumber();
     const [rating, seasonStats, recentMatches, friendsOnline, activeArena] = await Promise.all([
       this.getRating(wallet),
       prisma().arenaSeasonStatistic.findUnique({
-        where: { userId_seasonNumber: { userId, seasonNumber: CURRENT_SEASON } },
+        where: { userId_seasonNumber: { userId, seasonNumber } },
       }),
       this.getHistory(wallet, 5),
       this.getFriendsInArena(wallet),
@@ -31,7 +33,7 @@ export class ArenaEngine implements IArenaEngine {
 
     return {
       name: "NEXORA Arena",
-      season: CURRENT_SEASON,
+      season: seasonNumber,
       rating,
       seasonStats: seasonStats ?? { wins: 0, losses: 0, draws: 0, totalMatches: 0 },
       recentMatches,
@@ -44,12 +46,13 @@ export class ArenaEngine implements IArenaEngine {
     const userId = await this.resolveId(wallet);
     if (!userId) throw new Error("User not found");
 
+    const seasonNumber = await getActiveSeasonNumber();
     const rating = await prisma().arenaRating.upsert({
-      where: { userId_seasonNumber: { userId, seasonNumber: CURRENT_SEASON } },
+      where: { userId_seasonNumber: { userId, seasonNumber } },
       update: {},
       create: {
         userId,
-        seasonNumber: CURRENT_SEASON,
+        seasonNumber,
         skillRating: DEFAULT_RATING,
         league: leagueForRating(DEFAULT_RATING),
       },
@@ -63,7 +66,7 @@ export class ArenaEngine implements IArenaEngine {
       currentStreak: rating.currentStreak,
       bestStreak: rating.bestStreak,
       league: rating.league,
-      season: CURRENT_SEASON,
+      season: seasonNumber,
     };
   }
 

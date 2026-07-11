@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/auth/session";
-import { logger } from "@/lib/logging";
-import { COUNTDOWN_SECONDS, MATCH_ACCEPT_TIMEOUT_MS } from "@/lib/arena/constants";
+import { COUNTDOWN_SECONDS } from "@/lib/arena/constants";
+import { ArenaStateMachine, type ArenaEvent, type ArenaState } from "@/lib/arena/ArenaStateMachine";
 import { eventBus } from "./EventBus";
 import type { IMatchEngine } from "./interfaces";
 
@@ -14,6 +14,11 @@ export class MatchEngine implements IMatchEngine {
   private async resolveId(wallet: string): Promise<string | null> {
     const user = await prisma().userProfile.findUnique({ where: { wallet }, select: { id: true } });
     return user?.id ?? null;
+  }
+
+  private transitionStatus(current: string, event: ArenaEvent): ArenaState {
+    const sm = new ArenaStateMachine(current as ArenaState);
+    return sm.transition(event);
   }
 
   async acceptMatch(wallet: string, matchId: string): Promise<Record<string, unknown>> {
@@ -42,7 +47,7 @@ export class MatchEngine implements IMatchEngine {
     if (!match) throw new Error("Match not found");
 
     if (allAccepted) {
-      await this.transitionToCountdown(matchId);
+      await this.transitionToCountdown(matchId, match.status);
     }
 
     eventBus.publish({
@@ -52,13 +57,15 @@ export class MatchEngine implements IMatchEngine {
       aggregateType: "ArenaMatch",
     });
 
-    return { matchId, accepted: true, status: match.status };
+    const updated = await prisma().arenaMatch.findUnique({ where: { id: matchId } });
+    return { matchId, accepted: true, status: updated?.status ?? match.status };
   }
 
-  private async transitionToCountdown(matchId: string): Promise<void> {
+  private async transitionToCountdown(matchId: string, currentStatus: string): Promise<void> {
+    const countdownStatus = this.transitionStatus(currentStatus, "ALL_ACCEPTED");
     await prisma().arenaMatch.update({
       where: { id: matchId },
-      data: { status: "COUNTDOWN", startedAt: new Date(Date.now() + COUNTDOWN_SECONDS * 1000) },
+      data: { status: countdownStatus, startedAt: new Date(Date.now() + COUNTDOWN_SECONDS * 1000) },
     });
 
     eventBus.publish({
@@ -68,10 +75,10 @@ export class MatchEngine implements IMatchEngine {
       seconds: COUNTDOWN_SECONDS,
     });
 
-    // Transition to PLAYING immediately for server-side flow (client animates countdown)
+    const playingStatus = this.transitionStatus(countdownStatus, "COUNTDOWN_DONE");
     await prisma().arenaMatch.update({
       where: { id: matchId },
-      data: { status: "PLAYING" },
+      data: { status: playingStatus },
     });
 
     eventBus.publish({
@@ -159,9 +166,12 @@ export class MatchEngine implements IMatchEngine {
     const userId = await this.resolveId(wallet);
     if (!userId) throw new Error("User not found");
 
+    const match = await prisma().arenaMatch.findUnique({ where: { id: matchId } });
+    const archivedStatus = match ? this.transitionStatus(match.status, "DECLINE") : "ARCHIVED";
+
     await prisma().arenaMatch.update({
       where: { id: matchId },
-      data: { status: "ARCHIVED" },
+      data: { status: archivedStatus },
     });
     await prisma().arenaQueue.updateMany({
       where: { matchId, userId },
@@ -180,10 +190,14 @@ export class MatchEngine implements IMatchEngine {
 
   async expireWaitingMatches(): Promise<number> {
     const now = new Date();
-    const expired = await prisma().arenaMatch.updateMany({
+    const waiting = await prisma().arenaMatch.findMany({
       where: { status: "WAITING", expiresAt: { lt: now } },
-      data: { status: "ARCHIVED" },
     });
-    return expired.count;
+
+    for (const match of waiting) {
+      const archived = this.transitionStatus(match.status, "EXPIRE");
+      await prisma().arenaMatch.update({ where: { id: match.id }, data: { status: archived } });
+    }
+    return waiting.length;
   }
 }
