@@ -1,13 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { checkAdminAuth, clearToken } from "@/lib/api";
 import clsx from "clsx";
 
 const NAV = [
   { href: "/", label: "Dashboard" },
+  { href: "/observability", label: "Observability" },
+  { href: "/alerts", label: "Alerts" },
+  { href: "/traces", label: "Traces" },
+  { href: "/experiments", label: "Experiments" },
+  { href: "/search", label: "Search" },
   { href: "/users", label: "Users" },
   { href: "/moderation", label: "Moderation" },
   { href: "/arena", label: "Arena Ops" },
@@ -25,6 +29,7 @@ export function AdminShell({ children, title }: { children: React.ReactNode; tit
   const pathname = usePathname();
   const router = useRouter();
   const [role, setRole] = useState<string | null>(null);
+  const [searchQ, setSearchQ] = useState("");
 
   useEffect(() => {
     if (pathname === "/login") return;
@@ -33,6 +38,15 @@ export function AdminShell({ children, title }: { children: React.ReactNode; tit
       else setRole(r.role ?? null);
     });
   }, [pathname, router]);
+
+  const onSearch = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter" && searchQ.trim()) {
+        router.push(`/search?q=${encodeURIComponent(searchQ.trim())}`);
+      }
+    },
+    [router, searchQ]
+  );
 
   if (pathname === "/login") return <>{children}</>;
 
@@ -72,8 +86,11 @@ export function AdminShell({ children, title }: { children: React.ReactNode; tit
           <h2 className="text-xl font-bold">{title ?? "Admin Console"}</h2>
           <input
             type="search"
-            placeholder="Search… (⌘K)"
+            placeholder="Search… (Enter)"
             className="rounded-lg border border-border bg-muted px-3 py-2 text-sm w-64"
+            value={searchQ}
+            onChange={(e) => setSearchQ(e.target.value)}
+            onKeyDown={onSearch}
           />
         </header>
         <main className="flex-1 p-6 overflow-auto">{children}</main>

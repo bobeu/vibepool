@@ -132,6 +132,31 @@ export class FeatureFlagEngine implements IFeatureFlagEngine {
 
     this.cache.delete(key);
 
+    const latestVersion = await prisma().featureFlagVersion.findFirst({
+      where: { flagKey: key },
+      orderBy: { version: "desc" },
+    });
+    const nextVersion = (latestVersion?.version ?? 0) + 1;
+    await prisma().featureFlagVersion.create({
+      data: {
+        flagKey: key,
+        version: nextVersion,
+        snapshot: {
+          enabled: flag.enabled,
+          targetType: flag.targetType,
+          percentage: flag.percentage,
+          whitelist: flag.whitelist,
+          regions: flag.regions,
+          environments: flag.environments,
+          experimentGroups: flag.experimentGroups,
+          minipayOnly: flag.minipayOnly,
+          metadata: flag.metadata,
+        },
+        changedBy: (data.changedBy as string) ?? undefined,
+        rollbackOf: data.rollbackOf != null ? Number(data.rollbackOf) : undefined,
+      },
+    });
+
     eventBus.publish({
       event: "FeatureFlagChanged",
       aggregateId: flag.id,
@@ -140,8 +165,24 @@ export class FeatureFlagEngine implements IFeatureFlagEngine {
       enabled: flag.enabled,
     });
 
-    logger.info("Feature flag updated", { key });
-    return { key: flag.key, enabled: flag.enabled, targetType: flag.targetType };
+    logger.info("Feature flag updated", { key, version: nextVersion });
+    return { key: flag.key, enabled: flag.enabled, targetType: flag.targetType, version: nextVersion };
+  }
+
+  async getVersionHistory(key: string): Promise<Record<string, unknown>[]> {
+    return prisma().featureFlagVersion.findMany({
+      where: { flagKey: key },
+      orderBy: { version: "desc" },
+    });
+  }
+
+  async rollback(key: string, version: number, changedBy?: string): Promise<Record<string, unknown>> {
+    const snapshot = await prisma().featureFlagVersion.findUnique({
+      where: { flagKey_version: { flagKey: key, version } },
+    });
+    if (!snapshot) throw new Error("Version not found");
+    const data = snapshot.snapshot as Record<string, unknown>;
+    return this.upsertFlag({ ...data, key, changedBy, rollbackOf: version });
   }
 
   async previewImpact(key: string): Promise<Record<string, unknown>> {

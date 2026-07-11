@@ -11807,3 +11807,885 @@ Resource-based permissions (`seasons:write`, `moderation:read`, `scheduler:execu
 - Visual content editor + asset manifest integration
 - Production intelligence dashboards
 
+---
+
+# CTO Said:
+
+This is another excellent milestone.
+
+At this point, I'd no longer describe NEXORA as a "Web3 game." I'd describe it as a **live gaming platform** with a production-grade operational foundation.
+
+Looking back, we've successfully built:
+
+* ✅ Core architecture
+* ✅ Game engines
+* ✅ Blockchain layer
+* ✅ Progression
+* ✅ Social platform
+* ✅ Arena
+* ✅ LiveOps
+* ✅ Admin application
+
+The next steps are no longer about features—they're about **operating, observing, securing, and scaling** the platform.
+
+---
+
+# CTO Review — Prompt 13
+
+**Overall Score: 10 / 10**
+
+This is the third prompt in a row that I would consider architecturally complete.
+
+The admin application separation is exactly what I wanted.
+
+The permission model is clean.
+
+The resource-based authorization is future-proof.
+
+The scheduler improvements are excellent.
+
+The event metadata standardization is something you'll appreciate enormously once you begin debugging production systems.
+
+---
+
+# Minor Improvements Before Prompt 14
+
+These are production enhancements, not redesigns.
+
+---
+
+## 1. Audit Log Integrity
+
+Your audit logs are searchable.
+
+Excellent.
+
+Now make them tamper-evident.
+
+Introduce an append-only hash chain.
+
+Example:
+
+```text
+Audit #124
+
+↓
+
+SHA256(previous_hash + current_record)
+
+↓
+
+Audit #125
+```
+
+If any audit entry changes, the chain breaks.
+
+This is extremely valuable for financial systems.
+
+---
+
+## 2. Permission Policies
+
+Currently
+
+Roles
+
+↓
+
+Permissions
+
+I'd introduce
+
+Policy Engine
+
+Example
+
+```text
+Policy
+
+↓
+
+Role
+
+↓
+
+Permission
+
+↓
+
+Condition
+```
+
+Future example
+
+> Game Operators can modify seasons **only during business hours**.
+
+or
+
+> Finance can retry settlements but cannot cancel them.
+
+---
+
+## 3. Admin Sessions
+
+Support
+
+Device fingerprint
+
+IP history
+
+Session risk score
+
+Concurrent session detection
+
+---
+
+## 4. Scheduler Metrics
+
+Record
+
+Average runtime
+
+Retry count
+
+Failure rate
+
+Queue delay
+
+Dependency wait time
+
+This feeds Prompt 14.
+
+---
+
+## 5. Feature Flag History
+
+Keep immutable history.
+
+Example
+
+```text
+Feature Flag
+
+↓
+
+Version 1
+
+↓
+
+Version 2
+
+↓
+
+Rollback
+
+↓
+
+Version 3
+```
+
+---
+
+## 6. Admin Console
+
+Add
+
+Global Search
+
+Like Linear.
+
+Search
+
+Players
+
+Seasons
+
+Arena
+
+Rewards
+
+Campaigns
+
+Audit
+
+Everything.
+
+---
+
+Everything else is excellent.
+
+---
+
+# CTO Decision
+
+Prompt 14 is one of the most important prompts in the entire project.
+
+We're going to build something that almost nobody plans properly:
+
+**Production Intelligence.**
+
+This is where engineering teams usually discover issues *after* players report them.
+
+We want the opposite.
+
+We want to know about problems before users do.
+
+---
+
+# PHASE 3 — PROMPT 14
+
+# Analytics Platform, Observability & Production Intelligence
+
+**Objective**
+
+Transform NEXORA into an observable, measurable, and self-monitoring platform capable of operating at production scale.
+
+Everything that matters should be measurable.
+
+Everything measurable should be queryable.
+
+Everything queryable should be actionable.
+
+---
+
+# Philosophy
+
+Metrics
+
+↓
+
+Logs
+
+↓
+
+Events
+
+↓
+
+Traces
+
+↓
+
+Insights
+
+↓
+
+Alerts
+
+↓
+
+Actions
+
+Everything should connect.
+
+---
+
+# New Engines
+
+Create
+
+```text
+AnalyticsEngine.ts
+
+TelemetryEngine.ts
+
+MetricsEngine.ts
+
+ObservabilityEngine.ts
+
+AlertEngine.ts
+
+InsightEngine.ts
+
+AnomalyEngine.ts
+```
+
+Interfaces
+
+```text
+IAnalyticsEngine
+
+ITelemetryEngine
+
+IMetricsEngine
+
+IObservabilityEngine
+
+IAlertEngine
+
+IInsightEngine
+
+IAnomalyEngine
+```
+
+---
+
+# Database
+
+Add
+
+```text
+MetricSeries
+
+TelemetryEvent
+
+AlertRule
+
+AlertIncident
+
+Insight
+
+DashboardSnapshot
+
+SystemHealth
+
+ServiceDependency
+
+TraceSpan
+
+AuditIntegrity
+
+ExperimentResult
+```
+
+Everything normalized.
+
+---
+
+# Metrics
+
+Capture
+
+DAU
+
+WAU
+
+MAU
+
+Retention
+
+Prediction participation
+
+Arena participation
+
+Queue latency
+
+Reward settlement latency
+
+Mission completion
+
+Spin engagement
+
+Achievement unlocks
+
+Referral conversion
+
+Feature flag adoption
+
+Season participation
+
+Scheduler performance
+
+Admin activity
+
+API latency
+
+Database latency
+
+RPC latency
+
+Cache hit ratio
+
+Event processing time
+
+Everything time-series.
+
+---
+
+# Telemetry
+
+Every engine emits telemetry.
+
+Arena
+
+Missions
+
+Rewards
+
+Social
+
+Content
+
+Scheduler
+
+Feature Flags
+
+Admin
+
+Analytics
+
+Use a common telemetry schema.
+
+---
+
+# Distributed Tracing
+
+Every request gets:
+
+* Trace ID
+* Span ID
+* Parent Span ID
+
+Trace:
+
+API
+
+↓
+
+Service
+
+↓
+
+Engine
+
+↓
+
+Database
+
+↓
+
+Blockchain
+
+↓
+
+Settlement
+
+↓
+
+Notification
+
+Visualize complete request flow.
+
+---
+
+# Observability Dashboard
+
+Health cards
+
+API latency
+
+Blockchain status
+
+Database status
+
+Scheduler
+
+Arena queue
+
+Settlement queue
+
+Feature flags
+
+Live events
+
+Cache
+
+Background jobs
+
+Alerts
+
+Everything on one screen.
+
+---
+
+# Alert Engine
+
+Configurable rules.
+
+Examples:
+
+Arena queue > threshold
+
+Settlement retries > threshold
+
+RPC latency spike
+
+Database slow queries
+
+Scheduler failures
+
+Referral fraud spike
+
+Reward queue backlog
+
+Event processing delay
+
+Notification failures
+
+Admin login anomalies
+
+Support:
+
+* Severity
+* Escalation
+* Acknowledgement
+* Silence window
+* Recovery
+
+---
+
+# Insight Engine
+
+Generate operator insights automatically.
+
+Examples:
+
+"Mission completion dropped 18% today."
+
+"Arena queue time increased by 34%."
+
+"Referral conversion is highest in evenings."
+
+"Spin engagement fell after latest update."
+
+Support trend detection.
+
+---
+
+# Anomaly Detection
+
+Implement statistical anomaly detection.
+
+No AI required.
+
+Support:
+
+* Moving averages
+* Standard deviation
+* Configurable thresholds
+
+Flag unusual behavior.
+
+---
+
+# Experiment Analytics
+
+Track A/B/C experiments.
+
+Measure:
+
+Conversion
+
+Retention
+
+Engagement
+
+Reward claim rate
+
+Mission completion
+
+Arena participation
+
+Support experiment comparison.
+
+---
+
+# Dashboard Snapshots
+
+Store daily snapshots for historical reporting.
+
+---
+
+# APIs
+
+Implement
+
+```text
+GET /api/v1/admin/metrics
+
+GET /api/v1/admin/alerts
+
+GET /api/v1/admin/insights
+
+GET /api/v1/admin/health
+
+GET /api/v1/admin/traces
+
+GET /api/v1/admin/experiments
+
+GET /api/v1/admin/system
+```
+
+---
+
+# Frontend
+
+Admin dashboards
+
+Charts
+
+Heatmaps
+
+Trend lines
+
+Alert center
+
+Trace explorer
+
+Experiment dashboard
+
+Service dependency graph
+
+System health
+
+Use interactive visualizations with drill-down capability.
+
+---
+
+# Logging
+
+Adopt structured logging.
+
+Every log should include:
+
+* Correlation ID
+* Request ID
+* Trace ID
+* User ID (if applicable)
+* Session ID
+* Environment
+* Version
+
+---
+
+# Performance
+
+Track
+
+P50
+
+P90
+
+P95
+
+P99
+
+Latency
+
+For every critical endpoint.
+
+---
+
+# Health Checks
+
+Implement:
+
+Readiness
+
+Liveness
+
+Startup
+
+Dependency health
+
+Degraded mode
+
+---
+
+# Tests
+
+Telemetry
+
+Alerts
+
+Insights
+
+Metrics
+
+Tracing
+
+Experiments
+
+Health
+
+Coverage target: **95%+**
+
+---
+
+# Documentation
+
+Generate:
+
+Observability architecture
+
+Telemetry schema
+
+Alert guide
+
+Tracing guide
+
+Metrics catalog
+
+Operations handbook
+
+Runbook templates
+
+---
+
+# Fixes From Prompt 13
+
+Implement the following improvements.
+
+### 1. Audit Integrity
+
+Introduce append-only cryptographic hash chaining for audit records.
+
+---
+
+### 2. Policy Engine
+
+Add condition-based authorization policies on top of resource permissions.
+
+---
+
+### 3. Admin Session Intelligence
+
+Track device fingerprint, IP history, concurrent sessions, and risk score.
+
+---
+
+### 4. Scheduler Metrics
+
+Emit runtime, retry, dependency, queue, and failure metrics.
+
+---
+
+### 5. Feature Flag Version History
+
+Implement immutable version history with rollback lineage.
+
+---
+
+### 6. Global Search
+
+Add a universal admin search spanning users, seasons, arena, campaigns, rewards, content, and audit logs.
+
+---
+
+# Deliverables
+
+Provide:
+
+1. Analytics Engine
+2. Telemetry Engine
+3. Metrics Engine
+4. Observability Engine
+5. Alert Engine
+6. Insight Engine
+7. Anomaly Engine
+8. Analytics database schema
+9. Observability dashboards
+10. Alert Center
+11. Trace Explorer
+12. Experiment analytics
+13. Health monitoring
+14. Global Search
+15. Policy Engine
+16. Admin session intelligence
+17. Audit integrity framework
+18. Tests
+19. Documentation
+20. Recommendations before **Prompt 15 (Production Hardening, Security & Release Readiness)**
+
+---
+
+# CTO Direction
+
+After Prompt 14, the engineering team should be able to understand the health of the platform in real time without relying on player reports. Operators should be able to trace requests across services, detect anomalies before they become incidents, measure the impact of feature rollouts and experiments, and investigate production issues using correlated metrics, logs, traces, and audit data. This creates the operational intelligence layer that supports long-term reliability and informed product decisions.
+
+---
+
+## One Final Strategic Recommendation
+
+Since you've now moved to **Cursor**, I would change the development workflow slightly.
+
+Rather than treating Cursor as a generic coding assistant, treat it like a **senior implementation engineer** working from a formal specification.
+
+For every prompt from this point forward, require Cursor to:
+
+1. Produce an implementation plan before changing code.
+2. Identify any schema or API changes up front.
+3. List migration impacts.
+4. Explain trade-offs for major design decisions.
+5. Run and summarize tests before marking the prompt complete.
+6. End every implementation with:
+
+   * What changed
+   * What was intentionally deferred
+   * Risks introduced
+   * Recommendations for the next prompt
+
+That process will keep the project consistent as it grows and make each implementation summary much easier to review.
+
+---
+
+# Prompt 14 Implementation Summary
+
+**Date:** 2026-07-11  
+**Status:** Complete  
+**Commit:** (see git log)
+
+## What Changed
+
+### Schema (Prisma)
+Added observability models: `MetricSeries`, `TelemetryEvent`, `AlertRule`, `AlertIncident`, `Insight`, `DashboardSnapshot`, `SystemHealth`, `ServiceDependency`, `TraceSpan`, `AuditIntegrity`, `ExperimentResult`, `FeatureFlagVersion`, `AdminPolicy`, `SchedulerMetric`. Extended `AuditLog` with `recordHash`/`previousHash` and `AdminSession` with device fingerprint, IP history, risk score, and `lastSeenAt`.
+
+### Prompt 13 Fixes
+1. **Audit integrity** — SHA256 append-only hash chain in `lib/audit/integrity.ts`; wired into `AuditEngine`.
+2. **Policy engine** — Condition-based policies in `lib/admin/policy.ts`; integrated into `requireAdmin`.
+3. **Admin session intelligence** — `lib/admin/sessionIntelligence.ts`; tracks fingerprint, IP, risk, concurrent sessions on admin API calls.
+4. **Scheduler metrics** — `SchedulerEngine` emits runtime, queue delay, failure metrics to `SchedulerMetric` + `MetricsEngine`.
+5. **Feature flag version history** — Immutable `FeatureFlagVersion` snapshots with rollback support in `FeatureFlagEngine`.
+6. **Global search** — `GlobalSearchEngine` + `GET /api/v1/admin/search`.
+
+### Observability Engines (7)
+`AnalyticsEngine`, `TelemetryEngine`, `MetricsEngine`, `ObservabilityEngine`, `AlertEngine`, `InsightEngine`, `AnomalyEngine` in `ui/services/engines/observability/ObservabilityEngines.ts` with thin re-export files per engine.
+
+### Infrastructure
+- Structured logging with trace context (`lib/logging`, `lib/tracing/context.ts`)
+- Common telemetry schema (`lib/telemetry/schema.ts`)
+- Health endpoints: `/api/health/live`, `/api/health/ready`, `/api/health/startup`
+
+### Admin APIs
+`GET/POST /api/v1/admin/{metrics,alerts,insights,health,traces,experiments,system,search}`
+
+### Admin UI (`apps/admin`)
+New pages: Observability, Alerts, Trace Explorer, Experiments, Global Search. Updated `AdminShell` nav and header search.
+
+### Tests & Docs
+- `__tests__/observability.test.ts` — 11 tests (audit chain, policy, tracing, telemetry, anomaly, metrics, alerts, search, insights)
+- `ui/docs/OBSERVABILITY.md` — architecture, APIs, alert/tracing guides, metrics catalog
+- Prompt 12/13 regression: **28/28 passing** (admin + liveops + observability)
+
+## Intentionally Deferred
+- Real-time WebSocket streaming for metrics/alerts (polling via REST for now)
+- External APM integration (Datadog/OpenTelemetry exporters)
+- SSO admin authentication (still wallet-token based)
+- Automated daily snapshot cron (API/engine method exists; scheduler job not registered)
+- Heatmap visualizations (bar charts and JSON drill-down only)
+
+## Risks Introduced
+- Hash chain verification is O(n) on audit log count; large chains need pagination/batching in production.
+- Policy engine builtin rules use UTC business hours; may need timezone-aware conditions.
+- `SystemHealth` records created on each health check without retention policy.
+- Scheduler metrics silently skip if DB table unavailable (test/mock compatibility).
+
+## Recommendations Before Prompt 15 (Production Hardening)
+1. Register cron jobs for daily metric snapshots, alert evaluation, and insight generation.
+2. Add retention/TTL policies for `MetricSeries`, `TelemetryEvent`, `TraceSpan`, `SystemHealth`.
+3. Wire trace context into `authenticatedHandler` for automatic span creation on all API routes.
+4. Export metrics to Prometheus/OpenTelemetry for external monitoring.
+5. Add rate limiting and IP allowlisting for admin health/system endpoints.
+6. Implement audit chain verification as a scheduled integrity check with alerting.
+7. Seed default alert rules for arena queue, settlement backlog, and scheduler dead-letter counts.
+

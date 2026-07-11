@@ -310,21 +310,24 @@ model PendingReward {
 }
 
 model AuditLog {
-  id          String   @id @default(cuid()) @db.Uuid
-  actor       String?  @db.VarChar(42)
-  action      String   @db.VarChar(120)
-  entity      String?  @db.VarChar(120)
-  entityId    String?  @db.VarChar(42)
-  eventId     String?  @db.VarChar(42)
-  sessionId   String?  @db.VarChar(42)
-  correlationId String? @db.VarChar(64)
-  metadata    Json?
-  createdAt   DateTime @default(now()) @db.Timestamp
+  id            String   @id @default(cuid()) @db.Uuid
+  actor         String?  @db.VarChar(42)
+  action        String   @db.VarChar(120)
+  entity        String?  @db.VarChar(120)
+  entityId      String?  @db.VarChar(42)
+  eventId       String?  @db.VarChar(42)
+  sessionId     String?  @db.VarChar(42)
+  correlationId String?  @db.VarChar(64)
+  metadata      Json?
+  recordHash    String?  @db.VarChar(64)
+  previousHash  String?  @db.VarChar(64)
+  createdAt     DateTime @default(now()) @db.Timestamp
 
   @@index([action, createdAt])
   @@index([entity, entityId])
   @@index([eventId])
   @@index([correlationId])
+  @@index([recordHash])
 }
 
 model Session {
@@ -1835,15 +1838,21 @@ model ModerationReport {
 }
 
 model AdminSession {
-  id        String    @id @default(cuid()) @db.Uuid
-  wallet    String    @db.VarChar(42)
-  role      AdminRole
-  token     String    @unique @db.VarChar(128)
-  expiresAt DateTime  @db.Timestamp
-  revoked   Boolean   @default(false)
-  createdAt DateTime  @default(now()) @db.Timestamp
+  id                String    @id @default(cuid()) @db.Uuid
+  wallet            String    @db.VarChar(42)
+  role              AdminRole
+  token             String    @unique @db.VarChar(128)
+  expiresAt         DateTime  @db.Timestamp
+  revoked           Boolean   @default(false)
+  deviceFingerprint String?   @db.VarChar(128)
+  ipAddress         String?   @db.VarChar(45)
+  ipHistory         Json?
+  riskScore         Int       @default(0)
+  createdAt         DateTime  @default(now()) @db.Timestamp
+  lastSeenAt        DateTime  @default(now()) @db.Timestamp
 
   @@index([wallet, revoked, expiresAt])
+  @@index([deviceFingerprint])
 }
 
 model AdminPermission {
@@ -1854,4 +1863,205 @@ model AdminPermission {
   createdAt DateTime  @default(now()) @db.Timestamp
 
   @@index([role, active])
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AlertStatus {
+  OPEN
+  ACKNOWLEDGED
+  SILENCED
+  RESOLVED
+}
+
+enum HealthStatus {
+  HEALTHY
+  DEGRADED
+  UNHEALTHY
+  UNKNOWN
+}
+
+model MetricSeries {
+  id         String   @id @default(cuid()) @db.Uuid
+  name       String   @db.VarChar(120)
+  value      Float
+  tags       Json?
+  recordedAt DateTime @default(now()) @db.Timestamp
+
+  @@index([name, recordedAt])
+}
+
+model TelemetryEvent {
+  id            String   @id @default(cuid()) @db.Uuid
+  source        String   @db.VarChar(64)
+  eventType     String   @db.VarChar(120)
+  traceId       String?  @db.VarChar(64)
+  spanId        String?  @db.VarChar(64)
+  parentSpanId  String?  @db.VarChar(64)
+  correlationId String?  @db.VarChar(64)
+  durationMs    Int?
+  payload       Json?
+  recordedAt    DateTime @default(now()) @db.Timestamp
+
+  @@index([source, recordedAt])
+  @@index([traceId])
+  @@index([correlationId])
+}
+
+model AlertRule {
+  id          String        @id @default(cuid()) @db.Uuid
+  name        String        @db.VarChar(120)
+  metricName  String        @db.VarChar(120)
+  condition   String        @db.VarChar(32)
+  threshold   Float
+  severity    AlertSeverity @default(MEDIUM)
+  enabled     Boolean       @default(true)
+  silenceUntil DateTime?    @db.Timestamp
+  createdAt   DateTime      @default(now()) @db.Timestamp
+
+  incidents AlertIncident[]
+
+  @@index([enabled, metricName])
+}
+
+model AlertIncident {
+  id          String        @id @default(cuid()) @db.Uuid
+  ruleId      String        @db.Uuid
+  status      AlertStatus   @default(OPEN)
+  severity    AlertSeverity
+  message     String        @db.Text
+  value       Float?
+  acknowledgedBy String?    @db.VarChar(42)
+  acknowledgedAt DateTime?  @db.Timestamp
+  resolvedAt  DateTime?     @db.Timestamp
+  createdAt   DateTime      @default(now()) @db.Timestamp
+
+  rule AlertRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([status, severity, createdAt])
+}
+
+model Insight {
+  id          String   @id @default(cuid()) @db.Uuid
+  category    String   @db.VarChar(64)
+  title       String   @db.VarChar(160)
+  body        String   @db.Text
+  trendPct    Float?
+  severity    AlertSeverity @default(LOW)
+  metadata    Json?
+  createdAt   DateTime @default(now()) @db.Timestamp
+
+  @@index([category, createdAt])
+}
+
+model DashboardSnapshot {
+  id        String   @id @default(cuid()) @db.Uuid
+  snapshot  Json
+  capturedAt DateTime @default(now()) @db.Timestamp
+
+  @@index([capturedAt])
+}
+
+model SystemHealth {
+  id         String       @id @default(cuid()) @db.Uuid
+  component  String       @db.VarChar(64)
+  status     HealthStatus @default(UNKNOWN)
+  latencyMs  Float?
+  metadata   Json?
+  checkedAt  DateTime     @default(now()) @db.Timestamp
+
+  @@index([component, checkedAt])
+}
+
+model ServiceDependency {
+  id           String @id @default(cuid()) @db.Uuid
+  service      String @db.VarChar(64)
+  dependsOn    String @db.VarChar(64)
+  critical     Boolean @default(false)
+  metadata     Json?
+
+  @@unique([service, dependsOn])
+}
+
+model TraceSpan {
+  id           String   @id @default(cuid()) @db.Uuid
+  traceId      String   @db.VarChar(64)
+  spanId       String   @db.VarChar(64)
+  parentSpanId String?  @db.VarChar(64)
+  operation    String   @db.VarChar(120)
+  service      String   @db.VarChar(64)
+  durationMs   Int
+  status       String   @db.VarChar(32)
+  metadata     Json?
+  startedAt    DateTime @db.Timestamp
+
+  @@index([traceId, startedAt])
+  @@index([spanId])
+}
+
+model AuditIntegrity {
+  id           String   @id @default(cuid()) @db.Uuid
+  auditLogId   String   @unique @db.Uuid
+  recordHash   String   @db.VarChar(64)
+  previousHash String?  @db.VarChar(64)
+  verified     Boolean  @default(true)
+  createdAt    DateTime @default(now()) @db.Timestamp
+
+  @@index([recordHash])
+}
+
+model ExperimentResult {
+  id           String   @id @default(cuid()) @db.Uuid
+  flagKey      String   @db.VarChar(64)
+  variant      String   @db.VarChar(16)
+  metricName   String   @db.VarChar(120)
+  value        Float
+  sampleSize   Int      @default(0)
+  recordedAt   DateTime @default(now()) @db.Timestamp
+
+  @@index([flagKey, variant, recordedAt])
+}
+
+model FeatureFlagVersion {
+  id        String   @id @default(cuid()) @db.Uuid
+  flagKey   String   @db.VarChar(64)
+  version   Int
+  snapshot  Json
+  changedBy String?  @db.VarChar(42)
+  rollbackOf Int?
+  createdAt DateTime @default(now()) @db.Timestamp
+
+  @@unique([flagKey, version])
+  @@index([flagKey, version])
+}
+
+model AdminPolicy {
+  id         String    @id @default(cuid()) @db.Uuid
+  name       String    @db.VarChar(120)
+  role       AdminRole
+  permission String    @db.VarChar(64)
+  condition  Json
+  active     Boolean   @default(true)
+  createdAt  DateTime  @default(now()) @db.Timestamp
+
+  @@index([role, permission, active])
+}
+
+model SchedulerMetric {
+  id              String   @id @default(cuid()) @db.Uuid
+  jobId           String?  @db.Uuid
+  jobType         String   @db.VarChar(64)
+  runtimeMs       Int
+  retryCount      Int      @default(0)
+  dependencyWaitMs Int?
+  queueDelayMs    Int?
+  success         Boolean
+  recordedAt      DateTime @default(now()) @db.Timestamp
+
+  @@index([jobType, recordedAt])
 }

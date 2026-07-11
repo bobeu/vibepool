@@ -11,7 +11,7 @@ export async function adminHandler(
 ): Promise<Response> {
   return authenticatedHandler(req, async (wallet, request) => {
     try {
-      await requireAdmin(wallet, permission);
+      await requireAdmin(wallet, permission, request);
       const response = await handler(wallet, request);
       if (audit) {
         await auditAdminAction(wallet, audit.action, audit.resource);

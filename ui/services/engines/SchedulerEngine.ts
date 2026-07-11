@@ -129,6 +129,8 @@ export class SchedulerEngine implements ISchedulerEngine {
     if (job.paused) return { id: jobId, skipped: true, reason: "Paused" };
 
     const isDryRun = options?.dryRun ?? job.dryRun;
+    const queueDelayMs = Math.max(0, Date.now() - job.scheduledAt.getTime());
+    const started = Date.now();
 
     if (!isDryRun) {
       await prisma().scheduledJob.update({
@@ -145,6 +147,17 @@ export class SchedulerEngine implements ISchedulerEngine {
 
     try {
       const result = await handler((job.payload as Record<string, unknown>) ?? {}, { dryRun: isDryRun });
+      const runtimeMs = Date.now() - started;
+      if (!isDryRun) {
+        await this.recordMetrics({
+          jobId,
+          jobType: job.jobType,
+          runtimeMs,
+          retryCount: job.retryCount,
+          queueDelayMs,
+          success: true,
+        });
+      }
       if (isDryRun) {
         return { id: jobId, status: "DRY_RUN", result, dryRun: true };
       }
@@ -155,6 +168,17 @@ export class SchedulerEngine implements ISchedulerEngine {
       return { id: jobId, status: "COMPLETED", result };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
+      const runtimeMs = Date.now() - started;
+      if (!isDryRun) {
+        await this.recordMetrics({
+          jobId,
+          jobType: job.jobType,
+          runtimeMs,
+          retryCount: job.retryCount,
+          queueDelayMs,
+          success: false,
+        });
+      }
       if (isDryRun) return { id: jobId, status: "DRY_RUN_ERROR", error: message, dryRun: true };
       if (job.retryCount < job.maxRetries) {
         await prisma().scheduledJob.update({
@@ -179,5 +203,34 @@ export class SchedulerEngine implements ISchedulerEngine {
       data: { status: "DEAD_LETTER", error, completedAt: new Date() },
     });
     logger.error("Scheduled job dead-lettered", { jobId, error });
+  }
+
+  private async recordMetrics(data: {
+    jobId: string;
+    jobType: string;
+    runtimeMs: number;
+    retryCount: number;
+    queueDelayMs: number;
+    success: boolean;
+  }): Promise<void> {
+    try {
+      await prisma().schedulerMetric.create({
+        data: {
+          jobId: data.jobId,
+          jobType: data.jobType,
+          runtimeMs: data.runtimeMs,
+          retryCount: data.retryCount,
+          queueDelayMs: data.queueDelayMs,
+          success: data.success,
+        },
+      });
+      const { MetricsEngine } = await import("./MetricsEngine");
+      const metrics = new MetricsEngine();
+      await metrics.record("scheduler.runtime_ms", data.runtimeMs, { jobType: data.jobType });
+      await metrics.record("scheduler.queue_delay_ms", data.queueDelayMs, { jobType: data.jobType });
+      if (!data.success) await metrics.record("scheduler.failure_rate", 1, { jobType: data.jobType });
+    } catch {
+      /* metrics optional when schema unavailable */
+    }
   }
 }

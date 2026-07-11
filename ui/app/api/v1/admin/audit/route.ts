@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/auth/session";
 import { adminHandler, jsonResponse } from "@/lib/admin/apiHandler";
+import { verifyAuditChain } from "@/lib/audit/integrity";
 
 export const GET = (req: NextRequest) =>
   adminHandler(req, "audit:read", async (_wallet, request) => {
@@ -9,6 +10,7 @@ export const GET = (req: NextRequest) =>
     const action = params.get("action") ?? undefined;
     const entity = params.get("resource") ?? undefined;
     const correlationId = params.get("correlationId") ?? undefined;
+    const verify = params.get("verify") === "true";
     const limit = Number(params.get("limit") ?? 100);
 
     const logs = await prisma().auditLog.findMany({
@@ -22,5 +24,6 @@ export const GET = (req: NextRequest) =>
       take: limit,
     });
 
-    return jsonResponse({ logs, exportable: true });
+    const integrity = verify ? await verifyAuditChain(limit) : undefined;
+    return jsonResponse({ logs, exportable: true, integrity });
   });

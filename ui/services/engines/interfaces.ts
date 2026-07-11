@@ -284,3 +284,46 @@ export interface ICampaignEngine extends IEngine {
   addTarget(campaignId: string, data: Record<string, unknown>): Promise<void>;
   activateDueCampaigns(): Promise<number>;
 }
+
+export interface IMetricsEngine extends IEngine {
+  record(name: string, value: number, tags?: Record<string, unknown>): Promise<void>;
+  query(name: string, since: Date, until?: Date): Promise<Record<string, unknown>[]>;
+  percentile(name: string, since: Date, p: number): Promise<number>;
+  getCatalog(): Record<string, string>;
+}
+
+export interface ITelemetryEngine extends IEngine {
+  emit(source: string, eventType: string, payload?: Record<string, unknown>, durationMs?: number): Promise<void>;
+  list(filter?: { source?: string; traceId?: string; limit?: number }): Promise<Record<string, unknown>[]>;
+}
+
+export interface IAnalyticsEngine extends IEngine {
+  collectProductMetrics(): Promise<Record<string, unknown>>;
+  snapshotDaily(): Promise<Record<string, unknown>>;
+}
+
+export interface IAlertEngine extends IEngine {
+  listRules(): Promise<Record<string, unknown>[]>;
+  upsertRule(data: Record<string, unknown>): Promise<Record<string, unknown>>;
+  listIncidents(status?: string): Promise<Record<string, unknown>[]>;
+  acknowledge(incidentId: string, wallet: string): Promise<Record<string, unknown>>;
+  evaluateRules(): Promise<Record<string, unknown>[]>;
+}
+
+export interface IInsightEngine extends IEngine {
+  generate(): Promise<Record<string, unknown>[]>;
+  list(limit?: number): Promise<Record<string, unknown>[]>;
+}
+
+export interface IAnomalyEngine extends IEngine {
+  detect(values: number[], threshold?: number): { index: number; value: number; zScore: number }[];
+  scanMetric(name: string, windowHours?: number, threshold?: number): Promise<Record<string, unknown>>;
+}
+
+export interface IObservabilityEngine extends IEngine {
+  getDashboard(): Promise<Record<string, unknown>>;
+  checkHealth(): Promise<Record<string, unknown>>;
+  recordSpan(span: Record<string, unknown>): Promise<void>;
+  getTrace(traceId: string): Promise<Record<string, unknown>[]>;
+  seedDependencies(): Promise<void>;
+}
