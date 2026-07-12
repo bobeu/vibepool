@@ -1,0 +1,1370 @@
+{
+  "address": "0xDA5Fbd3f5F42fb0c65b7d27cb99f191ba0fbF91a",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_activityRegistry",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_spinRewardManager",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "AccessControlBadConfirmation",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "neededRole",
+          "type": "bytes32"
+        }
+      ],
+      "name": "AccessControlUnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "DuplicateRequestId",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InsufficientBalance",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidAmount",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidInput",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Unauthorized",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newLevel",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "totalXP",
+          "type": "uint256"
+        }
+      ],
+      "name": "LevelUp",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newTotalPoints",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "PointsDeducted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newTotalPoints",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "PointsGranted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        }
+      ],
+      "name": "ProfileUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "RewardClaimed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "previousAdminRole",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "newAdminRole",
+          "type": "bytes32"
+        }
+      ],
+      "name": "RoleAdminChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "RoleGranted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        }
+      ],
+      "name": "RoleRevoked",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newAvailableSpins",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "SpinGranted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newTotalXP",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "XPGranted",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "BACKEND_ROLE",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "DEFAULT_ADMIN_ROLE",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "activityRegistry",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "players",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "amounts",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "bytes32[]",
+          "name": "requestIds",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "batchGrantPoints",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "players",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "amounts",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "bytes32[]",
+          "name": "requestIds",
+          "type": "bytes32[]"
+        }
+      ],
+      "name": "batchGrantXP",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "deductPoints",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getRoleAdmin",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "grantPoints",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "grantRewardClaim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "grantRole",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "grantSpin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "grantXP",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "hasRole",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "playerStatistics",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "totalXPGranted",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "totalPointsGranted",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "totalPointsDeducted",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "totalSpinsGranted",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "totalRewardClaims",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IPointsManager.PlayerStatistics",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "playerStats",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "totalXPGranted",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "totalPointsGranted",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "totalPointsDeducted",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "totalSpinsGranted",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "totalRewardClaims",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "processedRequestIds",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "player",
+          "type": "address"
+        }
+      ],
+      "name": "profile",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "xp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "level",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "points",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "lifetimePoints",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "lifetimeXP",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "availableSpins",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "rewardClaims",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint64",
+              "name": "currentStreak",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint64",
+              "name": "longestStreak",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint64",
+              "name": "lastActivity",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint64",
+              "name": "registrationTime",
+              "type": "uint64"
+            }
+          ],
+          "internalType": "struct IPointsManager.Profile",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "profiles",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "xp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "level",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "points",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "lifetimePoints",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "lifetimeXP",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "availableSpins",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "rewardClaims",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint64",
+          "name": "currentStreak",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64",
+          "name": "longestStreak",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64",
+          "name": "lastActivity",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64",
+          "name": "registrationTime",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "callerConfirmation",
+          "type": "address"
+        }
+      ],
+      "name": "renounceRole",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "role",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "revokeRole",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "spinRewardManager",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes4",
+          "name": "interfaceId",
+          "type": "bytes4"
+        }
+      ],
+      "name": "supportsInterface",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xf2dad21aa6250b8127b6035d1e5fe4057e8fc14c4cf939c0f1808e7b66a5c1f0",
+  "receipt": {
+    "to": null,
+    "from": "0x84F043e2ca7928Ec79AA08Eed595313AEf434028",
+    "contractAddress": "0xDA5Fbd3f5F42fb0c65b7d27cb99f191ba0fbF91a",
+    "transactionIndex": 1,
+    "gasUsed": "1419366",
+    "logsBloom": "0x00000004000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000080000000000200000000000000000000000400000000000000000020000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080000000000000800008000000001000000000000000000000000000000000000000000000000000000000000100000000000020000000000000000000200000000000000800000000000000000000000000000000",
+    "blockHash": "0x05bbcae20f393daa3c5e4444880805c277547e15abb26509c232622340d81284",
+    "transactionHash": "0xf2dad21aa6250b8127b6035d1e5fe4057e8fc14c4cf939c0f1808e7b66a5c1f0",
+    "logs": [
+      {
+        "transactionIndex": 1,
+        "blockNumber": 30520825,
+        "transactionHash": "0xf2dad21aa6250b8127b6035d1e5fe4057e8fc14c4cf939c0f1808e7b66a5c1f0",
+        "address": "0xDA5Fbd3f5F42fb0c65b7d27cb99f191ba0fbF91a",
+        "topics": [
+          "0x2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x00000000000000000000000084f043e2ca7928ec79aa08eed595313aef434028",
+          "0x00000000000000000000000084f043e2ca7928ec79aa08eed595313aef434028"
+        ],
+        "data": "0x",
+        "logIndex": 0,
+        "blockHash": "0x05bbcae20f393daa3c5e4444880805c277547e15abb26509c232622340d81284"
+      },
+      {
+        "transactionIndex": 1,
+        "blockNumber": 30520825,
+        "transactionHash": "0xf2dad21aa6250b8127b6035d1e5fe4057e8fc14c4cf939c0f1808e7b66a5c1f0",
+        "address": "0xDA5Fbd3f5F42fb0c65b7d27cb99f191ba0fbF91a",
+        "topics": [
+          "0x2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d",
+          "0x25cf2b509f2a7f322675b2a5322b182f44ad2c03ac941a0af17c9b178f5d5d5f",
+          "0x00000000000000000000000084f043e2ca7928ec79aa08eed595313aef434028",
+          "0x00000000000000000000000084f043e2ca7928ec79aa08eed595313aef434028"
+        ],
+        "data": "0x",
+        "logIndex": 1,
+        "blockHash": "0x05bbcae20f393daa3c5e4444880805c277547e15abb26509c232622340d81284"
+      }
+    ],
+    "blockNumber": 30520825,
+    "cumulativeGasUsed": "1465524",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x3e380A0d364358519BC3847d996bc5a17d9Bf268",
+    "0x94943AD6604FeDDD45597441B277A3ECdFC3299E"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "efff8684b17874e72892a7d6ab8a4eb4",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.28+commit.7893614a\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_activityRegistry\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_spinRewardManager\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AccessControlBadConfirmation\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"neededRole\",\"type\":\"bytes32\"}],\"name\":\"AccessControlUnauthorizedAccount\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"DuplicateRequestId\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InsufficientBalance\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidAmount\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidInput\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Unauthorized\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newLevel\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"totalXP\",\"type\":\"uint256\"}],\"name\":\"LevelUp\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newTotalPoints\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"}],\"name\":\"PointsDeducted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newTotalPoints\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"}],\"name\":\"PointsGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"}],\"name\":\"ProfileUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"}],\"name\":\"RewardClaimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"previousAdminRole\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"newAdminRole\",\"type\":\"bytes32\"}],\"name\":\"RoleAdminChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleRevoked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newAvailableSpins\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"}],\"name\":\"SpinGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newTotalXP\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"}],\"name\":\"XPGranted\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"BACKEND_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"DEFAULT_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"activityRegistry\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"players\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes32[]\",\"name\":\"requestIds\",\"type\":\"bytes32[]\"}],\"name\":\"batchGrantPoints\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"players\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes32[]\",\"name\":\"requestIds\",\"type\":\"bytes32[]\"}],\"name\":\"batchGrantXP\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"}],\"name\":\"deductPoints\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"}],\"name\":\"getRoleAdmin\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"}],\"name\":\"grantPoints\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"}],\"name\":\"grantRewardClaim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"}],\"name\":\"grantSpin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"}],\"name\":\"grantXP\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"playerStatistics\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"totalXPGranted\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalPointsGranted\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalPointsDeducted\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalSpinsGranted\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalRewardClaims\",\"type\":\"uint256\"}],\"internalType\":\"struct IPointsManager.PlayerStatistics\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"playerStats\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalXPGranted\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalPointsGranted\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalPointsDeducted\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalSpinsGranted\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalRewardClaims\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"processedRequestIds\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"player\",\"type\":\"address\"}],\"name\":\"profile\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"xp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"level\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"points\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lifetimePoints\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lifetimeXP\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"availableSpins\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"rewardClaims\",\"type\":\"uint256\"},{\"internalType\":\"uint64\",\"name\":\"currentStreak\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"longestStreak\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"lastActivity\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"registrationTime\",\"type\":\"uint64\"}],\"internalType\":\"struct IPointsManager.Profile\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"profiles\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"xp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"level\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"points\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lifetimePoints\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lifetimeXP\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"availableSpins\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"rewardClaims\",\"type\":\"uint256\"},{\"internalType\":\"uint64\",\"name\":\"currentStreak\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"longestStreak\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"lastActivity\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"registrationTime\",\"type\":\"uint64\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"callerConfirmation\",\"type\":\"address\"}],\"name\":\"renounceRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"revokeRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"spinRewardManager\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Backend-authorized only. Never allows self-editing.\",\"errors\":{\"AccessControlBadConfirmation()\":[{\"details\":\"The caller of a function is not the expected one. NOTE: Don't confuse with {AccessControlUnauthorizedAccount}.\"}],\"AccessControlUnauthorizedAccount(address,bytes32)\":[{\"details\":\"The `account` is missing a role.\"}]},\"events\":{\"RoleAdminChanged(bytes32,bytes32,bytes32)\":{\"details\":\"Emitted when `newAdminRole` is set as ``role``'s admin role, replacing `previousAdminRole` `DEFAULT_ADMIN_ROLE` is the starting admin for all roles, despite {RoleAdminChanged} not being emitted to signal this.\"},\"RoleGranted(bytes32,address,address)\":{\"details\":\"Emitted when `account` is granted `role`. `sender` is the account that originated the contract call. This account bears the admin role (for the granted role). Expected in cases where the role was granted using the internal {AccessControl-_grantRole}.\"},\"RoleRevoked(bytes32,address,address)\":{\"details\":\"Emitted when `account` is revoked `role`. `sender` is the account that originated the contract call:   - if using `revokeRole`, it is the admin role bearer   - if using `renounceRole`, it is the role bearer (i.e. `account`)\"}},\"kind\":\"dev\",\"methods\":{\"batchGrantPoints(address[],uint256[],bytes32[])\":{\"params\":{\"amounts\":\"Array of point amounts\",\"players\":\"Array of player addresses\",\"requestIds\":\"Array of unique request IDs\"}},\"batchGrantXP(address[],uint256[],bytes32[])\":{\"params\":{\"amounts\":\"Array of XP amounts\",\"players\":\"Array of player addresses\",\"requestIds\":\"Array of unique request IDs\"}},\"constructor\":{\"params\":{\"_activityRegistry\":\"Address of the ActivityRegistry contract\",\"_spinRewardManager\":\"Address of the SpinRewardManager contract\"}},\"deductPoints(address,uint256,bytes32)\":{\"params\":{\"amount\":\"The points amount to deduct\",\"player\":\"The player address\",\"requestId\":\"Unique request ID for replay protection\"}},\"getRoleAdmin(bytes32)\":{\"details\":\"Returns the admin role that controls `role`. See {grantRole} and {revokeRole}. To change a role's admin, use {_setRoleAdmin}.\"},\"grantPoints(address,uint256,bytes32)\":{\"params\":{\"amount\":\"The points amount to grant\",\"player\":\"The player address\",\"requestId\":\"Unique request ID for replay protection\"}},\"grantRewardClaim(address,bytes32)\":{\"params\":{\"player\":\"The player address\",\"requestId\":\"Unique request ID for replay protection\"}},\"grantRole(bytes32,address)\":{\"details\":\"Grants `role` to `account`. If `account` had not been already granted `role`, emits a {RoleGranted} event. Requirements: - the caller must have ``role``'s admin role. May emit a {RoleGranted} event.\"},\"grantSpin(address,uint256,bytes32)\":{\"params\":{\"amount\":\"The spin amount to grant\",\"player\":\"The player address\",\"requestId\":\"Unique request ID for replay protection\"}},\"grantXP(address,uint256,bytes32)\":{\"params\":{\"amount\":\"The XP amount to grant\",\"player\":\"The player address\",\"requestId\":\"Unique request ID for replay protection\"}},\"hasRole(bytes32,address)\":{\"details\":\"Returns `true` if `account` has been granted `role`.\"},\"playerStatistics()\":{\"returns\":{\"_0\":\"The player statistics struct\"}},\"profile(address)\":{\"params\":{\"player\":\"The player address\"},\"returns\":{\"_0\":\"The player profile struct\"}},\"renounceRole(bytes32,address)\":{\"details\":\"Revokes `role` from the calling account. Roles are often managed via {grantRole} and {revokeRole}: this function's purpose is to provide a mechanism for accounts to lose their privileges if they are compromised (such as when a trusted device is misplaced). If the calling account had been revoked `role`, emits a {RoleRevoked} event. Requirements: - the caller must be `callerConfirmation`. May emit a {RoleRevoked} event.\"},\"revokeRole(bytes32,address)\":{\"details\":\"Revokes `role` from `account`. If `account` had been granted `role`, emits a {RoleRevoked} event. Requirements: - the caller must have ``role``'s admin role. May emit a {RoleRevoked} event.\"},\"supportsInterface(bytes4)\":{\"details\":\"Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[ERC section] to learn more about how these ids are created. This function call must use less than 30 000 gas.\"}},\"title\":\"PointsManager\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"activityRegistry()\":{\"notice\":\"Address of the ActivityRegistry contract\"},\"batchGrantPoints(address[],uint256[],bytes32[])\":{\"notice\":\"Grants points to multiple players in a batch\"},\"batchGrantXP(address[],uint256[],bytes32[])\":{\"notice\":\"Grants XP to multiple players in a batch\"},\"constructor\":{\"notice\":\"Initializes the PointsManager with associated contracts\"},\"deductPoints(address,uint256,bytes32)\":{\"notice\":\"Deducts points from a player\"},\"grantPoints(address,uint256,bytes32)\":{\"notice\":\"Grants points to a player\"},\"grantRewardClaim(address,bytes32)\":{\"notice\":\"Records a reward claim for a player\"},\"grantSpin(address,uint256,bytes32)\":{\"notice\":\"Grants spins to a player\"},\"grantXP(address,uint256,bytes32)\":{\"notice\":\"Grants XP to a player and auto-updates level\"},\"playerStatistics()\":{\"notice\":\"Returns aggregated player statistics\"},\"playerStats()\":{\"notice\":\"Aggregated player statistics\"},\"processedRequestIds(bytes32)\":{\"notice\":\"Mapping of request ID to processed status for replay protection\"},\"profile(address)\":{\"notice\":\"Returns a player's profile\"},\"profiles(address)\":{\"notice\":\"Mapping of player address to profile\"},\"spinRewardManager()\":{\"notice\":\"Address of the SpinRewardManager contract\"}},\"notice\":\"On-chain verification layer for player profiles, XP, points, spins, and reward claims\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/PointsManager.sol\":\"PointsManager\"},\"evmVersion\":\"cancun\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/AccessControl.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.6.0) (access/AccessControl.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {IAccessControl} from \\\"./IAccessControl.sol\\\";\\nimport {Context} from \\\"../utils/Context.sol\\\";\\nimport {ERC165} from \\\"../utils/introspection/ERC165.sol\\\";\\n\\n/**\\n * @dev Contract module that allows children to implement role-based access\\n * control mechanisms. This is a lightweight version that doesn't allow enumerating role\\n * members except through off-chain means by accessing the contract event logs. Some\\n * applications may benefit from on-chain enumerability, for those cases see\\n * {AccessControlEnumerable}.\\n *\\n * Roles are referred to by their `bytes32` identifier. These should be exposed\\n * in the external API and be unique. The best way to achieve this is by\\n * using `public constant` hash digests:\\n *\\n * ```solidity\\n * bytes32 public constant MY_ROLE = keccak256(\\\"MY_ROLE\\\");\\n * ```\\n *\\n * Roles can be used to represent a set of permissions. To restrict access to a\\n * function call, use {hasRole}:\\n *\\n * ```solidity\\n * function foo() public {\\n *     require(hasRole(MY_ROLE, msg.sender));\\n *     ...\\n * }\\n * ```\\n *\\n * Roles can be granted and revoked dynamically via the {grantRole} and\\n * {revokeRole} functions. Each role has an associated admin role, and only\\n * accounts that have a role's admin role can call {grantRole} and {revokeRole}.\\n *\\n * By default, the admin role for all roles is `DEFAULT_ADMIN_ROLE`, which means\\n * that only accounts with this role will be able to grant or revoke other\\n * roles. More complex role relationships can be created by using\\n * {_setRoleAdmin}.\\n *\\n * WARNING: The `DEFAULT_ADMIN_ROLE` is also its own admin: it has permission to\\n * grant and revoke this role. Extra precautions should be taken to secure\\n * accounts that have been granted it. We recommend using {AccessControlDefaultAdminRules}\\n * to enforce additional security measures for this role.\\n */\\nabstract contract AccessControl is Context, IAccessControl, ERC165 {\\n    struct RoleData {\\n        mapping(address account => bool) hasRole;\\n        bytes32 adminRole;\\n    }\\n\\n    mapping(bytes32 role => RoleData) private _roles;\\n\\n    bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;\\n\\n    /**\\n     * @dev Modifier that checks that an account has a specific role. Reverts\\n     * with an {AccessControlUnauthorizedAccount} error including the required role.\\n     */\\n    modifier onlyRole(bytes32 role) {\\n        _checkRole(role);\\n        _;\\n    }\\n\\n    /// @inheritdoc ERC165\\n    function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {\\n        return interfaceId == type(IAccessControl).interfaceId || super.supportsInterface(interfaceId);\\n    }\\n\\n    /**\\n     * @dev Returns `true` if `account` has been granted `role`.\\n     */\\n    function hasRole(bytes32 role, address account) public view virtual returns (bool) {\\n        return _roles[role].hasRole[account];\\n    }\\n\\n    /**\\n     * @dev Reverts with an {AccessControlUnauthorizedAccount} error if `_msgSender()`\\n     * is missing `role`. Overriding this function changes the behavior of the {onlyRole} modifier.\\n     */\\n    function _checkRole(bytes32 role) internal view virtual {\\n        _checkRole(role, _msgSender());\\n    }\\n\\n    /**\\n     * @dev Reverts with an {AccessControlUnauthorizedAccount} error if `account`\\n     * is missing `role`.\\n     */\\n    function _checkRole(bytes32 role, address account) internal view virtual {\\n        if (!hasRole(role, account)) {\\n            revert AccessControlUnauthorizedAccount(account, role);\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns the admin role that controls `role`. See {grantRole} and\\n     * {revokeRole}.\\n     *\\n     * To change a role's admin, use {_setRoleAdmin}.\\n     */\\n    function getRoleAdmin(bytes32 role) public view virtual returns (bytes32) {\\n        return _roles[role].adminRole;\\n    }\\n\\n    /**\\n     * @dev Grants `role` to `account`.\\n     *\\n     * If `account` had not been already granted `role`, emits a {RoleGranted}\\n     * event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must have ``role``'s admin role.\\n     *\\n     * May emit a {RoleGranted} event.\\n     */\\n    function grantRole(bytes32 role, address account) public virtual onlyRole(getRoleAdmin(role)) {\\n        _grantRole(role, account);\\n    }\\n\\n    /**\\n     * @dev Revokes `role` from `account`.\\n     *\\n     * If `account` had been granted `role`, emits a {RoleRevoked} event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must have ``role``'s admin role.\\n     *\\n     * May emit a {RoleRevoked} event.\\n     */\\n    function revokeRole(bytes32 role, address account) public virtual onlyRole(getRoleAdmin(role)) {\\n        _revokeRole(role, account);\\n    }\\n\\n    /**\\n     * @dev Revokes `role` from the calling account.\\n     *\\n     * Roles are often managed via {grantRole} and {revokeRole}: this function's\\n     * purpose is to provide a mechanism for accounts to lose their privileges\\n     * if they are compromised (such as when a trusted device is misplaced).\\n     *\\n     * If the calling account had been revoked `role`, emits a {RoleRevoked}\\n     * event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must be `callerConfirmation`.\\n     *\\n     * May emit a {RoleRevoked} event.\\n     */\\n    function renounceRole(bytes32 role, address callerConfirmation) public virtual {\\n        if (callerConfirmation != _msgSender()) {\\n            revert AccessControlBadConfirmation();\\n        }\\n\\n        _revokeRole(role, callerConfirmation);\\n    }\\n\\n    /**\\n     * @dev Sets `adminRole` as ``role``'s admin role.\\n     *\\n     * Emits a {RoleAdminChanged} event.\\n     */\\n    function _setRoleAdmin(bytes32 role, bytes32 adminRole) internal virtual {\\n        bytes32 previousAdminRole = getRoleAdmin(role);\\n        _roles[role].adminRole = adminRole;\\n        emit RoleAdminChanged(role, previousAdminRole, adminRole);\\n    }\\n\\n    /**\\n     * @dev Attempts to grant `role` to `account` and returns a boolean indicating if `role` was granted.\\n     *\\n     * Internal function without access restriction.\\n     *\\n     * May emit a {RoleGranted} event.\\n     */\\n    function _grantRole(bytes32 role, address account) internal virtual returns (bool) {\\n        if (!hasRole(role, account)) {\\n            _roles[role].hasRole[account] = true;\\n            emit RoleGranted(role, account, _msgSender());\\n            return true;\\n        } else {\\n            return false;\\n        }\\n    }\\n\\n    /**\\n     * @dev Attempts to revoke `role` from `account` and returns a boolean indicating if `role` was revoked.\\n     *\\n     * Internal function without access restriction.\\n     *\\n     * May emit a {RoleRevoked} event.\\n     */\\n    function _revokeRole(bytes32 role, address account) internal virtual returns (bool) {\\n        if (hasRole(role, account)) {\\n            _roles[role].hasRole[account] = false;\\n            emit RoleRevoked(role, account, _msgSender());\\n            return true;\\n        } else {\\n            return false;\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0x4686ec784d75f95beaf2bf5b5f26e5f946d4c864aaee9c3c62bdc18381f5e017\",\"license\":\"MIT\"},\"@openzeppelin/contracts/access/IAccessControl.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.4.0) (access/IAccessControl.sol)\\n\\npragma solidity >=0.8.4;\\n\\n/**\\n * @dev External interface of AccessControl declared to support ERC-165 detection.\\n */\\ninterface IAccessControl {\\n    /**\\n     * @dev The `account` is missing a role.\\n     */\\n    error AccessControlUnauthorizedAccount(address account, bytes32 neededRole);\\n\\n    /**\\n     * @dev The caller of a function is not the expected one.\\n     *\\n     * NOTE: Don't confuse with {AccessControlUnauthorizedAccount}.\\n     */\\n    error AccessControlBadConfirmation();\\n\\n    /**\\n     * @dev Emitted when `newAdminRole` is set as ``role``'s admin role, replacing `previousAdminRole`\\n     *\\n     * `DEFAULT_ADMIN_ROLE` is the starting admin for all roles, despite\\n     * {RoleAdminChanged} not being emitted to signal this.\\n     */\\n    event RoleAdminChanged(bytes32 indexed role, bytes32 indexed previousAdminRole, bytes32 indexed newAdminRole);\\n\\n    /**\\n     * @dev Emitted when `account` is granted `role`.\\n     *\\n     * `sender` is the account that originated the contract call. This account bears the admin role (for the granted role).\\n     * Expected in cases where the role was granted using the internal {AccessControl-_grantRole}.\\n     */\\n    event RoleGranted(bytes32 indexed role, address indexed account, address indexed sender);\\n\\n    /**\\n     * @dev Emitted when `account` is revoked `role`.\\n     *\\n     * `sender` is the account that originated the contract call:\\n     *   - if using `revokeRole`, it is the admin role bearer\\n     *   - if using `renounceRole`, it is the role bearer (i.e. `account`)\\n     */\\n    event RoleRevoked(bytes32 indexed role, address indexed account, address indexed sender);\\n\\n    /**\\n     * @dev Returns `true` if `account` has been granted `role`.\\n     */\\n    function hasRole(bytes32 role, address account) external view returns (bool);\\n\\n    /**\\n     * @dev Returns the admin role that controls `role`. See {grantRole} and\\n     * {revokeRole}.\\n     *\\n     * To change a role's admin, use {AccessControl-_setRoleAdmin}.\\n     */\\n    function getRoleAdmin(bytes32 role) external view returns (bytes32);\\n\\n    /**\\n     * @dev Grants `role` to `account`.\\n     *\\n     * If `account` had not been already granted `role`, emits a {RoleGranted}\\n     * event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must have ``role``'s admin role.\\n     */\\n    function grantRole(bytes32 role, address account) external;\\n\\n    /**\\n     * @dev Revokes `role` from `account`.\\n     *\\n     * If `account` had been granted `role`, emits a {RoleRevoked} event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must have ``role``'s admin role.\\n     */\\n    function revokeRole(bytes32 role, address account) external;\\n\\n    /**\\n     * @dev Revokes `role` from the calling account.\\n     *\\n     * Roles are often managed via {grantRole} and {revokeRole}: this function's\\n     * purpose is to provide a mechanism for accounts to lose their privileges\\n     * if they are compromised (such as when a trusted device is misplaced).\\n     *\\n     * If the calling account had been granted `role`, emits a {RoleRevoked}\\n     * event.\\n     *\\n     * Requirements:\\n     *\\n     * - the caller must be `callerConfirmation`.\\n     */\\n    function renounceRole(bytes32 role, address callerConfirmation) external;\\n}\\n\",\"keccak256\":\"0xbff9f59c84e5337689161ce7641c0ef8e872d6a7536fbc1f5133f128887aba3c\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n\\n    function _contextSuffixLength() internal view virtual returns (uint256) {\\n        return 0;\\n    }\\n}\\n\",\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/introspection/ERC165.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.4.0) (utils/introspection/ERC165.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {IERC165} from \\\"./IERC165.sol\\\";\\n\\n/**\\n * @dev Implementation of the {IERC165} interface.\\n *\\n * Contracts that want to implement ERC-165 should inherit from this contract and override {supportsInterface} to check\\n * for the additional interface id that will be supported. For example:\\n *\\n * ```solidity\\n * function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {\\n *     return interfaceId == type(MyInterface).interfaceId || super.supportsInterface(interfaceId);\\n * }\\n * ```\\n */\\nabstract contract ERC165 is IERC165 {\\n    /// @inheritdoc IERC165\\n    function supportsInterface(bytes4 interfaceId) public view virtual returns (bool) {\\n        return interfaceId == type(IERC165).interfaceId;\\n    }\\n}\\n\",\"keccak256\":\"0x2d9dc2fe26180f74c11c13663647d38e259e45f95eb88f57b61d2160b0109d3e\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/introspection/IERC165.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.4.0) (utils/introspection/IERC165.sol)\\n\\npragma solidity >=0.4.16;\\n\\n/**\\n * @dev Interface of the ERC-165 standard, as defined in the\\n * https://eips.ethereum.org/EIPS/eip-165[ERC].\\n *\\n * Implementers can declare support of contract interfaces, which can then be\\n * queried by others ({ERC165Checker}).\\n *\\n * For an implementation, see {ERC165}.\\n */\\ninterface IERC165 {\\n    /**\\n     * @dev Returns true if this contract implements the interface defined by\\n     * `interfaceId`. See the corresponding\\n     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[ERC section]\\n     * to learn more about how these ids are created.\\n     *\\n     * This function call must use less than 30 000 gas.\\n     */\\n    function supportsInterface(bytes4 interfaceId) external view returns (bool);\\n}\\n\",\"keccak256\":\"0x8891738ffe910f0cf2da09566928589bf5d63f4524dd734fd9cedbac3274dd5c\",\"license\":\"MIT\"},\"contracts/PointsManager.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity 0.8.28;\\n\\nimport { AccessControl } from \\\"@openzeppelin/contracts/access/AccessControl.sol\\\";\\nimport { SharedErrors } from \\\"./SharedErrors.sol\\\";\\nimport { SharedEvents } from \\\"./SharedEvents.sol\\\";\\nimport { LevelMath } from \\\"./libraries/LevelMath.sol\\\";\\nimport { IPointsManager } from \\\"./interfaces/IPointsManager.sol\\\";\\n\\n/// @title PointsManager\\n/// @notice On-chain verification layer for player profiles, XP, points, spins, and reward claims\\n/// @dev Backend-authorized only. Never allows self-editing.\\ncontract PointsManager is AccessControl, IPointsManager {\\n    bytes32 public constant BACKEND_ROLE = keccak256(\\\"BACKEND_ROLE\\\");\\n\\n    /// @notice Mapping of player address to profile\\n    mapping(address => Profile) public profiles;\\n    /// @notice Mapping of request ID to processed status for replay protection\\n    mapping(bytes32 => bool) public processedRequestIds;\\n\\n    /// @notice Aggregated player statistics\\n    PlayerStatistics public playerStats;\\n\\n    /// @notice Address of the ActivityRegistry contract\\n    address public immutable activityRegistry;\\n    /// @notice Address of the SpinRewardManager contract\\n    address public immutable spinRewardManager;\\n\\n    /// @notice Reverts if sender is not authorized backend\\n    modifier onlyBackend() {\\n        if (!hasRole(BACKEND_ROLE, msg.sender)) revert SharedErrors.Unauthorized();\\n        _;\\n    }\\n\\n    /// @notice Reverts if amount is zero\\n    /// @param amount The amount to check\\n    modifier onlyNonZeroAmount(uint256 amount) {\\n        if (amount == 0) revert SharedErrors.InvalidAmount();\\n        _;\\n    }\\n\\n    /// @notice Initializes the PointsManager with associated contracts\\n    /// @param _activityRegistry Address of the ActivityRegistry contract\\n    /// @param _spinRewardManager Address of the SpinRewardManager contract\\n    constructor(address _activityRegistry, address _spinRewardManager) {\\n        activityRegistry = _activityRegistry;\\n        spinRewardManager = _spinRewardManager;\\n\\n        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);\\n        _grantRole(BACKEND_ROLE, msg.sender);\\n    }\\n\\n    /// @notice Grants XP to a player and auto-updates level\\n    /// @param player The player address\\n    /// @param amount The XP amount to grant\\n    /// @param requestId Unique request ID for replay protection\\n    function grantXP(address player, uint256 amount, bytes32 requestId)\\n        external\\n        onlyBackend\\n        onlyNonZeroAmount(amount)\\n    {\\n        if (processedRequestIds[requestId]) revert SharedErrors.DuplicateRequestId();\\n        processedRequestIds[requestId] = true;\\n\\n        Profile storage playerProfile = profiles[player];\\n        uint256 oldLevel = playerProfile.level;\\n\\n        unchecked {\\n            playerProfile.xp += amount;\\n            playerProfile.level = LevelMath.calculateLevel(playerProfile.xp);\\n            playerProfile.lifetimeXP += amount;\\n        }\\n\\n        playerStats.totalXPGranted += amount;\\n\\n        emit SharedEvents.XPGranted(player, amount, playerProfile.xp, requestId);\\n\\n        if (playerProfile.level > oldLevel) {\\n            emit SharedEvents.LevelUp(player, playerProfile.level, playerProfile.xp);\\n        }\\n\\n        emit SharedEvents.ProfileUpdated(player);\\n    }\\n\\n    /// @notice Grants points to a player\\n    /// @param player The player address\\n    /// @param amount The points amount to grant\\n    /// @param requestId Unique request ID for replay protection\\n    function grantPoints(address player, uint256 amount, bytes32 requestId)\\n        external\\n        onlyBackend\\n        onlyNonZeroAmount(amount)\\n    {\\n        if (processedRequestIds[requestId]) revert SharedErrors.DuplicateRequestId();\\n        processedRequestIds[requestId] = true;\\n\\n        Profile storage playerProfile = profiles[player];\\n\\n        unchecked {\\n            playerProfile.points += amount;\\n            playerProfile.lifetimePoints += amount;\\n        }\\n\\n        playerStats.totalPointsGranted += amount;\\n\\n        emit SharedEvents.PointsGranted(player, amount, playerProfile.points, requestId);\\n        emit SharedEvents.ProfileUpdated(player);\\n    }\\n\\n    /// @notice Deducts points from a player\\n    /// @param player The player address\\n    /// @param amount The points amount to deduct\\n    /// @param requestId Unique request ID for replay protection\\n    function deductPoints(address player, uint256 amount, bytes32 requestId)\\n        external\\n        onlyBackend\\n        onlyNonZeroAmount(amount)\\n    {\\n        if (processedRequestIds[requestId]) revert SharedErrors.DuplicateRequestId();\\n        processedRequestIds[requestId] = true;\\n\\n        Profile storage playerProfile = profiles[player];\\n        if (playerProfile.points < amount) revert SharedErrors.InsufficientBalance();\\n\\n        unchecked {\\n            playerProfile.points -= amount;\\n        }\\n\\n        playerStats.totalPointsDeducted += amount;\\n\\n        emit SharedEvents.PointsDeducted(player, amount, playerProfile.points, requestId);\\n        emit SharedEvents.ProfileUpdated(player);\\n    }\\n\\n    /// @notice Grants spins to a player\\n    /// @param player The player address\\n    /// @param amount The spin amount to grant\\n    /// @param requestId Unique request ID for replay protection\\n    function grantSpin(address player, uint256 amount, bytes32 requestId)\\n        external\\n        onlyBackend\\n        onlyNonZeroAmount(amount)\\n    {\\n        if (processedRequestIds[requestId]) revert SharedErrors.DuplicateRequestId();\\n        processedRequestIds[requestId] = true;\\n\\n        Profile storage playerProfile = profiles[player];\\n\\n        unchecked {\\n            playerProfile.availableSpins += amount;\\n        }\\n\\n        playerStats.totalSpinsGranted += amount;\\n\\n        emit SharedEvents.SpinGranted(player, amount, playerProfile.availableSpins, requestId);\\n        emit SharedEvents.ProfileUpdated(player);\\n    }\\n\\n    /// @notice Records a reward claim for a player\\n    /// @param player The player address\\n    /// @param requestId Unique request ID for replay protection\\n    function grantRewardClaim(address player, bytes32 requestId)\\n        external\\n        onlyBackend\\n    {\\n        if (processedRequestIds[requestId]) revert SharedErrors.DuplicateRequestId();\\n        processedRequestIds[requestId] = true;\\n\\n        Profile storage playerProfile = profiles[player];\\n\\n        unchecked {\\n            playerProfile.rewardClaims += 1;\\n        }\\n\\n        playerStats.totalRewardClaims += 1;\\n\\n        emit SharedEvents.RewardClaimed(player, 0, requestId);\\n        emit SharedEvents.ProfileUpdated(player);\\n    }\\n\\n    /// @notice Returns a player's profile\\n    /// @param player The player address\\n    /// @return The player profile struct\\n    function profile(address player) external view returns (Profile memory) {\\n        return profiles[player];\\n    }\\n\\n    /// @notice Returns aggregated player statistics\\n    /// @return The player statistics struct\\n    function playerStatistics() external view returns (PlayerStatistics memory) {\\n        return playerStats;\\n    }\\n\\n    /// @notice Grants XP to multiple players in a batch\\n    /// @param players Array of player addresses\\n    /// @param amounts Array of XP amounts\\n    /// @param requestIds Array of unique request IDs\\n    function batchGrantXP(address[] calldata players, uint256[] calldata amounts, bytes32[] calldata requestIds)\\n        external\\n        onlyBackend\\n    {\\n        if (players.length != amounts.length || players.length != requestIds.length) {\\n            revert SharedErrors.InvalidInput();\\n        }\\n\\n        for (uint256 i = 0; i < players.length; i++) {\\n            if (processedRequestIds[requestIds[i]]) continue;\\n\\n            processedRequestIds[requestIds[i]] = true;\\n\\n            Profile storage playerProfile = profiles[players[i]];\\n            uint256 oldLevel = playerProfile.level;\\n\\n            unchecked {\\n                playerProfile.xp += amounts[i];\\n                playerProfile.level = LevelMath.calculateLevel(playerProfile.xp);\\n                playerProfile.lifetimeXP += amounts[i];\\n            }\\n\\n            playerStats.totalXPGranted += amounts[i];\\n\\n            emit SharedEvents.XPGranted(players[i], amounts[i], playerProfile.xp, requestIds[i]);\\n\\n            if (playerProfile.level > oldLevel) {\\n                emit SharedEvents.LevelUp(players[i], playerProfile.level, playerProfile.xp);\\n            }\\n        }\\n    }\\n\\n    /// @notice Grants points to multiple players in a batch\\n    /// @param players Array of player addresses\\n    /// @param amounts Array of point amounts\\n    /// @param requestIds Array of unique request IDs\\n    function batchGrantPoints(address[] calldata players, uint256[] calldata amounts, bytes32[] calldata requestIds)\\n        external\\n        onlyBackend\\n    {\\n        if (players.length != amounts.length || players.length != requestIds.length) {\\n            revert SharedErrors.InvalidInput();\\n        }\\n\\n        for (uint256 i = 0; i < players.length; i++) {\\n            if (processedRequestIds[requestIds[i]]) continue;\\n\\n            processedRequestIds[requestIds[i]] = true;\\n\\n            Profile storage playerProfile = profiles[players[i]];\\n\\n            unchecked {\\n                playerProfile.points += amounts[i];\\n                playerProfile.lifetimePoints += amounts[i];\\n            }\\n\\n            playerStats.totalPointsGranted += amounts[i];\\n\\n            emit SharedEvents.PointsGranted(players[i], amounts[i], playerProfile.points, requestIds[i]);\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0x363babbd48fdcaf3e770048f9e6bacc751c7aff2e93ebbaf8a3eb45aa84fe5d4\",\"license\":\"MIT\"},\"contracts/SharedErrors.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity 0.8.28;\\n\\n/// @title SharedErrors\\n/// @notice Custom errors used across all Vibepool foundation contracts\\ninterface SharedErrors {\\n    error UnsupportedAsset();\\n    error Unauthorized();\\n    error InvalidAmount();\\n    error InvalidAddress();\\n    error InsufficientBalance();\\n    error NoSpinRemaining();\\n    error AlreadyPaused();\\n    error NotPaused();\\n    error RewardFailed();\\n    error TransferFailed();\\n    error InvalidReceiver();\\n    error ZeroAddress();\\n    error DuplicateRequestId();\\n    error AssetDisabled();\\n    error AssetNotFound();\\n    error AssetAlreadyExists();\\n    error InvalidInput();\\n}\\n\",\"keccak256\":\"0xbc3541ca08e21ce9b77bf9c63d40a4e4e09498736d9e14d1239a41661a780810\",\"license\":\"MIT\"},\"contracts/SharedEvents.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity 0.8.28;\\n\\n/// @title SharedEvents\\n/// @notice Events emitted across all Vibepool foundation contracts\\ninterface SharedEvents {\\n    event XPGranted(address indexed player, uint256 amount, uint256 newTotalXP, bytes32 indexed requestId);\\n    event PointsGranted(address indexed player, uint256 amount, uint256 newTotalPoints, bytes32 indexed requestId);\\n    event PointsDeducted(address indexed player, uint256 amount, uint256 newTotalPoints, bytes32 indexed requestId);\\n    event SpinGranted(address indexed player, uint256 amount, uint256 newAvailableSpins, bytes32 indexed requestId);\\n    event SpinConsumed(address indexed player, uint256 newAvailableSpins, bytes32 indexed requestId);\\n    event RewardRecorded(address indexed player, uint256 amount, bytes32 indexed requestId);\\n    event RewardClaimed(address indexed player, uint256 amount, bytes32 indexed requestId);\\n    event RewardPaid(\\n        address indexed recipient,\\n        address indexed asset,\\n        uint256 amount,\\n        bytes32 indexed requestId,\\n        uint256 timestamp\\n    );\\n    event ActivityRecorded(address indexed player, uint256 streak, uint256 longestStreak, uint256 activityCount);\\n    event StreakUpdated(address indexed player, uint256 streak, uint256 longestStreak);\\n    event AssetEnabled(address indexed asset, string symbol);\\n    event AssetDisabled(address indexed asset, string symbol);\\n    event TreasuryDeposit(address indexed asset, uint256 amount, uint256 timestamp);\\n    event TreasuryWithdrawal(address indexed asset, uint256 amount, address indexed to, uint256 timestamp);\\n    event LevelUp(address indexed player, uint256 newLevel, uint256 totalXP);\\n    event ProfileUpdated(address indexed player);\\n    event Paused();\\n    event Unpaused();\\n}\\n\",\"keccak256\":\"0x22840191a764ff96c2ae6f073abd6a8bb9c845b303c6d1fa3bb943a0010a5db4\",\"license\":\"MIT\"},\"contracts/interfaces/IPointsManager.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity 0.8.28;\\n\\n/// @title IPointsManager\\n/// @notice Interface for the PointsManager contract\\ninterface IPointsManager {\\n    /// @notice Player profile data\\n    struct Profile {\\n        uint256 xp;\\n        uint256 level;\\n        uint256 points;\\n        uint256 lifetimePoints;\\n        uint256 lifetimeXP;\\n        uint256 availableSpins;\\n        uint256 rewardClaims;\\n        uint64 currentStreak;\\n        uint64 longestStreak;\\n        uint64 lastActivity;\\n        uint64 registrationTime;\\n    }\\n\\n    /// @notice Aggregated player statistics\\n    struct PlayerStatistics {\\n        uint256 totalXPGranted;\\n        uint256 totalPointsGranted;\\n        uint256 totalPointsDeducted;\\n        uint256 totalSpinsGranted;\\n        uint256 totalRewardClaims;\\n    }\\n\\n    /// @notice Grants XP to a player\\n    /// @param player The player address\\n    /// @param amount The XP amount\\n    /// @param requestId Unique request ID\\n    function grantXP(address player, uint256 amount, bytes32 requestId) external;\\n\\n    /// @notice Grants points to a player\\n    /// @param player The player address\\n    /// @param amount The points amount\\n    /// @param requestId Unique request ID\\n    function grantPoints(address player, uint256 amount, bytes32 requestId) external;\\n\\n    /// @notice Deducts points from a player\\n    /// @param player The player address\\n    /// @param amount The points amount\\n    /// @param requestId Unique request ID\\n    function deductPoints(address player, uint256 amount, bytes32 requestId) external;\\n\\n    /// @notice Grants spins to a player\\n    /// @param player The player address\\n    /// @param amount The spin amount\\n    /// @param requestId Unique request ID\\n    function grantSpin(address player, uint256 amount, bytes32 requestId) external;\\n\\n    /// @notice Records a reward claim for a player\\n    /// @param player The player address\\n    /// @param requestId Unique request ID\\n    function grantRewardClaim(address player, bytes32 requestId) external;\\n\\n    /// @notice Returns a player's profile\\n    /// @param player The player address\\n    function profile(address player) external view returns (Profile memory);\\n\\n    /// @notice Returns aggregated player statistics\\n    function playerStatistics() external view returns (PlayerStatistics memory);\\n\\n    /// @notice Grants XP to multiple players in a batch\\n    /// @param players Array of player addresses\\n    /// @param amounts Array of XP amounts\\n    /// @param requestIds Array of unique request IDs\\n    function batchGrantXP(address[] calldata players, uint256[] calldata amounts, bytes32[] calldata requestIds) external;\\n\\n    /// @notice Grants points to multiple players in a batch\\n    /// @param players Array of player addresses\\n    /// @param amounts Array of point amounts\\n    /// @param requestIds Array of unique request IDs\\n    function batchGrantPoints(address[] calldata players, uint256[] calldata amounts, bytes32[] calldata requestIds) external;\\n}\\n\",\"keccak256\":\"0xa0971d90823a057c3f11615e65744c6fbf6837cbae5215399833553d67e31df9\",\"license\":\"MIT\"},\"contracts/libraries/LevelMath.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity 0.8.28;\\n\\n/// @title LevelMath\\n/// @notice Library for calculating player level from XP\\nlibrary LevelMath {\\n    /// @notice Calculates level from total XP (1 level per 1000 XP)\\n    /// @param xp The total experience points\\n    /// @return The calculated level\\n    function calculateLevel(uint256 xp) internal pure returns (uint256) {\\n        return xp / 1000;\\n    }\\n}\\n\",\"keccak256\":\"0x533c97824a3f3ed5d7f38f2bb8196d281168440fbba6b9b2c16d6d095f521c6c\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x60c060405234801561000f575f5ffd5b5060405161194038038061194083398101604081905261002e91610142565b6001600160a01b03808316608052811660a05261004b5f3361007e565b506100767f25cf2b509f2a7f322675b2a5322b182f44ad2c03ac941a0af17c9b178f5d5d5f3361007e565b505050610173565b5f828152602081815260408083206001600160a01b038516845290915281205460ff1661011e575f838152602081815260408083206001600160a01b03861684529091529020805460ff191660011790556100d63390565b6001600160a01b0316826001600160a01b0316847f2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d60405160405180910390a4506001610121565b505f5b92915050565b80516001600160a01b038116811461013d575f5ffd5b919050565b5f5f60408385031215610153575f5ffd5b61015c83610127565b915061016a60208401610127565b90509250929050565b60805160a0516117ac6101945f395f61029d01525f61035f01526117ac5ff3fe608060405234801561000f575f5ffd5b506004361061013d575f3560e01c8063730f1fa9116100b4578063a4802a1111610079578063a4802a1114610347578063af1b22171461035a578063b1fed1e714610381578063bbe1562714610394578063d547741f14610472578063ed384a5a14610485575f5ffd5b8063730f1fa9146102d757806391d14854146102f957806392c2becc1461030c5780639dd9d0fd14610320578063a217fddf14610340575f5ffd5b806320ff72491161010557806320ff72491461021c578063248a9ca31461022f5780632f2ff15d1461025f57806336568abe146102725780633e0c6f3f146102855780636a07c2b514610298575f5ffd5b806301ffc9a71461014157806304b1d96f1461016957806306128da71461017e5780630ee42686146101c757806315581a5314610209575b5f5ffd5b61015461014f366004611466565b610498565b60405190151581526020015b60405180910390f35b61017c6101773660046114af565b6104ce565b005b610186610628565b60405161016091905f60a082019050825182526020830151602083015260408301516040830152606083015160608301526080830151608083015292915050565b6003546004546005546006546007546101e1949392919085565b604080519586526020860194909452928401919091526060830152608082015260a001610160565b61017c610217366004611526565b61068a565b61017c61022a3660046114af565b610981565b61025161023d3660046115c2565b5f9081526020819052604090206001015490565b604051908152602001610160565b61017c61026d3660046115d9565b610ac4565b61017c6102803660046115d9565b610aee565b61017c610293366004611526565b610b26565b6102bf7f000000000000000000000000000000000000000000000000000000000000000081565b6040516001600160a01b039091168152602001610160565b6101546102e53660046115c2565b60026020525f908152604090205460ff1681565b6101546103073660046115d9565b610d83565b6102515f5160206117575f395f51905f5281565b61033361032e366004611603565b610dab565b604051610160919061161c565b6102515f81565b61017c6103553660046116dc565b610ece565b6102bf7f000000000000000000000000000000000000000000000000000000000000000081565b61017c61038f3660046114af565b610ff9565b61040d6103a2366004611603565b600160208190525f91825260409091208054918101546002820154600383015460048401546005850154600686015460079096015494959394929391929091906001600160401b0380821691600160401b8104821691600160801b8204811691600160c01b9004168b565b604080519b8c5260208c019a909a52988a01979097526060890195909552608088019390935260a087019190915260c08601526001600160401b0390811660e08601529081166101008501529081166101208401521661014082015261016001610160565b61017c6104803660046115d9565b6111ca565b61017c6104933660046114af565b6111ee565b5f6001600160e01b03198216637965db0b60e01b14806104c857506301ffc9a760e01b6001600160e01b03198316145b92915050565b6104e55f5160206117575f395f51905f5233610d83565b610501576040516282b42960e81b815260040160405180910390fd5b81805f036105225760405163162908e360e11b815260040160405180910390fd5b5f8281526002602052604090205460ff16156105505760405162c7e13f60e61b815260040160405180910390fd5b5f828152600260209081526040808320805460ff191660019081179091556001600160a01b0388168452909152812060058101805486019055600680549192869261059c908490611704565b9091555050600581015460408051868152602081019290925284916001600160a01b038816917f9c59da7fd95ea6a8010a7b52f6bce91b0cfbe1f7322d7a9238d9e070c37e03fe91015b60405180910390a36040516001600160a01b038616907fbe4ec58a792f909e102ee3d745d0c3b34a4d437a54d903c4db098d31c556422f905f90a25050505050565b6106556040518060a001604052805f81526020015f81526020015f81526020015f81526020015f81525090565b506040805160a08101825260035481526004546020820152600554918101919091526006546060820152600754608082015290565b6106a15f5160206117575f395f51905f5233610d83565b6106bd576040516282b42960e81b815260040160405180910390fd5b84831415806106cc5750848114155b156106ea5760405163b4fa3fb360e01b815260040160405180910390fd5b5f5b858110156109785760025f84848481811061070957610709611723565b602090810292909201358352508101919091526040015f205460ff1661097057600160025f85858581811061074057610740611723565b9050602002013581526020019081526020015f205f6101000a81548160ff0219169083151502179055505f60015f89898581811061078057610780611723565b90506020020160208101906107959190611603565b6001600160a01b0316815260208101919091526040015f2060018101549091508686848181106107c7576107c7611723565b845460209091029290920135919091018084556107e49150611313565b60018301558686848181106107fb576107fb611723565b60048501805460209092029390930135019091555086868481811061082257610822611723565b9050602002013560035f015f82825461083b9190611704565b90915550859050848481811061085357610853611723565b9050602002013589898581811061086c5761086c611723565b90506020020160208101906108819190611603565b6001600160a01b03167f399439b0a85cd609a4e88c53776e33ff8f2ddec09209879eb8b8236695aae2a28989878181106108bd576108bd611723565b90506020020135855f01546040516108df929190918252602082015260400190565b60405180910390a3808260010154111561096d5788888481811061090557610905611723565b905060200201602081019061091a9190611603565b6001600160a01b03167feec61667dd6eeecdccfef3c906e0fd047cca672804901ac4254d8545e9a426d48360010154845f0154604051610964929190918252602082015260400190565b60405180910390a25b50505b6001016106ec565b50505050505050565b6109985f5160206117575f395f51905f5233610d83565b6109b4576040516282b42960e81b815260040160405180910390fd5b81805f036109d55760405163162908e360e11b815260040160405180910390fd5b5f8281526002602052604090205460ff1615610a035760405162c7e13f60e61b815260040160405180910390fd5b5f828152600260208181526040808420805460ff191660019081179091556001600160a01b038916855290915290912090810154841115610a5757604051631e9acf1760e31b815260040160405180910390fd5b6002810180548590039055600580548591905f90610a76908490611704565b9091555050600281015460408051868152602081019290925284916001600160a01b038816917f489535efd65aeeac391e4ccab6d92610f1e9ae53da555d0b6620098e6aee680991016105e6565b5f82815260208190526040902060010154610ade81611320565b610ae8838361132d565b50505050565b6001600160a01b0381163314610b175760405163334bd91960e11b815260040160405180910390fd5b610b2182826113bc565b505050565b610b3d5f5160206117575f395f51905f5233610d83565b610b59576040516282b42960e81b815260040160405180910390fd5b8483141580610b685750848114155b15610b865760405163b4fa3fb360e01b815260040160405180910390fd5b5f5b858110156109785760025f848484818110610ba557610ba5611723565b602090810292909201358352508101919091526040015f205460ff16610d7b57600160025f858585818110610bdc57610bdc611723565b9050602002013581526020019081526020015f205f6101000a81548160ff0219169083151502179055505f60015f898985818110610c1c57610c1c611723565b9050602002016020810190610c319190611603565b6001600160a01b03166001600160a01b031681526020019081526020015f209050858583818110610c6457610c64611723565b600284018054602090920293909301350190915550858583818110610c8b57610c8b611723565b600384018054602090920293909301350190915550858583818110610cb257610cb2611723565b9050602002013560036001015f828254610ccc9190611704565b909155508490508383818110610ce457610ce4611723565b90506020020135888884818110610cfd57610cfd611723565b9050602002016020810190610d129190611603565b6001600160a01b03167fac2c5cffc69d7c595842c069f8431492915645dd641c35aa1c44dfb14f482dcf888886818110610d4e57610d4e611723565b905060200201358460020154604051610d71929190918252602082015260400190565b60405180910390a3505b600101610b88565b5f918252602082815260408084206001600160a01b0393909316845291905290205460ff1690565b610e216040518061016001604052805f81526020015f81526020015f81526020015f81526020015f81526020015f81526020015f81526020015f6001600160401b031681526020015f6001600160401b031681526020015f6001600160401b031681526020015f6001600160401b031681525090565b506001600160a01b03165f908152600160208181526040928390208351610160810185528154815292810154918301919091526002810154928201929092526003820154606082015260048201546080820152600582015460a0820152600682015460c08201526007909101546001600160401b0380821660e0840152600160401b82048116610100840152600160801b82048116610120840152600160c01b9091041661014082015290565b610ee55f5160206117575f395f51905f5233610d83565b610f01576040516282b42960e81b815260040160405180910390fd5b5f8181526002602052604090205460ff1615610f2f5760405162c7e13f60e61b815260040160405180910390fd5b5f818152600260209081526040808320805460ff191660019081179091556001600160a01b0386168452918290528220600681018054830190556007805491939091610f7c908490611704565b90915550506040515f815282906001600160a01b038516907fe413caa6d70a6d9b51c2af2575a2914490f614355049af8ae7cde5caab9fd2019060200160405180910390a36040516001600160a01b038416907fbe4ec58a792f909e102ee3d745d0c3b34a4d437a54d903c4db098d31c556422f905f90a2505050565b6110105f5160206117575f395f51905f5233610d83565b61102c576040516282b42960e81b815260040160405180910390fd5b81805f0361104d5760405163162908e360e11b815260040160405180910390fd5b5f8281526002602052604090205460ff161561107b5760405162c7e13f60e61b815260040160405180910390fd5b5f828152600260209081526040808320805460ff191660019081179091556001600160a01b03881684529182905290912090810154815485018083556110c090611313565b600183015560048201805486019055600380548691905f906110e3908490611704565b9091555050815460408051878152602081019290925285916001600160a01b038916917f399439b0a85cd609a4e88c53776e33ff8f2ddec09209879eb8b8236695aae2a2910160405180910390a3808260010154111561118f57600182015482546040516001600160a01b038916927feec61667dd6eeecdccfef3c906e0fd047cca672804901ac4254d8545e9a426d49261118692918252602082015260400190565b60405180910390a25b6040516001600160a01b038716907fbe4ec58a792f909e102ee3d745d0c3b34a4d437a54d903c4db098d31c556422f905f90a2505050505050565b5f828152602081905260409020600101546111e481611320565b610ae883836113bc565b6112055f5160206117575f395f51905f5233610d83565b611221576040516282b42960e81b815260040160405180910390fd5b81805f036112425760405163162908e360e11b815260040160405180910390fd5b5f8281526002602052604090205460ff16156112705760405162c7e13f60e61b815260040160405180910390fd5b5f828152600260208181526040808420805460ff191660019081179091556001600160a01b038916855290915282209081018054860190556003810180548601905560048054919286926112c5908490611704565b9091555050600281015460408051868152602081019290925284916001600160a01b038816917fac2c5cffc69d7c595842c069f8431492915645dd641c35aa1c44dfb14f482dcf91016105e6565b5f6104c86103e883611737565b61132a8133611425565b50565b5f6113388383610d83565b6113b5575f838152602081815260408083206001600160a01b03861684529091529020805460ff1916600117905561136d3390565b6001600160a01b0316826001600160a01b0316847f2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d60405160405180910390a45060016104c8565b505f6104c8565b5f6113c78383610d83565b156113b5575f838152602081815260408083206001600160a01b0386168085529252808320805460ff1916905551339286917ff6391f5c32d9c69d2a47ea670b442974b53935d1edc7fd64eb21e047a839171b9190a45060016104c8565b61142f8282610d83565b6114625760405163e2517d3f60e01b81526001600160a01b03821660048201526024810183905260440160405180910390fd5b5050565b5f60208284031215611476575f5ffd5b81356001600160e01b03198116811461148d575f5ffd5b9392505050565b80356001600160a01b03811681146114aa575f5ffd5b919050565b5f5f5f606084860312156114c1575f5ffd5b6114ca84611494565b95602085013595506040909401359392505050565b5f5f83601f8401126114ef575f5ffd5b5081356001600160401b03811115611505575f5ffd5b6020830191508360208260051b850101111561151f575f5ffd5b9250929050565b5f5f5f5f5f5f6060878903121561153b575f5ffd5b86356001600160401b03811115611550575f5ffd5b61155c89828a016114df565b90975095505060208701356001600160401b0381111561157a575f5ffd5b61158689828a016114df565b90955093505060408701356001600160401b038111156115a4575f5ffd5b6115b089828a016114df565b979a9699509497509295939492505050565b5f602082840312156115d2575f5ffd5b5035919050565b5f5f604083850312156115ea575f5ffd5b823591506115fa60208401611494565b90509250929050565b5f60208284031215611613575f5ffd5b61148d82611494565b5f61016082019050825182526020830151602083015260408301516040830152606083015160608301526080830151608083015260a083015160a083015260c083015160c083015260e083015161167e60e08401826001600160401b03169052565b5061010083015161169b6101008401826001600160401b03169052565b506101208301516116b86101208401826001600160401b03169052565b506101408301516116d56101408401826001600160401b03169052565b5092915050565b5f5f604083850312156116ed575f5ffd5b6116f683611494565b946020939093013593505050565b808201808211156104c857634e487b7160e01b5f52601160045260245ffd5b634e487b7160e01b5f52603260045260245ffd5b5f8261175157634e487b7160e01b5f52601260045260245ffd5b50049056fe25cf2b509f2a7f322675b2a5322b182f44ad2c03ac941a0af17c9b178f5d5d5fa2646970667358221220b73ea547d495474c3291fbe99a8af75f986575116a9c6b74fe8c52478bdc096c64736f6c634300081c0033",
+  "deployedBytecode": "0x608060405234801561000f575f5ffd5b506004361061013d575f3560e01c8063730f1fa9116100b4578063a4802a1111610079578063a4802a1114610347578063af1b22171461035a578063b1fed1e714610381578063bbe1562714610394578063d547741f14610472578063ed384a5a14610485575f5ffd5b8063730f1fa9146102d757806391d14854146102f957806392c2becc1461030c5780639dd9d0fd14610320578063a217fddf14610340575f5ffd5b806320ff72491161010557806320ff72491461021c578063248a9ca31461022f5780632f2ff15d1461025f57806336568abe146102725780633e0c6f3f146102855780636a07c2b514610298575f5ffd5b806301ffc9a71461014157806304b1d96f1461016957806306128da71461017e5780630ee42686146101c757806315581a5314610209575b5f5ffd5b61015461014f366004611466565b610498565b60405190151581526020015b60405180910390f35b61017c6101773660046114af565b6104ce565b005b610186610628565b60405161016091905f60a082019050825182526020830151602083015260408301516040830152606083015160608301526080830151608083015292915050565b6003546004546005546006546007546101e1949392919085565b604080519586526020860194909452928401919091526060830152608082015260a001610160565b61017c610217366004611526565b61068a565b61017c61022a3660046114af565b610981565b61025161023d3660046115c2565b5f9081526020819052604090206001015490565b604051908152602001610160565b61017c61026d3660046115d9565b610ac4565b61017c6102803660046115d9565b610aee565b61017c610293366004611526565b610b26565b6102bf7f000000000000000000000000000000000000000000000000000000000000000081565b6040516001600160a01b039091168152602001610160565b6101546102e53660046115c2565b60026020525f908152604090205460ff1681565b6101546103073660046115d9565b610d83565b6102515f5160206117575f395f51905f5281565b61033361032e366004611603565b610dab565b604051610160919061161c565b6102515f81565b61017c6103553660046116dc565b610ece565b6102bf7f000000000000000000000000000000000000000000000000000000000000000081565b61017c61038f3660046114af565b610ff9565b61040d6103a2366004611603565b600160208190525f91825260409091208054918101546002820154600383015460048401546005850154600686015460079096015494959394929391929091906001600160401b0380821691600160401b8104821691600160801b8204811691600160c01b9004168b565b604080519b8c5260208c019a909a52988a01979097526060890195909552608088019390935260a087019190915260c08601526001600160401b0390811660e08601529081166101008501529081166101208401521661014082015261016001610160565b61017c6104803660046115d9565b6111ca565b61017c6104933660046114af565b6111ee565b5f6001600160e01b03198216637965db0b60e01b14806104c857506301ffc9a760e01b6001600160e01b03198316145b92915050565b6104e55f5160206117575f395f51905f5233610d83565b610501576040516282b42960e81b815260040160405180910390fd5b81805f036105225760405163162908e360e11b815260040160405180910390fd5b5f8281526002602052604090205460ff16156105505760405162c7e13f60e61b815260040160405180910390fd5b5f828152600260209081526040808320805460ff191660019081179091556001600160a01b0388168452909152812060058101805486019055600680549192869261059c908490611704565b9091555050600581015460408051868152602081019290925284916001600160a01b038816917f9c59da7fd95ea6a8010a7b52f6bce91b0cfbe1f7322d7a9238d9e070c37e03fe91015b60405180910390a36040516001600160a01b038616907fbe4ec58a792f909e102ee3d745d0c3b34a4d437a54d903c4db098d31c556422f905f90a25050505050565b6106556040518060a001604052805f81526020015f81526020015f81526020015f81526020015f81525090565b506040805160a08101825260035481526004546020820152600554918101919091526006546060820152600754608082015290565b6106a15f5160206117575f395f51905f5233610d83565b6106bd576040516282b42960e81b815260040160405180910390fd5b84831415806106cc5750848114155b156106ea5760405163b4fa3fb360e01b815260040160405180910390fd5b5f5b858110156109785760025f84848481811061070957610709611723565b602090810292909201358352508101919091526040015f205460ff1661097057600160025f85858581811061074057610740611723565b9050602002013581526020019081526020015f205f6101000a81548160ff0219169083151502179055505f60015f89898581811061078057610780611723565b90506020020160208101906107959190611603565b6001600160a01b0316815260208101919091526040015f2060018101549091508686848181106107c7576107c7611723565b845460209091029290920135919091018084556107e49150611313565b60018301558686848181106107fb576107fb611723565b60048501805460209092029390930135019091555086868481811061082257610822611723565b9050602002013560035f015f82825461083b9190611704565b90915550859050848481811061085357610853611723565b9050602002013589898581811061086c5761086c611723565b90506020020160208101906108819190611603565b6001600160a01b03167f399439b0a85cd609a4e88c53776e33ff8f2ddec09209879eb8b8236695aae2a28989878181106108bd576108bd611723565b90506020020135855f01546040516108df929190918252602082015260400190565b60405180910390a3808260010154111561096d5788888481811061090557610905611723565b905060200201602081019061091a9190611603565b6001600160a01b03167feec61667dd6eeecdccfef3c906e0fd047cca672804901ac4254d8545e9a426d48360010154845f0154604051610964929190918252602082015260400190565b60405180910390a25b50505b6001016106ec565b50505050505050565b6109985f5160206117575f395f51905f5233610d83565b6109b4576040516282b42960e81b815260040160405180910390fd5b81805f036109d55760405163162908e360e11b815260040160405180910390fd5b5f8281526002602052604090205460ff1615610a035760405162c7e13f60e61b815260040160405180910390fd5b5f828152600260208181526040808420805460ff191660019081179091556001600160a01b038916855290915290912090810154841115610a5757604051631e9acf1760e31b815260040160405180910390fd5b6002810180548590039055600580548591905f90610a76908490611704565b9091555050600281015460408051868152602081019290925284916001600160a01b038816917f489535efd65aeeac391e4ccab6d92610f1e9ae53da555d0b6620098e6aee680991016105e6565b5f82815260208190526040902060010154610ade81611320565b610ae8838361132d565b50505050565b6001600160a01b0381163314610b175760405163334bd91960e11b815260040160405180910390fd5b610b2182826113bc565b505050565b610b3d5f5160206117575f395f51905f5233610d83565b610b59576040516282b42960e81b815260040160405180910390fd5b8483141580610b685750848114155b15610b865760405163b4fa3fb360e01b815260040160405180910390fd5b5f5b858110156109785760025f848484818110610ba557610ba5611723565b602090810292909201358352508101919091526040015f205460ff16610d7b57600160025f858585818110610bdc57610bdc611723565b9050602002013581526020019081526020015f205f6101000a81548160ff0219169083151502179055505f60015f898985818110610c1c57610c1c611723565b9050602002016020810190610c319190611603565b6001600160a01b03166001600160a01b031681526020019081526020015f209050858583818110610c6457610c64611723565b600284018054602090920293909301350190915550858583818110610c8b57610c8b611723565b600384018054602090920293909301350190915550858583818110610cb257610cb2611723565b9050602002013560036001015f828254610ccc9190611704565b909155508490508383818110610ce457610ce4611723565b90506020020135888884818110610cfd57610cfd611723565b9050602002016020810190610d129190611603565b6001600160a01b03167fac2c5cffc69d7c595842c069f8431492915645dd641c35aa1c44dfb14f482dcf888886818110610d4e57610d4e611723565b905060200201358460020154604051610d71929190918252602082015260400190565b60405180910390a3505b600101610b88565b5f918252602082815260408084206001600160a01b0393909316845291905290205460ff1690565b610e216040518061016001604052805f81526020015f81526020015f81526020015f81526020015f81526020015f81526020015f81526020015f6001600160401b031681526020015f6001600160401b031681526020015f6001600160401b031681526020015f6001600160401b031681525090565b506001600160a01b03165f908152600160208181526040928390208351610160810185528154815292810154918301919091526002810154928201929092526003820154606082015260048201546080820152600582015460a0820152600682015460c08201526007909101546001600160401b0380821660e0840152600160401b82048116610100840152600160801b82048116610120840152600160c01b9091041661014082015290565b610ee55f5160206117575f395f51905f5233610d83565b610f01576040516282b42960e81b815260040160405180910390fd5b5f8181526002602052604090205460ff1615610f2f5760405162c7e13f60e61b815260040160405180910390fd5b5f818152600260209081526040808320805460ff191660019081179091556001600160a01b0386168452918290528220600681018054830190556007805491939091610f7c908490611704565b90915550506040515f815282906001600160a01b038516907fe413caa6d70a6d9b51c2af2575a2914490f614355049af8ae7cde5caab9fd2019060200160405180910390a36040516001600160a01b038416907fbe4ec58a792f909e102ee3d745d0c3b34a4d437a54d903c4db098d31c556422f905f90a2505050565b6110105f5160206117575f395f51905f5233610d83565b61102c576040516282b42960e81b815260040160405180910390fd5b81805f0361104d5760405163162908e360e11b815260040160405180910390fd5b5f8281526002602052604090205460ff161561107b5760405162c7e13f60e61b815260040160405180910390fd5b5f828152600260209081526040808320805460ff191660019081179091556001600160a01b03881684529182905290912090810154815485018083556110c090611313565b600183015560048201805486019055600380548691905f906110e3908490611704565b9091555050815460408051878152602081019290925285916001600160a01b038916917f399439b0a85cd609a4e88c53776e33ff8f2ddec09209879eb8b8236695aae2a2910160405180910390a3808260010154111561118f57600182015482546040516001600160a01b038916927feec61667dd6eeecdccfef3c906e0fd047cca672804901ac4254d8545e9a426d49261118692918252602082015260400190565b60405180910390a25b6040516001600160a01b038716907fbe4ec58a792f909e102ee3d745d0c3b34a4d437a54d903c4db098d31c556422f905f90a2505050505050565b5f828152602081905260409020600101546111e481611320565b610ae883836113bc565b6112055f5160206117575f395f51905f5233610d83565b611221576040516282b42960e81b815260040160405180910390fd5b81805f036112425760405163162908e360e11b815260040160405180910390fd5b5f8281526002602052604090205460ff16156112705760405162c7e13f60e61b815260040160405180910390fd5b5f828152600260208181526040808420805460ff191660019081179091556001600160a01b038916855290915282209081018054860190556003810180548601905560048054919286926112c5908490611704565b9091555050600281015460408051868152602081019290925284916001600160a01b038816917fac2c5cffc69d7c595842c069f8431492915645dd641c35aa1c44dfb14f482dcf91016105e6565b5f6104c86103e883611737565b61132a8133611425565b50565b5f6113388383610d83565b6113b5575f838152602081815260408083206001600160a01b03861684529091529020805460ff1916600117905561136d3390565b6001600160a01b0316826001600160a01b0316847f2f8788117e7eff1d82e926ec794901d17c78024a50270940304540a733656f0d60405160405180910390a45060016104c8565b505f6104c8565b5f6113c78383610d83565b156113b5575f838152602081815260408083206001600160a01b0386168085529252808320805460ff1916905551339286917ff6391f5c32d9c69d2a47ea670b442974b53935d1edc7fd64eb21e047a839171b9190a45060016104c8565b61142f8282610d83565b6114625760405163e2517d3f60e01b81526001600160a01b03821660048201526024810183905260440160405180910390fd5b5050565b5f60208284031215611476575f5ffd5b81356001600160e01b03198116811461148d575f5ffd5b9392505050565b80356001600160a01b03811681146114aa575f5ffd5b919050565b5f5f5f606084860312156114c1575f5ffd5b6114ca84611494565b95602085013595506040909401359392505050565b5f5f83601f8401126114ef575f5ffd5b5081356001600160401b03811115611505575f5ffd5b6020830191508360208260051b850101111561151f575f5ffd5b9250929050565b5f5f5f5f5f5f6060878903121561153b575f5ffd5b86356001600160401b03811115611550575f5ffd5b61155c89828a016114df565b90975095505060208701356001600160401b0381111561157a575f5ffd5b61158689828a016114df565b90955093505060408701356001600160401b038111156115a4575f5ffd5b6115b089828a016114df565b979a9699509497509295939492505050565b5f602082840312156115d2575f5ffd5b5035919050565b5f5f604083850312156115ea575f5ffd5b823591506115fa60208401611494565b90509250929050565b5f60208284031215611613575f5ffd5b61148d82611494565b5f61016082019050825182526020830151602083015260408301516040830152606083015160608301526080830151608083015260a083015160a083015260c083015160c083015260e083015161167e60e08401826001600160401b03169052565b5061010083015161169b6101008401826001600160401b03169052565b506101208301516116b86101208401826001600160401b03169052565b506101408301516116d56101408401826001600160401b03169052565b5092915050565b5f5f604083850312156116ed575f5ffd5b6116f683611494565b946020939093013593505050565b808201808211156104c857634e487b7160e01b5f52601160045260245ffd5b634e487b7160e01b5f52603260045260245ffd5b5f8261175157634e487b7160e01b5f52601260045260245ffd5b50049056fe25cf2b509f2a7f322675b2a5322b182f44ad2c03ac941a0af17c9b178f5d5d5fa2646970667358221220b73ea547d495474c3291fbe99a8af75f986575116a9c6b74fe8c52478bdc096c64736f6c634300081c0033",
+  "devdoc": {
+    "details": "Backend-authorized only. Never allows self-editing.",
+    "errors": {
+      "AccessControlBadConfirmation()": [
+        {
+          "details": "The caller of a function is not the expected one. NOTE: Don't confuse with {AccessControlUnauthorizedAccount}."
+        }
+      ],
+      "AccessControlUnauthorizedAccount(address,bytes32)": [
+        {
+          "details": "The `account` is missing a role."
+        }
+      ]
+    },
+    "events": {
+      "RoleAdminChanged(bytes32,bytes32,bytes32)": {
+        "details": "Emitted when `newAdminRole` is set as ``role``'s admin role, replacing `previousAdminRole` `DEFAULT_ADMIN_ROLE` is the starting admin for all roles, despite {RoleAdminChanged} not being emitted to signal this."
+      },
+      "RoleGranted(bytes32,address,address)": {
+        "details": "Emitted when `account` is granted `role`. `sender` is the account that originated the contract call. This account bears the admin role (for the granted role). Expected in cases where the role was granted using the internal {AccessControl-_grantRole}."
+      },
+      "RoleRevoked(bytes32,address,address)": {
+        "details": "Emitted when `account` is revoked `role`. `sender` is the account that originated the contract call:   - if using `revokeRole`, it is the admin role bearer   - if using `renounceRole`, it is the role bearer (i.e. `account`)"
+      }
+    },
+    "kind": "dev",
+    "methods": {
+      "batchGrantPoints(address[],uint256[],bytes32[])": {
+        "params": {
+          "amounts": "Array of point amounts",
+          "players": "Array of player addresses",
+          "requestIds": "Array of unique request IDs"
+        }
+      },
+      "batchGrantXP(address[],uint256[],bytes32[])": {
+        "params": {
+          "amounts": "Array of XP amounts",
+          "players": "Array of player addresses",
+          "requestIds": "Array of unique request IDs"
+        }
+      },
+      "constructor": {
+        "params": {
+          "_activityRegistry": "Address of the ActivityRegistry contract",
+          "_spinRewardManager": "Address of the SpinRewardManager contract"
+        }
+      },
+      "deductPoints(address,uint256,bytes32)": {
+        "params": {
+          "amount": "The points amount to deduct",
+          "player": "The player address",
+          "requestId": "Unique request ID for replay protection"
+        }
+      },
+      "getRoleAdmin(bytes32)": {
+        "details": "Returns the admin role that controls `role`. See {grantRole} and {revokeRole}. To change a role's admin, use {_setRoleAdmin}."
+      },
+      "grantPoints(address,uint256,bytes32)": {
+        "params": {
+          "amount": "The points amount to grant",
+          "player": "The player address",
+          "requestId": "Unique request ID for replay protection"
+        }
+      },
+      "grantRewardClaim(address,bytes32)": {
+        "params": {
+          "player": "The player address",
+          "requestId": "Unique request ID for replay protection"
+        }
+      },
+      "grantRole(bytes32,address)": {
+        "details": "Grants `role` to `account`. If `account` had not been already granted `role`, emits a {RoleGranted} event. Requirements: - the caller must have ``role``'s admin role. May emit a {RoleGranted} event."
+      },
+      "grantSpin(address,uint256,bytes32)": {
+        "params": {
+          "amount": "The spin amount to grant",
+          "player": "The player address",
+          "requestId": "Unique request ID for replay protection"
+        }
+      },
+      "grantXP(address,uint256,bytes32)": {
+        "params": {
+          "amount": "The XP amount to grant",
+          "player": "The player address",
+          "requestId": "Unique request ID for replay protection"
+        }
+      },
+      "hasRole(bytes32,address)": {
+        "details": "Returns `true` if `account` has been granted `role`."
+      },
+      "playerStatistics()": {
+        "returns": {
+          "_0": "The player statistics struct"
+        }
+      },
+      "profile(address)": {
+        "params": {
+          "player": "The player address"
+        },
+        "returns": {
+          "_0": "The player profile struct"
+        }
+      },
+      "renounceRole(bytes32,address)": {
+        "details": "Revokes `role` from the calling account. Roles are often managed via {grantRole} and {revokeRole}: this function's purpose is to provide a mechanism for accounts to lose their privileges if they are compromised (such as when a trusted device is misplaced). If the calling account had been revoked `role`, emits a {RoleRevoked} event. Requirements: - the caller must be `callerConfirmation`. May emit a {RoleRevoked} event."
+      },
+      "revokeRole(bytes32,address)": {
+        "details": "Revokes `role` from `account`. If `account` had been granted `role`, emits a {RoleRevoked} event. Requirements: - the caller must have ``role``'s admin role. May emit a {RoleRevoked} event."
+      },
+      "supportsInterface(bytes4)": {
+        "details": "Returns true if this contract implements the interface defined by `interfaceId`. See the corresponding https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[ERC section] to learn more about how these ids are created. This function call must use less than 30 000 gas."
+      }
+    },
+    "title": "PointsManager",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "activityRegistry()": {
+        "notice": "Address of the ActivityRegistry contract"
+      },
+      "batchGrantPoints(address[],uint256[],bytes32[])": {
+        "notice": "Grants points to multiple players in a batch"
+      },
+      "batchGrantXP(address[],uint256[],bytes32[])": {
+        "notice": "Grants XP to multiple players in a batch"
+      },
+      "constructor": {
+        "notice": "Initializes the PointsManager with associated contracts"
+      },
+      "deductPoints(address,uint256,bytes32)": {
+        "notice": "Deducts points from a player"
+      },
+      "grantPoints(address,uint256,bytes32)": {
+        "notice": "Grants points to a player"
+      },
+      "grantRewardClaim(address,bytes32)": {
+        "notice": "Records a reward claim for a player"
+      },
+      "grantSpin(address,uint256,bytes32)": {
+        "notice": "Grants spins to a player"
+      },
+      "grantXP(address,uint256,bytes32)": {
+        "notice": "Grants XP to a player and auto-updates level"
+      },
+      "playerStatistics()": {
+        "notice": "Returns aggregated player statistics"
+      },
+      "playerStats()": {
+        "notice": "Aggregated player statistics"
+      },
+      "processedRequestIds(bytes32)": {
+        "notice": "Mapping of request ID to processed status for replay protection"
+      },
+      "profile(address)": {
+        "notice": "Returns a player's profile"
+      },
+      "profiles(address)": {
+        "notice": "Mapping of player address to profile"
+      },
+      "spinRewardManager()": {
+        "notice": "Address of the SpinRewardManager contract"
+      }
+    },
+    "notice": "On-chain verification layer for player profiles, XP, points, spins, and reward claims",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 26,
+        "contract": "contracts/PointsManager.sol:PointsManager",
+        "label": "_roles",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_mapping(t_bytes32,t_struct(RoleData)21_storage)"
+      },
+      {
+        "astId": 2448,
+        "contract": "contracts/PointsManager.sol:PointsManager",
+        "label": "profiles",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_address,t_struct(Profile)4630_storage)"
+      },
+      {
+        "astId": 2453,
+        "contract": "contracts/PointsManager.sol:PointsManager",
+        "label": "processedRequestIds",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_mapping(t_bytes32,t_bool)"
+      },
+      {
+        "astId": 2457,
+        "contract": "contracts/PointsManager.sol:PointsManager",
+        "label": "playerStats",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_struct(PlayerStatistics)4642_storage"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_bytes32": {
+        "encoding": "inplace",
+        "label": "bytes32",
+        "numberOfBytes": "32"
+      },
+      "t_mapping(t_address,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_mapping(t_address,t_struct(Profile)4630_storage)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => struct IPointsManager.Profile)",
+        "numberOfBytes": "32",
+        "value": "t_struct(Profile)4630_storage"
+      },
+      "t_mapping(t_bytes32,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_bytes32",
+        "label": "mapping(bytes32 => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_mapping(t_bytes32,t_struct(RoleData)21_storage)": {
+        "encoding": "mapping",
+        "key": "t_bytes32",
+        "label": "mapping(bytes32 => struct AccessControl.RoleData)",
+        "numberOfBytes": "32",
+        "value": "t_struct(RoleData)21_storage"
+      },
+      "t_struct(PlayerStatistics)4642_storage": {
+        "encoding": "inplace",
+        "label": "struct IPointsManager.PlayerStatistics",
+        "members": [
+          {
+            "astId": 4633,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "totalXPGranted",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 4635,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "totalPointsGranted",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 4637,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "totalPointsDeducted",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 4639,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "totalSpinsGranted",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 4641,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "totalRewardClaims",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "160"
+      },
+      "t_struct(Profile)4630_storage": {
+        "encoding": "inplace",
+        "label": "struct IPointsManager.Profile",
+        "members": [
+          {
+            "astId": 4609,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "xp",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 4611,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "level",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 4613,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "points",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 4615,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "lifetimePoints",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 4617,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "lifetimeXP",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 4619,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "availableSpins",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 4621,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "rewardClaims",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 4623,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "currentStreak",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint64"
+          },
+          {
+            "astId": 4625,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "longestStreak",
+            "offset": 8,
+            "slot": "7",
+            "type": "t_uint64"
+          },
+          {
+            "astId": 4627,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "lastActivity",
+            "offset": 16,
+            "slot": "7",
+            "type": "t_uint64"
+          },
+          {
+            "astId": 4629,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "registrationTime",
+            "offset": 24,
+            "slot": "7",
+            "type": "t_uint64"
+          }
+        ],
+        "numberOfBytes": "256"
+      },
+      "t_struct(RoleData)21_storage": {
+        "encoding": "inplace",
+        "label": "struct AccessControl.RoleData",
+        "members": [
+          {
+            "astId": 18,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "hasRole",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_mapping(t_address,t_bool)"
+          },
+          {
+            "astId": 20,
+            "contract": "contracts/PointsManager.sol:PointsManager",
+            "label": "adminRole",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_bytes32"
+          }
+        ],
+        "numberOfBytes": "64"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      },
+      "t_uint64": {
+        "encoding": "inplace",
+        "label": "uint64",
+        "numberOfBytes": "8"
+      }
+    }
+  }
+}

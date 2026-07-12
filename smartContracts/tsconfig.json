@@ -13,7 +13,7 @@
     "useUnknownInCatchVariables": false,
     "noImplicitAny": false
   },
-  "include": ["./typechain-types", "./test", "./deploy", "./scripts"],
+  "include": ["./typechain-types", "./test", "./deploy", "./scripts", "sync-data.js"],
   "exclude": ["./node_modules/*"],
   "files": ["./hardhat.config.ts"]
 }

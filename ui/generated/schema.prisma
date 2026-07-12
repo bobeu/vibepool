@@ -1,0 +1,2068 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model UserProfile {
+  id            String     @id @default(cuid()) @db.Uuid
+  wallet        String     @unique @db.VarChar(42)
+  username      String?    @db.VarChar(64)
+  avatar        String?    @db.Text
+  xp            Int        @default(0)
+  points        Int        @default(0)
+  spins         Int        @default(0)
+  level         Int        @default(0)
+  currentRank   Int?
+  lastLogin     DateTime?  @db.Timestamp
+  totalActivity Int        @default(0)
+  currentStreak Int        @default(0)
+  longestStreak Int        @default(0)
+  status        UserStatus @default(ACTIVE)
+  createdAt     DateTime   @default(now()) @db.Timestamp
+  updatedAt     DateTime   @updatedAt @db.Timestamp
+
+  predictions          Prediction[]
+  userMissions         UserMission[]
+  spinLedgers          SpinLedger[]
+  rewardLedgers        RewardLedger[]
+  activities           Activity[]
+  leaderboardSnapshots LeaderboardSnapshot[]
+  notifications        Notification[]
+  sessions             Session[]
+  pendingRewards       PendingReward[]
+  spinHistories        SpinHistory[]
+  rewardClaims         RewardClaim[]
+  playerStats          PlayerStatistic[]
+  notificationPrefs    NotificationPreference[]
+  playerIdentity       PlayerIdentity?
+  userAchievements     UserAchievement[]
+  progressSnapshots    ProgressSnapshot[]
+  unlockAnimations     UnlockAnimation[]
+
+  friendRequestsSent     FriendRequest[]        @relation("FriendRequestSender")
+  friendRequestsReceived FriendRequest[]        @relation("FriendRequestReceiver")
+  friendsAsUser          Friendship[]           @relation("FriendshipUser")
+  friendsAsFriend        Friendship[]           @relation("FriendshipFriend")
+  referralsMade          Referral[]             @relation("ReferralReferrer")
+  referralsReceived      Referral[]             @relation("ReferralReferred")
+  inviteCodes            InviteCode[]
+  communityPosts         CommunityPost[]
+  feedItemsOwned         FeedItem[]             @relation("FeedItemOwner")
+  feedItemsActed         FeedItem[]             @relation("FeedItemActor")
+  presences              Presence[]
+  presenceSessions       PresenceSession[]
+  relationshipsInitiated PlayerRelationship[]   @relation("RelationshipInitiator")
+  relationshipsTargeted  PlayerRelationship[]   @relation("RelationshipTarget")
+  socialSettings         SocialSettings?
+  arenaRatings           ArenaRating[]
+  arenaQueueEntries      ArenaQueue[]
+  matchParticipants      MatchParticipant[]
+  arenaInvitationsSent   ArenaInvitation[]      @relation("ArenaInvitationSender")
+  arenaInvitationsRecv   ArenaInvitation[]      @relation("ArenaInvitationReceiver")
+  arenaPresence          ArenaPresence?
+  arenaSeasonStats       ArenaSeasonStatistic[]
+  seasonProgress         SeasonProgress[]
+  bannerDismissals       BannerDismissal[]
+  campaignTargets        CampaignTarget[]
+
+  @@index([wallet])
+  @@index([status])
+}
+
+model Tournament {
+  id             String           @id @default(cuid()) @db.Uuid
+  name           String           @db.VarChar(120)
+  startTime      DateTime         @db.Timestamp
+  endTime        DateTime         @db.Timestamp
+  status         TournamentStatus @default(UPCOMING)
+  rewardPool     Int
+  asset          String           @db.VarChar(42)
+  maxPlayers     Int
+  currentPlayers Int              @default(0)
+  seasonNumber   Int
+  dailyNumber    Int
+  actualValue    Int?
+  createdAt      DateTime         @default(now()) @db.Timestamp
+  updatedAt      DateTime         @updatedAt @db.Timestamp
+
+  predictions          Prediction[]
+  leaderboardSnapshots LeaderboardSnapshot[]
+  executions           GameExecution[]
+  pendingRewards       PendingReward[]
+
+  @@index([status, startTime])
+  @@index([seasonNumber, dailyNumber])
+}
+
+model Prediction {
+  id              String           @id @default(cuid()) @db.Uuid
+  tournamentId    String           @db.Uuid
+  userId          String           @db.Uuid
+  predictionValue Int
+  submittedValue  Int?
+  actualValue     Int?
+  accuracy        Float?
+  rankPoints      Int              @default(0)
+  xpAwarded       Int              @default(0)
+  status          PredictionStatus @default(PENDING)
+  submittedAt     DateTime?        @db.Timestamp
+  createdAt       DateTime         @default(now()) @db.Timestamp
+  updatedAt       DateTime         @updatedAt @db.Timestamp
+
+  tournament Tournament  @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+  user       UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tournamentId, userId])
+  @@index([tournamentId, userId])
+  @@index([userId, status])
+}
+
+model DailyMission {
+  id          String          @id @default(cuid()) @db.Uuid
+  title       String          @db.VarChar(120)
+  description String          @db.Text
+  xpReward    Int
+  pointReward Int
+  spinReward  Int
+  missionType String          @db.VarChar(64)
+  category    MissionCategory @default(DAILY)
+  targetValue Int
+  config      Json?
+  status      MissionStatus   @default(ACTIVE)
+  startDate   DateTime        @db.Timestamp
+  endDate     DateTime        @db.Timestamp
+  createdAt   DateTime        @default(now()) @db.Timestamp
+  updatedAt   DateTime        @updatedAt @db.Timestamp
+
+  userMissions UserMission[]
+  rewards      MissionReward[]
+
+  @@index([category, status])
+  @@index([status, startDate])
+}
+
+model UserMission {
+  id            String          @id @default(cuid()) @db.Uuid
+  userId        String          @db.Uuid
+  missionId     String          @db.Uuid
+  category      MissionCategory @default(DAILY)
+  currentValue  Int             @default(0)
+  targetValue   Int
+  completed     Boolean         @default(false)
+  completedAt   DateTime?       @db.Timestamp
+  claimable     Boolean         @default(false)
+  claimed       Boolean         @default(false)
+  claimedAt     DateTime?       @db.Timestamp
+  rewardClaimed Boolean         @default(false)
+  createdAt     DateTime        @default(now()) @db.Timestamp
+  updatedAt     DateTime        @updatedAt @db.Timestamp
+
+  user    UserProfile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mission DailyMission @relation(fields: [missionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, missionId])
+  @@index([userId, completed])
+}
+
+model MissionReward {
+  id         String          @id @default(cuid()) @db.Uuid
+  missionId  String          @db.Uuid
+  rewardType RewardAssetType
+  amount     Int
+  createdAt  DateTime        @default(now()) @db.Timestamp
+
+  mission DailyMission @relation(fields: [missionId], references: [id], onDelete: Cascade)
+
+  @@index([missionId])
+}
+
+model SpinLedger {
+  id              String   @id @default(cuid()) @db.Uuid
+  userId          String   @db.Uuid
+  spinType        SpinType
+  amount          Int
+  reason          String?
+  transactionHash String?  @db.VarChar(66)
+  createdAt       DateTime @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model RewardLedger {
+  id                String   @id @default(cuid()) @db.Uuid
+  userId            String   @db.Uuid
+  reward            String   @db.VarChar(120)
+  asset             String   @db.VarChar(42)
+  amount            Int
+  reason            String?
+  transactionHash   String?  @db.VarChar(66)
+  treasuryRequestId String?  @db.VarChar(66)
+  createdAt         DateTime @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([treasuryRequestId])
+}
+
+model Activity {
+  id        String       @id @default(cuid()) @db.Uuid
+  userId    String       @db.Uuid
+  type      ActivityType
+  metadata  Json?
+  createdAt DateTime     @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type, createdAt])
+}
+
+model LeaderboardSnapshot {
+  id                 String   @id @default(cuid()) @db.Uuid
+  tournamentId       String?  @db.Uuid
+  userId             String   @db.Uuid
+  rank               Int
+  xp                 Int
+  points             Int
+  predictionAccuracy Float?
+  snapshotTime       DateTime @db.Timestamp
+  createdAt          DateTime @default(now()) @db.Timestamp
+
+  user       UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tournament Tournament? @relation(fields: [tournamentId], references: [id], onDelete: SetNull)
+
+  @@index([tournamentId, snapshotTime])
+  @@index([userId, snapshotTime])
+}
+
+model Notification {
+  id             String               @id @default(cuid()) @db.Uuid
+  userId         String               @db.Uuid
+  type           NotificationType
+  title          String               @db.VarChar(120)
+  body           String               @db.Text
+  read           Boolean              @default(false)
+  readAt         DateTime?            @db.Timestamp
+  priority       NotificationPriority @default(NORMAL)
+  expiresAt      DateTime?            @db.Timestamp
+  scheduledAt    DateTime?            @db.Timestamp
+  recurring      Boolean              @default(false)
+  channel        NotificationChannel  @default(IN_APP)
+  deliveryStatus String?              @db.VarChar(32)
+  createdAt      DateTime             @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read, createdAt])
+  @@index([userId, priority, createdAt])
+  @@index([scheduledAt])
+}
+
+model Settings {
+  id        String   @id @default(cuid()) @db.Uuid
+  key       String   @unique @db.VarChar(120)
+  value     String   @db.Text
+  updatedAt DateTime @updatedAt @db.Timestamp
+}
+
+model GameExecution {
+  id            String         @id @default(cuid()) @db.Uuid
+  tournamentId  String         @db.Uuid
+  engineVersion String         @db.VarChar(64)
+  status        GameExecStatus @default(PENDING)
+  startedAt     DateTime       @default(now()) @db.Timestamp
+  completedAt   DateTime?      @db.Timestamp
+  errors        Json?
+  metadata      Json?
+
+  tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
+
+  @@index([tournamentId, status])
+}
+
+model PendingReward {
+  id                String       @id @default(cuid()) @db.Uuid
+  userId            String       @db.Uuid
+  tournamentId      String?      @db.Uuid
+  predictionId      String?      @db.Uuid
+  reward            String       @db.VarChar(120)
+  asset             String       @db.VarChar(42)
+  amount            Int
+  reason            String?
+  treasuryRequestId String?      @db.VarChar(66)
+  status            RewardStatus @default(PENDING)
+  transactionHash   String?      @db.VarChar(66)
+  txAttempts        Int          @default(0)
+  lastError         String?      @db.Text
+  createdAt         DateTime     @default(now()) @db.Timestamp
+  updatedAt         DateTime     @updatedAt @db.Timestamp
+
+  user       UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tournament Tournament? @relation(fields: [tournamentId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status])
+  @@index([treasuryRequestId])
+}
+
+model AuditLog {
+  id            String   @id @default(cuid()) @db.Uuid
+  actor         String?  @db.VarChar(42)
+  action        String   @db.VarChar(120)
+  entity        String?  @db.VarChar(120)
+  entityId      String?  @db.VarChar(42)
+  eventId       String?  @db.VarChar(42)
+  sessionId     String?  @db.VarChar(42)
+  correlationId String?  @db.VarChar(64)
+  metadata      Json?
+  recordHash    String?  @db.VarChar(64)
+  previousHash  String?  @db.VarChar(64)
+  createdAt     DateTime @default(now()) @db.Timestamp
+
+  @@index([action, createdAt])
+  @@index([entity, entityId])
+  @@index([eventId])
+  @@index([correlationId])
+  @@index([recordHash])
+}
+
+model Session {
+  id           String   @id @default(cuid()) @db.Uuid
+  userId       String   @db.Uuid
+  wallet       String   @db.VarChar(42)
+  refreshToken String   @unique @db.VarChar(128)
+  userAgent    String?  @db.VarChar(255)
+  ip           String?  @db.VarChar(45)
+  expiresAt    DateTime @db.Timestamp
+  revoked      Boolean  @default(false)
+  createdAt    DateTime @default(now()) @db.Timestamp
+  updatedAt    DateTime @updatedAt @db.Timestamp
+
+  user        UserProfile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenRecord RefreshToken?
+
+  @@index([userId, revoked, expiresAt])
+}
+
+model RefreshToken {
+  id         String   @id @default(cuid()) @db.Uuid
+  sessionId  String   @unique @db.Uuid
+  token      String   @unique @db.VarChar(128)
+  expiresAt  DateTime @db.Timestamp
+  revoked    Boolean  @default(false)
+  replacedBy String?  @db.VarChar(128)
+  createdAt  DateTime @default(now()) @db.Timestamp
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, revoked, expiresAt])
+}
+
+model PlayerStatistic {
+  id        String        @id @default(cuid()) @db.Uuid
+  userId    String        @db.Uuid
+  type      StatisticType
+  value     Int           @default(0)
+  metadata  Json?
+  createdAt DateTime      @default(now()) @db.Timestamp
+  updatedAt DateTime      @updatedAt @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type])
+  @@index([userId, type])
+}
+
+model NotificationPreference {
+  id        String   @id @default(cuid()) @db.Uuid
+  userId    String   @db.Uuid
+  eventType String   @db.VarChar(64)
+  enabled   Boolean  @default(true)
+  channels  Json?
+  createdAt DateTime @default(now()) @db.Timestamp
+  updatedAt DateTime @updatedAt @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventType])
+  @@index([userId])
+}
+
+model Achievement {
+  id           String              @id @default(cuid()) @db.Uuid
+  slug         String              @unique @db.VarChar(120)
+  title        String              @db.VarChar(120)
+  description  String              @db.Text
+  category     AchievementCategory @default(DAILY)
+  rarity       AchievementRarity   @default(COMMON)
+  xpReward     Int                 @default(0)
+  pointsReward Int                 @default(0)
+  icon         String?             @db.VarChar(120)
+  criteria     Json?
+  active       Boolean             @default(true)
+  createdAt    DateTime            @default(now()) @db.Timestamp
+  updatedAt    DateTime            @updatedAt @db.Timestamp
+
+  rules            AchievementRule[]
+  userAchievements UserAchievement[]
+  ruleGroups       AchievementRuleGroup[]
+}
+
+model AchievementRule {
+  id            String        @id @default(cuid()) @db.Uuid
+  achievementId String        @db.Uuid
+  groupId       String?       @db.Uuid
+  statType      StatisticType
+  operator      String        @db.VarChar(16)
+  targetValue   Int
+  windowDays    Int           @default(0)
+  createdAt     DateTime      @default(now()) @db.Timestamp
+
+  achievement Achievement           @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  group       AchievementRuleGroup? @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@index([achievementId])
+  @@index([statType])
+}
+
+model AchievementRuleGroup {
+  id            String    @id @default(cuid()) @db.Uuid
+  achievementId String    @db.Uuid
+  logic         RuleLogic @default(AND)
+  createdAt     DateTime  @default(now()) @db.Timestamp
+
+  achievement Achievement       @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  rules       AchievementRule[]
+
+  @@index([achievementId])
+}
+
+model UserAchievement {
+  id            String    @id @default(cuid()) @db.Uuid
+  userId        String    @db.Uuid
+  achievementId String    @db.Uuid
+  progress      Int       @default(0)
+  target        Int       @default(1)
+  unlocked      Boolean   @default(false)
+  unlockedAt    DateTime? @db.Timestamp
+  notified      Boolean   @default(false)
+  createdAt     DateTime  @default(now()) @db.Timestamp
+  updatedAt     DateTime  @updatedAt @db.Timestamp
+
+  user        UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@index([userId, unlocked])
+}
+
+model Badge {
+  id        String    @id @default(cuid()) @db.Uuid
+  slug      String    @unique @db.VarChar(120)
+  name      String    @db.VarChar(120)
+  tier      BadgeTier @default(BRONZE)
+  icon      String?   @db.VarChar(120)
+  createdAt DateTime  @default(now()) @db.Timestamp
+  updatedAt DateTime  @updatedAt @db.Timestamp
+}
+
+model Title {
+  id          String      @id @default(cuid()) @db.Uuid
+  slug        String      @unique @db.VarChar(120)
+  name        String      @db.VarChar(120)
+  rarity      TitleRarity @default(COMMON)
+  requirement String?     @db.Text
+  createdAt   DateTime    @default(now()) @db.Timestamp
+  updatedAt   DateTime    @updatedAt @db.Timestamp
+}
+
+model AvatarFrame {
+  id        String      @id @default(cuid()) @db.Uuid
+  slug      String      @unique @db.VarChar(120)
+  name      String      @db.VarChar(120)
+  rarity    TitleRarity @default(COMMON)
+  cssClass  String?     @db.VarChar(255)
+  createdAt DateTime    @default(now()) @db.Timestamp
+  updatedAt DateTime    @updatedAt @db.Timestamp
+}
+
+model PlayerIdentity {
+  id            String   @id @default(cuid()) @db.Uuid
+  userId        String   @unique @db.Uuid
+  displayName   String?  @db.VarChar(64)
+  selectedTitle String?  @db.VarChar(120)
+  selectedBadge String?  @db.VarChar(120)
+  selectedFrame String?  @db.VarChar(120)
+  theme         String?  @db.VarChar(32)
+  schemaVersion Int      @default(1)
+  updatedAt     DateTime @updatedAt @db.Timestamp
+
+  user     UserProfile             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  versions PlayerIdentityVersion[]
+}
+
+model PlayerIdentityVersion {
+  id            String   @id @default(cuid()) @db.Uuid
+  identityId    String   @db.Uuid
+  userId        String   @db.Uuid
+  version       Int
+  displayName   String?  @db.VarChar(64)
+  selectedTitle String?  @db.VarChar(120)
+  selectedBadge String?  @db.VarChar(120)
+  selectedFrame String?  @db.VarChar(120)
+  theme         String?  @db.VarChar(32)
+  snapshot      Json?
+  createdAt     DateTime @default(now()) @db.Timestamp
+
+  identity PlayerIdentity @relation(fields: [identityId], references: [id], onDelete: Cascade)
+
+  @@index([userId, version])
+}
+
+model ProgressSnapshot {
+  id            String   @id @default(cuid()) @db.Uuid
+  userId        String   @db.Uuid
+  snapshotType  String   @db.VarChar(64)
+  level         Int      @default(0)
+  xp            Int      @default(0)
+  points        Int      @default(0)
+  currentStreak Int      @default(0)
+  longestStreak Int      @default(0)
+  metadata      Json?
+  createdAt     DateTime @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, snapshotType, createdAt])
+}
+
+model UnlockAnimation {
+  id          String   @id @default(cuid()) @db.Uuid
+  userId      String   @db.Uuid
+  type        String   @db.VarChar(64)
+  referenceId String?  @db.VarChar(42)
+  payload     Json?
+  viewed      Boolean  @default(false)
+  priority    String   @default("NORMAL") @db.VarChar(16)
+  interrupt   Boolean  @default(false)
+  position    Int      @default(0)
+  createdAt   DateTime @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, viewed])
+  @@index([userId, priority])
+}
+
+model RateLimitEntry {
+  id          String   @id @default(cuid()) @db.Uuid
+  identifier  String   @db.VarChar(120)
+  endpoint    String   @db.VarChar(120)
+  count       Int      @default(1)
+  windowStart DateTime @db.Timestamp
+  expiresAt   DateTime @db.Timestamp
+  createdAt   DateTime @default(now()) @db.Timestamp
+  updatedAt   DateTime @updatedAt @db.Timestamp
+
+  @@index([identifier, endpoint, createdAt])
+  @@index([expiresAt])
+}
+
+model DomainEvent {
+  id            String   @id @default(cuid()) @db.Uuid
+  aggregateId   String   @db.VarChar(42)
+  aggregateType String   @db.VarChar(64)
+  eventType     String   @db.VarChar(120)
+  payload       Json?
+  occurredAt    DateTime @default(now()) @db.Timestamp
+  version       Int      @default(1)
+  processed     Boolean  @default(false)
+
+  @@index([aggregateId, occurredAt])
+  @@index([eventType, processed])
+  @@index([occurredAt])
+}
+
+model SpinReward {
+  id        String   @id @default(cuid()) @db.Uuid
+  name      String   @db.VarChar(120)
+  asset     String   @db.VarChar(42)
+  amount    Int
+  weight    Int      @default(1)
+  rarity    String   @db.VarChar(32)
+  config    Json?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp
+  updatedAt DateTime @updatedAt @db.Timestamp
+
+  spinHistories SpinHistory[]
+}
+
+model SpinHistory {
+  id              String   @id @default(cuid()) @db.Uuid
+  userId          String   @db.Uuid
+  spinRewardId    String?  @db.Uuid
+  reward          String   @db.VarChar(120)
+  asset           String   @db.VarChar(42)
+  amount          Int
+  reason          String?
+  transactionHash String?  @db.VarChar(66)
+  seed            String?  @db.VarChar(64)
+  randomNumber    String?  @db.VarChar(64)
+  weightUsed      Int?
+  createdAt       DateTime @default(now()) @db.Timestamp
+
+  user       UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  spinReward SpinReward? @relation(fields: [spinRewardId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+}
+
+model RewardClaim {
+  id              String       @id @default(cuid()) @db.Uuid
+  userId          String       @db.Uuid
+  reward          String       @db.VarChar(120)
+  asset           String       @db.VarChar(42)
+  amount          Int
+  reason          String?
+  transactionHash String?      @db.VarChar(66)
+  status          RewardStatus @default(PENDING)
+  createdAt       DateTime     @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
+
+model RewardQueue {
+  id          String         @id @default(cuid()) @db.Uuid
+  userId      String         @db.Uuid
+  reward      String         @db.VarChar(120)
+  asset       String         @db.VarChar(42)
+  amount      Int
+  source      RewardSource
+  reason      String?
+  status      RewardStatus   @default(PENDING)
+  priority    RewardPriority @default(NORMAL)
+  attempts    Int            @default(0)
+  maxAttempts Int            @default(3)
+  lastError   String?        @db.Text
+  deadLetter  Boolean        @default(false)
+  scheduledAt DateTime?
+  processedAt DateTime?
+  createdAt   DateTime       @default(now()) @db.Timestamp
+  updatedAt   DateTime       @updatedAt @db.Timestamp
+
+  @@index([userId, status])
+  @@index([status, scheduledAt])
+  @@index([status, priority])
+}
+
+model RewardSourceCatalog {
+  id        String   @id @default(cuid()) @db.Uuid
+  name      String   @db.VarChar(64)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @db.Timestamp
+
+  @@unique([name])
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  BANNED
+  SHADOW_BANNED
+}
+
+enum TournamentStatus {
+  UPCOMING
+  OPEN
+  LOCKED
+  EVALUATING
+  COMPLETED
+  ARCHIVED
+}
+
+enum PredictionStatus {
+  PENDING
+  EVALUATED
+  REWARDED
+}
+
+enum MissionStatus {
+  ACTIVE
+  COMPLETED
+  EXPIRED
+}
+
+enum ActivityType {
+  LOGIN
+  PREDICTION
+  MISSION
+  SPIN
+  REWARD
+  SOCIAL
+  TOURNAMENT
+}
+
+enum NotificationType {
+  INFO
+  REWARD
+  SYSTEM
+  ALERT
+}
+
+enum SpinType {
+  DAILY
+  REWARD
+  PURCHASE
+  EVENT
+}
+
+enum MissionCategory {
+  DAILY
+  WEEKLY
+  MILESTONE
+  HIDDEN
+  SEASONAL
+}
+
+enum RewardAssetType {
+  XP
+  POINTS
+  SPINS
+  CELO
+  USDT
+  USDM
+}
+
+enum StatisticType {
+  PREDICTIONS_SUBMITTED
+  PREDICTIONS_WON
+  PREDICTION_ACCURACY
+  XP_EARNED
+  POINTS_EARNED
+  REWARDS_EARNED
+  SPINS_EARNED
+  SPINS_USED
+  LOGIN_DAYS
+  CURRENT_STREAK
+  LONGEST_STREAK
+  MISSION_COMPLETION_PERCENTAGE
+  TOURNAMENT_WINS
+  LEADERBOARD_FINISHES
+  ARENA_MATCHES
+  ARENA_WINS
+}
+
+enum NotificationChannel {
+  IN_APP
+  EMAIL
+  PUSH
+}
+
+enum NotificationPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum SessionStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
+  COMPLETED
+}
+
+enum RefreshTokenStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
+}
+
+enum GameExecStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum RewardStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+}
+
+enum RewardPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum AuditAction {
+  TOURNAMENT_CREATED
+  TOURNAMENT_STARTED
+  TOURNAMENT_LOCKED
+  EVALUATION_STARTED
+  EVALUATION_COMPLETED
+  REWARD_GENERATED
+  REWARD_PAID
+  REWARD_FAILED
+  SETTINGS_CHANGED
+  AUTH_FAILED
+  ADMIN_ACTION
+  PREDICTION_SUBMITTED
+  PREDICTION_EVALUATED
+  MISSION_CREATED
+  MISSION_COMPLETED
+  MISSION_CLAIMED
+  NOTIFICATION_SENT
+  NOTIFICATION_READ
+  STREAK_UPDATED
+  CACHE_INVALIDATED
+  SETTLEMENT_RETRY
+  SPIN_STARTED
+  SPIN_COMPLETED
+  REWARD_CLAIMED
+}
+
+enum RewardSource {
+  TOURNAMENT
+  MISSION
+  DAILY_LOGIN
+  STREAK
+  SPIN
+  ADMIN
+  REFERRAL
+}
+
+enum AchievementCategory {
+  DAILY
+  WEEKLY
+  LIFETIME
+  HIDDEN
+  LEGENDARY
+  SEASONAL
+  COMMUNITY
+  REFERRAL
+  TOURNAMENT
+  SKILL
+}
+
+enum AchievementRarity {
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+enum BadgeTier {
+  BRONZE
+  SILVER
+  GOLD
+  DIAMOND
+  MASTER
+  LEGEND
+}
+
+enum TitleRarity {
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+enum RuleLogic {
+  AND
+  OR
+}
+
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  BLOCKED
+}
+
+enum RelationshipType {
+  BLOCKED
+  MUTED
+  FRIEND
+}
+
+enum PresenceStatus {
+  ONLINE
+  OFFLINE
+  PLAYING_TOURNAMENT
+  SPINNING
+  VIEWING_LEADERBOARD
+  AWAY
+  INVISIBLE
+  ARENA_SEARCHING
+  ARENA_PLAYING
+  ARENA_SPECTATING
+}
+
+enum FeedItemType {
+  ACHIEVEMENT
+  REWARD
+  TOURNAMENT
+  BADGE
+  MISSION
+  REFERRAL
+  SYSTEM
+  FRIEND_REQUEST
+  PRESENCE
+  LEVEL_UP
+  SPIN
+  ARENA_VICTORY
+  ARENA_MATCH
+}
+
+enum CommunityPostType {
+  ANNOUNCEMENT
+  FEATURED
+  HIGHLIGHT
+  CHAMPION
+  SEASONAL
+  FEATURED_TOURNAMENT
+  FEATURED_PLAYER
+  FEATURED_ACHIEVEMENT
+  WEEKLY_SPOTLIGHT
+}
+
+enum InviteType {
+  DEEP_LINK
+  INVITE_CODE
+  QR
+  MINIPAY
+}
+
+enum ReferralMilestone {
+  REGISTERED
+  FIRST_PREDICTION
+  FIRST_TOURNAMENT
+  THIRD_ACTIVE_DAY
+  FIRST_REWARD
+}
+
+enum Visibility {
+  PUBLIC
+  FRIENDS
+  PRIVATE
+}
+
+enum FeedPriority {
+  LOW
+  NORMAL
+  HIGH
+  PINNED
+}
+
+enum ReferralFraudStatus {
+  CLEAR
+  FLAGGED
+  REVIEW
+  REJECTED
+}
+
+enum ArenaQueueStatus {
+  SEARCHING
+  MATCHED
+  ACCEPTED
+  DECLINED
+  EXPIRED
+  CANCELLED
+}
+
+enum ArenaMatchStatus {
+  WAITING
+  ACCEPTED
+  COUNTDOWN
+  PLAYING
+  FINISHED
+  SETTLING
+  COMPLETED
+  ARCHIVED
+}
+
+enum ArenaMatchType {
+  PREDICTION_DUEL
+  TRIVIA
+  PUZZLE
+  STRATEGY
+  REACTION
+  CREATOR_EVENT
+}
+
+enum ArenaQueueMode {
+  QUICK_MATCH
+  FRIEND_CHALLENGE
+  INVITE_CODE
+  PRIVATE_MATCH
+  REMATCH
+  TOURNAMENT_QUEUE
+}
+
+enum ArenaPresenceStatus {
+  SEARCHING
+  MATCHED
+  PLAYING
+  SPECTATING
+  OFFLINE
+}
+
+enum MatchOutcome {
+  WIN
+  LOSS
+  DRAW
+}
+
+enum SeasonStatus {
+  PRESEASON
+  ACTIVE
+  ENDED
+  ARCHIVED
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum CampaignType {
+  ONBOARDING
+  RETENTION
+  REENGAGEMENT
+  REFERRAL
+  SEASON_LAUNCH
+  LIVE_EVENT
+}
+
+enum LiveEventType {
+  WEEKEND
+  HOLIDAY
+  DOUBLE_XP
+  DOUBLE_SPINS
+  SPECIAL_TOURNAMENT
+  COMMUNITY_CHALLENGE
+  CREATOR
+  FLASH_MISSIONS
+  ARENA_MODE
+}
+
+enum LiveEventStatus {
+  SCHEDULED
+  ACTIVE
+  ENDED
+  CANCELLED
+}
+
+enum ContentBlockType {
+  HERO_BANNER
+  ANNOUNCEMENT
+  PROMO_CARD
+  ARENA_HIGHLIGHT
+  COMMUNITY_SPOTLIGHT
+  REWARD_PROMO
+}
+
+enum BannerPlacement {
+  HOME_HERO
+  ARENA
+  SEASON
+  EVENTS
+  GLOBAL
+}
+
+enum ScheduledJobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  DEAD_LETTER
+  CANCELLED
+}
+
+enum ScheduledJobType {
+  SEASON_ROLLOVER
+  CAMPAIGN_START
+  CAMPAIGN_END
+  BANNER_PUBLISH
+  FEATURE_ACTIVATION
+  TOURNAMENT_GENERATE
+  MISSION_REFRESH
+  LEADERBOARD_SNAPSHOT
+  REWARD_PROCESSING
+  CLEANUP
+  MATCH_EXPIRE
+  QUEUE_EXPIRE
+}
+
+enum FeatureFlagTarget {
+  GLOBAL
+  PERCENTAGE
+  WHITELIST
+  REGION
+  MINIPAY
+  ENVIRONMENT
+  EXPERIMENT
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  PLATFORM_ADMIN
+  GAME_OPERATOR
+  CONTENT_EDITOR
+  SUPPORT
+  ANALYST
+  FINANCE
+  READ_ONLY
+}
+
+enum ModerationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ESCALATED
+  APPEALED
+}
+
+model FriendRequest {
+  id          String              @id @default(cuid()) @db.Uuid
+  senderId    String              @db.Uuid
+  receiverId  String              @db.Uuid
+  status      FriendRequestStatus @default(PENDING)
+  message     String?             @db.VarChar(280)
+  respondedAt DateTime?           @db.Timestamp
+  createdAt   DateTime            @default(now()) @db.Timestamp
+  updatedAt   DateTime            @updatedAt @db.Timestamp
+
+  sender   UserProfile @relation("FriendRequestSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver UserProfile @relation("FriendRequestReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+  @@index([receiverId, status])
+  @@index([senderId, status])
+}
+
+model Friendship {
+  id        String   @id @default(cuid()) @db.Uuid
+  userId    String   @db.Uuid
+  friendId  String   @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamp
+
+  user   UserProfile @relation("FriendshipUser", fields: [userId], references: [id], onDelete: Cascade)
+  friend UserProfile @relation("FriendshipFriend", fields: [friendId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, friendId])
+  @@index([friendId])
+}
+
+model Referral {
+  id            String              @id @default(cuid()) @db.Uuid
+  referrerId    String              @db.Uuid
+  referredId    String              @db.Uuid
+  code          String              @db.VarChar(64)
+  status        String              @default("PENDING") @db.VarChar(32)
+  rewardClaimed Boolean             @default(false)
+  fraudStatus   ReferralFraudStatus @default(CLEAR)
+  fraudScore    Int                 @default(0)
+  deviceHash    String?             @db.VarChar(64)
+  ipHash        String?             @db.VarChar(64)
+  flaggedAt     DateTime?           @db.Timestamp
+  createdAt     DateTime            @default(now()) @db.Timestamp
+
+  referrer     UserProfile           @relation("ReferralReferrer", fields: [referrerId], references: [id], onDelete: Cascade)
+  referred     UserProfile           @relation("ReferralReferred", fields: [referredId], references: [id], onDelete: Cascade)
+  rewards      ReferralReward[]
+  fraudSignals ReferralFraudSignal[]
+
+  @@unique([referredId])
+  @@index([referrerId])
+  @@index([code])
+  @@index([fraudStatus])
+}
+
+model ReferralReward {
+  id         String            @id @default(cuid()) @db.Uuid
+  referralId String            @db.Uuid
+  milestone  ReferralMilestone
+  rewardType String            @db.VarChar(32)
+  amount     Int
+  claimed    Boolean           @default(false)
+  claimedAt  DateTime?         @db.Timestamp
+  createdAt  DateTime          @default(now()) @db.Timestamp
+
+  referral Referral @relation(fields: [referralId], references: [id], onDelete: Cascade)
+
+  @@unique([referralId, milestone])
+  @@index([referralId, claimed])
+}
+
+model InviteCode {
+  id        String     @id @default(cuid()) @db.Uuid
+  ownerId   String     @db.Uuid
+  code      String     @db.VarChar(64)
+  shortCode String?    @db.VarChar(8)
+  type      InviteType @default(INVITE_CODE)
+  url       String?    @db.Text
+  deepLink  String?    @db.Text
+  usedBy    String?    @db.Uuid
+  uses      Int        @default(0)
+  createdAt DateTime   @default(now()) @db.Timestamp
+
+  owner UserProfile @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@unique([code])
+  @@unique([shortCode])
+  @@index([ownerId])
+}
+
+model CommunityPost {
+  id          String            @id @default(cuid()) @db.Uuid
+  authorId    String            @db.Uuid
+  type        CommunityPostType
+  title       String            @db.VarChar(160)
+  body        String            @db.Text
+  referenceId String?           @db.VarChar(64)
+  active      Boolean           @default(true)
+  createdAt   DateTime          @default(now()) @db.Timestamp
+  updatedAt   DateTime          @updatedAt @db.Timestamp
+
+  author UserProfile @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([type, active, createdAt])
+}
+
+model FeedItem {
+  id            String       @id @default(cuid()) @db.Uuid
+  userId        String       @db.Uuid
+  actorId       String?      @db.Uuid
+  type          FeedItemType
+  title         String       @db.VarChar(160)
+  body          String       @db.Text
+  referenceType String?      @db.VarChar(64)
+  referenceId   String?      @db.VarChar(64)
+  visibility    Visibility   @default(PUBLIC)
+  priority      FeedPriority @default(NORMAL)
+  pinned        Boolean      @default(false)
+  rankScore     Int          @default(0)
+  createdAt     DateTime     @default(now()) @db.Timestamp
+
+  user  UserProfile  @relation("FeedItemOwner", fields: [userId], references: [id], onDelete: Cascade)
+  actor UserProfile? @relation("FeedItemActor", fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([userId, pinned, rankScore, createdAt])
+  @@index([type, createdAt])
+}
+
+model Presence {
+  id         String         @id @default(cuid()) @db.Uuid
+  userId     String         @db.Uuid
+  status     PresenceStatus @default(OFFLINE)
+  lastActive DateTime       @default(now()) @db.Timestamp
+  expiresAt  DateTime?      @db.Timestamp
+  createdAt  DateTime       @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+  @@index([status])
+}
+
+model PresenceSession {
+  id         String         @id @default(cuid()) @db.Uuid
+  userId     String         @db.Uuid
+  deviceId   String         @db.VarChar(64)
+  deviceType String         @default("WEB") @db.VarChar(32)
+  status     PresenceStatus @default(ONLINE)
+  lastActive DateTime       @default(now()) @db.Timestamp
+  expiresAt  DateTime?      @db.Timestamp
+  createdAt  DateTime       @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, deviceId])
+  @@index([userId, lastActive])
+}
+
+model ReferralFraudSignal {
+  id         String   @id @default(cuid()) @db.Uuid
+  referralId String   @db.Uuid
+  signalType String   @db.VarChar(64)
+  score      Int      @default(0)
+  metadata   Json?
+  createdAt  DateTime @default(now()) @db.Timestamp
+
+  referral Referral @relation(fields: [referralId], references: [id], onDelete: Cascade)
+
+  @@index([referralId, signalType])
+}
+
+model PlayerRelationship {
+  id        String           @id @default(cuid()) @db.Uuid
+  userId    String           @db.Uuid
+  relatedId String           @db.Uuid
+  type      RelationshipType @default(BLOCKED)
+  createdAt DateTime         @default(now()) @db.Timestamp
+
+  initiator UserProfile @relation("RelationshipInitiator", fields: [userId], references: [id], onDelete: Cascade)
+  target    UserProfile @relation("RelationshipTarget", fields: [relatedId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, relatedId, type])
+  @@index([userId, type])
+}
+
+model SocialSettings {
+  id                 String     @id @default(cuid()) @db.Uuid
+  userId             String     @unique @db.Uuid
+  profileVisibility  Visibility @default(PUBLIC)
+  activityVisibility Visibility @default(FRIENDS)
+  onlineStatus       Boolean    @default(true)
+  friendRequests     Boolean    @default(true)
+  referralVisibility Visibility @default(PRIVATE)
+  createdAt          DateTime   @default(now()) @db.Timestamp
+  updatedAt          DateTime   @updatedAt @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Arena {
+  id           String   @id @default(cuid()) @db.Uuid
+  name         String   @default("NEXORA Arena") @db.VarChar(120)
+  seasonNumber Int      @default(1)
+  active       Boolean  @default(true)
+  config       Json?
+  createdAt    DateTime @default(now()) @db.Timestamp
+  updatedAt    DateTime @updatedAt @db.Timestamp
+
+  matches ArenaMatch[]
+
+  @@index([active, seasonNumber])
+}
+
+model ArenaMatch {
+  id          String           @id @default(cuid()) @db.Uuid
+  arenaId     String?          @db.Uuid
+  matchType   ArenaMatchType   @default(PREDICTION_DUEL)
+  status      ArenaMatchStatus @default(WAITING)
+  mode        ArenaQueueMode   @default(QUICK_MATCH)
+  inviteCode  String?          @db.VarChar(16)
+  targetValue Int?
+  metadata    Json?
+  startedAt   DateTime?        @db.Timestamp
+  finishedAt  DateTime?        @db.Timestamp
+  expiresAt   DateTime?        @db.Timestamp
+  createdAt   DateTime         @default(now()) @db.Timestamp
+  updatedAt   DateTime         @updatedAt @db.Timestamp
+
+  arena        Arena?             @relation(fields: [arenaId], references: [id], onDelete: SetNull)
+  participants MatchParticipant[]
+  queueEntries ArenaQueue[]
+  invitations  ArenaInvitation[]
+  result       ArenaResult?
+  replay       ArenaReplay?
+
+  @@index([status, createdAt])
+  @@index([inviteCode])
+}
+
+model ArenaQueue {
+  id        String           @id @default(cuid()) @db.Uuid
+  userId    String           @db.Uuid
+  matchId   String?          @db.Uuid
+  mode      ArenaQueueMode   @default(QUICK_MATCH)
+  matchType ArenaMatchType   @default(PREDICTION_DUEL)
+  status    ArenaQueueStatus @default(SEARCHING)
+  rating    Int              @default(1000)
+  expiresAt DateTime?        @db.Timestamp
+  createdAt DateTime         @default(now()) @db.Timestamp
+  updatedAt DateTime         @updatedAt @db.Timestamp
+
+  user  UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  match ArenaMatch? @relation(fields: [matchId], references: [id], onDelete: SetNull)
+
+  @@index([status, matchType, rating])
+  @@index([userId, status])
+}
+
+model ArenaInvitation {
+  id         String   @id @default(cuid()) @db.Uuid
+  matchId    String   @db.Uuid
+  senderId   String   @db.Uuid
+  receiverId String   @db.Uuid
+  code       String   @db.VarChar(16)
+  accepted   Boolean  @default(false)
+  expiresAt  DateTime @db.Timestamp
+  createdAt  DateTime @default(now()) @db.Timestamp
+
+  match    ArenaMatch  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  sender   UserProfile @relation("ArenaInvitationSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver UserProfile @relation("ArenaInvitationReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([code])
+  @@index([receiverId, accepted])
+}
+
+model MatchParticipant {
+  id             String        @id @default(cuid()) @db.Uuid
+  matchId        String        @db.Uuid
+  userId         String        @db.Uuid
+  accepted       Boolean       @default(false)
+  prediction     Int?
+  score          Float?
+  outcome        MatchOutcome?
+  ratingBefore   Int?
+  ratingAfter    Int?
+  rewardEligible Boolean       @default(true)
+  createdAt      DateTime      @default(now()) @db.Timestamp
+  updatedAt      DateTime      @updatedAt @db.Timestamp
+
+  match ArenaMatch  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  user  UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, userId])
+  @@index([userId, createdAt])
+}
+
+model ArenaResult {
+  id        String    @id @default(cuid()) @db.Uuid
+  matchId   String    @unique @db.Uuid
+  winnerId  String?   @db.Uuid
+  loserId   String?   @db.Uuid
+  isDraw    Boolean   @default(false)
+  auditHash String    @db.VarChar(64)
+  settled   Boolean   @default(false)
+  settledAt DateTime? @db.Timestamp
+  metadata  Json?
+  createdAt DateTime  @default(now()) @db.Timestamp
+
+  match ArenaMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
+}
+
+model ArenaReplay {
+  id                String   @id @default(cuid()) @db.Uuid
+  matchId           String   @unique @db.Uuid
+  timeline          Json
+  statistics        Json?
+  result            Json?
+  compressed        Boolean  @default(false)
+  compressionFormat String?  @db.VarChar(16)
+  checkpoints       Json?
+  createdAt         DateTime @default(now()) @db.Timestamp
+
+  match ArenaMatch @relation(fields: [matchId], references: [id], onDelete: Cascade)
+}
+
+model ArenaRating {
+  id              String   @id @default(cuid()) @db.Uuid
+  userId          String   @db.Uuid
+  skillRating     Int      @default(1000)
+  ratingDeviation Float    @default(350)
+  winRate         Float    @default(0)
+  matchesPlayed   Int      @default(0)
+  currentStreak   Int      @default(0)
+  bestStreak      Int      @default(0)
+  league          String   @default("BRONZE") @db.VarChar(32)
+  seasonNumber    Int      @default(1)
+  createdAt       DateTime @default(now()) @db.Timestamp
+  updatedAt       DateTime @updatedAt @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, seasonNumber])
+  @@index([skillRating])
+}
+
+model ArenaSeasonStatistic {
+  id            String   @id @default(cuid()) @db.Uuid
+  userId        String   @db.Uuid
+  seasonNumber  Int
+  wins          Int      @default(0)
+  losses        Int      @default(0)
+  draws         Int      @default(0)
+  totalMatches  Int      @default(0)
+  peakRating    Int      @default(1000)
+  rewardsEarned Int      @default(0)
+  createdAt     DateTime @default(now()) @db.Timestamp
+  updatedAt     DateTime @updatedAt @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, seasonNumber])
+}
+
+model ArenaPresence {
+  id        String              @id @default(cuid()) @db.Uuid
+  userId    String              @unique @db.Uuid
+  status    ArenaPresenceStatus @default(OFFLINE)
+  matchId   String?             @db.VarChar(64)
+  updatedAt DateTime            @updatedAt @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+}
+
+model ArenaStateMachineDefinition {
+  id          String   @id @default(cuid()) @db.Uuid
+  name        String   @unique @db.VarChar(64)
+  version     Int      @default(1)
+  states      Json
+  transitions Json
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now()) @db.Timestamp
+  updatedAt   DateTime @updatedAt @db.Timestamp
+}
+
+model ArenaAnalyticsMetric {
+  id         String   @id @default(cuid()) @db.Uuid
+  metricType String   @db.VarChar(64)
+  value      Float
+  metadata   Json?
+  recordedAt DateTime @default(now()) @db.Timestamp
+
+  @@index([metricType, recordedAt])
+}
+
+model Season {
+  id          String       @id @default(cuid()) @db.Uuid
+  number      Int          @unique
+  name        String       @db.VarChar(120)
+  description String?      @db.Text
+  status      SeasonStatus @default(PRESEASON)
+  startAt     DateTime     @db.Timestamp
+  endAt       DateTime     @db.Timestamp
+  preseasonAt DateTime?    @db.Timestamp
+  config      Json?
+  createdAt   DateTime     @default(now()) @db.Timestamp
+  updatedAt   DateTime     @updatedAt @db.Timestamp
+
+  tiers        SeasonTier[]
+  rewards      SeasonReward[]
+  missions     SeasonMission[]
+  leaderboards SeasonLeaderboard[]
+  progress     SeasonProgress[]
+  liveEvents   LiveEvent[]
+  campaigns    Campaign[]
+
+  @@index([status, startAt])
+}
+
+model SeasonTier {
+  id           String @id @default(cuid()) @db.Uuid
+  seasonId     String @db.Uuid
+  tierLevel    Int
+  name         String @db.VarChar(64)
+  xpRequired   Int
+  rewardType   String @db.VarChar(32)
+  rewardAmount Int    @default(0)
+
+  season Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@unique([seasonId, tierLevel])
+}
+
+model SeasonReward {
+  id          String  @id @default(cuid()) @db.Uuid
+  seasonId    String  @db.Uuid
+  tierLevel   Int
+  rewardType  String  @db.VarChar(32)
+  amount      Int
+  description String? @db.VarChar(160)
+
+  season Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@index([seasonId, tierLevel])
+}
+
+model SeasonMission {
+  id        String  @id @default(cuid()) @db.Uuid
+  seasonId  String  @db.Uuid
+  missionId String  @db.Uuid
+  bonusXp   Int     @default(0)
+  active    Boolean @default(true)
+
+  season Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@unique([seasonId, missionId])
+}
+
+model SeasonLeaderboard {
+  id         String   @id @default(cuid()) @db.Uuid
+  seasonId   String   @db.Uuid
+  userId     String   @db.Uuid
+  rank       Int
+  score      Int
+  snapshotAt DateTime @default(now()) @db.Timestamp
+
+  season Season @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@index([seasonId, rank])
+  @@index([seasonId, userId])
+}
+
+model SeasonProgress {
+  id             String @id @default(cuid()) @db.Uuid
+  userId         String @db.Uuid
+  seasonId       String @db.Uuid
+  seasonXp       Int    @default(0)
+  seasonRank     Int    @default(0)
+  tierLevel      Int    @default(0)
+  matchesPlayed  Int    @default(0)
+  rewardsClaimed Int    @default(0)
+
+  user   UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  season Season      @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, seasonId])
+  @@index([seasonId, seasonXp])
+}
+
+model LiveEvent {
+  id          String          @id @default(cuid()) @db.Uuid
+  seasonId    String?         @db.Uuid
+  type        LiveEventType
+  name        String          @db.VarChar(120)
+  description String?         @db.Text
+  status      LiveEventStatus @default(SCHEDULED)
+  startAt     DateTime        @db.Timestamp
+  endAt       DateTime        @db.Timestamp
+  config      Json?
+  createdAt   DateTime        @default(now()) @db.Timestamp
+
+  season Season? @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+
+  @@index([status, startAt])
+}
+
+model FeatureFlag {
+  id               String            @id @default(cuid()) @db.Uuid
+  key              String            @unique @db.VarChar(64)
+  enabled          Boolean           @default(false)
+  targetType       FeatureFlagTarget @default(GLOBAL)
+  percentage       Int?
+  whitelist        Json?
+  regions          Json?
+  environments     Json?
+  minipayOnly      Boolean           @default(false)
+  experimentGroups Json?
+  metadata         Json?
+  createdAt        DateTime          @default(now()) @db.Timestamp
+  updatedAt        DateTime          @updatedAt @db.Timestamp
+
+  @@index([key, enabled])
+}
+
+model ContentBlock {
+  id        String           @id @default(cuid()) @db.Uuid
+  type      ContentBlockType
+  title     String           @db.VarChar(160)
+  body      String           @db.Text
+  imageUrl  String?          @db.Text
+  ctaLabel  String?          @db.VarChar(64)
+  ctaUrl    String?          @db.Text
+  placement BannerPlacement  @default(HOME_HERO)
+  priority  Int              @default(0)
+  active    Boolean          @default(true)
+  startAt   DateTime?        @db.Timestamp
+  endAt     DateTime?        @db.Timestamp
+  audience  Json?
+  version   Int              @default(1)
+  locale    String           @default("en") @db.VarChar(8)
+  createdAt DateTime         @default(now()) @db.Timestamp
+  updatedAt DateTime         @updatedAt @db.Timestamp
+
+  @@index([type, active, placement, priority])
+}
+
+model Banner {
+  id        String          @id @default(cuid()) @db.Uuid
+  contentId String?         @db.Uuid
+  title     String          @db.VarChar(160)
+  subtitle  String?         @db.Text
+  imageUrl  String?         @db.Text
+  ctaLabel  String?         @db.VarChar(64)
+  ctaUrl    String?         @db.Text
+  placement BannerPlacement @default(HOME_HERO)
+  priority  Int             @default(0)
+  active    Boolean         @default(true)
+  startAt   DateTime?       @db.Timestamp
+  endAt     DateTime?       @db.Timestamp
+  audience  Json?
+  version   Int             @default(1)
+  locale    String          @default("en") @db.VarChar(8)
+  createdAt DateTime        @default(now()) @db.Timestamp
+
+  dismissals BannerDismissal[]
+
+  @@index([placement, active, priority])
+}
+
+model BannerDismissal {
+  id          String   @id @default(cuid()) @db.Uuid
+  userId      String   @db.Uuid
+  bannerId    String   @db.Uuid
+  dismissedAt DateTime @default(now()) @db.Timestamp
+
+  user   UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  banner Banner      @relation(fields: [bannerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bannerId])
+}
+
+model AnnouncementSchedule {
+  id          String    @id @default(cuid()) @db.Uuid
+  title       String    @db.VarChar(160)
+  body        String    @db.Text
+  scheduledAt DateTime  @db.Timestamp
+  published   Boolean   @default(false)
+  publishedAt DateTime? @db.Timestamp
+  createdAt   DateTime  @default(now()) @db.Timestamp
+
+  @@index([scheduledAt, published])
+}
+
+model Campaign {
+  id          String         @id @default(cuid()) @db.Uuid
+  seasonId    String?        @db.Uuid
+  type        CampaignType
+  name        String         @db.VarChar(120)
+  description String?        @db.Text
+  status      CampaignStatus @default(DRAFT)
+  startAt     DateTime?      @db.Timestamp
+  endAt       DateTime?      @db.Timestamp
+  config      Json?
+  version     Int            @default(1)
+  createdAt   DateTime       @default(now()) @db.Timestamp
+  updatedAt   DateTime       @updatedAt @db.Timestamp
+
+  season   Season?           @relation(fields: [seasonId], references: [id], onDelete: SetNull)
+  targets  CampaignTarget[]
+  versions CampaignVersion[]
+
+  @@index([status, startAt])
+}
+
+model CampaignVersion {
+  id         String   @id @default(cuid()) @db.Uuid
+  campaignId String   @db.Uuid
+  version    Int
+  snapshot   Json
+  createdBy  String?  @db.VarChar(42)
+  createdAt  DateTime @default(now()) @db.Timestamp
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, version])
+  @@index([campaignId, version])
+}
+
+model CampaignTarget {
+  id         String  @id @default(cuid()) @db.Uuid
+  campaignId String  @db.Uuid
+  userId     String? @db.Uuid
+  segment    String? @db.VarChar(64)
+  metadata   Json?
+
+  campaign Campaign     @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user     UserProfile? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([userId])
+}
+
+model ScheduledJob {
+  id             String             @id @default(cuid()) @db.Uuid
+  jobType        ScheduledJobType
+  status         ScheduledJobStatus @default(PENDING)
+  scheduledAt    DateTime           @db.Timestamp
+  startedAt      DateTime?          @db.Timestamp
+  completedAt    DateTime?          @db.Timestamp
+  payload        Json?
+  result         Json?
+  error          String?            @db.Text
+  retryCount     Int                @default(0)
+  maxRetries     Int                @default(3)
+  dryRun         Boolean            @default(false)
+  paused         Boolean            @default(false)
+  idempotencyKey String?            @unique @db.VarChar(120)
+  createdAt      DateTime           @default(now()) @db.Timestamp
+
+  dependencies ScheduledJobDependency[] @relation("JobDependencies")
+  dependents   ScheduledJobDependency[] @relation("JobDependents")
+
+  @@index([status, scheduledAt])
+  @@index([jobType, status])
+}
+
+model ScheduledJobDependency {
+  id             String @id @default(cuid()) @db.Uuid
+  jobId          String @db.Uuid
+  dependsOnJobId String @db.Uuid
+
+  job       ScheduledJob @relation("JobDependencies", fields: [jobId], references: [id], onDelete: Cascade)
+  dependsOn ScheduledJob @relation("JobDependents", fields: [dependsOnJobId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, dependsOnJobId])
+}
+
+model ModerationReport {
+  id           String           @id @default(cuid()) @db.Uuid
+  reporterId   String?          @db.Uuid
+  targetUserId String?          @db.Uuid
+  targetPostId String?          @db.Uuid
+  type         String           @db.VarChar(64)
+  reason       String           @db.Text
+  status       ModerationStatus @default(PENDING)
+  resolution   String?          @db.Text
+  resolvedBy   String?          @db.VarChar(42)
+  resolvedAt   DateTime?        @db.Timestamp
+  createdAt    DateTime         @default(now()) @db.Timestamp
+
+  @@index([status, createdAt])
+  @@index([targetUserId])
+  @@index([targetPostId])
+}
+
+model AdminSession {
+  id                String    @id @default(cuid()) @db.Uuid
+  wallet            String    @db.VarChar(42)
+  role              AdminRole
+  token             String    @unique @db.VarChar(128)
+  expiresAt         DateTime  @db.Timestamp
+  revoked           Boolean   @default(false)
+  deviceFingerprint String?   @db.VarChar(128)
+  ipAddress         String?   @db.VarChar(45)
+  ipHistory         Json?
+  riskScore         Int       @default(0)
+  createdAt         DateTime  @default(now()) @db.Timestamp
+  lastSeenAt        DateTime  @default(now()) @db.Timestamp
+
+  @@index([wallet, revoked, expiresAt])
+  @@index([deviceFingerprint])
+}
+
+model AdminPermission {
+  id        String    @id @default(cuid()) @db.Uuid
+  wallet    String    @unique @db.VarChar(42)
+  role      AdminRole @default(READ_ONLY)
+  active    Boolean   @default(true)
+  createdAt DateTime  @default(now()) @db.Timestamp
+
+  @@index([role, active])
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AlertStatus {
+  OPEN
+  ACKNOWLEDGED
+  SILENCED
+  RESOLVED
+}
+
+enum HealthStatus {
+  HEALTHY
+  DEGRADED
+  UNHEALTHY
+  UNKNOWN
+}
+
+model MetricSeries {
+  id         String   @id @default(cuid()) @db.Uuid
+  name       String   @db.VarChar(120)
+  value      Float
+  tags       Json?
+  recordedAt DateTime @default(now()) @db.Timestamp
+
+  @@index([name, recordedAt])
+}
+
+model TelemetryEvent {
+  id            String   @id @default(cuid()) @db.Uuid
+  source        String   @db.VarChar(64)
+  eventType     String   @db.VarChar(120)
+  traceId       String?  @db.VarChar(64)
+  spanId        String?  @db.VarChar(64)
+  parentSpanId  String?  @db.VarChar(64)
+  correlationId String?  @db.VarChar(64)
+  durationMs    Int?
+  payload       Json?
+  recordedAt    DateTime @default(now()) @db.Timestamp
+
+  @@index([source, recordedAt])
+  @@index([traceId])
+  @@index([correlationId])
+}
+
+model AlertRule {
+  id           String        @id @default(cuid()) @db.Uuid
+  name         String        @db.VarChar(120)
+  metricName   String        @db.VarChar(120)
+  condition    String        @db.VarChar(32)
+  threshold    Float
+  severity     AlertSeverity @default(MEDIUM)
+  enabled      Boolean       @default(true)
+  silenceUntil DateTime?     @db.Timestamp
+  createdAt    DateTime      @default(now()) @db.Timestamp
+
+  incidents AlertIncident[]
+
+  @@index([enabled, metricName])
+}
+
+model AlertIncident {
+  id             String        @id @default(cuid()) @db.Uuid
+  ruleId         String        @db.Uuid
+  status         AlertStatus   @default(OPEN)
+  severity       AlertSeverity
+  message        String        @db.Text
+  value          Float?
+  acknowledgedBy String?       @db.VarChar(42)
+  acknowledgedAt DateTime?     @db.Timestamp
+  resolvedAt     DateTime?     @db.Timestamp
+  createdAt      DateTime      @default(now()) @db.Timestamp
+
+  rule AlertRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([status, severity, createdAt])
+}
+
+model Insight {
+  id        String        @id @default(cuid()) @db.Uuid
+  category  String        @db.VarChar(64)
+  title     String        @db.VarChar(160)
+  body      String        @db.Text
+  trendPct  Float?
+  severity  AlertSeverity @default(LOW)
+  metadata  Json?
+  createdAt DateTime      @default(now()) @db.Timestamp
+
+  @@index([category, createdAt])
+}
+
+model DashboardSnapshot {
+  id         String   @id @default(cuid()) @db.Uuid
+  snapshot   Json
+  capturedAt DateTime @default(now()) @db.Timestamp
+
+  @@index([capturedAt])
+}
+
+model SystemHealth {
+  id        String       @id @default(cuid()) @db.Uuid
+  component String       @db.VarChar(64)
+  status    HealthStatus @default(UNKNOWN)
+  latencyMs Float?
+  metadata  Json?
+  checkedAt DateTime     @default(now()) @db.Timestamp
+
+  @@index([component, checkedAt])
+}
+
+model ServiceDependency {
+  id        String  @id @default(cuid()) @db.Uuid
+  service   String  @db.VarChar(64)
+  dependsOn String  @db.VarChar(64)
+  critical  Boolean @default(false)
+  metadata  Json?
+
+  @@unique([service, dependsOn])
+}
+
+model TraceSpan {
+  id           String   @id @default(cuid()) @db.Uuid
+  traceId      String   @db.VarChar(64)
+  spanId       String   @db.VarChar(64)
+  parentSpanId String?  @db.VarChar(64)
+  operation    String   @db.VarChar(120)
+  service      String   @db.VarChar(64)
+  durationMs   Int
+  status       String   @db.VarChar(32)
+  metadata     Json?
+  startedAt    DateTime @db.Timestamp
+
+  @@index([traceId, startedAt])
+  @@index([spanId])
+}
+
+model AuditIntegrity {
+  id           String   @id @default(cuid()) @db.Uuid
+  auditLogId   String   @unique @db.Uuid
+  recordHash   String   @db.VarChar(64)
+  previousHash String?  @db.VarChar(64)
+  verified     Boolean  @default(true)
+  createdAt    DateTime @default(now()) @db.Timestamp
+
+  @@index([recordHash])
+}
+
+model ExperimentResult {
+  id         String   @id @default(cuid()) @db.Uuid
+  flagKey    String   @db.VarChar(64)
+  variant    String   @db.VarChar(16)
+  metricName String   @db.VarChar(120)
+  value      Float
+  sampleSize Int      @default(0)
+  recordedAt DateTime @default(now()) @db.Timestamp
+
+  @@index([flagKey, variant, recordedAt])
+}
+
+model FeatureFlagVersion {
+  id         String   @id @default(cuid()) @db.Uuid
+  flagKey    String   @db.VarChar(64)
+  version    Int
+  snapshot   Json
+  changedBy  String?  @db.VarChar(42)
+  rollbackOf Int?
+  createdAt  DateTime @default(now()) @db.Timestamp
+
+  @@unique([flagKey, version])
+  @@index([flagKey, version])
+}
+
+model AdminPolicy {
+  id         String    @id @default(cuid()) @db.Uuid
+  name       String    @db.VarChar(120)
+  role       AdminRole
+  permission String    @db.VarChar(64)
+  condition  Json
+  active     Boolean   @default(true)
+  createdAt  DateTime  @default(now()) @db.Timestamp
+
+  @@index([role, permission, active])
+}
+
+model SchedulerMetric {
+  id               String   @id @default(cuid()) @db.Uuid
+  jobId            String?  @db.Uuid
+  jobType          String   @db.VarChar(64)
+  runtimeMs        Int
+  retryCount       Int      @default(0)
+  dependencyWaitMs Int?
+  queueDelayMs     Int?
+  success          Boolean
+  recordedAt       DateTime @default(now()) @db.Timestamp
+
+  @@index([jobType, recordedAt])
+}
