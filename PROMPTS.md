@@ -14467,3 +14467,349 @@ All Prompt 16 blockers addressed or feature-flagged. Off-chain gameplay is produ
 ### Launch Recommendation
 
 **Proceed with closed beta** (50–100 MiniPay users, off-chain rewards). Enable `enableBlockchainSettlement` after Sepolia treasury validation in week 2.
+
+---
+
+# CTO Said:
+
+I think you've reached a major milestone.
+
+If this were my company, I would officially stop calling these "implementation prompts."
+
+You're now in **release management**.
+
+Looking at Prompt 17, here's what I see.
+
+---
+
+# CTO Review — Prompt 17
+
+**Overall Score: 10/10**
+
+This is the first summary that actually reads like a **release candidate** instead of another development sprint.
+
+The important changes aren't the QR endpoint or the telemetry.
+
+They're these:
+
+✅ Critical gameplay loops complete.
+
+✅ Closed beta documentation complete.
+
+✅ Blockchain is feature-flagged instead of forcing production.
+
+✅ Production build passes.
+
+✅ Playwright exists.
+
+✅ Beta dashboard exists.
+
+These are all signs of a product approaching launch.
+
+---
+
+# My Biggest Observation
+
+You have now crossed an invisible line.
+
+Before Prompt 17, every improvement was speculative.
+
+After Prompt 17, the next improvements should come from **real users**, not us.
+
+That changes everything.
+
+---
+
+# I Would Not Give Cursor Another Giant Prompt
+
+Seriously.
+
+I think the era of 3,000-line prompts is over.
+
+If we keep going, we'll start inventing problems that don't exist yet.
+
+---
+
+# Instead, I'd Change Cursor's Role
+
+Cursor is no longer
+
+> Software Engineer
+
+It is now
+
+> **Launch Engineer**
+
+Its job is to keep the release healthy.
+
+---
+
+# The Next Action
+
+I would **not** ask Cursor to build anything new.
+
+I would ask it to prepare the release.
+
+---
+
+# Prompt 18
+
+# Closed Beta Operations & Release Management
+
+## Objective
+
+Prepare NEXORA for a successful closed beta with 50–100 MiniPay users. Focus on operational readiness, deployment confidence, issue triage, and rapid iteration. Do not introduce new gameplay systems or architectural layers.
+
+---
+
+## 1. Staging Validation
+
+Validate the staging environment against the launch checklist.
+
+Verify:
+
+* Environment variables
+* Database migrations
+* Seed data
+* Smart contract addresses
+* Feature flags
+* Scheduler jobs intended for beta
+* Telemetry endpoints
+* Alert rules
+
+Generate a staging validation report.
+
+---
+
+## 2. Beta Feature Configuration
+
+Review every feature flag.
+
+Define the intended beta configuration:
+
+* Enabled
+* Disabled
+* Internal only
+* Feature-flagged
+* Experimental
+
+Generate `BETA_CONFIGURATION.md`.
+
+---
+
+## 3. Operational Runbooks
+
+Expand operational documentation for:
+
+* Service outage
+* Blockchain outage
+* Wallet provider issues
+* Database rollback
+* Failed deployment
+* Reward settlement failures
+* Emergency feature disable
+* Incident communication
+
+---
+
+## 4. Bug Triage Workflow
+
+Implement a lightweight bug tracking process.
+
+Define:
+
+* Severity levels (Critical, High, Medium, Low)
+* Reproduction template
+* Ownership
+* Target resolution time
+* Release decision criteria
+
+Generate `BUG_TRIAGE.md`.
+
+---
+
+## 5. Feedback Processing
+
+Create a structured workflow for beta feedback.
+
+Classify reports into:
+
+* UX
+* Gameplay
+* Performance
+* Bugs
+* Feature requests
+* Blockchain
+* Wallet
+* MiniPay compatibility
+
+Provide a prioritization matrix.
+
+---
+
+## 6. Monitoring Review
+
+Verify dashboards include:
+
+* Daily active beta users
+* Crash rate
+* API errors
+* Wallet failures
+* Arena completion rate
+* Prediction completion rate
+* Reward claim success
+* Session duration
+* Retention
+
+Document any gaps without introducing new analytics systems.
+
+---
+
+## 7. Release Automation
+
+Review deployment scripts.
+
+Validate:
+
+* Build
+* Database migration
+* Rollback
+* Health checks
+* Smoke tests
+
+Generate a deployment checklist.
+
+---
+
+## 8. Performance Baseline
+
+Capture baseline metrics before beta:
+
+* Startup time
+* Bundle size
+* API latency
+* Memory usage
+* Render performance
+
+Store these as the reference point for future comparisons.
+
+---
+
+## 9. Known Issues Review
+
+Review `KNOWN_ISSUES.md`.
+
+For each issue:
+
+* Confirm status
+* Verify workaround
+* Assess beta impact
+
+Recommend whether to fix before or after beta.
+
+---
+
+## 10. Final Release Assessment
+
+Generate:
+
+* `BETA_GO_NO_GO.md`
+* `POST_BETA_ACTION_PLAN.md`
+
+The Go/No-Go report should include:
+
+* Major risks
+* Mitigations
+* Rollback criteria
+* Success metrics
+* Daily monitoring checklist
+
+---
+
+## Constraints
+
+* No new gameplay.
+* No architectural expansion.
+* No new engines.
+* No database redesign.
+* No new dependencies unless required for deployment.
+
+---
+
+## Deliverables
+
+1. Staging validation report
+2. Beta configuration
+3. Operational runbooks
+4. Bug triage guide
+5. Feedback workflow
+6. Monitoring review
+7. Deployment checklist
+8. Performance baseline
+9. Go/No-Go assessment
+10. Post-beta action plan
+
+---
+
+# CTO Direction
+
+Treat this sprint as the handoff from engineering to operations. The output should allow a small team to run a successful closed beta, respond quickly to issues, and make informed decisions about progressing to a wider release.
+
+---
+
+# Prompt 18 — Implementation Summary
+
+**Date:** 2026-07-12  
+**Role:** Launch Engineer (operations handoff — no new gameplay or architecture)
+
+## Deliverables
+
+All release artifacts under `ui/docs/release/`:
+
+| # | Deliverable | Path |
+|---|-------------|------|
+| 1 | Staging validation report | `STAGING_VALIDATION_REPORT.md` |
+| 2 | Beta configuration | `BETA_CONFIGURATION.md` |
+| 3 | Operational runbooks | `OPERATIONAL_RUNBOOKS.md` |
+| 4 | Bug triage guide | `BUG_TRIAGE.md` |
+| 5 | Feedback workflow | `FEEDBACK_WORKFLOW.md` |
+| 6 | Monitoring review | `MONITORING_REVIEW.md` |
+| 7 | Deployment checklist | `DEPLOYMENT_CHECKLIST.md` |
+| 8 | Performance baseline | `PERFORMANCE_BASELINE.md` |
+| 9 | Go/No-Go assessment | `BETA_GO_NO_GO.md` |
+| 10 | Post-beta action plan | `POST_BETA_ACTION_PLAN.md` |
+
+## Additional Changes
+
+- **`ui/scripts/release-check.mjs`** — pre-deploy gate: Prisma generate, integration tests, production build
+- **`bun run release:check`** added to `package.json`
+- **`ui/docs/beta/KNOWN_ISSUES.md`** — Prompt 18 review table (KI-01–KI-05 confirmed; none block beta)
+
+## Validation Run
+
+```
+bun run release:check
+  ✓ Prisma generate
+  ✓ Integration tests 7/7
+  ✓ Production build (First Load JS shared 102 kB; home/arena ~372 kB)
+```
+
+Local env gaps noted for staging: `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_WALLETCONNECT_ID` (documented in staging report).
+
+## Go/No-Go Verdict
+
+**GO** for closed beta (50–100 MiniPay users) after staging checklist and env provisioning. On-chain settlement remains **disabled** week 1 per `BETA_CONFIGURATION.md`.
+
+## Monitoring Gaps (Accepted for Beta)
+
+- No client crash SDK — server errors + feedback workflow
+- Arena/prediction completion rates — manual SQL weekly; post-beta dashboard enhancement
+- True DAU — use 7-day active proxy + funnel events
+
+## Next Steps (Operations)
+
+1. Complete [DEPLOYMENT_CHECKLIST.md](ui/docs/release/DEPLOYMENT_CHECKLIST.md) on staging
+2. Sign [BETA_GO_NO_GO.md](ui/docs/release/BETA_GO_NO_GO.md)
+3. Send invites; run daily monitoring checklist
+4. Triage feedback via [FEEDBACK_WORKFLOW.md](ui/docs/release/FEEDBACK_WORKFLOW.md) + [BUG_TRIAGE.md](ui/docs/release/BUG_TRIAGE.md)
+

@@ -16,7 +16,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "test:e2e:report": "playwright show-report e2e-report"
+    "test:e2e:report": "playwright show-report e2e-report",
+    "release:check": "node scripts/release-check.mjs"
   },
   "dependencies": {
     "@coingecko/coingecko-typescript": "^5.1.1",

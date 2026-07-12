@@ -8,6 +8,18 @@
 | KI-04 | Low | Arena | Some button variants use legacy prop values | Functional | Polish sprint |
 | KI-05 | Info | Tests | Vitest engine mocks have pre-existing gaps | E2E covers critical paths | Ongoing |
 
+## Prompt 18 Review (2026-07-12)
+
+| ID | Status confirmed | Workaround valid | Beta impact | Fix timing |
+|----|------------------|------------------|-------------|------------|
+| KI-01 | ✅ Open | N/A — build warning only | **None** — runtime unaffected | **After beta** |
+| KI-02 | ✅ Open | Off-chain rewards fully functional | **Low** week 1 (settlement off) | **During beta week 2+** if enabling chain |
+| KI-03 | ✅ Open | Copy invite code | **Low** — QR is visual fallback | **After beta** (scannable QR) |
+| KI-04 | ✅ Open | Buttons work | **None** functional | **After beta** polish |
+| KI-05 | ✅ Open | Playwright E2E gates deploy | **None** for players | **Ongoing** — not blocking beta |
+
+**Recommendation:** No KI items block closed beta Go decision. Address KI-02 only when toggling `enableBlockchainSettlement`.
+
 ## Resolved (Prompt 17)
 
 - B-06 Navigation — Profile hub + home quick actions
