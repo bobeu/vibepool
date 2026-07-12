@@ -5,21 +5,23 @@ import { WheelEngine } from "@/services/engines/WheelEngine";
 import { SecureRandomProvider } from "@/services/engines/SecureRandomProvider";
 import { jsonResponse, apiError } from "@/lib/api/responses";
 
+const spinService = new SpinService();
+
 export const GET = async (req: NextRequest) => {
   return authenticatedHandler(req, async (wallet) => {
-    const state = await SpinService.getAvailableSpins(wallet);
+    const state = await spinService.getAvailableSpins(wallet);
     return jsonResponse(state);
   });
 };
 
 export const POST = async (req: NextRequest) => {
-  return authenticatedHandler(req, async (wallet) => {
+  return authenticatedHandler(req, async (wallet, request) => {
     try {
-      const body = await req.json();
+      const body = await request.json();
       const action = body.action as string;
 
       if (action === "start") {
-        const result = await SpinService.executeSpin(wallet);
+        const result = await spinService.executeSpin(wallet);
         return jsonResponse(result, 201);
       }
 

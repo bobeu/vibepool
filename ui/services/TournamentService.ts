@@ -115,6 +115,15 @@ export class TournamentService implements ITournamentService {
     return tournaments.map((t) => this.toResponse(t));
   }
 
+  async listAll(limit = 50): Promise<Record<string, unknown>[]> {
+    const tournaments = await prisma().tournament.findMany({
+      include: { predictions: { include: { user: true } } },
+      orderBy: { startTime: "desc" },
+      take: limit,
+    });
+    return tournaments.map((t) => this.toResponse(t));
+  }
+
   async getCurrentTournament(): Promise<Record<string, unknown> | null> {
     const tournament = await prisma().tournament.findFirst({
       where: { status: TournamentStatus.OPEN },

@@ -2,7 +2,7 @@ import { prisma } from "@/lib/auth/session";
 import { logger } from "@/lib/logging";
 import type { IXPRewardEngine } from "./interfaces";
 
-function getSettings(): Promise<Record<string, string>> {
+async function getSettings(): Promise<Record<string, string>> {
   const all = await prisma().settings.findMany();
   return Object.fromEntries(all.map((s) => [s.key, s.value]));
 }

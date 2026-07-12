@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { prisma } from "@/lib/auth/session";
+import { revokeSession } from "@/lib/auth/session";
 import { jsonResponse, apiError } from "@/lib/api/responses";
 
 export const POST = async (req: NextRequest) => {
@@ -10,25 +10,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     const accessToken = authHeader.slice(7);
-
-    const session = await prisma().session.findFirst({
-      where: {
-        refreshToken: accessToken,
-        status: "ACTIVE",
-      },
-    });
-
-    if (session) {
-      await prisma().session.update({
-        where: { id: session.id },
-        data: { status: "REVOKED" },
-      });
-
-      await prisma().refreshToken.updateMany({
-        where: { sessionId: session.id, status: "ACTIVE" },
-        data: { status: "REVOKED" },
-      });
-    }
+    await revokeSession(accessToken);
 
     return jsonResponse({ loggedOut: true });
   } catch (error) {

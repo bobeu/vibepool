@@ -9,7 +9,7 @@ export function notImplemented(module: string): Response {
   );
 }
 
-/** Returns 410 for legacy routes disconnected at launch (Prompt 15). */
+/** Returns 410 for legacy routes disconnected at launch. */
 export function dormantLegacyRoute(module: string, replacement: string): Response {
   if (isRuntimeEnabled("enableLegacyStubRoutes")) {
     return notImplemented(module);

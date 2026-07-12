@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/auth/session";
+import { resolveUserId } from "@/lib/auth/resolveUser";
 import { TournamentService } from "@/services/TournamentService";
 import { PredictionEngine } from "@/services/engines/PredictionEngine";
 import { logger } from "@/lib/logging";
@@ -9,11 +10,18 @@ export class PredictionService implements IPredictionService {
   private predictionEngine = new PredictionEngine();
 
   async getCurrentRound(_wallet?: string): Promise<Record<string, unknown> | null> {
-    const tournament = await new TournamentService().getCurrentTournament();
-    return tournament;
+    return new TournamentService().getCurrentTournament();
+  }
+
+  async getUserPrediction(wallet: string, tournamentId: string): Promise<Record<string, unknown> | null> {
+    const userId = await resolveUserId(wallet);
+    return prisma().prediction.findFirst({
+      where: { tournamentId, userId },
+    });
   }
 
   async submitPrediction(wallet: string, payload: Record<string, unknown>): Promise<Record<string, unknown>> {
+    const userId = await resolveUserId(wallet);
     const tournament = await new TournamentService().getCurrentTournament();
 
     if (!tournament) {
@@ -25,7 +33,7 @@ export class PredictionService implements IPredictionService {
     }
 
     const existing = await prisma().prediction.findFirst({
-      where: { tournamentId: tournament.id as string, userId: wallet },
+      where: { tournamentId: tournament.id as string, userId },
     });
 
     if (existing) {
@@ -35,7 +43,7 @@ export class PredictionService implements IPredictionService {
     const prediction = await prisma().prediction.create({
       data: {
         tournamentId: tournament.id as string,
-        userId: wallet,
+        userId,
         predictionValue: payload.predictionValue as number,
         submittedValue: payload.predictionValue as number,
         status: "PENDING",
@@ -50,7 +58,7 @@ export class PredictionService implements IPredictionService {
 
     await prisma().activity.create({
       data: {
-        userId: wallet,
+        userId,
         type: "PREDICTION",
         metadata: { tournamentId: tournament.id, predictionId: prediction.id },
       },

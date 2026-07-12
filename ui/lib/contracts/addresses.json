@@ -1,6 +1,15 @@
 {
   "PredictionManager": {},
-  "RewardTreasury": {},
-  "PointsManager": {},
-  "SpinRewardManager": {}
+  "RewardTreasury": {
+    "11142220": "0x3073792CB872D5194a35777beF82561ad4C07300"
+  },
+  "PointsManager": {
+    "11142220": "0xDA5Fbd3f5F42fb0c65b7d27cb99f191ba0fbF91a"
+  },
+  "SpinRewardManager": {
+    "11142220": "0x94943AD6604FeDDD45597441B277A3ECdFC3299E"
+  },
+  "ActivityRegistry": {
+    "11142220": "0x3e380A0d364358519BC3847d996bc5a17d9Bf268"
+  }
 }

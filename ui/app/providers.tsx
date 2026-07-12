@@ -5,6 +5,8 @@ import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { wagmiConfig } from '@/lib/wagmi';
 import { VibepoolProvider } from '@/lib/context/VibepoolContext';
+import { AuthProvider } from '@/lib/auth/useAuth';
+import { WalletSessionSync } from '@/lib/auth/WalletSessionSync';
 import { RainbowKitProvider, lightTheme, darkTheme } from '@rainbow-me/rainbowkit';
 import { celo } from "wagmi/chains";
 
@@ -61,7 +63,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
             theme={rainbowKitTheme}
           >
             <VibepoolProvider>
-              {children}
+              <AuthProvider>
+                <WalletSessionSync />
+                {children}
+              </AuthProvider>
             </VibepoolProvider>
           </RainbowKitProvider>
         </ThemeContext.Provider>

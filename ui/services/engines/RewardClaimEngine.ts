@@ -2,8 +2,12 @@ import { prisma } from "@/lib/auth/session";
 import { logger } from "@/lib/logging";
 import { eventBus } from "./EventBus";
 import { XPRewardEngine } from "./XPRewardEngine";
-import { SettingsService } from "../serviceImpl";
 import type { IRewardClaimEngine } from "./interfaces";
+
+async function loadSettings(): Promise<Record<string, string>> {
+  const all = (await prisma().settings.findMany()) ?? [];
+  return Object.fromEntries(all.map((s) => [s.key, s.value]));
+}
 
 export class RewardClaimEngine implements IRewardClaimEngine {
   name = "RewardClaimEngine";
@@ -29,8 +33,7 @@ export class RewardClaimEngine implements IRewardClaimEngine {
 
       if (reward.source === "SPIN") {
         const xpEngine = new XPRewardEngine();
-        const settingsService = new SettingsService();
-        const settings = await settingsService.getAll();
+        const settings = await loadSettings();
         const xp = xpEngine.calculateXP(settings, { participation: true });
 
         await tx.userProfile.update({

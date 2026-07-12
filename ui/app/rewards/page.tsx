@@ -1,18 +1,33 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AppShell } from "@/components/layout/AppShell";
+import { authFetch } from "@/lib/auth/client";
 
 export default function RewardsPage() {
+  const queryClient = useQueryClient();
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["rewards"],
     queryFn: async () => {
-      const res = await fetch("/api/rewards");
+      const res = await authFetch("/api/rewards");
       if (!res.ok) throw new Error("Failed to fetch rewards");
       return res.json();
     },
     staleTime: 15_000,
     refetchInterval: 30_000,
+  });
+
+  const claimMutation = useMutation({
+    mutationFn: async () => {
+      const res = await authFetch("/api/rewards", {
+        method: "POST",
+        body: JSON.stringify({ type: "points" }),
+      });
+      if (!res.ok) throw new Error("Failed to claim reward");
+      return res.json();
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["rewards"] }),
   });
 
   if (isLoading) {
@@ -54,13 +69,20 @@ export default function RewardsPage() {
           {data?.rewards?.map((reward: any) => (
             <div
               key={reward.id}
-              className="rounded-xl border border-border/50 bg-card/60 p-4 flex items-center justify-between"
+              className="rounded-xl border border-border/50 bg-card/60 p-4 flex items-center justify-between gap-3"
             >
               <div>
-                <p className="font-bold text-sm">{reward.reward}</p>
-                <p className="text-xs text-muted-foreground">{reward.asset} · {reward.amount}</p>
+                <p className="font-bold text-sm">{reward.reward ?? reward.type ?? "Reward"}</p>
+                <p className="text-xs text-muted-foreground">{reward.asset ?? "points"} · {reward.amount ?? reward.value}</p>
               </div>
-              <span className="text-xs font-semibold text-green-400">Claimable</span>
+              <button
+                type="button"
+                onClick={() => claimMutation.mutate()}
+                disabled={claimMutation.isPending}
+                className="shrink-0 rounded-lg bg-primary px-3 py-1.5 text-xs font-bold"
+              >
+                Claim
+              </button>
             </div>
           ))}
         </div>

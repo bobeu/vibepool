@@ -9,6 +9,7 @@ import { NAV_ITEMS } from "@/config/constants";
 import { cn } from "@/utils/format";
 import { useTheme } from "@/app/providers";
 import { useAuth } from "@/lib/auth/useAuth";
+import { authFetch } from "@/lib/auth/client";
 import { UnlockAnimationToast } from "@/components/social/UnlockAnimationToast";
 import type { NavKey } from "@/types";
 
@@ -25,9 +26,8 @@ export function AppShell({ children, activeNav }: AppShellProps) {
   useEffect(() => {
     if (!session?.wallet) return;
     const ping = (status: string) =>
-      fetch("/api/presence", {
+      authFetch("/api/presence", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
       }).catch(() => {});
     ping("ONLINE");

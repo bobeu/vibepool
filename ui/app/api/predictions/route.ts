@@ -2,9 +2,10 @@ import { NextRequest } from "next/server";
 import { authenticatedHandler, optionalAuthHandler } from "@/lib/auth/middleware";
 import { PredictionService } from "@/services/PredictionService";
 import { TournamentService } from "@/services/TournamentService";
-import { LeaderboardService } from "@/services/LeaderboardService";
 import { jsonResponse, apiError } from "@/lib/api/responses";
-import { predictionSchema, walletSchema } from "@/lib/validation/schemas";
+import { predictionSchema } from "@/lib/validation/schemas";
+
+const predictionService = new PredictionService();
 
 export const GET = async (req: NextRequest) => {
   return optionalAuthHandler(req, async (wallet) => {
@@ -15,21 +16,22 @@ export const GET = async (req: NextRequest) => {
 
     let userPrediction = null;
     if (wallet) {
-      const predictions = await PredictionService.getCurrentRound(wallet);
-      userPrediction = predictions;
+      userPrediction = await predictionService.getUserPrediction(wallet, tournament.id as string);
     }
 
     return jsonResponse({ tournament, userPrediction });
   });
 };
 
-export const POST = authenticatedHandler(async (wallet, req: NextRequest) => {
-  try {
-    const body = await req.json();
-    const parsed = predictionSchema.parse(body);
-    const result = await new PredictionService().submitPrediction(wallet, parsed);
-    return jsonResponse(result, 201);
-  } catch (error) {
-    return apiError(error);
-  }
-});
+export const POST = async (req: NextRequest) => {
+  return authenticatedHandler(req, async (wallet, request) => {
+    try {
+      const body = await request.json();
+      const parsed = predictionSchema.parse(body);
+      const result = await predictionService.submitPrediction(wallet, parsed);
+      return jsonResponse(result, 201);
+    } catch (error) {
+      return apiError(error);
+    }
+  });
+};

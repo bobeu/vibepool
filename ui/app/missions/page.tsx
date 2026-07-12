@@ -3,6 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AppShell } from "@/components/layout/AppShell";
 import { MissionCard } from "@/components/ui/MissionCard";
+import { authFetch } from "@/lib/auth/client";
 
 export default function MissionsPage() {
   const queryClient = useQueryClient();
@@ -10,7 +11,7 @@ export default function MissionsPage() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["missions"],
     queryFn: async () => {
-      const res = await fetch("/api/missions");
+      const res = await authFetch("/api/missions");
       if (!res.ok) throw new Error("Failed to fetch missions");
       return res.json();
     },
@@ -19,7 +20,7 @@ export default function MissionsPage() {
 
   const claimMutation = useMutation({
     mutationFn: async (missionId: string) => {
-      const res = await fetch("/api/missions", {
+      const res = await authFetch("/api/missions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ missionId }),
@@ -68,17 +69,24 @@ export default function MissionsPage() {
           <p className="text-sm text-muted-foreground text-center py-10">No missions available right now.</p>
         )}
         <div className="space-y-3">
-          {data?.missions?.map((mission: any) => (
-            <MissionCard
-              key={mission.id}
-              title={mission.mission?.title ?? "Mission"}
-              description={mission.mission?.description ?? ""}
-              progress={mission.currentValue ?? 0}
-              target={mission.targetValue ?? 1}
-              reward={`${mission.mission?.xpReward ?? 0} XP`}
-              accent="purple"
-            />
-          ))}
+          {data?.missions?.map((mission: any) => {
+            const done = mission.completed || (mission.currentValue ?? 0) >= (mission.targetValue ?? 1);
+            return (
+              <MissionCard
+                key={mission.id}
+                title={mission.mission?.title ?? mission.title ?? "Mission"}
+                description={mission.mission?.description ?? mission.description ?? ""}
+                progress={mission.currentValue ?? 0}
+                target={mission.targetValue ?? 1}
+                reward={`${mission.mission?.xpReward ?? 0} XP`}
+                accent="purple"
+                completed={mission.completed}
+                claimable={done && !mission.claimed}
+                claiming={claimMutation.isPending}
+                onClaim={() => claimMutation.mutate(mission.missionId ?? mission.id)}
+              />
+            );
+          })}
         </div>
       </div>
     </AppShell>

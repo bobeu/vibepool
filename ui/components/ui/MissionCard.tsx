@@ -7,9 +7,13 @@ interface MissionCardProps {
   target: number;
   reward?: string;
   accent?: "orange" | "purple";
+  completed?: boolean;
+  claimable?: boolean;
+  onClaim?: () => void;
+  claiming?: boolean;
 }
 
-export function MissionCard({ title, description, progress, target, reward, accent = "orange" }: MissionCardProps) {
+export function MissionCard({ title, description, progress, target, reward, accent = "orange", completed, claimable, onClaim, claiming }: MissionCardProps) {
   const percent = Math.min((progress / target) * 100, 100);
 
   return (
@@ -42,6 +46,19 @@ export function MissionCard({ title, description, progress, target, reward, acce
           />
         </div>
       </div>
+      {claimable && onClaim && (
+        <button
+          type="button"
+          onClick={onClaim}
+          disabled={claiming}
+          className="w-full rounded-lg bg-primary py-2 text-sm font-bold"
+        >
+          {claiming ? "Claiming…" : "Claim Reward"}
+        </button>
+      )}
+      {completed && !claimable && (
+        <p className="text-xs text-green-400 font-semibold">Completed</p>
+      )}
     </div>
   );
 }

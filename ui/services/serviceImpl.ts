@@ -31,6 +31,7 @@ import { CampaignEngine } from "@/services/engines/CampaignEngine";
 import { eventBus } from "@/services/engines/EventBus";
 import { getSchedulerEngine } from "@/services/schedulerRegistry";
 import { isRuntimeEnabled } from "@/lib/runtime/productionConfig";
+import { resolveUserId } from "@/lib/auth/resolveUser";
 import type {
   IMissionService,
   IRewardService,
@@ -449,19 +450,24 @@ export class MissionService implements IMissionService {
   name = "MissionService";
 
   async getDailyMissions(wallet: string): Promise<Record<string, unknown>[]> {
-    return missionEngine.generateDailyMissions(wallet);
+    const userId = await resolveUserId(wallet);
+    return missionEngine.generateDailyMissions(userId);
   }
 
   async completeMission(wallet: string, missionId: string): Promise<Record<string, unknown>> {
-    return missionEngine.completeMission(wallet, missionId);
+    const userId = await resolveUserId(wallet);
+    return missionEngine.completeMission(userId, missionId);
   }
 
   async getActiveMissions(wallet: string): Promise<Record<string, unknown>[]> {
-    return missionEngine.getActiveMissions(wallet);
+    const userId = await resolveUserId(wallet);
+    await missionEngine.generateDailyMissions(userId);
+    return missionEngine.getActiveMissions(userId);
   }
 
   async claimMission(wallet: string, missionId: string): Promise<Record<string, unknown>> {
-    return missionEngine.claimMission(wallet, missionId);
+    const userId = await resolveUserId(wallet);
+    return missionEngine.claimMission(userId, missionId);
   }
 }
 
@@ -469,15 +475,17 @@ export class RewardService implements IRewardService {
   name = "RewardService";
 
   async getClaimable(wallet: string): Promise<Record<string, unknown>[]> {
-    return rewardClaimEngine.getClaimableRewards(wallet);
+    const userId = await resolveUserId(wallet);
+    return rewardClaimEngine.getClaimableRewards(userId);
   }
 
   async claimPoints(wallet: string): Promise<Record<string, unknown>> {
-    const claimable = await rewardClaimEngine.getClaimableRewards(wallet);
+    const userId = await resolveUserId(wallet);
+    const claimable = await rewardClaimEngine.getClaimableRewards(userId);
     if (claimable.length === 0) {
       return { claimed: false, message: "No claimable rewards" };
     }
-    return rewardClaimEngine.claimReward(wallet, claimable[0].id as string);
+    return rewardClaimEngine.claimReward(userId, claimable[0].id as string);
   }
 }
 
@@ -497,18 +505,20 @@ export class SpinService implements ISpinService {
   name = "SpinService";
 
   async getAvailableSpins(wallet: string): Promise<Record<string, unknown>> {
-    return spinEngine.getSpinBalance(wallet);
+    const userId = await resolveUserId(wallet);
+    return spinEngine.getSpinBalance(userId);
   }
 
   async executeSpin(wallet: string): Promise<Record<string, unknown>> {
-    const canSpin = await spinEngine.consumeSpin(wallet);
+    const userId = await resolveUserId(wallet);
+    const canSpin = await spinEngine.consumeSpin(userId);
     if (!canSpin) {
       return { success: false, message: "No spins available" };
     }
 
     const { SecureRandomProvider } = await import("@/services/engines/SecureRandomProvider");
     const randomProvider = new SecureRandomProvider();
-    return wheelEngine.generateSpin(wallet, randomProvider);
+    return wheelEngine.generateSpin(userId, randomProvider);
   }
 }
 
@@ -516,7 +526,8 @@ export class NotificationService implements INotificationService {
   name = "NotificationService";
 
   async getUnread(wallet: string): Promise<Record<string, unknown>[]> {
-    return notificationEngine.getUnread(wallet);
+    const userId = await resolveUserId(wallet);
+    return notificationEngine.getUnread(userId);
   }
 
   async markRead(id: string): Promise<void> {
@@ -643,15 +654,18 @@ export class ProgressionService implements IProgressionService {
   name = "ProgressionService";
 
   async getLevelProgress(wallet: string): Promise<Record<string, unknown>> {
-    return gamificationEngine.getLevelProgress(wallet);
+    const userId = await resolveUserId(wallet);
+    return gamificationEngine.getLevelProgress(userId);
   }
 
   async getPlayerRank(wallet: string): Promise<Record<string, unknown>> {
-    return gamificationEngine.getPlayerRank(wallet);
+    const userId = await resolveUserId(wallet);
+    return gamificationEngine.getPlayerRank(userId);
   }
 
   async getEngagementMetrics(wallet: string): Promise<Record<string, unknown>> {
-    return gamificationEngine.getEngagementMetrics(wallet);
+    const userId = await resolveUserId(wallet);
+    return gamificationEngine.getEngagementMetrics(userId);
   }
 }
 
