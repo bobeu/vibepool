@@ -2,6 +2,8 @@ export default {
   darkMode: ["class"],
   content: [
     "./app/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./features/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
@@ -49,7 +51,9 @@ export default {
           foreground: 'hsl(var(--accent-foreground))',
           green: 'hsl(var(--accent-green))',
           orange: 'hsl(var(--accent-orange))',
-          red: 'hsl(var(--accent-red))'
+          purple: 'hsl(var(--accent-purple))',
+          red: 'hsl(var(--accent-red))',
+          cyan: 'hsl(var(--accent-cyan))',
         },
         popover: {
           DEFAULT: 'hsl(var(--popover))',

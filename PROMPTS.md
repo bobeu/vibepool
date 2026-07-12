@@ -14813,3 +14813,73 @@ Local env gaps noted for staging: `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_WALLETCONN
 3. Send invites; run daily monitoring checklist
 4. Triage feedback via [FEEDBACK_WORKFLOW.md](ui/docs/release/FEEDBACK_WORKFLOW.md) + [BUG_TRIAGE.md](ui/docs/release/BUG_TRIAGE.md)
 
+---
+
+# CTO Said:
+
+Hey Cursor, Its been a great job you doing. However, there is a pressing issue to fix. Currently, the UI is absolutely messed up as a result of what KiloCode coding agent did before you took over. The project has every assets, typography, theme in place but the app does not look good at all.
+
+I have attached a couple of images for you to read and understand how exactly I want the UI/UX to look. I attached:
+
+- skillerdesign
+- mobile view, and
+- vibecheck_design
+
+Nexora should be a mobile-first highly Minipay-compatible mini app built on the Celo blockchain. So it must be built with mobile experience in mind. 
+
+- The whole design should use the exact design as seen in the `skillerdesign` image. 
+- Use the exact theme shown in the image. This is a complete overhaul of the entire theme settings.
+
+- Deisgn the mobile view to use the design but not the theme in `mobile_view` image. The card, buttons, typography should use the design in `skillerdesign` image.
+
+- The web version should be built exaclty as seen in the `vibecheck_design` image but with a tablet dimension or size. Use any of the images in the `public` folder as a placeholder for the background until I provide a better one. You should design the frame exactly as it is but with tablet form in mind.
+
+- Ensure you recreate the theme and update the necessary file to reflect the new theme.
+
+---
+
+# Prompt 19 — Implementation Summary
+
+**Date:** 2026-07-12  
+**Scope:** Complete UI/UX theme overhaul — neo-brutalist skillerdesign theme, mobile_view layout, vibecheck tablet layout
+
+## Theme Overhaul
+
+- Rebuilt `styles/globals.css` with neo-brutalist tokens: cyan primary, yellow secondary, pink accent, 3px black borders, offset shadows
+- Updated `tailwind.config.js` — accent-purple/cyan, content paths for components/features
+- Added `ui/docs/design/THEME.md` design system reference
+
+## New Components
+
+| Component | Purpose |
+|-----------|---------|
+| `BrutalCard` | Card with brutal border + shadow |
+| `TabletFrame` | Tablet chrome (820px) with public folder background placeholder |
+| `Button` (updated) | brutal-btn variants (primary/secondary/white) |
+| `LevelProgress` (updated) | Brutal XP bar with black border |
+
+## Layout
+
+- **`AppShell`** — responsive shell: mobile full-width + tablet framed view; separate nav configs
+- **`config/navigation.ts`** — Mobile: Home/Arena/Spin/Rewards/Profile; Tablet: Home/Predict/Rounds/Admin
+- **`HomeHub`** — mobile_view layout (Grand Arena hero, progress, 3 action tiles) with skillerdesign styling
+- **`PredictHub`** — vibecheck_design layout (CELO arena badge, pool stats, manual/AI toggle, analyst panel, prediction form)
+
+## Pages
+
+- `/` — mobile shows HomeHub, tablet/desktop shows PredictHub in TabletFrame
+- `/prediction` — PredictHub on all breakpoints (auto shell)
+
+## Assets
+
+Placeholder backgrounds from `public/`: `NEXORA_Brand_Hero.png`, `spin.png`, `vibepool-predict.png`, `logo.png`
+
+## Build
+
+`bun run build` — pass
+
+## Notes
+
+- Dark mode retains brutal borders (inverted to white) but light mode is default per skillerdesign
+- Secondary routes (arena, missions, etc.) inherit new theme via AppShell `variant="auto"`
+- Wallet connect (RainbowKit) unchanged; styled via existing provider

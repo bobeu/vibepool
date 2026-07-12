@@ -1,49 +1,17 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { TournamentCard } from "@/components/tournament/TournamentCard";
+import { Shield, Target, Trophy } from "lucide-react";
+import { BrutalCard } from "@/components/ui/BrutalCard";
+import { Button } from "@/components/ui/button";
 import { CountdownTimer } from "@/components/ui/CountdownTimer";
 import { LevelProgress } from "@/components/ui/LevelProgress";
-import { HeroBanner } from "@/components/hero/HeroBanner";
-import { useAuth } from "@/lib/auth/useAuth";
-
-const SECTIONS = [
-  { key: "tournament", label: "Daily Tournament", href: "/tournament" },
-  { key: "missions", label: "Today's Missions", href: "/missions" },
-  { key: "achievements", label: "Achievements", href: "/achievements" },
-  { key: "spin", label: "Available Spins", href: "/spin" },
-  { key: "leaderboard", label: "Leaderboard Preview", href: "/leaderboard" },
-  { key: "rewards", label: "Reward Center", href: "/rewards" },
-  { key: "referrals", label: "Invite Friends", href: "/referrals" },
-] as const;
 
 export function HomeHub() {
   const router = useRouter();
-
-  const { data: heroData } = useQuery({
-    queryKey: ["hero-banner"],
-    queryFn: async () => {
-      const res = await fetch("/api/content?hero=1");
-      if (!res.ok) throw new Error("Failed to load hero");
-      return res.json() as Promise<{ hero: { title?: string; subtitle?: string; body?: string; ctaLabel?: string; ctaUrl?: string } }>;
-    },
-    staleTime: 30_000,
-  });
-
-  const { data: seasonData } = useQuery({
-    queryKey: ["season-end"],
-    queryFn: async () => {
-      const res = await fetch("/api/seasons");
-      if (!res.ok) return null;
-      return res.json();
-    },
-    staleTime: 60_000,
-  });
-
-  const hero = heroData?.hero;
 
   const { data: tournaments } = useQuery({
     queryKey: ["tournaments"],
@@ -60,7 +28,7 @@ export function HomeHub() {
     queryKey: ["profile"],
     queryFn: async () => {
       const res = await fetch("/api/profile");
-      if (!res.ok) throw new Error("Failed to fetch profile");
+      if (!res.ok) return null;
       return res.json();
     },
     staleTime: 15_000,
@@ -70,7 +38,7 @@ export function HomeHub() {
     queryKey: ["missions"],
     queryFn: async () => {
       const res = await fetch("/api/missions");
-      if (!res.ok) throw new Error("Failed to fetch missions");
+      if (!res.ok) return { missions: [] };
       return res.json();
     },
     staleTime: 15_000,
@@ -80,158 +48,142 @@ export function HomeHub() {
     queryKey: ["spins"],
     queryFn: async () => {
       const res = await fetch("/api/spins");
-      if (!res.ok) throw new Error("Failed to fetch spins");
+      if (!res.ok) return { available: 0 };
       return res.json();
     },
     staleTime: 15_000,
   });
 
-  const { data: community } = useQuery({
-    queryKey: ["community-spotlight"],
+  const { data: rewards } = useQuery({
+    queryKey: ["rewards"],
     queryFn: async () => {
-      const res = await fetch("/api/community");
-      if (!res.ok) throw new Error("Failed to load community");
+      const res = await fetch("/api/rewards");
+      if (!res.ok) return { claimable: 0 };
       return res.json();
     },
     staleTime: 15_000,
   });
 
-  const current = tournaments?.tournaments?.find((t: any) => t.status === "OPEN");
+  const current = tournaments?.tournaments?.find((t: { status: string }) => t.status === "OPEN");
+  const activeMissions = missions?.missions?.filter((m: { completed: boolean }) => !m.completed)?.length ?? 0;
+  const claimable = rewards?.pending?.length ?? rewards?.claimable ?? 0;
 
   return (
-    <div className="space-y-6">
-      <motion.section initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-        <HeroBanner
-          title={hero?.title ?? "Welcome to NEXORA"}
-          subtitle={hero?.subtitle ?? hero?.body ?? "The home of Web3 competitive games. Compete, earn, and climb the ranks."}
-          cta={hero?.ctaLabel ?? "Play Arena"}
-          onCta={() => router.push(hero?.ctaUrl ?? "/arena")}
-        />
-        {profile && (
-          <div className="pt-3">
-            <LevelProgress xp={profile.xp} level={profile.level} />
+    <div className="space-y-5">
+      {/* Grand Arena hero — mobile_view layout, skillerdesign theme */}
+      <BrutalCard className="overflow-hidden p-0">
+        <div className="relative h-40 w-full border-b-[3px] border-black">
+          <Image
+            src="/NEXORA_Brand_Hero.png"
+            alt="Grand Arena"
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/30" />
+          <div className="absolute bottom-3 left-3 right-3">
+            <p className="brutal-heading text-white text-lg drop-shadow-[2px_2px_0_#000]">
+              Grand Arena
+            </p>
           </div>
-        )}
-        {seasonData?.active?.endAt && (
-          <p className="text-xs text-muted-foreground mt-2 flex items-center gap-2">
-            <span className="inline-flex h-2 w-2 rounded-full bg-accent-purple animate-pulse" />
-            Season {seasonData.active.number} ends in <CountdownTimer endTime={seasonData.active.endAt} />
-          </p>
-        )}
-      </motion.section>
-
-      {current && (
-        <motion.section
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.05 }}
-          className="space-y-3"
-        >
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold uppercase tracking-tight">Live Tournament</h2>
-            <span className="px-2 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-semibold animate-pulse">
-              LIVE
-            </span>
-          </div>
-          <TournamentCard tournament={current} priority />
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span className="inline-flex h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-            Closes in <CountdownTimer endTime={current.endTime} />
-          </div>
-        </motion.section>
-      )}
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <Link href="/missions" className="glass-card flex items-center gap-4 p-4 block hover:bg-card/90 transition-colors">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-purple/10 text-accent-purple">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="font-bold">Missions</h3>
-              <p className="text-xs text-muted-foreground">{missions?.missions?.length ?? 0} active today</p>
-            </div>
-          </Link>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-        >
-          <Link href="/spin" className="glass-card flex items-center gap-4 p-4 block hover:bg-card/90 transition-colors">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-            </div>
-            <div>
-              <h3 className="font-bold">Spins</h3>
-              <p className="text-xs text-muted-foreground">{spins?.available ?? 0} available</p>
-            </div>
-          </Link>
-        </motion.div>
-      </div>
-
-      <motion.section
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="space-y-3"
-      >
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold uppercase tracking-tight">Community Spotlight</h2>
-          <Link href="/community" className="text-xs font-semibold text-primary">View all</Link>
         </div>
-        <Link href="/community" className="glass-card block p-4 hover:bg-card/90 transition-colors">
-          <p className="text-sm font-black uppercase tracking-tight text-transparent bg-gradient-to-r from-primary to-accent-purple bg-clip-text">
-            Today's Champions
-          </p>
-          <p className="text-xs text-muted-foreground mt-1">
-            {(community?.posts ?? []).slice(0, 1).map((p: any) => p.title).join("") || "Climb the ranks and earn your place among the legends."}
-          </p>
-          <div className="mt-3 flex items-center gap-2 text-xs">
-            <span className="px-2 py-1 rounded-full bg-accent-cyan/10 text-accent-cyan capitalize">Trending Players</span>
-            <span className="px-2 py-1 rounded-full bg-accent-purple/10 text-accent-purple capitalize">Season Countdown</span>
+        <div className="p-4 space-y-3 bg-white">
+          <div className="flex items-end justify-between gap-3">
+            <div>
+              <p className="text-[10px] font-black uppercase text-muted-foreground">Prize Pool</p>
+              <p className="text-2xl font-black tabular-nums">
+                {(current?.prizePool ?? 22500).toLocaleString()}
+              </p>
+            </div>
+            {current?.endTime && (
+              <div className="text-right">
+                <p className="text-[10px] font-black uppercase text-muted-foreground">Starts in</p>
+                <p className="text-sm font-black">
+                  <CountdownTimer endTime={current.endTime} />
+                </p>
+              </div>
+            )}
           </div>
+          <Button
+            size="lg"
+            className="w-full"
+            onClick={() => router.push(current ? "/tournament" : "/arena")}
+          >
+            Join Tournament
+          </Button>
+        </div>
+      </BrutalCard>
+
+      {/* Your Progress */}
+      <section className="space-y-3">
+        <h2 className="text-xs font-black uppercase tracking-widest text-muted-foreground">
+          Your Progress
+        </h2>
+        <BrutalCard className="p-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center border-[3px] border-black bg-secondary font-black text-lg shadow-[3px_3px_0_#000]">
+              {profile?.level ?? 1}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-black uppercase text-sm">Level {profile?.level ?? 1}</p>
+              {profile ? (
+                <LevelProgress xp={profile.xp} level={profile.level} />
+              ) : (
+                <p className="text-xs text-muted-foreground mt-1">Connect wallet to track XP</p>
+              )}
+            </div>
+          </div>
+        </BrutalCard>
+      </section>
+
+      {/* Quick action tiles — 3 across */}
+      <section className="grid grid-cols-3 gap-2">
+        <Link href="/missions" className="block">
+          <BrutalCard className="p-3 text-center h-full hover:translate-x-[1px] hover:translate-y-[1px] transition-transform">
+            <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center border-[2px] border-black bg-secondary shadow-[2px_2px_0_#000]">
+              <Shield className="w-5 h-5" strokeWidth={2.5} />
+            </div>
+            <p className="text-[10px] font-black uppercase">Missions</p>
+            <p className="text-xs font-bold mt-0.5">{activeMissions} Active</p>
+          </BrutalCard>
         </Link>
-      </motion.section>
 
-      <motion.section
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25 }}
-        className="space-y-3"
-      >
-        <h2 className="text-lg font-bold uppercase tracking-tight">Quick Actions</h2>
-        <div className="grid gap-3 sm:grid-cols-2">
-          {SECTIONS.filter((s) => !["tournament", "missions", "spin"].includes(s.key)).map((section, i) => (
-            <motion.div
-              key={section.key}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25 + i * 0.04 }}
-            >
-              <Link href={section.href} className="glass-card flex items-center gap-4 p-4 block hover:bg-card/90 transition-colors">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted/50 text-muted-foreground">
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-                <div>
-                  <h3 className="font-bold text-sm">{section.label}</h3>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
+        <Link href="/spin" className="block">
+          <BrutalCard className="p-3 text-center h-full hover:translate-x-[1px] hover:translate-y-[1px] transition-transform">
+            <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center border-[2px] border-black bg-primary shadow-[2px_2px_0_#000]">
+              <Target className="w-5 h-5" strokeWidth={2.5} />
+            </div>
+            <p className="text-[10px] font-black uppercase">Spins</p>
+            <p className="text-xs font-bold mt-0.5">{spins?.available ?? 0} Available</p>
+          </BrutalCard>
+        </Link>
+
+        <Link href="/rewards" className="block">
+          <BrutalCard className="p-3 text-center h-full hover:translate-x-[1px] hover:translate-y-[1px] transition-transform">
+            <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center border-[2px] border-black bg-accent shadow-[2px_2px_0_#000]">
+              <Trophy className="w-5 h-5" strokeWidth={2.5} />
+            </div>
+            <p className="text-[10px] font-black uppercase">Rewards</p>
+            <p className="text-xs font-bold mt-0.5">{claimable} Claimable</p>
+          </BrutalCard>
+        </Link>
+      </section>
+
+      {/* Secondary links */}
+      <section className="grid grid-cols-2 gap-2">
+        {[
+          { href: "/leaderboard", label: "Leaderboard" },
+          { href: "/referrals", label: "Referrals" },
+          { href: "/friends", label: "Friends" },
+          { href: "/community", label: "Community" },
+        ].map((link) => (
+          <Link key={link.href} href={link.href}>
+            <BrutalCard className="p-3 text-center text-xs font-black uppercase hover:bg-muted/50">
+              {link.label}
+            </BrutalCard>
+          </Link>
+        ))}
+      </section>
     </div>
   );
 }

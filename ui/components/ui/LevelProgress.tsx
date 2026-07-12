@@ -7,23 +7,20 @@ interface LevelProgressProps {
 }
 
 export function LevelProgress({ xp, level, xpPerLevel = 1000 }: LevelProgressProps) {
-  const currentLevelXp = level * xpPerLevel;
   const nextLevelXp = (level + 1) * xpPerLevel;
   const progress = Math.min((xp / nextLevelXp) * 100, 100);
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-baseline justify-between">
-        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-          Level {level}
-        </span>
-        <span className="text-xs text-muted-foreground">
-          {xp.toLocaleString()} / {nextLevelXp.toLocaleString()} XP
+    <div className="space-y-1.5 mt-1">
+      <div className="flex items-baseline justify-between text-[10px] font-black uppercase">
+        <span className="text-muted-foreground">XP</span>
+        <span>
+          {xp.toLocaleString()} / {nextLevelXp.toLocaleString()}
         </span>
       </div>
-      <div className="h-2 w-full overflow-hidden rounded-full bg-muted/60">
+      <div className="h-3 w-full overflow-hidden border-[2px] border-black bg-white">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-primary to-accent-purple transition-all duration-500"
+          className="h-full bg-gradient-to-r from-secondary via-primary to-accent-green transition-all duration-500"
           style={{ width: `${progress}%` }}
         />
       </div>

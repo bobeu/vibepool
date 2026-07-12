@@ -4,97 +4,79 @@
 @tailwind components;
 @tailwind utilities;
 
-/* NEXORA — Premium Web3 Gaming Platform */
+/* NEXORA — Neo-Brutalist MiniPay Theme (skillerdesign) */
 
 @layer base {
   :root {
-    --background: 240 10% 6%;
-    --foreground: 0 0% 100%;
+    --background: 0 0% 98%;
+    --foreground: 0 0% 0%;
 
-    --primary: 24 100% 54%;
-    --primary-foreground: 0 0% 100%;
-    --primary-light: 24 100% 62%;
-    --primary-glow: 24 100% 68%;
+    --primary: 187 100% 68%;
+    --primary-foreground: 0 0% 0%;
+    --primary-light: 187 100% 78%;
+    --primary-glow: 187 100% 58%;
 
-    --secondary: 265 75% 55%;
-    --secondary-foreground: 0 0% 100%;
-    --secondary-light: 265 75% 63%;
-    --secondary-dark: 265 75% 43%;
+    --secondary: 48 100% 58%;
+    --secondary-foreground: 0 0% 0%;
+    --secondary-light: 48 100% 68%;
+    --secondary-dark: 48 100% 48%;
 
-    --accent: 188 100% 50%;
-    --accent-foreground: 240 10% 6%;
-    --accent-green: 145 69% 53%;
+    --accent: 330 100% 71%;
+    --accent-foreground: 0 0% 0%;
+    --accent-green: 145 69% 45%;
     --accent-orange: 24 100% 54%;
     --accent-purple: 265 75% 55%;
-    --accent-red: 0 85% 60%;
-    --accent-cyan: 188 100% 50%;
+    --accent-red: 0 85% 55%;
+    --accent-cyan: 187 100% 68%;
 
-    --muted: 240 10% 12%;
-    --muted-foreground: 220 10% 65%;
-    --card: 240 10% 9%;
-    --card-foreground: 0 0% 100%;
-    --border: 240 10% 18%;
-    --input: 240 10% 16%;
-    --ring: 24 100% 54%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 35%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --border: 0 0% 0%;
+    --input: 0 0% 100%;
+    --ring: 0 0% 0%;
 
-    --popover: 240 10% 9%;
-    --popover-foreground: 0 0% 100%;
-    --destructive: 0 85% 60%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --destructive: 0 85% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --radius: 12px;
+    --radius: 0px;
 
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent-purple)) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(var(--accent-cyan)) 0%, hsl(var(--accent-purple)) 100%);
+    --brutal-border: 3px solid #000;
+    --brutal-shadow: 4px 4px 0 #000;
+    --brutal-shadow-lg: 6px 6px 0 #000;
+
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
     --gradient-bg: hsl(var(--background));
 
-    --shadow-glow: 0 0 20px hsl(var(--primary) / 0.25);
-    --shadow-elevated: 0 10px 40px -10px rgb(0 0 0 / 0.5);
-    --shadow-data: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+    --shadow-glow: 4px 4px 0 #000;
+    --shadow-elevated: 6px 6px 0 #000;
+    --shadow-data: 3px 3px 0 #000;
   }
 
   .dark {
-    --background: 240 10% 6%;
-    --foreground: 0 0% 100%;
+    --background: 240 10% 8%;
+    --foreground: 0 0% 98%;
 
-    --primary: 24 100% 54%;
-    --primary-foreground: 0 0% 100%;
-    --primary-light: 24 100% 62%;
-    --primary-glow: 24 100% 68%;
+    --primary: 187 100% 68%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 48 100% 58%;
+    --secondary-foreground: 0 0% 0%;
 
-    --secondary: 265 75% 55%;
-    --secondary-foreground: 0 0% 100%;
-    --secondary-light: 265 75% 63%;
-    --secondary-dark: 265 75% 43%;
+    --muted: 240 10% 14%;
+    --muted-foreground: 0 0% 70%;
+    --card: 240 10% 11%;
+    --card-foreground: 0 0% 98%;
+    --border: 0 0% 98%;
+    --input: 240 10% 14%;
+    --ring: 187 100% 68%;
 
-    --accent: 188 100% 50%;
-    --accent-foreground: 240 10% 6%;
-    --accent-green: 145 69% 53%;
-    --accent-orange: 24 100% 54%;
-    --accent-purple: 265 75% 55%;
-    --accent-red: 0 85% 60%;
-    --accent-cyan: 188 100% 50%;
-
-    --muted: 240 10% 12%;
-    --muted-foreground: 220 10% 65%;
-    --card: 240 10% 9%;
-    --card-foreground: 0 0% 100%;
-    --border: 240 10% 18%;
-    --input: 240 10% 16%;
-    --ring: 24 100% 54%;
-
-    --popover: 240 10% 9%;
-    --popover-foreground: 0 0% 100%;
-    --destructive: 0 85% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent-purple)) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(var(--accent-cyan)) 0%, hsl(var(--accent-purple)) 100%);
-    --gradient-bg: hsl(var(--background));
-
-    --shadow-glow: 0 0 20px hsl(var(--primary) / 0.25);
-    --shadow-elevated: 0 10px 40px -10px rgb(0 0 0 / 0.5);
-    --shadow-data: 0 4px 6px -1px rgb(0 0 0 / 0.3);
+    --brutal-border: 3px solid #fff;
+    --brutal-shadow: 4px 4px 0 rgba(255, 255, 255, 0.9);
+    --brutal-shadow-lg: 6px 6px 0 rgba(255, 255, 255, 0.9);
   }
 }
 
@@ -122,7 +104,63 @@
 
   ::-webkit-scrollbar-thumb {
     background: hsl(var(--border));
-    border-radius: 3px;
+    border-radius: 0;
+  }
+}
+
+@layer components {
+  .brutal-card {
+    @apply bg-card text-card-foreground border-[3px] border-black;
+    box-shadow: var(--brutal-shadow);
+  }
+
+  .brutal-card-yellow {
+    @apply bg-secondary text-secondary-foreground border-[3px] border-black;
+    box-shadow: var(--brutal-shadow);
+  }
+
+  .brutal-card-cyan {
+    @apply bg-primary text-primary-foreground border-[3px] border-black;
+    box-shadow: var(--brutal-shadow);
+  }
+
+  .brutal-btn {
+    @apply inline-flex items-center justify-center font-black uppercase tracking-wide border-[3px] border-black transition-all;
+    box-shadow: var(--brutal-shadow);
+  }
+
+  .brutal-btn:active:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #000;
+  }
+
+  .brutal-btn-primary {
+    @apply brutal-btn bg-primary text-black;
+  }
+
+  .brutal-btn-secondary {
+    @apply brutal-btn bg-secondary text-black;
+  }
+
+  .brutal-btn-white {
+    @apply brutal-btn bg-white text-black;
+  }
+
+  .brutal-input {
+    @apply w-full border-[3px] border-black bg-white px-3 py-2.5 text-sm font-medium text-black placeholder:text-black/40;
+    box-shadow: var(--brutal-shadow);
+  }
+
+  .brutal-heading {
+    @apply font-black uppercase tracking-tight italic;
+  }
+
+  .glass-card {
+    @apply brutal-card rounded-none p-4;
+  }
+
+  .stat-pill {
+    @apply brutal-card px-3 py-2 text-center;
   }
 }
 
@@ -160,85 +198,10 @@
   }
 
   .safe-area-pb {
-    padding-bottom: env(safe-area-inset-bottom, 16px);
+    padding-bottom: env(safe-area-inset-bottom, 12px);
   }
-}
 
-@keyframes hero-orbit-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes hero-orbit-counter-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
-}
-
-.hero-orbit-ring {
-  animation: hero-orbit-spin 20s linear infinite;
-}
-
-.hero-orbit-item {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-}
-
-.hero-orbit-item-trending {
-  transform: rotate(45deg) translateX(110px);
-}
-
-.hero-orbit-item-coins {
-  transform: rotate(225deg) translateX(110px);
-}
-
-.hero-orbit-counter {
-  margin: -1.5rem;
-  animation: hero-orbit-counter-spin 20s linear infinite;
-}
-
-.premium-card {
-  border-right-width: 4px !important;
-  border-bottom-width: 4px !important;
-  border-color: hsl(24 95% 45%) !important;
-  border-style: solid !important;
-}
-
-.premium-btn {
-  border-right-width: 4px !important;
-  border-bottom-width: 4px !important;
-  border-color: hsl(24 95% 40%) !important;
-  border-style: solid !important;
-  transition: all 0.1s ease-in-out;
-}
-
-.premium-btn:active:not(:disabled) {
-  transform: translate(2px, 2px);
-  border-right-width: 2px !important;
-  border-bottom-width: 2px !important;
-}
-
-.neobrutal-card {
-  border-right: 8px solid #000000 !important;
-  border-bottom: 8px solid #000000 !important;
-  border-top: 2px solid #000000 !important;
-  border-left: 2px solid #000000 !important;
-  border-style: solid !important;
-}
-
-.neobrutal-btn {
-  border-right: 8px solid #000000 !important;
-  border-bottom: 8px solid #000000 !important;
-  border-top: 2px solid #000000 !important;
-  border-left: 2px solid #000000 !important;
-  border-style: solid !important;
-  transition: transform 0.1s ease, border-width 0.1s ease;
-}
-
-.neobrutal-btn:active:not(:disabled) {
-  transform: translate(3px, 3px);
-  border-right-width: 4px !important;
-  border-bottom-width: 4px !important;
+  .safe-area-pt {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
 }

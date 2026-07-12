@@ -2,15 +2,24 @@ import * as React from "react";
 import { cn } from "@/utils/format";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "default" | "primary" | "outline";
+  variant?: "default" | "primary" | "secondary" | "white" | "outline";
+  size?: "sm" | "md" | "lg";
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = "", variant = "default", type = "button", ...props }, ref) => {
+  ({ className = "", variant = "primary", size = "md", type = "button", ...props }, ref) => {
     const variants: Record<NonNullable<ButtonProps["variant"]>, string> = {
-      default: "bg-primary text-primary-foreground",
-      primary: "gradient-primary text-white",
-      outline: "border border-border bg-transparent text-foreground",
+      default: "brutal-btn-primary",
+      primary: "brutal-btn-primary",
+      secondary: "brutal-btn-secondary",
+      white: "brutal-btn-white",
+      outline: "brutal-btn bg-transparent text-foreground border-[3px] border-black",
+    };
+
+    const sizes = {
+      sm: "px-3 py-1.5 text-xs",
+      md: "px-4 py-2.5 text-sm",
+      lg: "px-6 py-3.5 text-base",
     };
 
     return (
@@ -18,8 +27,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         type={type}
         className={cn(
-          "inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-bold transition-all hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed",
           variants[variant],
+          sizes[size],
+          "disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none",
           className
         )}
         {...props}
