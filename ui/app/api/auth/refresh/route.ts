@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma, refreshSession } from "@/lib/auth/session";
 import { jsonResponse, apiError } from "@/lib/api/responses";
+import { AuthenticationError } from "@/lib/errors";
 import { z } from "zod";
 
 const refreshSchema = z.object({
@@ -14,7 +15,7 @@ export const POST = async (req: NextRequest) => {
 
     const session = await refreshSession(prisma(), refreshToken);
     if (!session) {
-      return apiError(new Error("Invalid refresh token"), { status: 401 });
+      return apiError(new AuthenticationError("Invalid refresh token"));
     }
 
     return jsonResponse({

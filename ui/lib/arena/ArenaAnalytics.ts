@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/auth/session";
 import { eventBus } from "@/services/engines/EventBus";
 
@@ -14,7 +15,11 @@ export type ArenaMetricType =
 export class ArenaAnalytics {
   async record(metricType: ArenaMetricType, value: number, metadata?: Record<string, unknown>): Promise<void> {
     await prisma().arenaAnalyticsMetric.create({
-      data: { metricType, value, metadata: metadata ?? undefined },
+      data: {
+        metricType,
+        value,
+        metadata: metadata as Prisma.InputJsonValue | undefined,
+      },
     });
 
     eventBus.publish({

@@ -273,7 +273,7 @@ export class ArenaOpsEngine {
   }
 
   async forceEndMatch(matchId: string): Promise<Record<string, unknown>> {
-    const { ResultEngine } = await import("./ResultEngine");
+    const { ResultEngine } = await import("../ResultEngine");
     const engine = new ResultEngine();
     return engine.finalizeMatch(matchId);
   }

@@ -1,4 +1,4 @@
-import type { NextRequest } from "next/server";
+import { AppError } from "@/lib/errors";
 
 export function jsonResponse<T>(data: T, status = 200): Response {
   return Response.json(data, { status });
@@ -11,8 +11,6 @@ export function apiError(error: unknown): Response {
     { status: appError.statusCode }
   );
 }
-
-import { AppError } from "@/lib/errors";
 
 function toApiError(error: unknown): AppError {
   if (error instanceof AppError) return error;

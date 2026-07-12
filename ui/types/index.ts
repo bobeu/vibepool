@@ -87,6 +87,8 @@ export interface VibepoolContextValue {
 export interface ApiErrorResponse {
   error: string;
   code?: string;
+  replacement?: string;
+  meta?: Record<string, unknown>;
 }
 
 export interface WalletAuthPayload {

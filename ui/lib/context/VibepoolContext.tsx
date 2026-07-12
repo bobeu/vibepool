@@ -45,7 +45,7 @@ export function VibepoolProvider({ children }: { children: React.ReactNode }) {
     ],
     allowFailure: true,
     query: {
-      enabled: !!address && !!isConnected && !!predictionAbi.length,
+      enabled: !!address && !!isConnected && Array.isArray(predictionAbi) && predictionAbi.length > 0,
       refetchOnReconnect: true,
       refetchInterval: STALE_TIME_MS * 2,
       staleTime: STALE_TIME_MS,
@@ -77,7 +77,7 @@ export function VibepoolProvider({ children }: { children: React.ReactNode }) {
     isConnected: !!isConnected,
     address,
     predictionAddress: predictionAddr,
-    predictionAbi,
+    predictionAbi: predictionAbi ?? [],
     onData: handlePublicData,
   });
 
