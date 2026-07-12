@@ -13,9 +13,11 @@ import { useAuth } from "@/lib/auth/useAuth";
 const SECTIONS = [
   { key: "tournament", label: "Daily Tournament", href: "/tournament" },
   { key: "missions", label: "Today's Missions", href: "/missions" },
+  { key: "achievements", label: "Achievements", href: "/achievements" },
   { key: "spin", label: "Available Spins", href: "/spin" },
   { key: "leaderboard", label: "Leaderboard Preview", href: "/leaderboard" },
   { key: "rewards", label: "Reward Center", href: "/rewards" },
+  { key: "referrals", label: "Invite Friends", href: "/referrals" },
 ] as const;
 
 export function HomeHub() {
@@ -209,7 +211,7 @@ export function HomeHub() {
       >
         <h2 className="text-lg font-bold uppercase tracking-tight">Quick Actions</h2>
         <div className="grid gap-3 sm:grid-cols-2">
-          {SECTIONS.filter(s => !["tournament", "missions", "spin"].includes(s.key)).map((section, i) => (
+          {SECTIONS.filter((s) => !["tournament", "missions", "spin"].includes(s.key)).map((section, i) => (
             <motion.div
               key={section.key}
               initial={{ opacity: 0, y: 8 }}

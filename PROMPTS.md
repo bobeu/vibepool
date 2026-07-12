@@ -13943,3 +13943,527 @@ Added `ui/__tests__/integration.test.ts` — **7/7 passing** (vitest):
 - `ui/services/serviceImpl.ts`, `PredictionService.ts`, `TournamentService.ts`
 - `ui/docs/integration/*` — five audit reports
 - `ui/__tests__/integration.test.ts` — new
+
+--
+
+# CTO Said:
+
+After reviewing Cursor's summary, overall, I'm very impressed with where the project is now.
+
+One thing stands out to me:
+
+> **We are no longer building NEXORA. We are validating NEXORA.**
+
+The reports confirm that the architecture freeze worked, the core gameplay loops are integrated, and the remaining blockers are mostly launch-oriented rather than architectural. The integration matrix shows that almost every core feature is working end-to-end except blockchain settlement, which is intentionally disconnected.  The player journey report also concludes that the application is ready for a closed beta using off-chain gameplay. 
+
+Looking at the blocker report, there are really only three items I consider meaningful before public launch:
+
+* Blockchain settlement
+* Playwright end-to-end automation
+* Mobile polish/navigation cleanup
+
+Everything else is either documented or intentionally deferred. 
+
+---
+
+# CTO Decision
+
+I would **not** move to another architecture prompt.
+
+I also would **not** jump straight to blockchain implementation.
+
+Instead, I would make Cursor perform what every mature game studio does before enabling real-money rewards:
+
+# Prompt 17
+
+# Closed Beta Stabilization, Mobile QA & Launch Candidate
+
+---
+
+## Objective
+
+Treat NEXORA as if it is entering a two-week closed beta with 50–100 MiniPay users.
+
+Do not add new gameplay systems.
+
+Do not expand the architecture.
+
+The objective is to make every existing feature production-quality.
+
+---
+
+# Engineering Rules
+
+No new:
+
+* Engines
+* Services
+* Prisma models
+* Feature modules
+* Major dependencies
+
+Only improve:
+
+* stability
+* gameplay feel
+* MiniPay UX
+* bug fixes
+* navigation
+* testing
+* performance
+
+---
+
+# 1. Resolve All Remaining Blockers
+
+Complete the remaining launch blockers identified in Prompt 16.
+
+### B-04
+
+Implement the complete Blockchain Settlement API.
+
+Connect
+
+RewardEngine
+
+↓
+
+SettlementEngine
+
+↓
+
+BlockchainSyncService
+
+↓
+
+RewardTreasury
+
+↓
+
+RewardLedger
+
+Support:
+
+* retry
+* confirmation polling
+* transaction states
+* failure recovery
+* user notifications
+
+No redesign.
+
+Reuse the existing architecture.
+
+---
+
+### B-05
+
+Create a complete Playwright E2E suite.
+
+Cover
+
+Authentication
+
+Prediction
+
+Arena
+
+Mission
+
+Spin
+
+Reward
+
+Referral
+
+Profile
+
+Logout
+
+Generate screenshots on failures.
+
+Produce coverage report.
+
+---
+
+### B-06
+
+Navigation review.
+
+Review every player screen.
+
+Ensure important features are discoverable.
+
+Specifically review
+
+Missions
+
+Achievements
+
+Feed
+
+Referrals
+
+Determine whether they belong in
+
+Bottom Navigation
+
+Profile Hub
+
+Home Quick Actions
+
+Do not simply add everything to the bottom navigation.
+
+Optimize for MiniPay simplicity.
+
+---
+
+### B-07
+
+Implement
+
+`/api/invites/qr`
+
+OR
+
+remove the UI entry.
+
+No broken buttons.
+
+---
+
+### B-08
+
+Review orphan EventBus events.
+
+For each event
+
+Connect
+
+OR
+
+Document
+
+OR
+
+Gate via productionConfig
+
+No silent dead paths.
+
+---
+
+# 2. Full MiniPay Device QA
+
+Test every journey assuming
+
+Low-end Android
+
+Slow network
+
+Small screen
+
+MiniPay embedded browser
+
+Wallet reconnect
+
+Background resume
+
+Poor connectivity
+
+Verify
+
+animations
+
+loading
+
+scrolling
+
+forms
+
+safe areas
+
+transaction UX
+
+---
+
+# 3. Closed Beta Telemetry
+
+Instrument the following:
+
+* onboarding completion
+* first prediction
+* first arena match
+* first spin
+* first reward claim
+* first referral
+* D1 return
+* D3 return
+* D7 return
+
+Do not create new analytics engines.
+
+Reuse the existing telemetry layer.
+
+---
+
+# 4. Gameplay Feel Pass
+
+Review
+
+Arena
+
+Prediction
+
+Missions
+
+Rewards
+
+Spins
+
+Profile
+
+Leaderboard
+
+Community
+
+Make low-risk UX improvements only.
+
+No redesign.
+
+---
+
+# 5. Animation Polish
+
+Review every animation.
+
+Ensure
+
+consistent timing
+
+consistent easing
+
+consistent duration
+
+60fps on MiniPay target devices
+
+---
+
+# 6. Wallet Experience
+
+Review
+
+connect
+
+disconnect
+
+reconnect
+
+expired session
+
+network changes
+
+transaction pending
+
+transaction success
+
+transaction failed
+
+No confusing states.
+
+---
+
+# 7. Offline & Recovery
+
+Review
+
+temporary network loss
+
+API timeout
+
+wallet disconnect
+
+page refresh
+
+session expiry
+
+Ensure graceful recovery.
+
+---
+
+# 8. Error Experience
+
+Every error should
+
+explain the problem
+
+offer a recovery action
+
+match NEXORA branding
+
+Avoid raw stack traces.
+
+---
+
+# 9. Asset Verification
+
+Verify
+
+No placeholder
+
+No broken import
+
+No missing image
+
+No missing icon
+
+No incorrect branding
+
+---
+
+# 10. Performance
+
+Continue optimizing
+
+bundle
+
+lazy loading
+
+image loading
+
+wallet initialization
+
+render stability
+
+No architecture changes.
+
+---
+
+# 11. Launch Documentation
+
+Generate
+
+```text
+CLOSED_BETA_PLAN.md
+
+KNOWN_ISSUES.md
+
+TEST_ACCOUNTS.md
+
+BETA_FEEDBACK_TEMPLATE.md
+
+ROLLBACK_GUIDE.md
+
+SMOKE_TESTS.md
+```
+
+---
+
+# 12. Beta Dashboard
+
+Prepare a simple operational dashboard listing:
+
+* active beta users
+* crashes
+* failed transactions
+* API failures
+* settlement failures
+* top reported issues
+* average session duration
+
+Reuse the existing admin analytics where possible.
+
+---
+
+# Constraints
+
+Do not
+
+* redesign
+* refactor architecture
+* add gameplay
+* create new engines
+* expand the database unnecessarily
+
+---
+
+# Acceptance Criteria
+
+Prompt is complete only if:
+
+* All launch blockers are resolved or intentionally gated.
+* Blockchain settlement works end-to-end (or is clearly feature-flagged if deferred).
+* Playwright tests pass for critical journeys.
+* No broken navigation exists.
+* No dead buttons exist.
+* MiniPay experience is smooth.
+* Closed beta can begin with confidence.
+
+---
+
+# Deliverables
+
+1. Blockchain settlement integration
+2. Playwright E2E suite
+3. Navigation audit
+4. EventBus cleanup report
+5. MiniPay QA report
+6. Closed beta documentation
+7. Beta dashboard
+8. Final launch recommendation
+
+---
+
+# CTO Direction
+
+This sprint is the final engineering gate before inviting real users. The objective is to eliminate friction, complete the remaining production-critical integrations, and ensure the existing gameplay loops behave reliably under realistic MiniPay conditions. Any issue discovered during this sprint should be evaluated based on its impact on player trust, stability, and launch readiness rather than on architectural elegance.
+
+---
+
+## Prompt 17 — Implementation Summary (2026-07-12)
+
+### Verdict: **Ready for Closed Beta**
+
+All Prompt 16 blockers addressed or feature-flagged. Off-chain gameplay is production-quality; on-chain settlement enabled via `enableBlockchainSettlement` when `BACKEND_SIGNER_PRIVATE_KEY` is configured.
+
+### Blockers Resolved
+
+| ID | Resolution |
+|----|------------|
+| B-04 | SettlementEngine → `lib/blockchain/client.ts` → RewardTreasury `payout()`; `/api/settlement` status + retry; mock fallback when flag off |
+| B-05 | Playwright suite in `ui/e2e/critical-journeys.spec.ts` — API contracts, page smoke, navigation |
+| B-06 | Profile hub links (Missions, Feed, Referrals, Achievements View all); Home quick actions expanded |
+| B-07 | `GET /api/invites/qr?code=` — SVG QR without DB dependency; referrals page renders QR image |
+| B-08 | EventBus subscribers for MissionCompleted, RewardClaimed, SpinCompleted, RewardSettled/Failed; orphans documented |
+
+### Closed Beta Telemetry
+
+`lib/telemetry/betaEvents.ts` instruments via existing TelemetryEngine:
+
+- onboarding_complete, first_prediction, first_arena_match, first_spin, first_reward_claim, first_referral
+- d1_return, d3_return, d7_return (on login)
+
+### Beta Dashboard
+
+`GET /api/v1/admin/beta` — active users, failures, funnel, session duration, top reports (extends AdminDashboardEngine).
+
+### UX / Recovery
+
+- `ErrorState` component for branded error + retry
+- Session auto-refresh 60s before expiry (`useAuth.tsx`)
+- SSR-safe token storage guards
+
+### Documentation (`ui/docs/beta/`)
+
+- CLOSED_BETA_PLAN.md, KNOWN_ISSUES.md, TEST_ACCOUNTS.md
+- BETA_FEEDBACK_TEMPLATE.md, ROLLBACK_GUIDE.md, SMOKE_TESTS.md
+- NAVIGATION_AUDIT.md, EVENTBUS_CLEANUP.md, MINIPAY_QA_REPORT.md
+
+### Tests
+
+- Vitest integration: **7/7 pass**
+- Playwright: `bun run test:e2e` (requires server on :3001)
+- Production build: **passes**
+
+### Launch Recommendation
+
+**Proceed with closed beta** (50–100 MiniPay users, off-chain rewards). Enable `enableBlockchainSettlement` after Sepolia treasury validation in week 2.

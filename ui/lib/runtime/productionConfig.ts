@@ -15,6 +15,8 @@ export const PRODUCTION_RUNTIME = {
   enablePresenceFeedSideEffects: false,
   /** BlockchainService stub in serviceImpl (real sync lives in BlockchainSyncService) */
   enableBlockchainServiceStub: false,
+  /** On-chain reward settlement via RewardTreasury (requires BACKEND_SIGNER_PRIVATE_KEY) */
+  enableBlockchainSettlement: false,
 } as const;
 
 export type ProductionRuntimeFlag = keyof typeof PRODUCTION_RUNTIME;

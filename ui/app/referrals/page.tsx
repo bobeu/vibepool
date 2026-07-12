@@ -140,7 +140,14 @@ export default function ReferralsPage() {
             {inviteList.length > 0 && (
               <div className="space-y-2">
                 {inviteList.map((i) => (
-                  <div key={i.id} className="rounded-xl border border-border/40 bg-muted/30 p-3">
+                  <div key={i.id} className="rounded-xl border border-border/40 bg-muted/30 p-3 space-y-2">
+                    {i.type === "QR" && i.url && (
+                      <img
+                        src={`/api/invites/qr?code=${encodeURIComponent(i.code ?? i.id)}`}
+                        alt="Invite QR code"
+                        className="mx-auto h-40 w-40 rounded-lg border border-border/40 bg-white p-2"
+                      />
+                    )}
                     <p className="text-xs font-mono text-foreground break-all">{i.url}</p>
                     <p className="text-[10px] text-muted-foreground uppercase">{i.type} · used {i.uses}×</p>
                   </div>

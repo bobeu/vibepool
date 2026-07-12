@@ -228,14 +228,17 @@ export default function ProfilePage() {
         <motion.section variants={item} className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold uppercase tracking-tight">Achievements</h2>
-            <button
-              type="button"
-              onClick={() => evaluateMutation.mutate()}
-              disabled={evaluateMutation.isPending}
-              className="px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-bold uppercase tracking-wide transition-all hover:bg-primary/20 disabled:opacity-50"
-            >
-              {evaluateMutation.isPending ? "Evaluating..." : "Evaluate"}
-            </button>
+            <div className="flex items-center gap-2">
+              <Link href="/achievements" className="text-xs font-semibold text-primary">View all</Link>
+              <button
+                type="button"
+                onClick={() => evaluateMutation.mutate()}
+                disabled={evaluateMutation.isPending}
+                className="px-3 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-bold uppercase tracking-wide transition-all hover:bg-primary/20 disabled:opacity-50"
+              >
+                {evaluateMutation.isPending ? "Evaluating..." : "Evaluate"}
+              </button>
+            </div>
           </div>
           <GlassContainer className="p-4">
             {achievementsLoading ? (
@@ -275,7 +278,8 @@ export default function ProfilePage() {
         <motion.section variants={item} className="space-y-3">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold uppercase tracking-tight">Social</h2>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2 justify-end">
+              <Link href="/missions" className="text-xs font-semibold text-primary">Missions</Link>
               <Link href="/feed" className="text-xs font-semibold text-primary">Feed</Link>
               <Link href="/referrals" className="text-xs font-semibold text-primary">Referrals</Link>
             </div>

@@ -55,4 +55,13 @@ export const METRIC_CATALOG: Record<string, string> = {
   "cache.hit_ratio": "Cache hit ratio",
   "events.processing_ms": "Domain event processing time",
   "admin.activity": "Admin console activity count",
+  "beta.onboarding_complete": "Closed beta onboarding completion",
+  "beta.first_prediction": "First prediction submitted",
+  "beta.first_arena_match": "First arena match completed",
+  "beta.first_spin": "First spin completed",
+  "beta.first_reward_claim": "First reward claimed",
+  "beta.first_referral": "First successful referral",
+  "beta.d1_return": "Day-1 retention return",
+  "beta.d3_return": "Day-3 retention return",
+  "beta.d7_return": "Day-7 retention return",
 };

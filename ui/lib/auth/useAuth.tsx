@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { authFetch, clearTokens, getAccessToken } from "@/lib/auth/client";
+import { authFetch, clearTokens, getAccessToken, getRefreshToken } from "@/lib/auth/client";
 
 interface Session {
   wallet: string;
@@ -47,8 +47,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     refreshSession();
     const onSession = () => refreshSession();
     window.addEventListener("nexora:session", onSession);
-    return () => window.removeEventListener("nexora:session", onSession);
-  }, [refreshSession]);
+    const interval = setInterval(() => {
+      if (!session?.expiresAt) return;
+      const expires = new Date(session.expiresAt).getTime();
+      if (Date.now() > expires - 60_000) {
+        authFetch("/api/auth/refresh", {
+          method: "POST",
+          body: JSON.stringify({ refreshToken: getRefreshToken() }),
+        })
+          .then((res) => res.ok && refreshSession())
+          .catch(() => {});
+      }
+    }, 30_000);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("nexora:session", onSession);
+    };
+  }, [refreshSession, session?.expiresAt]);
 
   const logout = useCallback(async () => {
     await authFetch("/api/auth/logout", { method: "POST" }).catch(() => {});

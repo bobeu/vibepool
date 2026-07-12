@@ -32,6 +32,8 @@ import { eventBus } from "@/services/engines/EventBus";
 import { getSchedulerEngine } from "@/services/schedulerRegistry";
 import { isRuntimeEnabled } from "@/lib/runtime/productionConfig";
 import { resolveUserId } from "@/lib/auth/resolveUser";
+import { getBlockchainSyncService } from "@/lib/blockchain/client";
+import { trackBetaEvent, trackRetentionOnLogin } from "@/lib/telemetry/betaEvents";
 import type {
   IMissionService,
   IRewardService,
@@ -83,8 +85,9 @@ eventBus.subscribe("ActivityRecorded", async (payload) => {
 
   await progressEngine.handleActivity(userId, activityType, payload.metadata);
 
-  if (activityType === "PREDICTION" && wallet) {
-    await referralEngine.recordMilestone(wallet, "FIRST_PREDICTION");
+  if (activityType === "PREDICTION") {
+    await trackBetaEvent(userId, "first_prediction");
+    if (wallet) await referralEngine.recordMilestone(wallet, "FIRST_PREDICTION");
   }
   if (activityType === "TOURNAMENT" && wallet) {
     await referralEngine.recordMilestone(wallet, "FIRST_TOURNAMENT");
@@ -92,12 +95,18 @@ eventBus.subscribe("ActivityRecorded", async (payload) => {
   if (activityType === "REWARD" && wallet) {
     await referralEngine.recordMilestone(wallet, "FIRST_REWARD");
   }
-  if (activityType === "LOGIN" && wallet) {
-    const stats = await prisma().playerStatistic.findUnique({
-      where: { userId_type: { userId, type: "LOGIN_DAYS" } },
-    });
-    if ((stats?.value ?? 0) >= 3) {
-      await referralEngine.recordMilestone(wallet, "THIRD_ACTIVE_DAY");
+  if (activityType === "ARENA") {
+    await trackBetaEvent(userId, "first_arena_match");
+  }
+  if (activityType === "LOGIN") {
+    await trackRetentionOnLogin(userId);
+    if (wallet) {
+      const stats = await prisma().playerStatistic.findUnique({
+        where: { userId_type: { userId, type: "LOGIN_DAYS" } },
+      });
+      if ((stats?.value ?? 0) >= 3) {
+        await referralEngine.recordMilestone(wallet, "THIRD_ACTIVE_DAY");
+      }
     }
   }
 });
@@ -180,6 +189,7 @@ eventBus.subscribe("ReferralCompleted", async (payload) => {
 
 eventBus.subscribe("ReferralRegistered", async (payload) => {
   await referralEngine.recordMilestoneByUserId(payload.referredId as string, "REGISTERED");
+  await trackBetaEvent(payload.userId as string, "first_referral", { referredId: payload.referredId });
   await notificationEngine.send(
     payload.userId as string,
     "INFO",
@@ -446,6 +456,44 @@ eventBus.subscribe("LiveEventEnded", async () => {
   logger.info("Live events ended batch");
 });
 
+eventBus.subscribe("MissionCompleted", async (payload) => {
+  const userId = payload.userId as string;
+  await notificationEngine.send(userId, "REWARD", "Mission complete", "Claim your mission reward.", "NORMAL");
+});
+
+eventBus.subscribe("RewardClaimed", async (payload) => {
+  const userId = payload.userId as string;
+  await trackBetaEvent(userId, "first_reward_claim", { rewardId: payload.rewardId });
+  await notificationEngine.send(userId, "REWARD", "Reward claimed", "Your reward has been added.", "HIGH");
+});
+
+eventBus.subscribe("SpinCompleted", async (payload) => {
+  const userId = payload.userId as string;
+  await trackBetaEvent(userId, "first_spin", { reward: payload.reward });
+});
+
+eventBus.subscribe("RewardSettled", async (payload) => {
+  const userId = payload.userId as string;
+  await notificationEngine.send(
+    userId,
+    "REWARD",
+    "Reward settled",
+    payload.onChain ? "Your on-chain reward was confirmed." : "Your reward has been processed.",
+    "HIGH"
+  );
+});
+
+eventBus.subscribe("RewardSettlementFailed", async (payload) => {
+  const userId = payload.userId as string;
+  await notificationEngine.send(
+    userId,
+    "ERROR",
+    "Settlement delayed",
+    "We are retrying your reward. No action needed.",
+    "HIGH"
+  );
+});
+
 export class MissionService implements IMissionService {
   name = "MissionService";
 
@@ -599,29 +647,39 @@ export class ProfileService implements IProfileService {
 
 export class BlockchainService implements IBlockchainService {
   name = "BlockchainService";
+  private sync = getBlockchainSyncService();
 
-  async readProfile(_wallet: string): Promise<Record<string, unknown> | null> {
-    throw new Error("BlockchainService.readProfile — Prompt 5");
+  async readProfile(wallet: string): Promise<Record<string, unknown> | null> {
+    if (isRuntimeEnabled("enableBlockchainServiceStub")) {
+      throw new Error("BlockchainService.readProfile — stub mode");
+    }
+    return this.sync.readProfile(wallet);
   }
 
   async readTreasury(): Promise<Record<string, unknown> | null> {
-    throw new Error("BlockchainService.readTreasury — Prompt 5");
+    if (isRuntimeEnabled("enableBlockchainServiceStub")) {
+      throw new Error("BlockchainService.readTreasury — stub mode");
+    }
+    return this.sync.readTreasury();
   }
 
-  async submitBackendTransaction(_tx: Record<string, unknown>): Promise<string> {
-    throw new Error("BlockchainService.submitBackendTransaction — Prompt 5");
+  async submitBackendTransaction(tx: Record<string, unknown>): Promise<string> {
+    if (isRuntimeEnabled("enableBlockchainServiceStub")) {
+      throw new Error("BlockchainService.submitBackendTransaction — stub mode");
+    }
+    return this.sync.submitBackendTransaction(tx);
   }
 
   async listenToEvents(): Promise<void> {
-    throw new Error("BlockchainService.listenToEvents — Prompt 5");
+    return this.sync.listenToEvents();
   }
 
   async syncLocalCache(): Promise<void> {
-    throw new Error("BlockchainService.syncLocalCache — Prompt 5");
+    return this.sync.syncLocalCache();
   }
 
-  async retryFailedTransaction(_txHash: string): Promise<string> {
-    throw new Error("BlockchainService.retryFailedTransaction — Prompt 5");
+  async retryFailedTransaction(txHash: string): Promise<string> {
+    return this.sync.retryFailedTransaction(txHash);
   }
 }
 

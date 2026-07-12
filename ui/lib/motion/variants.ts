@@ -1,4 +1,4 @@
-import { VariantProps } from "framer-motion";
+import { Variant } from "framer-motion";
 
 export const container = {
   hidden: { opacity: 0 },
@@ -52,11 +52,11 @@ export const shimmer = {
   },
 };
 
-export type ContainerVariants = VariantProps<typeof container>;
-export type ItemVariants = VariantProps<typeof item>;
-export type FadeInVariants = VariantProps<typeof fadeIn>;
-export type SlideUpVariants = VariantProps<typeof slideUp>;
-export type ScaleInVariants = VariantProps<typeof scaleIn>;
-export type PopInVariants = VariantProps<typeof popIn>;
-export type RewardBurstVariants = VariantProps<typeof rewardBurst>;
-export type ShimmerVariants = VariantProps<typeof shimmer>;
+export type ContainerVariants = Variant;
+export type ItemVariants = Variant;
+export type FadeInVariants = Variant;
+export type SlideUpVariants = Variant;
+export type ScaleInVariants = Variant;
+export type PopInVariants = Variant;
+export type RewardBurstVariants = Variant;
+export type ShimmerVariants = Variant;

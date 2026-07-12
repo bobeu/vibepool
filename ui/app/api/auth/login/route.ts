@@ -47,6 +47,12 @@ export const POST = async (req: NextRequest) => {
 
     const { accessToken, refreshToken } = await createSession(prisma(), wallet);
 
+    const user = await prisma().userProfile.findUnique({ where: { wallet }, select: { id: true } });
+    if (user) {
+      const { trackBetaEvent } = await import("@/lib/telemetry/betaEvents");
+      if (isNewUser) await trackBetaEvent(user.id, "onboarding_complete");
+    }
+
     return jsonResponse({
       accessToken,
       refreshToken,

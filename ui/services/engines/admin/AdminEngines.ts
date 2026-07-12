@@ -58,6 +58,60 @@ export class AdminDashboardEngine {
       system: { errors24h: recentErrors, status: deadLetterJobs === 0 ? "healthy" : "degraded" },
     };
   }
+
+  async getBetaDashboard(): Promise<Record<string, unknown>> {
+    const now = new Date();
+    const dayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+    const [
+      activeBetaUsers,
+      failedSettlements,
+      failedRewards,
+      apiErrors,
+      moderationReports,
+      sessions,
+      betaEvents,
+    ] = await Promise.all([
+      prisma().userProfile.count({ where: { lastLogin: { gte: weekAgo } } }),
+      prisma().pendingReward.count({ where: { status: "FAILED" } }),
+      prisma().pendingReward.count({ where: { status: { in: ["FAILED", "PROCESSING"] } } }),
+      prisma().auditLog.count({ where: { action: { contains: "ERROR" }, createdAt: { gte: dayAgo } } }),
+      prisma().moderationReport.findMany({ where: { status: "PENDING" }, take: 5, orderBy: { createdAt: "desc" } }),
+      prisma().session.findMany({
+        where: { createdAt: { gte: weekAgo }, revoked: false },
+        select: { createdAt: true, expiresAt: true },
+        take: 500,
+      }),
+      prisma().telemetryEvent.findMany({
+        where: { source: "analytics", recordedAt: { gte: weekAgo } },
+        orderBy: { recordedAt: "desc" },
+        take: 200,
+      }),
+    ]);
+
+    const avgSessionMs =
+      sessions.length > 0
+        ? sessions.reduce((sum, s) => sum + (s.expiresAt.getTime() - s.createdAt.getTime()), 0) / sessions.length
+        : 0;
+
+    const funnel: Record<string, number> = {};
+    for (const e of betaEvents) {
+      funnel[e.eventType] = (funnel[e.eventType] ?? 0) + 1;
+    }
+
+    return {
+      activeBetaUsers,
+      crashes: apiErrors,
+      failedTransactions: failedSettlements,
+      apiFailures24h: apiErrors,
+      settlementFailures: failedRewards,
+      topReportedIssues: moderationReports.map((r) => ({ type: r.type, reason: r.reason, createdAt: r.createdAt })),
+      averageSessionMinutes: Math.round(avgSessionMs / 60_000),
+      betaFunnel: funnel,
+      generatedAt: now.toISOString(),
+    };
+  }
 }
 
 export class UserManagementEngine {
