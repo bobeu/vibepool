@@ -48,34 +48,39 @@ export function AppShell({ children, activeNav, variant = "auto" }: AppShellProp
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
 
-  const shell = (
+  const shell = (tablet: boolean) => (
     <>
-      <AppHeader theme={theme} setTheme={setTheme} compact={variant === "tablet"} />
+      <AppHeader theme={theme} setTheme={setTheme} tablet={tablet} />
       <UnlockAnimationToast />
-      <main className="flex-1 overflow-y-auto no-scrollbar px-4 py-4 pb-24 md:pb-28">
+      <main
+        className={cn(
+          "flex-1 overflow-y-auto no-scrollbar min-h-0",
+          tablet ? "px-5 py-4 pb-[4.5rem]" : "px-4 py-4 pb-24"
+        )}
+      >
         {children}
       </main>
-      <BottomNav pathname={pathname} activeNav={activeNav} mode={variant === "tablet" ? "tablet" : "mobile"} />
+      <BottomNav pathname={pathname} activeNav={activeNav} mode={tablet ? "tablet" : "mobile"} />
     </>
   );
 
   if (variant === "mobile") {
-    return <MobileOnly>{shell}</MobileOnly>;
+    return <MobileOnly>{shell(false)}</MobileOnly>;
   }
 
   if (variant === "tablet") {
     return (
       <TabletFrame>
-        <TabletOnly>{shell}</TabletOnly>
+        <TabletOnly>{shell(true)}</TabletOnly>
       </TabletFrame>
     );
   }
 
   return (
     <>
-      <MobileOnly>{shell}</MobileOnly>
+      <MobileOnly>{shell(false)}</MobileOnly>
       <TabletFrame>
-        <TabletOnly>{shell}</TabletOnly>
+        <TabletOnly>{shell(true)}</TabletOnly>
       </TabletFrame>
     </>
   );
@@ -84,24 +89,41 @@ export function AppShell({ children, activeNav, variant = "auto" }: AppShellProp
 function AppHeader({
   theme,
   setTheme,
-  compact,
+  tablet,
 }: {
   theme: "light" | "dark";
   setTheme: (t: "light" | "dark") => void;
-  compact?: boolean;
+  tablet?: boolean;
 }) {
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between px-4 py-3 border-b-[3px] border-black bg-card safe-area-pt">
-      <Link href="/" className="flex items-center gap-2">
-        <div className="relative w-9 h-9 border-[3px] border-black bg-primary overflow-hidden">
+    <header
+      className={cn(
+        "sticky top-0 z-20 flex items-center justify-between shrink-0 bg-card safe-area-pt",
+        tablet
+          ? "px-5 py-3.5 border-b border-black/10"
+          : "px-4 py-3 border-b-[3px] border-black"
+      )}
+    >
+      <Link href="/" className="flex items-center gap-2.5">
+        <div
+          className={cn(
+            "relative overflow-hidden bg-primary",
+            tablet ? "w-10 h-10 rounded-xl border border-black/10" : "w-9 h-9 border-[3px] border-black"
+          )}
+        >
           <Image src="/logo.png" alt="NEXORA" fill className="object-cover" />
         </div>
-        <span className="text-base font-black uppercase tracking-tight italic">
+        <span
+          className={cn(
+            "font-black uppercase tracking-tight italic",
+            tablet ? "text-lg" : "text-base"
+          )}
+        >
           Nex<span className="text-primary">ora</span>
         </span>
       </Link>
       <div className="flex items-center gap-2">
-        {!compact && (
+        {!tablet && (
           <button
             type="button"
             className="relative p-2 border-[3px] border-black bg-white shadow-[3px_3px_0_#000]"
@@ -115,7 +137,12 @@ function AppHeader({
         <button
           type="button"
           onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-          className="p-2 border-[3px] border-black bg-secondary shadow-[3px_3px_0_#000]"
+          className={cn(
+            "p-2",
+            tablet
+              ? "rounded-xl border border-black/10 bg-secondary/80"
+              : "border-[3px] border-black bg-secondary shadow-[3px_3px_0_#000]"
+          )}
           aria-label="Toggle theme"
         >
           {theme === "light" ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
@@ -138,8 +165,15 @@ function BottomNav({
   const icons = mode === "tablet" ? TABLET_ICONS : MOBILE_ICONS;
 
   return (
-    <nav className="fixed md:absolute bottom-0 left-0 right-0 z-20 border-t-[3px] border-black bg-card px-2 py-2 safe-area-pb">
-      <ul className="flex justify-around max-w-lg mx-auto md:max-w-none">
+    <nav
+      className={cn(
+        "absolute bottom-0 left-0 right-0 z-20 bg-card safe-area-pb",
+        mode === "tablet"
+          ? "px-4 py-2.5 border-t border-black/10 rounded-t-2xl"
+          : "fixed border-t-[3px] border-black px-2 py-2"
+      )}
+    >
+      <ul className={cn("flex justify-around mx-auto", mode === "tablet" ? "max-w-md gap-1" : "max-w-lg")}>
         {items.map((item) => {
           const isActive = item.key === activeNav || pathname === item.href;
           return (
@@ -147,14 +181,20 @@ function BottomNav({
               <Link
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center gap-0.5 px-3 py-1.5 text-[10px] font-black uppercase transition-colors",
+                  "flex flex-col items-center gap-1 px-3 py-1.5 font-black uppercase transition-colors",
+                  mode === "tablet" ? "text-[11px]" : "text-[10px]",
                   isActive ? "text-black" : "text-muted-foreground"
                 )}
               >
                 <span
                   className={cn(
-                    "p-1.5 border-[2px] border-black",
-                    isActive ? "bg-primary shadow-[2px_2px_0_#000]" : "bg-white"
+                    "p-2 transition-colors",
+                    mode === "tablet"
+                      ? cn("rounded-xl", isActive ? "bg-primary/90 text-black" : "bg-muted/60")
+                      : cn(
+                          "border-[2px] border-black",
+                          isActive ? "bg-primary shadow-[2px_2px_0_#000]" : "bg-white"
+                        )
                   )}
                 >
                   {icons[item.icon]}
