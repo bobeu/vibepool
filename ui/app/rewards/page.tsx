@@ -1,8 +1,10 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
 import { AppShell } from "@/components/layout/AppShell";
 import { authFetch } from "@/lib/auth/client";
+import { BrutalCard } from "@/components/ui/BrutalCard";
 
 export default function RewardsPage() {
   const queryClient = useQueryClient();
@@ -62,6 +64,26 @@ export default function RewardsPage() {
     <AppShell activeNav="rewards">
       <div className="space-y-4">
         <h1 className="text-xl font-black uppercase tracking-tight">Rewards</h1>
+        
+        {/* Rewards Hero Cover Asset */}
+        <BrutalCard className="relative overflow-hidden p-0">
+          <div className="relative h-48 w-full border-b-[3px] border-black bg-black">
+            <Image
+              src="/reward.png"
+              alt="Rewards"
+              fill
+              className="object-cover opacity-90"
+            />
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+              <p className="brutal-heading text-white text-xl drop-shadow-[2px_2px_0_#000]">
+                Claim Rewards
+              </p>
+              <p className="text-[10px] font-bold text-white/95 mt-1 max-w-xs drop-shadow-[1px_1px_0_#000]">
+                Redeem your points and XP for real tokens and exclusive dynamic yield pools
+              </p>
+            </div>
+          </div>
+        </BrutalCard>
         {data?.rewards?.length === 0 && (
           <p className="text-sm text-muted-foreground text-center py-10">No claimable rewards right now.</p>
         )}

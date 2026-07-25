@@ -2,10 +2,12 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { AppShell } from "@/components/layout/AppShell";
 import { GlassContainer } from "@/components/hero/GlassContainer";
 import { SectionDivider } from "@/components/hero/SectionDivider";
 import { Button } from "@/components/ui/button";
+import { BrutalCard } from "@/components/ui/BrutalCard";
 import { container, item } from "@/lib/motion/variants";
 
 const MILESTONES = ["REGISTERED", "FIRST_PREDICTION", "FIRST_TOURNAMENT", "THIRD_ACTIVE_DAY", "FIRST_REWARD"] as const;
@@ -73,6 +75,27 @@ export default function ReferralsPage() {
       <motion.div className="space-y-6" variants={container} initial="hidden" animate="show">
         <motion.section variants={item}>
           <h1 className="text-xl font-black uppercase tracking-tight">Referral Center</h1>
+        </motion.section>
+
+        <motion.section variants={item}>
+          <BrutalCard className="relative overflow-hidden p-0">
+            <div className="relative h-48 w-full border-b-[3px] border-black bg-black">
+              <Image
+                src="/referral_design.png"
+                alt="Referrals"
+                fill
+                className="object-cover opacity-90"
+              />
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                <p className="brutal-heading text-white text-xl drop-shadow-[2px_2px_0_#000]">
+                  Invite Friends
+                </p>
+                <p className="text-[10px] font-bold text-white/95 mt-1 max-w-xs drop-shadow-[1px_1px_0_#000]">
+                  Build your team and earn XP plus referral bonuses on Celo
+                </p>
+              </div>
+            </div>
+          </BrutalCard>
         </motion.section>
 
         <motion.section variants={item} className="grid grid-cols-3 gap-3">

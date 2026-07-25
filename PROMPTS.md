@@ -14883,3 +14883,83 @@ Placeholder backgrounds from `public/`: `NEXORA_Brand_Hero.png`, `spin.png`, `vi
 - Dark mode retains brutal borders (inverted to white) but light mode is default per skillerdesign
 - Secondary routes (arena, missions, etc.) inherit new theme via AppShell `variant="auto"`
 - Wallet connect (RainbowKit) unchanged; styled via existing provider
+
+
+---
+
+# CTO Said
+
+Hey Antigravity, As the CTO, I have decided to rewrite the vibepool ui code by completely redesign it from scratch. 
+
+Here are the rules you must maintain
+
+- You must maintain the current logic pattern and how the contract is connected to te frontend. 
+- No change must be made to the smart contracts and their artifacts.
+- You're restricted from running any build or terminal command.
+
+You're the best frontend/ui/ux designer and developer in the world. You create beautiful applications that keep users coming back.
+
+TASKS
+
+- Read and examine image attached to this conversation i.e 
+   * design_example
+   * lnading_page_web
+   * leaderboard
+   * spin_and_navigation
+
+- You're performing a complete redesigning of the vibepool UI/UX with the mobile-first design made to be compatible and smooth in Minipay. The design should use the same brutalist theme, font, border offset, onboard style, etc as seen in the `design_example` image attached to this conversation. 
+You're to build the mobile and web version. The web version should use a tablet dimension in an horizontal landscape. Currently, the tablet uses a vertical landscape and not well designed. You should perform a complete overhaul of the layout. There are couple of images in the `ui/public` folder for you to improve the app to look more appealing to the eyes. Use the `backgrounddark` in dark mode and backgroundlight in light mode while the tablet stays on the background. The tablet frame should look like a real tablet just as seen designed in `proofOfShip/vibecheck/vibepay` layout. 
+
+- Inside the tablet or on mobile, the onboard background should use the exact different backgrounds as seen in the `design_example` image. Design the onboard flow to look exactly like the flow in the `design_example`.
+- Redesign and reposition the botton navigation. Use proper and bold icons without border.
+- Implement both light and dark mode for the ui. See example and how exactly I want you to implement the mode and tablet design in the `proofOfShip/vibecheck/vibepay/src/app/page.tsx`. The design in the target file is for mobile so you should make if for tablet.
+
+- The landing page on the tablet should use the exact design in lnading_page_web. You should also design the onboard to look better and fit in both views i.e mobile and web.
+
+- You're expected to read all the images attached to this conversation including the ones in the public folder and use them to the best to achieve the expected result.
+
+- The leaderboard section should be designed exactly as seen in the attached `leaderboard` image while using the image as the background of the leaderboard section.
+
+- The Spin section should be designed exaclty as see in the attached `spin_and_navigation` image while using the `spin.png` image in the pubic folder as improved or background image on the web version.
+
+NOTE: Everything I described above is a projected picture of how I envisaged the UI to look like however, you're not limited to them. Since you're good at what you do, I am trusting that you will perform even beyond expectation.
+
+- Ensure that all vibepool pages is context-aware just as seen in `proofOfShip/vibecheck/vibepay/` sharing smart contract and relevant data.
+
+- Ensure the whole vibepool components use the new design and theme.
+
+- Ensure you leverage all the assets in the public folder to improve the application interface and experience.
+
+- The `play_earn_complete.png` image in the public folder could be used as hero image both on mobile and web. However, you should use what is best.
+
+- Currently, the ui auto connects in web version when not in Minipay. This is a very wrong experience. You should copy every wallet connection pattern, design, Minipay hooks and awareness, etc from `vibecheck/vibepay` into the `vibepool/ui`. There's not negotiation about this. Also, it should only auto connect when in Minipay.
+
+- Ensure you properly configure the following and for vibepool/ui for easy talent protocol verification. Rewrite the `description`, `title` and the `keywords` to target vibepool. Then place this in the layout.
+
+```ts
+export const metadata: Metadata = {
+    title: 'Vibepool - Yield-Backed Price Volatility Prediction Game on Celo',
+    description: 'Predict CELO token price volatility and earn a share of the losing pool, integrated with dynamic yield from Aave protocol pools on Celo.',
+    keywords: ['crypto', 'volatility', 'prediction market', 'Celo', 'MiniPay', 'Aave', 'yield', 'Vibepool'],
+    icons: {
+        icon: '/logo.png',
+    },
+    other: {
+        'talentapp:project_verification': 'a951a60cce43f90c1a84d1c55f7412f73f589c7eae2462103d148da7d10792e7323ff0da2cd9c49d4bc71f04377bb277941fe2a46f9be7012599c41be32370e8',
+    },
+};
+```
+---
+
+# CTO Said:
+
+There are a couple of issues that need to be fixed:
+
+- Part of the tablet frame is hidden to the right.
+- The leaderboard is not well aligned on mobile version.
+- Remove the logo from the tablet frame.
+- The background that surround the tablet should be in the brutalist yellow theme.
+- The onboard page is messes up. Please revisit it.
+- The sidebar on the tablet should scroll.
+- The connect button is not visible. It should be placed on the header of the tablet frame.
+- The assets in the `public` folder are not maximized. Please use all of them appropriately.
