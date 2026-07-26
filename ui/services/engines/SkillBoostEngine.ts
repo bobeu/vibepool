@@ -21,7 +21,7 @@ export class SkillBoostEngine {
   async recordAndApply(input: {
     wallet: string;
     txHash: string;
-    asset: "cUSD" | "CELO";
+    asset: "USDm" | "CELO";
     purpose: SkillBoostPurpose;
     matchId?: string;
   }): Promise<Record<string, unknown>> {
@@ -169,7 +169,7 @@ export class SkillBoostEngine {
       xpMultiplier: multipliers.xpMultiplier,
       pointsMultiplier: multipliers.pointsMultiplier,
       fees: {
-        cUSD: "0.01",
+        USDm: "0.01",
         CELO: "0.05",
       },
     };

@@ -6,14 +6,15 @@ import {
   type Log,
   parseAbiItem,
 } from "viem";
-import { celo, celoSepolia } from "viem/chains";
+import { celo } from "viem/chains";
 import { CONTRACTS } from "@/lib/contracts";
 import { ZERO_ADDRESS } from "@/config/constants";
 import {
-  CUSD_CELO,
+  USDM_CELO,
   feeForAsset,
   getSkillBoostChainId,
   getTreasuryAddress,
+  type SkillBoostAsset,
   type SkillBoostPurpose,
 } from "@/lib/arena/skillBoost";
 
@@ -21,33 +22,26 @@ const depositEvent = parseAbiItem(
   "event TreasuryDeposit(address indexed asset, uint256 amount, uint64 timestamp)"
 );
 
-function chainForId(chainId: number) {
-  return chainId === celo.id ? celo : celoSepolia;
-}
-
-function rpcForChain(chainId: number): string {
-  if (chainId === celo.id) {
-    return process.env.NEXT_PUBLIC_ALCHEMY_CELO_MAINNET_API || "https://forno.celo.org";
-  }
-  return process.env.NEXT_PUBLIC_CELO_SEPOLIA_RPC || "https://forno.celo-sepolia.celo-testnet.org";
+function rpcForMainnet(): string {
+  return process.env.NEXT_PUBLIC_ALCHEMY_CELO_MAINNET_API || "https://forno.celo.org";
 }
 
 export type VerifiedSkillDeposit = {
   txHash: string;
-  asset: "cUSD" | "CELO";
+  asset: SkillBoostAsset;
   amountWei: string;
   purpose: SkillBoostPurpose;
   from: string;
 };
 
 /**
- * Verifies a user→treasury deposit tx (native CELO or cUSD ERC20).
+ * Verifies a user→treasury deposit tx (native CELO or USDm ERC20) on Celo mainnet.
  * This is a flat skill fee, never a wager.
  */
 export async function verifySkillDeposit(input: {
   txHash: string;
   expectedFrom: string;
-  asset: "cUSD" | "CELO";
+  asset: SkillBoostAsset;
   purpose: SkillBoostPurpose;
 }): Promise<VerifiedSkillDeposit> {
   const treasury =
@@ -60,10 +54,13 @@ export async function verifySkillDeposit(input: {
   }
 
   const chainId = getSkillBoostChainId();
-  const chain = chainForId(chainId);
+  if (chainId !== celo.id) {
+    throw new Error("Skill fees are mainnet-only");
+  }
+
   const publicClient = createPublicClient({
-    chain,
-    transport: http(rpcForChain(chainId)),
+    chain: celo,
+    transport: http(rpcForMainnet()),
   });
 
   const receipt = await publicClient.waitForTransactionReceipt({
@@ -100,8 +97,7 @@ export async function verifySkillDeposit(input: {
     };
   }
 
-  // cUSD: depositERC20 → TreasuryDeposit event, or approve+transferFrom path
-  const expectedAsset = CUSD_CELO.toLowerCase();
+  const expectedAsset = USDM_CELO.toLowerCase();
   let deposited = 0n;
 
   for (const log of receipt.logs as Log[]) {
@@ -121,22 +117,20 @@ export async function verifySkillDeposit(input: {
     }
   }
 
-  // Fallback: tx must at least touch treasury or cUSD token
   if (deposited === 0n) {
     if (to !== treasury.toLowerCase() && to !== expectedAsset) {
-      throw new Error("cUSD fee transaction did not target treasury");
+      throw new Error("USDm fee transaction did not target treasury");
     }
-    // Allow verify when event decode fails but receipt succeeded to treasury (ABI variance)
     deposited = minFee;
   }
 
   if (deposited < minFee) {
-    throw new Error("cUSD fee below required skill boost amount");
+    throw new Error("USDm fee below required skill boost amount");
   }
 
   return {
     txHash: input.txHash,
-    asset: "cUSD",
+    asset: "USDm",
     amountWei: deposited.toString(),
     purpose: input.purpose,
     from,

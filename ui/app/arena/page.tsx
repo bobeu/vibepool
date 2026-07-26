@@ -39,7 +39,7 @@ type ArenaHome = {
     unusedBoosts: number;
     xpMultiplier: number;
     pointsMultiplier: number;
-    fees: { cUSD: string; CELO: string };
+    fees: { USDm: string; CELO: string };
   };
 };
 
@@ -382,7 +382,7 @@ export default function ArenaPage() {
               <GlassContainer clip={false} className="space-y-3 p-5">
                 <p className="text-sm text-muted-foreground">
                   Tiny treasury fees — not bets.{" "}
-                  {miniPay ? "MiniPay pays in cUSD." : "Desktop wallets pay in CELO."} Fee:{" "}
+                  {miniPay ? "MiniPay pays in USDm." : "Desktop wallets pay in CELO."} Fee:{" "}
                   <span className="font-semibold text-cyan-200">{feeLabel}</span>
                 </p>
                 <div className="grid gap-2">
@@ -417,7 +417,7 @@ export default function ArenaPage() {
                       ? `${boost.unusedBoosts} unused duel boost(s) · `
                       : ""}
                     Multipliers {boost.xpMultiplier}× XP / {boost.pointsMultiplier}× pts
-                    {preferredAsset === "cUSD" ? " · cUSD path" : " · CELO path"}
+                    {preferredAsset === "USDm" ? " · USDm path" : " · CELO path"}
                   </p>
                 )}
                 {!isConnected && (

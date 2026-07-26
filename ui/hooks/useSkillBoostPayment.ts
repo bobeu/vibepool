@@ -10,11 +10,11 @@ import {
   useWaitForTransactionReceipt,
 } from "wagmi";
 import { encodeFunctionData, erc20Abi, type Hash } from "viem";
-import { celo, celoSepolia } from "wagmi/chains";
+import { celo } from "wagmi/chains";
 import { CONTRACTS } from "@/lib/contracts";
 import { ZERO_ADDRESS } from "@/config/constants";
 import {
-  CUSD_CELO,
+  USDM_CELO,
   assetForMiniPay,
   feeForAsset,
   getSkillBoostChainId,
@@ -29,7 +29,7 @@ function resolveTreasury(): `0x${string}` {
   if (env !== ZERO_ADDRESS) return env;
   const fromRegistry = CONTRACTS.RewardTreasury?.address;
   if (fromRegistry && fromRegistry !== ZERO_ADDRESS) return fromRegistry as `0x${string}`;
-  throw new Error("Treasury address not configured");
+  throw new Error("Treasury address not configured — set NEXT_PUBLIC_REWARD_TREASURY_ADDRESS after mainnet deploy");
 }
 
 export function useSkillBoostPayment() {
@@ -46,15 +46,12 @@ export function useSkillBoostPayment() {
 
   const miniPay = useMemo(() => isMiniPay(), []);
   const targetChainId = getSkillBoostChainId();
-  // MiniPay + Celo mainnet → cUSD; Sepolia / non-MiniPay → native CELO
-  const preferredAsset =
-    targetChainId === celo.id ? assetForMiniPay(miniPay) : ("CELO" as const);
+  const preferredAsset = assetForMiniPay(miniPay);
 
   const ensureChain = useCallback(async () => {
-    if (chainId === targetChainId) return;
-    const chain = targetChainId === celo.id ? celo : celoSepolia;
-    await switchChainAsync({ chainId: chain.id });
-  }, [chainId, targetChainId, switchChainAsync]);
+    if (chainId === celo.id) return;
+    await switchChainAsync({ chainId: celo.id });
+  }, [chainId, switchChainAsync]);
 
   const paySkillBoost = useCallback(
     async (purpose: SkillBoostPurpose, matchId?: string) => {
@@ -71,11 +68,10 @@ export function useSkillBoostPayment() {
 
         const treasuryAbi = CONTRACTS.RewardTreasury?.abi;
         if (!treasuryAbi?.length) {
-          throw new Error("RewardTreasury ABI missing — sync contracts");
+          throw new Error("RewardTreasury ABI missing — run smartContracts sync after deploy");
         }
 
         if (asset === "CELO") {
-          // deposit() selector — payable native CELO into treasury
           const data = encodeFunctionData({
             abi: treasuryAbi,
             functionName: "deposit",
@@ -85,11 +81,11 @@ export function useSkillBoostPayment() {
             to: treasury,
             value: amount,
             data,
+            chainId: targetChainId,
           });
         } else {
-          // Approve cUSD then depositERC20
           await writeContractAsync({
-            address: CUSD_CELO,
+            address: USDM_CELO,
             abi: erc20Abi,
             functionName: "approve",
             args: [treasury, amount],
@@ -99,7 +95,7 @@ export function useSkillBoostPayment() {
             address: treasury,
             abi: treasuryAbi,
             functionName: "depositERC20",
-            args: [CUSD_CELO, amount],
+            args: [USDM_CELO, amount],
             chainId: targetChainId,
           });
         }
@@ -145,7 +141,7 @@ export function useSkillBoostPayment() {
     error,
     preferredAsset,
     miniPay,
-    feeLabel: preferredAsset === "cUSD" ? "0.01 cUSD" : "0.05 CELO",
+    feeLabel: preferredAsset === "USDm" ? "0.01 USDm" : "0.05 CELO",
     isConnected,
   };
 }

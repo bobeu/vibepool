@@ -1,15 +1,16 @@
 import { parseEther } from "viem";
+import { celo } from "viem/chains";
 import { USDM_CELO, ZERO_ADDRESS, type Address } from "@/config/constants";
 
 /** Skill boost purposes — flat fees to treasury, never a wager/prize stake. */
 export type SkillBoostPurpose = "ARENA_BOOST" | "STAY_RELEVANT" | "POINTS_GROWTH";
 
-export const CUSD_CELO = USDM_CELO;
+export type SkillBoostAsset = "USDm" | "CELO";
 
 /** Tiny fees tuned for frequent MiniPay txs (not gambling stakes). */
 export const SKILL_BOOST_FEES = {
-  /** MiniPay preferred: ~0.01 cUSD */
-  cUSD: parseEther("0.01"),
+  /** MiniPay preferred: ~0.01 USDm */
+  USDm: parseEther("0.01"),
   /** Non-MiniPay: ~0.05 CELO */
   CELO: parseEther("0.05"),
 } as const;
@@ -25,7 +26,7 @@ export const SKILL_BOOST_CONFIG = {
 
 export const PERFECT_HIT_THRESHOLD = 1; // within 1% of target
 export const PERFECT_HIT_BONUS_XP = 25;
-export const STREAK_XP_BONUS_PER = 5; // +5 XP per win streak step, capped
+export const STREAK_XP_BONUS_PER = 5;
 export const STREAK_XP_BONUS_CAP = 40;
 
 export function getTreasuryAddress(): Address {
@@ -36,17 +37,17 @@ export function getTreasuryAddress(): Address {
   return ZERO_ADDRESS;
 }
 
+/** Celo mainnet only. */
 export function getSkillBoostChainId(): number {
-  const raw = process.env.NEXT_PUBLIC_SKILL_BOOST_CHAIN_ID;
-  if (raw) return Number(raw);
-  // Contracts currently deployed on Celo Sepolia; MiniPay mainnet can override via env.
-  return Number(process.env.NEXT_PUBLIC_CELO_CHAIN_ID ?? 11142220);
+  return celo.id;
 }
 
-export function assetForMiniPay(isMiniPay: boolean): "cUSD" | "CELO" {
-  return isMiniPay ? "cUSD" : "CELO";
+export function assetForMiniPay(isMiniPay: boolean): SkillBoostAsset {
+  return isMiniPay ? "USDm" : "CELO";
 }
 
-export function feeForAsset(asset: "cUSD" | "CELO"): bigint {
-  return asset === "cUSD" ? SKILL_BOOST_FEES.cUSD : SKILL_BOOST_FEES.CELO;
+export function feeForAsset(asset: SkillBoostAsset): bigint {
+  return asset === "USDm" ? SKILL_BOOST_FEES.USDm : SKILL_BOOST_FEES.CELO;
 }
+
+export { USDM_CELO };
