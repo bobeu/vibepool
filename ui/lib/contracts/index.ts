@@ -11,7 +11,13 @@ import { ZERO_ADDRESS } from "@/config/constants";
 const MAINNET_CHAIN_ID = "42220";
 
 type NetworkMap = Record<string, string>;
-type ContractKey = "RewardTreasury" | "PointsManager" | "ActivityRegistry" | "SpinRewardManager";
+type ContractKey =
+  | "RewardTreasury"
+  | "PointsManager"
+  | "ActivityRegistry"
+  | "SpinRewardManager"
+  | "SpinPrizeVault"
+  | "SpinEconomy";
 
 function mainnetAddress(map: NetworkMap | undefined): Address {
   const addr = map?.[MAINNET_CHAIN_ID];
@@ -42,12 +48,16 @@ const rewardTreasury = contract("RewardTreasury", "NEXT_PUBLIC_REWARD_TREASURY_A
 const pointsManager = contract("PointsManager", "NEXT_PUBLIC_POINTS_MANAGER_ADDRESS");
 const activityRegistry = contract("ActivityRegistry", "NEXT_PUBLIC_ACTIVITY_REGISTRY_ADDRESS");
 const spinRewardManager = contract("SpinRewardManager", "NEXT_PUBLIC_SPIN_REWARD_MANAGER_ADDRESS");
+const spinPrizeVault = contract("SpinPrizeVault", "NEXT_PUBLIC_SPIN_PRIZE_VAULT_ADDRESS");
+const spinEconomy = contract("SpinEconomy", "NEXT_PUBLIC_SPIN_ECONOMY_ADDRESS");
 
 export const CONTRACTS = {
   ...(rewardTreasury ? { RewardTreasury: rewardTreasury } : {}),
   ...(pointsManager ? { PointsManager: pointsManager } : {}),
   ...(activityRegistry ? { ActivityRegistry: activityRegistry } : {}),
   ...(spinRewardManager ? { SpinRewardManager: spinRewardManager } : {}),
+  ...(spinPrizeVault ? { SpinPrizeVault: spinPrizeVault } : {}),
+  ...(spinEconomy ? { SpinEconomy: spinEconomy } : {}),
 } as const;
 
 export type ContractName = keyof typeof CONTRACTS;

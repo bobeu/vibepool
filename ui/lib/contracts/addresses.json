@@ -2,5 +2,7 @@
   "RewardTreasury": {},
   "PointsManager": {},
   "ActivityRegistry": {},
-  "SpinRewardManager": {}
+  "SpinRewardManager": {},
+  "SpinPrizeVault": {},
+  "SpinEconomy": {}
 }

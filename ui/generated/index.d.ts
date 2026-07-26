@@ -493,6 +493,46 @@ export type AdminPolicy = $Result.DefaultSelection<Prisma.$AdminPolicyPayload>
  * 
  */
 export type SchedulerMetric = $Result.DefaultSelection<Prisma.$SchedulerMetricPayload>
+/**
+ * Model SpinConfig
+ * 
+ */
+export type SpinConfig = $Result.DefaultSelection<Prisma.$SpinConfigPayload>
+/**
+ * Model SpinMusicTrack
+ * 
+ */
+export type SpinMusicTrack = $Result.DefaultSelection<Prisma.$SpinMusicTrackPayload>
+/**
+ * Model UserMusicInventory
+ * 
+ */
+export type UserMusicInventory = $Result.DefaultSelection<Prisma.$UserMusicInventoryPayload>
+/**
+ * Model SpinCollectionItem
+ * 
+ */
+export type SpinCollectionItem = $Result.DefaultSelection<Prisma.$SpinCollectionItemPayload>
+/**
+ * Model UserInventoryItem
+ * 
+ */
+export type UserInventoryItem = $Result.DefaultSelection<Prisma.$UserInventoryItemPayload>
+/**
+ * Model SpinSession
+ * 
+ */
+export type SpinSession = $Result.DefaultSelection<Prisma.$SpinSessionPayload>
+/**
+ * Model BubbleHit
+ * 
+ */
+export type BubbleHit = $Result.DefaultSelection<Prisma.$BubbleHitPayload>
+/**
+ * Model SpinRewardPending
+ * 
+ */
+export type SpinRewardPending = $Result.DefaultSelection<Prisma.$SpinRewardPendingPayload>
 
 /**
  * Enums
@@ -1151,6 +1191,51 @@ export const HealthStatus: {
 
 export type HealthStatus = (typeof HealthStatus)[keyof typeof HealthStatus]
 
+
+export const SpinMusicTier: {
+  FREE: 'FREE',
+  PREMIUM: 'PREMIUM',
+  GOLD: 'GOLD'
+};
+
+export type SpinMusicTier = (typeof SpinMusicTier)[keyof typeof SpinMusicTier]
+
+
+export const SpinItemType: {
+  SPEED_SHIELDER: 'SPEED_SHIELDER',
+  BUZZER: 'BUZZER',
+  MUSIC: 'MUSIC',
+  OTHER: 'OTHER'
+};
+
+export type SpinItemType = (typeof SpinItemType)[keyof typeof SpinItemType]
+
+
+export const SpinSessionStatus: {
+  ACTIVE: 'ACTIVE',
+  FINISHED: 'FINISHED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type SpinSessionStatus = (typeof SpinSessionStatus)[keyof typeof SpinSessionStatus]
+
+
+export const SpinRewardPendingStatus: {
+  PENDING_SYNC: 'PENDING_SYNC',
+  CREDITED_ONCHAIN: 'CREDITED_ONCHAIN',
+  WITHDRAWN: 'WITHDRAWN'
+};
+
+export type SpinRewardPendingStatus = (typeof SpinRewardPendingStatus)[keyof typeof SpinRewardPendingStatus]
+
+
+export const SpinRewardSource: {
+  BUBBLE: 'BUBBLE',
+  WHEEL: 'WHEEL'
+};
+
+export type SpinRewardSource = (typeof SpinRewardSource)[keyof typeof SpinRewardSource]
+
 }
 
 export type UserStatus = $Enums.UserStatus
@@ -1372,6 +1457,26 @@ export const AlertStatus: typeof $Enums.AlertStatus
 export type HealthStatus = $Enums.HealthStatus
 
 export const HealthStatus: typeof $Enums.HealthStatus
+
+export type SpinMusicTier = $Enums.SpinMusicTier
+
+export const SpinMusicTier: typeof $Enums.SpinMusicTier
+
+export type SpinItemType = $Enums.SpinItemType
+
+export const SpinItemType: typeof $Enums.SpinItemType
+
+export type SpinSessionStatus = $Enums.SpinSessionStatus
+
+export const SpinSessionStatus: typeof $Enums.SpinSessionStatus
+
+export type SpinRewardPendingStatus = $Enums.SpinRewardPendingStatus
+
+export const SpinRewardPendingStatus: typeof $Enums.SpinRewardPendingStatus
+
+export type SpinRewardSource = $Enums.SpinRewardSource
+
+export const SpinRewardSource: typeof $Enums.SpinRewardSource
 
 /**
  * ##  Prisma Client ʲˢ
@@ -2453,6 +2558,86 @@ export class PrismaClient<
     * ```
     */
   get schedulerMetric(): Prisma.SchedulerMetricDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.spinConfig`: Exposes CRUD operations for the **SpinConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SpinConfigs
+    * const spinConfigs = await prisma.spinConfig.findMany()
+    * ```
+    */
+  get spinConfig(): Prisma.SpinConfigDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.spinMusicTrack`: Exposes CRUD operations for the **SpinMusicTrack** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SpinMusicTracks
+    * const spinMusicTracks = await prisma.spinMusicTrack.findMany()
+    * ```
+    */
+  get spinMusicTrack(): Prisma.SpinMusicTrackDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userMusicInventory`: Exposes CRUD operations for the **UserMusicInventory** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserMusicInventories
+    * const userMusicInventories = await prisma.userMusicInventory.findMany()
+    * ```
+    */
+  get userMusicInventory(): Prisma.UserMusicInventoryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.spinCollectionItem`: Exposes CRUD operations for the **SpinCollectionItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SpinCollectionItems
+    * const spinCollectionItems = await prisma.spinCollectionItem.findMany()
+    * ```
+    */
+  get spinCollectionItem(): Prisma.SpinCollectionItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userInventoryItem`: Exposes CRUD operations for the **UserInventoryItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserInventoryItems
+    * const userInventoryItems = await prisma.userInventoryItem.findMany()
+    * ```
+    */
+  get userInventoryItem(): Prisma.UserInventoryItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.spinSession`: Exposes CRUD operations for the **SpinSession** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SpinSessions
+    * const spinSessions = await prisma.spinSession.findMany()
+    * ```
+    */
+  get spinSession(): Prisma.SpinSessionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.bubbleHit`: Exposes CRUD operations for the **BubbleHit** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BubbleHits
+    * const bubbleHits = await prisma.bubbleHit.findMany()
+    * ```
+    */
+  get bubbleHit(): Prisma.BubbleHitDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.spinRewardPending`: Exposes CRUD operations for the **SpinRewardPending** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SpinRewardPendings
+    * const spinRewardPendings = await prisma.spinRewardPending.findMany()
+    * ```
+    */
+  get spinRewardPending(): Prisma.SpinRewardPendingDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -2982,7 +3167,15 @@ export namespace Prisma {
     ExperimentResult: 'ExperimentResult',
     FeatureFlagVersion: 'FeatureFlagVersion',
     AdminPolicy: 'AdminPolicy',
-    SchedulerMetric: 'SchedulerMetric'
+    SchedulerMetric: 'SchedulerMetric',
+    SpinConfig: 'SpinConfig',
+    SpinMusicTrack: 'SpinMusicTrack',
+    UserMusicInventory: 'UserMusicInventory',
+    SpinCollectionItem: 'SpinCollectionItem',
+    UserInventoryItem: 'UserInventoryItem',
+    SpinSession: 'SpinSession',
+    BubbleHit: 'BubbleHit',
+    SpinRewardPending: 'SpinRewardPending'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2998,7 +3191,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "userProfile" | "tournament" | "prediction" | "dailyMission" | "userMission" | "missionReward" | "spinLedger" | "rewardLedger" | "activity" | "leaderboardSnapshot" | "notification" | "settings" | "gameExecution" | "pendingReward" | "auditLog" | "session" | "refreshToken" | "playerStatistic" | "notificationPreference" | "achievement" | "achievementRule" | "achievementRuleGroup" | "userAchievement" | "badge" | "title" | "avatarFrame" | "playerIdentity" | "playerIdentityVersion" | "progressSnapshot" | "unlockAnimation" | "rateLimitEntry" | "domainEvent" | "spinReward" | "spinHistory" | "rewardClaim" | "rewardQueue" | "rewardSourceCatalog" | "friendRequest" | "friendship" | "referral" | "referralReward" | "inviteCode" | "communityPost" | "feedItem" | "presence" | "presenceSession" | "referralFraudSignal" | "playerRelationship" | "socialSettings" | "arena" | "arenaMatch" | "arenaQueue" | "arenaInvitation" | "matchParticipant" | "arenaResult" | "arenaReplay" | "arenaRating" | "arenaSeasonStatistic" | "arenaPresence" | "arenaStateMachineDefinition" | "arenaAnalyticsMetric" | "skillBoostPayment" | "season" | "seasonTier" | "seasonReward" | "seasonMission" | "seasonLeaderboard" | "seasonProgress" | "liveEvent" | "featureFlag" | "contentBlock" | "banner" | "bannerDismissal" | "announcementSchedule" | "campaign" | "campaignVersion" | "campaignTarget" | "scheduledJob" | "scheduledJobDependency" | "moderationReport" | "adminSession" | "adminPermission" | "metricSeries" | "telemetryEvent" | "alertRule" | "alertIncident" | "insight" | "dashboardSnapshot" | "systemHealth" | "serviceDependency" | "traceSpan" | "auditIntegrity" | "experimentResult" | "featureFlagVersion" | "adminPolicy" | "schedulerMetric"
+      modelProps: "userProfile" | "tournament" | "prediction" | "dailyMission" | "userMission" | "missionReward" | "spinLedger" | "rewardLedger" | "activity" | "leaderboardSnapshot" | "notification" | "settings" | "gameExecution" | "pendingReward" | "auditLog" | "session" | "refreshToken" | "playerStatistic" | "notificationPreference" | "achievement" | "achievementRule" | "achievementRuleGroup" | "userAchievement" | "badge" | "title" | "avatarFrame" | "playerIdentity" | "playerIdentityVersion" | "progressSnapshot" | "unlockAnimation" | "rateLimitEntry" | "domainEvent" | "spinReward" | "spinHistory" | "rewardClaim" | "rewardQueue" | "rewardSourceCatalog" | "friendRequest" | "friendship" | "referral" | "referralReward" | "inviteCode" | "communityPost" | "feedItem" | "presence" | "presenceSession" | "referralFraudSignal" | "playerRelationship" | "socialSettings" | "arena" | "arenaMatch" | "arenaQueue" | "arenaInvitation" | "matchParticipant" | "arenaResult" | "arenaReplay" | "arenaRating" | "arenaSeasonStatistic" | "arenaPresence" | "arenaStateMachineDefinition" | "arenaAnalyticsMetric" | "skillBoostPayment" | "season" | "seasonTier" | "seasonReward" | "seasonMission" | "seasonLeaderboard" | "seasonProgress" | "liveEvent" | "featureFlag" | "contentBlock" | "banner" | "bannerDismissal" | "announcementSchedule" | "campaign" | "campaignVersion" | "campaignTarget" | "scheduledJob" | "scheduledJobDependency" | "moderationReport" | "adminSession" | "adminPermission" | "metricSeries" | "telemetryEvent" | "alertRule" | "alertIncident" | "insight" | "dashboardSnapshot" | "systemHealth" | "serviceDependency" | "traceSpan" | "auditIntegrity" | "experimentResult" | "featureFlagVersion" | "adminPolicy" | "schedulerMetric" | "spinConfig" | "spinMusicTrack" | "userMusicInventory" | "spinCollectionItem" | "userInventoryItem" | "spinSession" | "bubbleHit" | "spinRewardPending"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -10106,6 +10299,598 @@ export namespace Prisma {
           }
         }
       }
+      SpinConfig: {
+        payload: Prisma.$SpinConfigPayload<ExtArgs>
+        fields: Prisma.SpinConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SpinConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SpinConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.SpinConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SpinConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinConfigPayload>
+          }
+          findMany: {
+            args: Prisma.SpinConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinConfigPayload>[]
+          }
+          create: {
+            args: Prisma.SpinConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinConfigPayload>
+          }
+          createMany: {
+            args: Prisma.SpinConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SpinConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.SpinConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinConfigPayload>
+          }
+          update: {
+            args: Prisma.SpinConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.SpinConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SpinConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SpinConfigUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinConfigPayload>[]
+          }
+          upsert: {
+            args: Prisma.SpinConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.SpinConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSpinConfig>
+          }
+          groupBy: {
+            args: Prisma.SpinConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SpinConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SpinConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<SpinConfigCountAggregateOutputType> | number
+          }
+        }
+      }
+      SpinMusicTrack: {
+        payload: Prisma.$SpinMusicTrackPayload<ExtArgs>
+        fields: Prisma.SpinMusicTrackFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SpinMusicTrackFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinMusicTrackPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SpinMusicTrackFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinMusicTrackPayload>
+          }
+          findFirst: {
+            args: Prisma.SpinMusicTrackFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinMusicTrackPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SpinMusicTrackFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinMusicTrackPayload>
+          }
+          findMany: {
+            args: Prisma.SpinMusicTrackFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinMusicTrackPayload>[]
+          }
+          create: {
+            args: Prisma.SpinMusicTrackCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinMusicTrackPayload>
+          }
+          createMany: {
+            args: Prisma.SpinMusicTrackCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SpinMusicTrackCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinMusicTrackPayload>[]
+          }
+          delete: {
+            args: Prisma.SpinMusicTrackDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinMusicTrackPayload>
+          }
+          update: {
+            args: Prisma.SpinMusicTrackUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinMusicTrackPayload>
+          }
+          deleteMany: {
+            args: Prisma.SpinMusicTrackDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SpinMusicTrackUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SpinMusicTrackUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinMusicTrackPayload>[]
+          }
+          upsert: {
+            args: Prisma.SpinMusicTrackUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinMusicTrackPayload>
+          }
+          aggregate: {
+            args: Prisma.SpinMusicTrackAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSpinMusicTrack>
+          }
+          groupBy: {
+            args: Prisma.SpinMusicTrackGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SpinMusicTrackGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SpinMusicTrackCountArgs<ExtArgs>
+            result: $Utils.Optional<SpinMusicTrackCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserMusicInventory: {
+        payload: Prisma.$UserMusicInventoryPayload<ExtArgs>
+        fields: Prisma.UserMusicInventoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserMusicInventoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserMusicInventoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserMusicInventoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserMusicInventoryPayload>
+          }
+          findFirst: {
+            args: Prisma.UserMusicInventoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserMusicInventoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserMusicInventoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserMusicInventoryPayload>
+          }
+          findMany: {
+            args: Prisma.UserMusicInventoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserMusicInventoryPayload>[]
+          }
+          create: {
+            args: Prisma.UserMusicInventoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserMusicInventoryPayload>
+          }
+          createMany: {
+            args: Prisma.UserMusicInventoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserMusicInventoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserMusicInventoryPayload>[]
+          }
+          delete: {
+            args: Prisma.UserMusicInventoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserMusicInventoryPayload>
+          }
+          update: {
+            args: Prisma.UserMusicInventoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserMusicInventoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserMusicInventoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserMusicInventoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserMusicInventoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserMusicInventoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.UserMusicInventoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserMusicInventoryPayload>
+          }
+          aggregate: {
+            args: Prisma.UserMusicInventoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserMusicInventory>
+          }
+          groupBy: {
+            args: Prisma.UserMusicInventoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserMusicInventoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserMusicInventoryCountArgs<ExtArgs>
+            result: $Utils.Optional<UserMusicInventoryCountAggregateOutputType> | number
+          }
+        }
+      }
+      SpinCollectionItem: {
+        payload: Prisma.$SpinCollectionItemPayload<ExtArgs>
+        fields: Prisma.SpinCollectionItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SpinCollectionItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinCollectionItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SpinCollectionItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinCollectionItemPayload>
+          }
+          findFirst: {
+            args: Prisma.SpinCollectionItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinCollectionItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SpinCollectionItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinCollectionItemPayload>
+          }
+          findMany: {
+            args: Prisma.SpinCollectionItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinCollectionItemPayload>[]
+          }
+          create: {
+            args: Prisma.SpinCollectionItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinCollectionItemPayload>
+          }
+          createMany: {
+            args: Prisma.SpinCollectionItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SpinCollectionItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinCollectionItemPayload>[]
+          }
+          delete: {
+            args: Prisma.SpinCollectionItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinCollectionItemPayload>
+          }
+          update: {
+            args: Prisma.SpinCollectionItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinCollectionItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.SpinCollectionItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SpinCollectionItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SpinCollectionItemUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinCollectionItemPayload>[]
+          }
+          upsert: {
+            args: Prisma.SpinCollectionItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinCollectionItemPayload>
+          }
+          aggregate: {
+            args: Prisma.SpinCollectionItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSpinCollectionItem>
+          }
+          groupBy: {
+            args: Prisma.SpinCollectionItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SpinCollectionItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SpinCollectionItemCountArgs<ExtArgs>
+            result: $Utils.Optional<SpinCollectionItemCountAggregateOutputType> | number
+          }
+        }
+      }
+      UserInventoryItem: {
+        payload: Prisma.$UserInventoryItemPayload<ExtArgs>
+        fields: Prisma.UserInventoryItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserInventoryItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserInventoryItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserInventoryItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserInventoryItemPayload>
+          }
+          findFirst: {
+            args: Prisma.UserInventoryItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserInventoryItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserInventoryItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserInventoryItemPayload>
+          }
+          findMany: {
+            args: Prisma.UserInventoryItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserInventoryItemPayload>[]
+          }
+          create: {
+            args: Prisma.UserInventoryItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserInventoryItemPayload>
+          }
+          createMany: {
+            args: Prisma.UserInventoryItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.UserInventoryItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserInventoryItemPayload>[]
+          }
+          delete: {
+            args: Prisma.UserInventoryItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserInventoryItemPayload>
+          }
+          update: {
+            args: Prisma.UserInventoryItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserInventoryItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserInventoryItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserInventoryItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.UserInventoryItemUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserInventoryItemPayload>[]
+          }
+          upsert: {
+            args: Prisma.UserInventoryItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserInventoryItemPayload>
+          }
+          aggregate: {
+            args: Prisma.UserInventoryItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserInventoryItem>
+          }
+          groupBy: {
+            args: Prisma.UserInventoryItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserInventoryItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserInventoryItemCountArgs<ExtArgs>
+            result: $Utils.Optional<UserInventoryItemCountAggregateOutputType> | number
+          }
+        }
+      }
+      SpinSession: {
+        payload: Prisma.$SpinSessionPayload<ExtArgs>
+        fields: Prisma.SpinSessionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SpinSessionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinSessionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SpinSessionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinSessionPayload>
+          }
+          findFirst: {
+            args: Prisma.SpinSessionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinSessionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SpinSessionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinSessionPayload>
+          }
+          findMany: {
+            args: Prisma.SpinSessionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinSessionPayload>[]
+          }
+          create: {
+            args: Prisma.SpinSessionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinSessionPayload>
+          }
+          createMany: {
+            args: Prisma.SpinSessionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SpinSessionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinSessionPayload>[]
+          }
+          delete: {
+            args: Prisma.SpinSessionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinSessionPayload>
+          }
+          update: {
+            args: Prisma.SpinSessionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinSessionPayload>
+          }
+          deleteMany: {
+            args: Prisma.SpinSessionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SpinSessionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SpinSessionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinSessionPayload>[]
+          }
+          upsert: {
+            args: Prisma.SpinSessionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinSessionPayload>
+          }
+          aggregate: {
+            args: Prisma.SpinSessionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSpinSession>
+          }
+          groupBy: {
+            args: Prisma.SpinSessionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SpinSessionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SpinSessionCountArgs<ExtArgs>
+            result: $Utils.Optional<SpinSessionCountAggregateOutputType> | number
+          }
+        }
+      }
+      BubbleHit: {
+        payload: Prisma.$BubbleHitPayload<ExtArgs>
+        fields: Prisma.BubbleHitFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BubbleHitFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BubbleHitPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BubbleHitFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BubbleHitPayload>
+          }
+          findFirst: {
+            args: Prisma.BubbleHitFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BubbleHitPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BubbleHitFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BubbleHitPayload>
+          }
+          findMany: {
+            args: Prisma.BubbleHitFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BubbleHitPayload>[]
+          }
+          create: {
+            args: Prisma.BubbleHitCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BubbleHitPayload>
+          }
+          createMany: {
+            args: Prisma.BubbleHitCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BubbleHitCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BubbleHitPayload>[]
+          }
+          delete: {
+            args: Prisma.BubbleHitDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BubbleHitPayload>
+          }
+          update: {
+            args: Prisma.BubbleHitUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BubbleHitPayload>
+          }
+          deleteMany: {
+            args: Prisma.BubbleHitDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BubbleHitUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BubbleHitUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BubbleHitPayload>[]
+          }
+          upsert: {
+            args: Prisma.BubbleHitUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BubbleHitPayload>
+          }
+          aggregate: {
+            args: Prisma.BubbleHitAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBubbleHit>
+          }
+          groupBy: {
+            args: Prisma.BubbleHitGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BubbleHitGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BubbleHitCountArgs<ExtArgs>
+            result: $Utils.Optional<BubbleHitCountAggregateOutputType> | number
+          }
+        }
+      }
+      SpinRewardPending: {
+        payload: Prisma.$SpinRewardPendingPayload<ExtArgs>
+        fields: Prisma.SpinRewardPendingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SpinRewardPendingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinRewardPendingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SpinRewardPendingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinRewardPendingPayload>
+          }
+          findFirst: {
+            args: Prisma.SpinRewardPendingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinRewardPendingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SpinRewardPendingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinRewardPendingPayload>
+          }
+          findMany: {
+            args: Prisma.SpinRewardPendingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinRewardPendingPayload>[]
+          }
+          create: {
+            args: Prisma.SpinRewardPendingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinRewardPendingPayload>
+          }
+          createMany: {
+            args: Prisma.SpinRewardPendingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SpinRewardPendingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinRewardPendingPayload>[]
+          }
+          delete: {
+            args: Prisma.SpinRewardPendingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinRewardPendingPayload>
+          }
+          update: {
+            args: Prisma.SpinRewardPendingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinRewardPendingPayload>
+          }
+          deleteMany: {
+            args: Prisma.SpinRewardPendingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SpinRewardPendingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SpinRewardPendingUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinRewardPendingPayload>[]
+          }
+          upsert: {
+            args: Prisma.SpinRewardPendingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SpinRewardPendingPayload>
+          }
+          aggregate: {
+            args: Prisma.SpinRewardPendingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSpinRewardPending>
+          }
+          groupBy: {
+            args: Prisma.SpinRewardPendingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SpinRewardPendingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SpinRewardPendingCountArgs<ExtArgs>
+            result: $Utils.Optional<SpinRewardPendingCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -10310,6 +11095,14 @@ export namespace Prisma {
     featureFlagVersion?: FeatureFlagVersionOmit
     adminPolicy?: AdminPolicyOmit
     schedulerMetric?: SchedulerMetricOmit
+    spinConfig?: SpinConfigOmit
+    spinMusicTrack?: SpinMusicTrackOmit
+    userMusicInventory?: UserMusicInventoryOmit
+    spinCollectionItem?: SpinCollectionItemOmit
+    userInventoryItem?: UserInventoryItemOmit
+    spinSession?: SpinSessionOmit
+    bubbleHit?: BubbleHitOmit
+    spinRewardPending?: SpinRewardPendingOmit
   }
 
   /* Types for Logging */
@@ -10430,6 +11223,11 @@ export namespace Prisma {
     bannerDismissals: number
     campaignTargets: number
     skillBoostPayments: number
+    spinSessions: number
+    spinMusicOwned: number
+    spinInventory: number
+    spinRewardPendings: number
+    bubbleHits: number
   }
 
   export type UserProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10473,6 +11271,11 @@ export namespace Prisma {
     bannerDismissals?: boolean | UserProfileCountOutputTypeCountBannerDismissalsArgs
     campaignTargets?: boolean | UserProfileCountOutputTypeCountCampaignTargetsArgs
     skillBoostPayments?: boolean | UserProfileCountOutputTypeCountSkillBoostPaymentsArgs
+    spinSessions?: boolean | UserProfileCountOutputTypeCountSpinSessionsArgs
+    spinMusicOwned?: boolean | UserProfileCountOutputTypeCountSpinMusicOwnedArgs
+    spinInventory?: boolean | UserProfileCountOutputTypeCountSpinInventoryArgs
+    spinRewardPendings?: boolean | UserProfileCountOutputTypeCountSpinRewardPendingsArgs
+    bubbleHits?: boolean | UserProfileCountOutputTypeCountBubbleHitsArgs
   }
 
   // Custom InputTypes
@@ -10764,6 +11567,41 @@ export namespace Prisma {
    */
   export type UserProfileCountOutputTypeCountSkillBoostPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SkillBoostPaymentWhereInput
+  }
+
+  /**
+   * UserProfileCountOutputType without action
+   */
+  export type UserProfileCountOutputTypeCountSpinSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SpinSessionWhereInput
+  }
+
+  /**
+   * UserProfileCountOutputType without action
+   */
+  export type UserProfileCountOutputTypeCountSpinMusicOwnedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserMusicInventoryWhereInput
+  }
+
+  /**
+   * UserProfileCountOutputType without action
+   */
+  export type UserProfileCountOutputTypeCountSpinInventoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserInventoryItemWhereInput
+  }
+
+  /**
+   * UserProfileCountOutputType without action
+   */
+  export type UserProfileCountOutputTypeCountSpinRewardPendingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SpinRewardPendingWhereInput
+  }
+
+  /**
+   * UserProfileCountOutputType without action
+   */
+  export type UserProfileCountOutputTypeCountBubbleHitsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BubbleHitWhereInput
   }
 
 
@@ -11355,6 +12193,108 @@ export namespace Prisma {
 
 
   /**
+   * Count Type SpinMusicTrackCountOutputType
+   */
+
+  export type SpinMusicTrackCountOutputType = {
+    owners: number
+  }
+
+  export type SpinMusicTrackCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owners?: boolean | SpinMusicTrackCountOutputTypeCountOwnersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SpinMusicTrackCountOutputType without action
+   */
+  export type SpinMusicTrackCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinMusicTrackCountOutputType
+     */
+    select?: SpinMusicTrackCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SpinMusicTrackCountOutputType without action
+   */
+  export type SpinMusicTrackCountOutputTypeCountOwnersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserMusicInventoryWhereInput
+  }
+
+
+  /**
+   * Count Type SpinCollectionItemCountOutputType
+   */
+
+  export type SpinCollectionItemCountOutputType = {
+    owners: number
+  }
+
+  export type SpinCollectionItemCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owners?: boolean | SpinCollectionItemCountOutputTypeCountOwnersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SpinCollectionItemCountOutputType without action
+   */
+  export type SpinCollectionItemCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinCollectionItemCountOutputType
+     */
+    select?: SpinCollectionItemCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SpinCollectionItemCountOutputType without action
+   */
+  export type SpinCollectionItemCountOutputTypeCountOwnersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserInventoryItemWhereInput
+  }
+
+
+  /**
+   * Count Type SpinSessionCountOutputType
+   */
+
+  export type SpinSessionCountOutputType = {
+    bubbleHits: number
+    pendings: number
+  }
+
+  export type SpinSessionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bubbleHits?: boolean | SpinSessionCountOutputTypeCountBubbleHitsArgs
+    pendings?: boolean | SpinSessionCountOutputTypeCountPendingsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * SpinSessionCountOutputType without action
+   */
+  export type SpinSessionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSessionCountOutputType
+     */
+    select?: SpinSessionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SpinSessionCountOutputType without action
+   */
+  export type SpinSessionCountOutputTypeCountBubbleHitsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BubbleHitWhereInput
+  }
+
+  /**
+   * SpinSessionCountOutputType without action
+   */
+  export type SpinSessionCountOutputTypeCountPendingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SpinRewardPendingWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -11715,6 +12655,11 @@ export namespace Prisma {
     bannerDismissals?: boolean | UserProfile$bannerDismissalsArgs<ExtArgs>
     campaignTargets?: boolean | UserProfile$campaignTargetsArgs<ExtArgs>
     skillBoostPayments?: boolean | UserProfile$skillBoostPaymentsArgs<ExtArgs>
+    spinSessions?: boolean | UserProfile$spinSessionsArgs<ExtArgs>
+    spinMusicOwned?: boolean | UserProfile$spinMusicOwnedArgs<ExtArgs>
+    spinInventory?: boolean | UserProfile$spinInventoryArgs<ExtArgs>
+    spinRewardPendings?: boolean | UserProfile$spinRewardPendingsArgs<ExtArgs>
+    bubbleHits?: boolean | UserProfile$bubbleHitsArgs<ExtArgs>
     _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userProfile"]>
 
@@ -11820,6 +12765,11 @@ export namespace Prisma {
     bannerDismissals?: boolean | UserProfile$bannerDismissalsArgs<ExtArgs>
     campaignTargets?: boolean | UserProfile$campaignTargetsArgs<ExtArgs>
     skillBoostPayments?: boolean | UserProfile$skillBoostPaymentsArgs<ExtArgs>
+    spinSessions?: boolean | UserProfile$spinSessionsArgs<ExtArgs>
+    spinMusicOwned?: boolean | UserProfile$spinMusicOwnedArgs<ExtArgs>
+    spinInventory?: boolean | UserProfile$spinInventoryArgs<ExtArgs>
+    spinRewardPendings?: boolean | UserProfile$spinRewardPendingsArgs<ExtArgs>
+    bubbleHits?: boolean | UserProfile$bubbleHitsArgs<ExtArgs>
     _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -11871,6 +12821,11 @@ export namespace Prisma {
       bannerDismissals: Prisma.$BannerDismissalPayload<ExtArgs>[]
       campaignTargets: Prisma.$CampaignTargetPayload<ExtArgs>[]
       skillBoostPayments: Prisma.$SkillBoostPaymentPayload<ExtArgs>[]
+      spinSessions: Prisma.$SpinSessionPayload<ExtArgs>[]
+      spinMusicOwned: Prisma.$UserMusicInventoryPayload<ExtArgs>[]
+      spinInventory: Prisma.$UserInventoryItemPayload<ExtArgs>[]
+      spinRewardPendings: Prisma.$SpinRewardPendingPayload<ExtArgs>[]
+      bubbleHits: Prisma.$BubbleHitPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -12326,6 +13281,11 @@ export namespace Prisma {
     bannerDismissals<T extends UserProfile$bannerDismissalsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$bannerDismissalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BannerDismissalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     campaignTargets<T extends UserProfile$campaignTargetsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$campaignTargetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignTargetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     skillBoostPayments<T extends UserProfile$skillBoostPaymentsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$skillBoostPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SkillBoostPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    spinSessions<T extends UserProfile$spinSessionsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$spinSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    spinMusicOwned<T extends UserProfile$spinMusicOwnedArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$spinMusicOwnedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserMusicInventoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    spinInventory<T extends UserProfile$spinInventoryArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$spinInventoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserInventoryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    spinRewardPendings<T extends UserProfile$spinRewardPendingsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$spinRewardPendingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinRewardPendingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bubbleHits<T extends UserProfile$bubbleHitsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$bubbleHitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BubbleHitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13778,6 +14738,126 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: SkillBoostPaymentScalarFieldEnum | SkillBoostPaymentScalarFieldEnum[]
+  }
+
+  /**
+   * UserProfile.spinSessions
+   */
+  export type UserProfile$spinSessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionInclude<ExtArgs> | null
+    where?: SpinSessionWhereInput
+    orderBy?: SpinSessionOrderByWithRelationInput | SpinSessionOrderByWithRelationInput[]
+    cursor?: SpinSessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SpinSessionScalarFieldEnum | SpinSessionScalarFieldEnum[]
+  }
+
+  /**
+   * UserProfile.spinMusicOwned
+   */
+  export type UserProfile$spinMusicOwnedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryInclude<ExtArgs> | null
+    where?: UserMusicInventoryWhereInput
+    orderBy?: UserMusicInventoryOrderByWithRelationInput | UserMusicInventoryOrderByWithRelationInput[]
+    cursor?: UserMusicInventoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserMusicInventoryScalarFieldEnum | UserMusicInventoryScalarFieldEnum[]
+  }
+
+  /**
+   * UserProfile.spinInventory
+   */
+  export type UserProfile$spinInventoryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemInclude<ExtArgs> | null
+    where?: UserInventoryItemWhereInput
+    orderBy?: UserInventoryItemOrderByWithRelationInput | UserInventoryItemOrderByWithRelationInput[]
+    cursor?: UserInventoryItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserInventoryItemScalarFieldEnum | UserInventoryItemScalarFieldEnum[]
+  }
+
+  /**
+   * UserProfile.spinRewardPendings
+   */
+  export type UserProfile$spinRewardPendingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingInclude<ExtArgs> | null
+    where?: SpinRewardPendingWhereInput
+    orderBy?: SpinRewardPendingOrderByWithRelationInput | SpinRewardPendingOrderByWithRelationInput[]
+    cursor?: SpinRewardPendingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SpinRewardPendingScalarFieldEnum | SpinRewardPendingScalarFieldEnum[]
+  }
+
+  /**
+   * UserProfile.bubbleHits
+   */
+  export type UserProfile$bubbleHitsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitInclude<ExtArgs> | null
+    where?: BubbleHitWhereInput
+    orderBy?: BubbleHitOrderByWithRelationInput | BubbleHitOrderByWithRelationInput[]
+    cursor?: BubbleHitWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BubbleHitScalarFieldEnum | BubbleHitScalarFieldEnum[]
   }
 
   /**
@@ -120884,6 +121964,9245 @@ export namespace Prisma {
 
 
   /**
+   * Model SpinConfig
+   */
+
+  export type AggregateSpinConfig = {
+    _count: SpinConfigCountAggregateOutputType | null
+    _avg: SpinConfigAvgAggregateOutputType | null
+    _sum: SpinConfigSumAggregateOutputType | null
+    _min: SpinConfigMinAggregateOutputType | null
+    _max: SpinConfigMaxAggregateOutputType | null
+  }
+
+  export type SpinConfigAvgAggregateOutputType = {
+    treasuryBps: number | null
+    xpCostPerSpin: number | null
+    spinDurationSec: number | null
+    baseWheelRpm: number | null
+  }
+
+  export type SpinConfigSumAggregateOutputType = {
+    treasuryBps: number | null
+    xpCostPerSpin: number | null
+    spinDurationSec: number | null
+    baseWheelRpm: number | null
+  }
+
+  export type SpinConfigMinAggregateOutputType = {
+    id: string | null
+    key: string | null
+    treasuryBps: number | null
+    entryFeeWei: string | null
+    entryAsset: string | null
+    xpCostPerSpin: number | null
+    spinDurationSec: number | null
+    maxBubbleCashWei: string | null
+    maxCashPerSpinWei: string | null
+    baseWheelRpm: number | null
+    updatedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type SpinConfigMaxAggregateOutputType = {
+    id: string | null
+    key: string | null
+    treasuryBps: number | null
+    entryFeeWei: string | null
+    entryAsset: string | null
+    xpCostPerSpin: number | null
+    spinDurationSec: number | null
+    maxBubbleCashWei: string | null
+    maxCashPerSpinWei: string | null
+    baseWheelRpm: number | null
+    updatedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type SpinConfigCountAggregateOutputType = {
+    id: number
+    key: number
+    treasuryBps: number
+    entryFeeWei: number
+    entryAsset: number
+    xpCostPerSpin: number
+    spinDurationSec: number
+    maxBubbleCashWei: number
+    maxCashPerSpinWei: number
+    baseWheelRpm: number
+    metadata: number
+    updatedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SpinConfigAvgAggregateInputType = {
+    treasuryBps?: true
+    xpCostPerSpin?: true
+    spinDurationSec?: true
+    baseWheelRpm?: true
+  }
+
+  export type SpinConfigSumAggregateInputType = {
+    treasuryBps?: true
+    xpCostPerSpin?: true
+    spinDurationSec?: true
+    baseWheelRpm?: true
+  }
+
+  export type SpinConfigMinAggregateInputType = {
+    id?: true
+    key?: true
+    treasuryBps?: true
+    entryFeeWei?: true
+    entryAsset?: true
+    xpCostPerSpin?: true
+    spinDurationSec?: true
+    maxBubbleCashWei?: true
+    maxCashPerSpinWei?: true
+    baseWheelRpm?: true
+    updatedAt?: true
+    createdAt?: true
+  }
+
+  export type SpinConfigMaxAggregateInputType = {
+    id?: true
+    key?: true
+    treasuryBps?: true
+    entryFeeWei?: true
+    entryAsset?: true
+    xpCostPerSpin?: true
+    spinDurationSec?: true
+    maxBubbleCashWei?: true
+    maxCashPerSpinWei?: true
+    baseWheelRpm?: true
+    updatedAt?: true
+    createdAt?: true
+  }
+
+  export type SpinConfigCountAggregateInputType = {
+    id?: true
+    key?: true
+    treasuryBps?: true
+    entryFeeWei?: true
+    entryAsset?: true
+    xpCostPerSpin?: true
+    spinDurationSec?: true
+    maxBubbleCashWei?: true
+    maxCashPerSpinWei?: true
+    baseWheelRpm?: true
+    metadata?: true
+    updatedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SpinConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SpinConfig to aggregate.
+     */
+    where?: SpinConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinConfigs to fetch.
+     */
+    orderBy?: SpinConfigOrderByWithRelationInput | SpinConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SpinConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SpinConfigs
+    **/
+    _count?: true | SpinConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SpinConfigAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SpinConfigSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SpinConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SpinConfigMaxAggregateInputType
+  }
+
+  export type GetSpinConfigAggregateType<T extends SpinConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateSpinConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSpinConfig[P]>
+      : GetScalarType<T[P], AggregateSpinConfig[P]>
+  }
+
+
+
+
+  export type SpinConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SpinConfigWhereInput
+    orderBy?: SpinConfigOrderByWithAggregationInput | SpinConfigOrderByWithAggregationInput[]
+    by: SpinConfigScalarFieldEnum[] | SpinConfigScalarFieldEnum
+    having?: SpinConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SpinConfigCountAggregateInputType | true
+    _avg?: SpinConfigAvgAggregateInputType
+    _sum?: SpinConfigSumAggregateInputType
+    _min?: SpinConfigMinAggregateInputType
+    _max?: SpinConfigMaxAggregateInputType
+  }
+
+  export type SpinConfigGroupByOutputType = {
+    id: string
+    key: string
+    treasuryBps: number
+    entryFeeWei: string
+    entryAsset: string
+    xpCostPerSpin: number
+    spinDurationSec: number
+    maxBubbleCashWei: string
+    maxCashPerSpinWei: string
+    baseWheelRpm: number
+    metadata: JsonValue | null
+    updatedAt: Date
+    createdAt: Date
+    _count: SpinConfigCountAggregateOutputType | null
+    _avg: SpinConfigAvgAggregateOutputType | null
+    _sum: SpinConfigSumAggregateOutputType | null
+    _min: SpinConfigMinAggregateOutputType | null
+    _max: SpinConfigMaxAggregateOutputType | null
+  }
+
+  type GetSpinConfigGroupByPayload<T extends SpinConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SpinConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SpinConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SpinConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], SpinConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SpinConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    treasuryBps?: boolean
+    entryFeeWei?: boolean
+    entryAsset?: boolean
+    xpCostPerSpin?: boolean
+    spinDurationSec?: boolean
+    maxBubbleCashWei?: boolean
+    maxCashPerSpinWei?: boolean
+    baseWheelRpm?: boolean
+    metadata?: boolean
+    updatedAt?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["spinConfig"]>
+
+  export type SpinConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    treasuryBps?: boolean
+    entryFeeWei?: boolean
+    entryAsset?: boolean
+    xpCostPerSpin?: boolean
+    spinDurationSec?: boolean
+    maxBubbleCashWei?: boolean
+    maxCashPerSpinWei?: boolean
+    baseWheelRpm?: boolean
+    metadata?: boolean
+    updatedAt?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["spinConfig"]>
+
+  export type SpinConfigSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    key?: boolean
+    treasuryBps?: boolean
+    entryFeeWei?: boolean
+    entryAsset?: boolean
+    xpCostPerSpin?: boolean
+    spinDurationSec?: boolean
+    maxBubbleCashWei?: boolean
+    maxCashPerSpinWei?: boolean
+    baseWheelRpm?: boolean
+    metadata?: boolean
+    updatedAt?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["spinConfig"]>
+
+  export type SpinConfigSelectScalar = {
+    id?: boolean
+    key?: boolean
+    treasuryBps?: boolean
+    entryFeeWei?: boolean
+    entryAsset?: boolean
+    xpCostPerSpin?: boolean
+    spinDurationSec?: boolean
+    maxBubbleCashWei?: boolean
+    maxCashPerSpinWei?: boolean
+    baseWheelRpm?: boolean
+    metadata?: boolean
+    updatedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type SpinConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "treasuryBps" | "entryFeeWei" | "entryAsset" | "xpCostPerSpin" | "spinDurationSec" | "maxBubbleCashWei" | "maxCashPerSpinWei" | "baseWheelRpm" | "metadata" | "updatedAt" | "createdAt", ExtArgs["result"]["spinConfig"]>
+
+  export type $SpinConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SpinConfig"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      key: string
+      treasuryBps: number
+      entryFeeWei: string
+      entryAsset: string
+      xpCostPerSpin: number
+      spinDurationSec: number
+      maxBubbleCashWei: string
+      maxCashPerSpinWei: string
+      baseWheelRpm: number
+      metadata: Prisma.JsonValue | null
+      updatedAt: Date
+      createdAt: Date
+    }, ExtArgs["result"]["spinConfig"]>
+    composites: {}
+  }
+
+  type SpinConfigGetPayload<S extends boolean | null | undefined | SpinConfigDefaultArgs> = $Result.GetResult<Prisma.$SpinConfigPayload, S>
+
+  type SpinConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SpinConfigFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SpinConfigCountAggregateInputType | true
+    }
+
+  export interface SpinConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SpinConfig'], meta: { name: 'SpinConfig' } }
+    /**
+     * Find zero or one SpinConfig that matches the filter.
+     * @param {SpinConfigFindUniqueArgs} args - Arguments to find a SpinConfig
+     * @example
+     * // Get one SpinConfig
+     * const spinConfig = await prisma.spinConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SpinConfigFindUniqueArgs>(args: SelectSubset<T, SpinConfigFindUniqueArgs<ExtArgs>>): Prisma__SpinConfigClient<$Result.GetResult<Prisma.$SpinConfigPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SpinConfig that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SpinConfigFindUniqueOrThrowArgs} args - Arguments to find a SpinConfig
+     * @example
+     * // Get one SpinConfig
+     * const spinConfig = await prisma.spinConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SpinConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, SpinConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SpinConfigClient<$Result.GetResult<Prisma.$SpinConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SpinConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinConfigFindFirstArgs} args - Arguments to find a SpinConfig
+     * @example
+     * // Get one SpinConfig
+     * const spinConfig = await prisma.spinConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SpinConfigFindFirstArgs>(args?: SelectSubset<T, SpinConfigFindFirstArgs<ExtArgs>>): Prisma__SpinConfigClient<$Result.GetResult<Prisma.$SpinConfigPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SpinConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinConfigFindFirstOrThrowArgs} args - Arguments to find a SpinConfig
+     * @example
+     * // Get one SpinConfig
+     * const spinConfig = await prisma.spinConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SpinConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, SpinConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__SpinConfigClient<$Result.GetResult<Prisma.$SpinConfigPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SpinConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SpinConfigs
+     * const spinConfigs = await prisma.spinConfig.findMany()
+     * 
+     * // Get first 10 SpinConfigs
+     * const spinConfigs = await prisma.spinConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const spinConfigWithIdOnly = await prisma.spinConfig.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SpinConfigFindManyArgs>(args?: SelectSubset<T, SpinConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SpinConfig.
+     * @param {SpinConfigCreateArgs} args - Arguments to create a SpinConfig.
+     * @example
+     * // Create one SpinConfig
+     * const SpinConfig = await prisma.spinConfig.create({
+     *   data: {
+     *     // ... data to create a SpinConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends SpinConfigCreateArgs>(args: SelectSubset<T, SpinConfigCreateArgs<ExtArgs>>): Prisma__SpinConfigClient<$Result.GetResult<Prisma.$SpinConfigPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SpinConfigs.
+     * @param {SpinConfigCreateManyArgs} args - Arguments to create many SpinConfigs.
+     * @example
+     * // Create many SpinConfigs
+     * const spinConfig = await prisma.spinConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SpinConfigCreateManyArgs>(args?: SelectSubset<T, SpinConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SpinConfigs and returns the data saved in the database.
+     * @param {SpinConfigCreateManyAndReturnArgs} args - Arguments to create many SpinConfigs.
+     * @example
+     * // Create many SpinConfigs
+     * const spinConfig = await prisma.spinConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SpinConfigs and only return the `id`
+     * const spinConfigWithIdOnly = await prisma.spinConfig.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SpinConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, SpinConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinConfigPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SpinConfig.
+     * @param {SpinConfigDeleteArgs} args - Arguments to delete one SpinConfig.
+     * @example
+     * // Delete one SpinConfig
+     * const SpinConfig = await prisma.spinConfig.delete({
+     *   where: {
+     *     // ... filter to delete one SpinConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SpinConfigDeleteArgs>(args: SelectSubset<T, SpinConfigDeleteArgs<ExtArgs>>): Prisma__SpinConfigClient<$Result.GetResult<Prisma.$SpinConfigPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SpinConfig.
+     * @param {SpinConfigUpdateArgs} args - Arguments to update one SpinConfig.
+     * @example
+     * // Update one SpinConfig
+     * const spinConfig = await prisma.spinConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SpinConfigUpdateArgs>(args: SelectSubset<T, SpinConfigUpdateArgs<ExtArgs>>): Prisma__SpinConfigClient<$Result.GetResult<Prisma.$SpinConfigPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SpinConfigs.
+     * @param {SpinConfigDeleteManyArgs} args - Arguments to filter SpinConfigs to delete.
+     * @example
+     * // Delete a few SpinConfigs
+     * const { count } = await prisma.spinConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SpinConfigDeleteManyArgs>(args?: SelectSubset<T, SpinConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SpinConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SpinConfigs
+     * const spinConfig = await prisma.spinConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SpinConfigUpdateManyArgs>(args: SelectSubset<T, SpinConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SpinConfigs and returns the data updated in the database.
+     * @param {SpinConfigUpdateManyAndReturnArgs} args - Arguments to update many SpinConfigs.
+     * @example
+     * // Update many SpinConfigs
+     * const spinConfig = await prisma.spinConfig.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SpinConfigs and only return the `id`
+     * const spinConfigWithIdOnly = await prisma.spinConfig.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SpinConfigUpdateManyAndReturnArgs>(args: SelectSubset<T, SpinConfigUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinConfigPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SpinConfig.
+     * @param {SpinConfigUpsertArgs} args - Arguments to update or create a SpinConfig.
+     * @example
+     * // Update or create a SpinConfig
+     * const spinConfig = await prisma.spinConfig.upsert({
+     *   create: {
+     *     // ... data to create a SpinConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SpinConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SpinConfigUpsertArgs>(args: SelectSubset<T, SpinConfigUpsertArgs<ExtArgs>>): Prisma__SpinConfigClient<$Result.GetResult<Prisma.$SpinConfigPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SpinConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinConfigCountArgs} args - Arguments to filter SpinConfigs to count.
+     * @example
+     * // Count the number of SpinConfigs
+     * const count = await prisma.spinConfig.count({
+     *   where: {
+     *     // ... the filter for the SpinConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends SpinConfigCountArgs>(
+      args?: Subset<T, SpinConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SpinConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SpinConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SpinConfigAggregateArgs>(args: Subset<T, SpinConfigAggregateArgs>): Prisma.PrismaPromise<GetSpinConfigAggregateType<T>>
+
+    /**
+     * Group by SpinConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SpinConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SpinConfigGroupByArgs['orderBy'] }
+        : { orderBy?: SpinConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SpinConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSpinConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SpinConfig model
+   */
+  readonly fields: SpinConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SpinConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SpinConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SpinConfig model
+   */
+  interface SpinConfigFieldRefs {
+    readonly id: FieldRef<"SpinConfig", 'String'>
+    readonly key: FieldRef<"SpinConfig", 'String'>
+    readonly treasuryBps: FieldRef<"SpinConfig", 'Int'>
+    readonly entryFeeWei: FieldRef<"SpinConfig", 'String'>
+    readonly entryAsset: FieldRef<"SpinConfig", 'String'>
+    readonly xpCostPerSpin: FieldRef<"SpinConfig", 'Int'>
+    readonly spinDurationSec: FieldRef<"SpinConfig", 'Int'>
+    readonly maxBubbleCashWei: FieldRef<"SpinConfig", 'String'>
+    readonly maxCashPerSpinWei: FieldRef<"SpinConfig", 'String'>
+    readonly baseWheelRpm: FieldRef<"SpinConfig", 'Int'>
+    readonly metadata: FieldRef<"SpinConfig", 'Json'>
+    readonly updatedAt: FieldRef<"SpinConfig", 'DateTime'>
+    readonly createdAt: FieldRef<"SpinConfig", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SpinConfig findUnique
+   */
+  export type SpinConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinConfig
+     */
+    select?: SpinConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinConfig
+     */
+    omit?: SpinConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which SpinConfig to fetch.
+     */
+    where: SpinConfigWhereUniqueInput
+  }
+
+  /**
+   * SpinConfig findUniqueOrThrow
+   */
+  export type SpinConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinConfig
+     */
+    select?: SpinConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinConfig
+     */
+    omit?: SpinConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which SpinConfig to fetch.
+     */
+    where: SpinConfigWhereUniqueInput
+  }
+
+  /**
+   * SpinConfig findFirst
+   */
+  export type SpinConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinConfig
+     */
+    select?: SpinConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinConfig
+     */
+    omit?: SpinConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which SpinConfig to fetch.
+     */
+    where?: SpinConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinConfigs to fetch.
+     */
+    orderBy?: SpinConfigOrderByWithRelationInput | SpinConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SpinConfigs.
+     */
+    cursor?: SpinConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinConfigs.
+     */
+    distinct?: SpinConfigScalarFieldEnum | SpinConfigScalarFieldEnum[]
+  }
+
+  /**
+   * SpinConfig findFirstOrThrow
+   */
+  export type SpinConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinConfig
+     */
+    select?: SpinConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinConfig
+     */
+    omit?: SpinConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which SpinConfig to fetch.
+     */
+    where?: SpinConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinConfigs to fetch.
+     */
+    orderBy?: SpinConfigOrderByWithRelationInput | SpinConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SpinConfigs.
+     */
+    cursor?: SpinConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinConfigs.
+     */
+    distinct?: SpinConfigScalarFieldEnum | SpinConfigScalarFieldEnum[]
+  }
+
+  /**
+   * SpinConfig findMany
+   */
+  export type SpinConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinConfig
+     */
+    select?: SpinConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinConfig
+     */
+    omit?: SpinConfigOmit<ExtArgs> | null
+    /**
+     * Filter, which SpinConfigs to fetch.
+     */
+    where?: SpinConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinConfigs to fetch.
+     */
+    orderBy?: SpinConfigOrderByWithRelationInput | SpinConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SpinConfigs.
+     */
+    cursor?: SpinConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinConfigs.
+     */
+    distinct?: SpinConfigScalarFieldEnum | SpinConfigScalarFieldEnum[]
+  }
+
+  /**
+   * SpinConfig create
+   */
+  export type SpinConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinConfig
+     */
+    select?: SpinConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinConfig
+     */
+    omit?: SpinConfigOmit<ExtArgs> | null
+    /**
+     * The data needed to create a SpinConfig.
+     */
+    data: XOR<SpinConfigCreateInput, SpinConfigUncheckedCreateInput>
+  }
+
+  /**
+   * SpinConfig createMany
+   */
+  export type SpinConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SpinConfigs.
+     */
+    data: SpinConfigCreateManyInput | SpinConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SpinConfig createManyAndReturn
+   */
+  export type SpinConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinConfig
+     */
+    select?: SpinConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinConfig
+     */
+    omit?: SpinConfigOmit<ExtArgs> | null
+    /**
+     * The data used to create many SpinConfigs.
+     */
+    data: SpinConfigCreateManyInput | SpinConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SpinConfig update
+   */
+  export type SpinConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinConfig
+     */
+    select?: SpinConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinConfig
+     */
+    omit?: SpinConfigOmit<ExtArgs> | null
+    /**
+     * The data needed to update a SpinConfig.
+     */
+    data: XOR<SpinConfigUpdateInput, SpinConfigUncheckedUpdateInput>
+    /**
+     * Choose, which SpinConfig to update.
+     */
+    where: SpinConfigWhereUniqueInput
+  }
+
+  /**
+   * SpinConfig updateMany
+   */
+  export type SpinConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SpinConfigs.
+     */
+    data: XOR<SpinConfigUpdateManyMutationInput, SpinConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which SpinConfigs to update
+     */
+    where?: SpinConfigWhereInput
+    /**
+     * Limit how many SpinConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SpinConfig updateManyAndReturn
+   */
+  export type SpinConfigUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinConfig
+     */
+    select?: SpinConfigSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinConfig
+     */
+    omit?: SpinConfigOmit<ExtArgs> | null
+    /**
+     * The data used to update SpinConfigs.
+     */
+    data: XOR<SpinConfigUpdateManyMutationInput, SpinConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which SpinConfigs to update
+     */
+    where?: SpinConfigWhereInput
+    /**
+     * Limit how many SpinConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SpinConfig upsert
+   */
+  export type SpinConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinConfig
+     */
+    select?: SpinConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinConfig
+     */
+    omit?: SpinConfigOmit<ExtArgs> | null
+    /**
+     * The filter to search for the SpinConfig to update in case it exists.
+     */
+    where: SpinConfigWhereUniqueInput
+    /**
+     * In case the SpinConfig found by the `where` argument doesn't exist, create a new SpinConfig with this data.
+     */
+    create: XOR<SpinConfigCreateInput, SpinConfigUncheckedCreateInput>
+    /**
+     * In case the SpinConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SpinConfigUpdateInput, SpinConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * SpinConfig delete
+   */
+  export type SpinConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinConfig
+     */
+    select?: SpinConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinConfig
+     */
+    omit?: SpinConfigOmit<ExtArgs> | null
+    /**
+     * Filter which SpinConfig to delete.
+     */
+    where: SpinConfigWhereUniqueInput
+  }
+
+  /**
+   * SpinConfig deleteMany
+   */
+  export type SpinConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SpinConfigs to delete
+     */
+    where?: SpinConfigWhereInput
+    /**
+     * Limit how many SpinConfigs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SpinConfig without action
+   */
+  export type SpinConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinConfig
+     */
+    select?: SpinConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinConfig
+     */
+    omit?: SpinConfigOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SpinMusicTrack
+   */
+
+  export type AggregateSpinMusicTrack = {
+    _count: SpinMusicTrackCountAggregateOutputType | null
+    _avg: SpinMusicTrackAvgAggregateOutputType | null
+    _sum: SpinMusicTrackSumAggregateOutputType | null
+    _min: SpinMusicTrackMinAggregateOutputType | null
+    _max: SpinMusicTrackMaxAggregateOutputType | null
+  }
+
+  export type SpinMusicTrackAvgAggregateOutputType = {
+    durationSec: number | null
+  }
+
+  export type SpinMusicTrackSumAggregateOutputType = {
+    durationSec: number | null
+  }
+
+  export type SpinMusicTrackMinAggregateOutputType = {
+    id: string | null
+    title: string | null
+    artist: string | null
+    url: string | null
+    tier: $Enums.SpinMusicTier | null
+    priceWei: string | null
+    priceAsset: string | null
+    durationSec: number | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SpinMusicTrackMaxAggregateOutputType = {
+    id: string | null
+    title: string | null
+    artist: string | null
+    url: string | null
+    tier: $Enums.SpinMusicTier | null
+    priceWei: string | null
+    priceAsset: string | null
+    durationSec: number | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SpinMusicTrackCountAggregateOutputType = {
+    id: number
+    title: number
+    artist: number
+    url: number
+    tier: number
+    priceWei: number
+    priceAsset: number
+    durationSec: number
+    active: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SpinMusicTrackAvgAggregateInputType = {
+    durationSec?: true
+  }
+
+  export type SpinMusicTrackSumAggregateInputType = {
+    durationSec?: true
+  }
+
+  export type SpinMusicTrackMinAggregateInputType = {
+    id?: true
+    title?: true
+    artist?: true
+    url?: true
+    tier?: true
+    priceWei?: true
+    priceAsset?: true
+    durationSec?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SpinMusicTrackMaxAggregateInputType = {
+    id?: true
+    title?: true
+    artist?: true
+    url?: true
+    tier?: true
+    priceWei?: true
+    priceAsset?: true
+    durationSec?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SpinMusicTrackCountAggregateInputType = {
+    id?: true
+    title?: true
+    artist?: true
+    url?: true
+    tier?: true
+    priceWei?: true
+    priceAsset?: true
+    durationSec?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SpinMusicTrackAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SpinMusicTrack to aggregate.
+     */
+    where?: SpinMusicTrackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinMusicTracks to fetch.
+     */
+    orderBy?: SpinMusicTrackOrderByWithRelationInput | SpinMusicTrackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SpinMusicTrackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinMusicTracks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinMusicTracks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SpinMusicTracks
+    **/
+    _count?: true | SpinMusicTrackCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SpinMusicTrackAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SpinMusicTrackSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SpinMusicTrackMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SpinMusicTrackMaxAggregateInputType
+  }
+
+  export type GetSpinMusicTrackAggregateType<T extends SpinMusicTrackAggregateArgs> = {
+        [P in keyof T & keyof AggregateSpinMusicTrack]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSpinMusicTrack[P]>
+      : GetScalarType<T[P], AggregateSpinMusicTrack[P]>
+  }
+
+
+
+
+  export type SpinMusicTrackGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SpinMusicTrackWhereInput
+    orderBy?: SpinMusicTrackOrderByWithAggregationInput | SpinMusicTrackOrderByWithAggregationInput[]
+    by: SpinMusicTrackScalarFieldEnum[] | SpinMusicTrackScalarFieldEnum
+    having?: SpinMusicTrackScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SpinMusicTrackCountAggregateInputType | true
+    _avg?: SpinMusicTrackAvgAggregateInputType
+    _sum?: SpinMusicTrackSumAggregateInputType
+    _min?: SpinMusicTrackMinAggregateInputType
+    _max?: SpinMusicTrackMaxAggregateInputType
+  }
+
+  export type SpinMusicTrackGroupByOutputType = {
+    id: string
+    title: string
+    artist: string | null
+    url: string
+    tier: $Enums.SpinMusicTier
+    priceWei: string
+    priceAsset: string
+    durationSec: number
+    active: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: SpinMusicTrackCountAggregateOutputType | null
+    _avg: SpinMusicTrackAvgAggregateOutputType | null
+    _sum: SpinMusicTrackSumAggregateOutputType | null
+    _min: SpinMusicTrackMinAggregateOutputType | null
+    _max: SpinMusicTrackMaxAggregateOutputType | null
+  }
+
+  type GetSpinMusicTrackGroupByPayload<T extends SpinMusicTrackGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SpinMusicTrackGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SpinMusicTrackGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SpinMusicTrackGroupByOutputType[P]>
+            : GetScalarType<T[P], SpinMusicTrackGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SpinMusicTrackSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    artist?: boolean
+    url?: boolean
+    tier?: boolean
+    priceWei?: boolean
+    priceAsset?: boolean
+    durationSec?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    owners?: boolean | SpinMusicTrack$ownersArgs<ExtArgs>
+    _count?: boolean | SpinMusicTrackCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["spinMusicTrack"]>
+
+  export type SpinMusicTrackSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    artist?: boolean
+    url?: boolean
+    tier?: boolean
+    priceWei?: boolean
+    priceAsset?: boolean
+    durationSec?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["spinMusicTrack"]>
+
+  export type SpinMusicTrackSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    artist?: boolean
+    url?: boolean
+    tier?: boolean
+    priceWei?: boolean
+    priceAsset?: boolean
+    durationSec?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["spinMusicTrack"]>
+
+  export type SpinMusicTrackSelectScalar = {
+    id?: boolean
+    title?: boolean
+    artist?: boolean
+    url?: boolean
+    tier?: boolean
+    priceWei?: boolean
+    priceAsset?: boolean
+    durationSec?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SpinMusicTrackOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "artist" | "url" | "tier" | "priceWei" | "priceAsset" | "durationSec" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["spinMusicTrack"]>
+  export type SpinMusicTrackInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owners?: boolean | SpinMusicTrack$ownersArgs<ExtArgs>
+    _count?: boolean | SpinMusicTrackCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SpinMusicTrackIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type SpinMusicTrackIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $SpinMusicTrackPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SpinMusicTrack"
+    objects: {
+      owners: Prisma.$UserMusicInventoryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      title: string
+      artist: string | null
+      url: string
+      tier: $Enums.SpinMusicTier
+      priceWei: string
+      priceAsset: string
+      durationSec: number
+      active: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["spinMusicTrack"]>
+    composites: {}
+  }
+
+  type SpinMusicTrackGetPayload<S extends boolean | null | undefined | SpinMusicTrackDefaultArgs> = $Result.GetResult<Prisma.$SpinMusicTrackPayload, S>
+
+  type SpinMusicTrackCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SpinMusicTrackFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SpinMusicTrackCountAggregateInputType | true
+    }
+
+  export interface SpinMusicTrackDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SpinMusicTrack'], meta: { name: 'SpinMusicTrack' } }
+    /**
+     * Find zero or one SpinMusicTrack that matches the filter.
+     * @param {SpinMusicTrackFindUniqueArgs} args - Arguments to find a SpinMusicTrack
+     * @example
+     * // Get one SpinMusicTrack
+     * const spinMusicTrack = await prisma.spinMusicTrack.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SpinMusicTrackFindUniqueArgs>(args: SelectSubset<T, SpinMusicTrackFindUniqueArgs<ExtArgs>>): Prisma__SpinMusicTrackClient<$Result.GetResult<Prisma.$SpinMusicTrackPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SpinMusicTrack that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SpinMusicTrackFindUniqueOrThrowArgs} args - Arguments to find a SpinMusicTrack
+     * @example
+     * // Get one SpinMusicTrack
+     * const spinMusicTrack = await prisma.spinMusicTrack.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SpinMusicTrackFindUniqueOrThrowArgs>(args: SelectSubset<T, SpinMusicTrackFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SpinMusicTrackClient<$Result.GetResult<Prisma.$SpinMusicTrackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SpinMusicTrack that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinMusicTrackFindFirstArgs} args - Arguments to find a SpinMusicTrack
+     * @example
+     * // Get one SpinMusicTrack
+     * const spinMusicTrack = await prisma.spinMusicTrack.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SpinMusicTrackFindFirstArgs>(args?: SelectSubset<T, SpinMusicTrackFindFirstArgs<ExtArgs>>): Prisma__SpinMusicTrackClient<$Result.GetResult<Prisma.$SpinMusicTrackPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SpinMusicTrack that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinMusicTrackFindFirstOrThrowArgs} args - Arguments to find a SpinMusicTrack
+     * @example
+     * // Get one SpinMusicTrack
+     * const spinMusicTrack = await prisma.spinMusicTrack.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SpinMusicTrackFindFirstOrThrowArgs>(args?: SelectSubset<T, SpinMusicTrackFindFirstOrThrowArgs<ExtArgs>>): Prisma__SpinMusicTrackClient<$Result.GetResult<Prisma.$SpinMusicTrackPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SpinMusicTracks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinMusicTrackFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SpinMusicTracks
+     * const spinMusicTracks = await prisma.spinMusicTrack.findMany()
+     * 
+     * // Get first 10 SpinMusicTracks
+     * const spinMusicTracks = await prisma.spinMusicTrack.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const spinMusicTrackWithIdOnly = await prisma.spinMusicTrack.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SpinMusicTrackFindManyArgs>(args?: SelectSubset<T, SpinMusicTrackFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinMusicTrackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SpinMusicTrack.
+     * @param {SpinMusicTrackCreateArgs} args - Arguments to create a SpinMusicTrack.
+     * @example
+     * // Create one SpinMusicTrack
+     * const SpinMusicTrack = await prisma.spinMusicTrack.create({
+     *   data: {
+     *     // ... data to create a SpinMusicTrack
+     *   }
+     * })
+     * 
+     */
+    create<T extends SpinMusicTrackCreateArgs>(args: SelectSubset<T, SpinMusicTrackCreateArgs<ExtArgs>>): Prisma__SpinMusicTrackClient<$Result.GetResult<Prisma.$SpinMusicTrackPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SpinMusicTracks.
+     * @param {SpinMusicTrackCreateManyArgs} args - Arguments to create many SpinMusicTracks.
+     * @example
+     * // Create many SpinMusicTracks
+     * const spinMusicTrack = await prisma.spinMusicTrack.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SpinMusicTrackCreateManyArgs>(args?: SelectSubset<T, SpinMusicTrackCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SpinMusicTracks and returns the data saved in the database.
+     * @param {SpinMusicTrackCreateManyAndReturnArgs} args - Arguments to create many SpinMusicTracks.
+     * @example
+     * // Create many SpinMusicTracks
+     * const spinMusicTrack = await prisma.spinMusicTrack.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SpinMusicTracks and only return the `id`
+     * const spinMusicTrackWithIdOnly = await prisma.spinMusicTrack.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SpinMusicTrackCreateManyAndReturnArgs>(args?: SelectSubset<T, SpinMusicTrackCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinMusicTrackPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SpinMusicTrack.
+     * @param {SpinMusicTrackDeleteArgs} args - Arguments to delete one SpinMusicTrack.
+     * @example
+     * // Delete one SpinMusicTrack
+     * const SpinMusicTrack = await prisma.spinMusicTrack.delete({
+     *   where: {
+     *     // ... filter to delete one SpinMusicTrack
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SpinMusicTrackDeleteArgs>(args: SelectSubset<T, SpinMusicTrackDeleteArgs<ExtArgs>>): Prisma__SpinMusicTrackClient<$Result.GetResult<Prisma.$SpinMusicTrackPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SpinMusicTrack.
+     * @param {SpinMusicTrackUpdateArgs} args - Arguments to update one SpinMusicTrack.
+     * @example
+     * // Update one SpinMusicTrack
+     * const spinMusicTrack = await prisma.spinMusicTrack.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SpinMusicTrackUpdateArgs>(args: SelectSubset<T, SpinMusicTrackUpdateArgs<ExtArgs>>): Prisma__SpinMusicTrackClient<$Result.GetResult<Prisma.$SpinMusicTrackPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SpinMusicTracks.
+     * @param {SpinMusicTrackDeleteManyArgs} args - Arguments to filter SpinMusicTracks to delete.
+     * @example
+     * // Delete a few SpinMusicTracks
+     * const { count } = await prisma.spinMusicTrack.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SpinMusicTrackDeleteManyArgs>(args?: SelectSubset<T, SpinMusicTrackDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SpinMusicTracks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinMusicTrackUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SpinMusicTracks
+     * const spinMusicTrack = await prisma.spinMusicTrack.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SpinMusicTrackUpdateManyArgs>(args: SelectSubset<T, SpinMusicTrackUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SpinMusicTracks and returns the data updated in the database.
+     * @param {SpinMusicTrackUpdateManyAndReturnArgs} args - Arguments to update many SpinMusicTracks.
+     * @example
+     * // Update many SpinMusicTracks
+     * const spinMusicTrack = await prisma.spinMusicTrack.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SpinMusicTracks and only return the `id`
+     * const spinMusicTrackWithIdOnly = await prisma.spinMusicTrack.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SpinMusicTrackUpdateManyAndReturnArgs>(args: SelectSubset<T, SpinMusicTrackUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinMusicTrackPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SpinMusicTrack.
+     * @param {SpinMusicTrackUpsertArgs} args - Arguments to update or create a SpinMusicTrack.
+     * @example
+     * // Update or create a SpinMusicTrack
+     * const spinMusicTrack = await prisma.spinMusicTrack.upsert({
+     *   create: {
+     *     // ... data to create a SpinMusicTrack
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SpinMusicTrack we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SpinMusicTrackUpsertArgs>(args: SelectSubset<T, SpinMusicTrackUpsertArgs<ExtArgs>>): Prisma__SpinMusicTrackClient<$Result.GetResult<Prisma.$SpinMusicTrackPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SpinMusicTracks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinMusicTrackCountArgs} args - Arguments to filter SpinMusicTracks to count.
+     * @example
+     * // Count the number of SpinMusicTracks
+     * const count = await prisma.spinMusicTrack.count({
+     *   where: {
+     *     // ... the filter for the SpinMusicTracks we want to count
+     *   }
+     * })
+    **/
+    count<T extends SpinMusicTrackCountArgs>(
+      args?: Subset<T, SpinMusicTrackCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SpinMusicTrackCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SpinMusicTrack.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinMusicTrackAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SpinMusicTrackAggregateArgs>(args: Subset<T, SpinMusicTrackAggregateArgs>): Prisma.PrismaPromise<GetSpinMusicTrackAggregateType<T>>
+
+    /**
+     * Group by SpinMusicTrack.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinMusicTrackGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SpinMusicTrackGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SpinMusicTrackGroupByArgs['orderBy'] }
+        : { orderBy?: SpinMusicTrackGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SpinMusicTrackGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSpinMusicTrackGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SpinMusicTrack model
+   */
+  readonly fields: SpinMusicTrackFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SpinMusicTrack.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SpinMusicTrackClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    owners<T extends SpinMusicTrack$ownersArgs<ExtArgs> = {}>(args?: Subset<T, SpinMusicTrack$ownersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserMusicInventoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SpinMusicTrack model
+   */
+  interface SpinMusicTrackFieldRefs {
+    readonly id: FieldRef<"SpinMusicTrack", 'String'>
+    readonly title: FieldRef<"SpinMusicTrack", 'String'>
+    readonly artist: FieldRef<"SpinMusicTrack", 'String'>
+    readonly url: FieldRef<"SpinMusicTrack", 'String'>
+    readonly tier: FieldRef<"SpinMusicTrack", 'SpinMusicTier'>
+    readonly priceWei: FieldRef<"SpinMusicTrack", 'String'>
+    readonly priceAsset: FieldRef<"SpinMusicTrack", 'String'>
+    readonly durationSec: FieldRef<"SpinMusicTrack", 'Int'>
+    readonly active: FieldRef<"SpinMusicTrack", 'Boolean'>
+    readonly createdAt: FieldRef<"SpinMusicTrack", 'DateTime'>
+    readonly updatedAt: FieldRef<"SpinMusicTrack", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SpinMusicTrack findUnique
+   */
+  export type SpinMusicTrackFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinMusicTrack
+     */
+    select?: SpinMusicTrackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinMusicTrack
+     */
+    omit?: SpinMusicTrackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinMusicTrackInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinMusicTrack to fetch.
+     */
+    where: SpinMusicTrackWhereUniqueInput
+  }
+
+  /**
+   * SpinMusicTrack findUniqueOrThrow
+   */
+  export type SpinMusicTrackFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinMusicTrack
+     */
+    select?: SpinMusicTrackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinMusicTrack
+     */
+    omit?: SpinMusicTrackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinMusicTrackInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinMusicTrack to fetch.
+     */
+    where: SpinMusicTrackWhereUniqueInput
+  }
+
+  /**
+   * SpinMusicTrack findFirst
+   */
+  export type SpinMusicTrackFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinMusicTrack
+     */
+    select?: SpinMusicTrackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinMusicTrack
+     */
+    omit?: SpinMusicTrackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinMusicTrackInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinMusicTrack to fetch.
+     */
+    where?: SpinMusicTrackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinMusicTracks to fetch.
+     */
+    orderBy?: SpinMusicTrackOrderByWithRelationInput | SpinMusicTrackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SpinMusicTracks.
+     */
+    cursor?: SpinMusicTrackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinMusicTracks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinMusicTracks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinMusicTracks.
+     */
+    distinct?: SpinMusicTrackScalarFieldEnum | SpinMusicTrackScalarFieldEnum[]
+  }
+
+  /**
+   * SpinMusicTrack findFirstOrThrow
+   */
+  export type SpinMusicTrackFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinMusicTrack
+     */
+    select?: SpinMusicTrackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinMusicTrack
+     */
+    omit?: SpinMusicTrackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinMusicTrackInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinMusicTrack to fetch.
+     */
+    where?: SpinMusicTrackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinMusicTracks to fetch.
+     */
+    orderBy?: SpinMusicTrackOrderByWithRelationInput | SpinMusicTrackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SpinMusicTracks.
+     */
+    cursor?: SpinMusicTrackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinMusicTracks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinMusicTracks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinMusicTracks.
+     */
+    distinct?: SpinMusicTrackScalarFieldEnum | SpinMusicTrackScalarFieldEnum[]
+  }
+
+  /**
+   * SpinMusicTrack findMany
+   */
+  export type SpinMusicTrackFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinMusicTrack
+     */
+    select?: SpinMusicTrackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinMusicTrack
+     */
+    omit?: SpinMusicTrackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinMusicTrackInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinMusicTracks to fetch.
+     */
+    where?: SpinMusicTrackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinMusicTracks to fetch.
+     */
+    orderBy?: SpinMusicTrackOrderByWithRelationInput | SpinMusicTrackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SpinMusicTracks.
+     */
+    cursor?: SpinMusicTrackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinMusicTracks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinMusicTracks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinMusicTracks.
+     */
+    distinct?: SpinMusicTrackScalarFieldEnum | SpinMusicTrackScalarFieldEnum[]
+  }
+
+  /**
+   * SpinMusicTrack create
+   */
+  export type SpinMusicTrackCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinMusicTrack
+     */
+    select?: SpinMusicTrackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinMusicTrack
+     */
+    omit?: SpinMusicTrackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinMusicTrackInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SpinMusicTrack.
+     */
+    data: XOR<SpinMusicTrackCreateInput, SpinMusicTrackUncheckedCreateInput>
+  }
+
+  /**
+   * SpinMusicTrack createMany
+   */
+  export type SpinMusicTrackCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SpinMusicTracks.
+     */
+    data: SpinMusicTrackCreateManyInput | SpinMusicTrackCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SpinMusicTrack createManyAndReturn
+   */
+  export type SpinMusicTrackCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinMusicTrack
+     */
+    select?: SpinMusicTrackSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinMusicTrack
+     */
+    omit?: SpinMusicTrackOmit<ExtArgs> | null
+    /**
+     * The data used to create many SpinMusicTracks.
+     */
+    data: SpinMusicTrackCreateManyInput | SpinMusicTrackCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SpinMusicTrack update
+   */
+  export type SpinMusicTrackUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinMusicTrack
+     */
+    select?: SpinMusicTrackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinMusicTrack
+     */
+    omit?: SpinMusicTrackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinMusicTrackInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SpinMusicTrack.
+     */
+    data: XOR<SpinMusicTrackUpdateInput, SpinMusicTrackUncheckedUpdateInput>
+    /**
+     * Choose, which SpinMusicTrack to update.
+     */
+    where: SpinMusicTrackWhereUniqueInput
+  }
+
+  /**
+   * SpinMusicTrack updateMany
+   */
+  export type SpinMusicTrackUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SpinMusicTracks.
+     */
+    data: XOR<SpinMusicTrackUpdateManyMutationInput, SpinMusicTrackUncheckedUpdateManyInput>
+    /**
+     * Filter which SpinMusicTracks to update
+     */
+    where?: SpinMusicTrackWhereInput
+    /**
+     * Limit how many SpinMusicTracks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SpinMusicTrack updateManyAndReturn
+   */
+  export type SpinMusicTrackUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinMusicTrack
+     */
+    select?: SpinMusicTrackSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinMusicTrack
+     */
+    omit?: SpinMusicTrackOmit<ExtArgs> | null
+    /**
+     * The data used to update SpinMusicTracks.
+     */
+    data: XOR<SpinMusicTrackUpdateManyMutationInput, SpinMusicTrackUncheckedUpdateManyInput>
+    /**
+     * Filter which SpinMusicTracks to update
+     */
+    where?: SpinMusicTrackWhereInput
+    /**
+     * Limit how many SpinMusicTracks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SpinMusicTrack upsert
+   */
+  export type SpinMusicTrackUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinMusicTrack
+     */
+    select?: SpinMusicTrackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinMusicTrack
+     */
+    omit?: SpinMusicTrackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinMusicTrackInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SpinMusicTrack to update in case it exists.
+     */
+    where: SpinMusicTrackWhereUniqueInput
+    /**
+     * In case the SpinMusicTrack found by the `where` argument doesn't exist, create a new SpinMusicTrack with this data.
+     */
+    create: XOR<SpinMusicTrackCreateInput, SpinMusicTrackUncheckedCreateInput>
+    /**
+     * In case the SpinMusicTrack was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SpinMusicTrackUpdateInput, SpinMusicTrackUncheckedUpdateInput>
+  }
+
+  /**
+   * SpinMusicTrack delete
+   */
+  export type SpinMusicTrackDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinMusicTrack
+     */
+    select?: SpinMusicTrackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinMusicTrack
+     */
+    omit?: SpinMusicTrackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinMusicTrackInclude<ExtArgs> | null
+    /**
+     * Filter which SpinMusicTrack to delete.
+     */
+    where: SpinMusicTrackWhereUniqueInput
+  }
+
+  /**
+   * SpinMusicTrack deleteMany
+   */
+  export type SpinMusicTrackDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SpinMusicTracks to delete
+     */
+    where?: SpinMusicTrackWhereInput
+    /**
+     * Limit how many SpinMusicTracks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SpinMusicTrack.owners
+   */
+  export type SpinMusicTrack$ownersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryInclude<ExtArgs> | null
+    where?: UserMusicInventoryWhereInput
+    orderBy?: UserMusicInventoryOrderByWithRelationInput | UserMusicInventoryOrderByWithRelationInput[]
+    cursor?: UserMusicInventoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserMusicInventoryScalarFieldEnum | UserMusicInventoryScalarFieldEnum[]
+  }
+
+  /**
+   * SpinMusicTrack without action
+   */
+  export type SpinMusicTrackDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinMusicTrack
+     */
+    select?: SpinMusicTrackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinMusicTrack
+     */
+    omit?: SpinMusicTrackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinMusicTrackInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserMusicInventory
+   */
+
+  export type AggregateUserMusicInventory = {
+    _count: UserMusicInventoryCountAggregateOutputType | null
+    _min: UserMusicInventoryMinAggregateOutputType | null
+    _max: UserMusicInventoryMaxAggregateOutputType | null
+  }
+
+  export type UserMusicInventoryMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    trackId: string | null
+    equipped: boolean | null
+    createdAt: Date | null
+  }
+
+  export type UserMusicInventoryMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    trackId: string | null
+    equipped: boolean | null
+    createdAt: Date | null
+  }
+
+  export type UserMusicInventoryCountAggregateOutputType = {
+    id: number
+    userId: number
+    trackId: number
+    equipped: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type UserMusicInventoryMinAggregateInputType = {
+    id?: true
+    userId?: true
+    trackId?: true
+    equipped?: true
+    createdAt?: true
+  }
+
+  export type UserMusicInventoryMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    trackId?: true
+    equipped?: true
+    createdAt?: true
+  }
+
+  export type UserMusicInventoryCountAggregateInputType = {
+    id?: true
+    userId?: true
+    trackId?: true
+    equipped?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type UserMusicInventoryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserMusicInventory to aggregate.
+     */
+    where?: UserMusicInventoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserMusicInventories to fetch.
+     */
+    orderBy?: UserMusicInventoryOrderByWithRelationInput | UserMusicInventoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserMusicInventoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserMusicInventories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserMusicInventories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserMusicInventories
+    **/
+    _count?: true | UserMusicInventoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserMusicInventoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserMusicInventoryMaxAggregateInputType
+  }
+
+  export type GetUserMusicInventoryAggregateType<T extends UserMusicInventoryAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserMusicInventory]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserMusicInventory[P]>
+      : GetScalarType<T[P], AggregateUserMusicInventory[P]>
+  }
+
+
+
+
+  export type UserMusicInventoryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserMusicInventoryWhereInput
+    orderBy?: UserMusicInventoryOrderByWithAggregationInput | UserMusicInventoryOrderByWithAggregationInput[]
+    by: UserMusicInventoryScalarFieldEnum[] | UserMusicInventoryScalarFieldEnum
+    having?: UserMusicInventoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserMusicInventoryCountAggregateInputType | true
+    _min?: UserMusicInventoryMinAggregateInputType
+    _max?: UserMusicInventoryMaxAggregateInputType
+  }
+
+  export type UserMusicInventoryGroupByOutputType = {
+    id: string
+    userId: string
+    trackId: string
+    equipped: boolean
+    createdAt: Date
+    _count: UserMusicInventoryCountAggregateOutputType | null
+    _min: UserMusicInventoryMinAggregateOutputType | null
+    _max: UserMusicInventoryMaxAggregateOutputType | null
+  }
+
+  type GetUserMusicInventoryGroupByPayload<T extends UserMusicInventoryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserMusicInventoryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserMusicInventoryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserMusicInventoryGroupByOutputType[P]>
+            : GetScalarType<T[P], UserMusicInventoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserMusicInventorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    trackId?: boolean
+    equipped?: boolean
+    createdAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    track?: boolean | SpinMusicTrackDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userMusicInventory"]>
+
+  export type UserMusicInventorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    trackId?: boolean
+    equipped?: boolean
+    createdAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    track?: boolean | SpinMusicTrackDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userMusicInventory"]>
+
+  export type UserMusicInventorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    trackId?: boolean
+    equipped?: boolean
+    createdAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    track?: boolean | SpinMusicTrackDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userMusicInventory"]>
+
+  export type UserMusicInventorySelectScalar = {
+    id?: boolean
+    userId?: boolean
+    trackId?: boolean
+    equipped?: boolean
+    createdAt?: boolean
+  }
+
+  export type UserMusicInventoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "trackId" | "equipped" | "createdAt", ExtArgs["result"]["userMusicInventory"]>
+  export type UserMusicInventoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    track?: boolean | SpinMusicTrackDefaultArgs<ExtArgs>
+  }
+  export type UserMusicInventoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    track?: boolean | SpinMusicTrackDefaultArgs<ExtArgs>
+  }
+  export type UserMusicInventoryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    track?: boolean | SpinMusicTrackDefaultArgs<ExtArgs>
+  }
+
+  export type $UserMusicInventoryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserMusicInventory"
+    objects: {
+      user: Prisma.$UserProfilePayload<ExtArgs>
+      track: Prisma.$SpinMusicTrackPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      trackId: string
+      equipped: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["userMusicInventory"]>
+    composites: {}
+  }
+
+  type UserMusicInventoryGetPayload<S extends boolean | null | undefined | UserMusicInventoryDefaultArgs> = $Result.GetResult<Prisma.$UserMusicInventoryPayload, S>
+
+  type UserMusicInventoryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserMusicInventoryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserMusicInventoryCountAggregateInputType | true
+    }
+
+  export interface UserMusicInventoryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserMusicInventory'], meta: { name: 'UserMusicInventory' } }
+    /**
+     * Find zero or one UserMusicInventory that matches the filter.
+     * @param {UserMusicInventoryFindUniqueArgs} args - Arguments to find a UserMusicInventory
+     * @example
+     * // Get one UserMusicInventory
+     * const userMusicInventory = await prisma.userMusicInventory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserMusicInventoryFindUniqueArgs>(args: SelectSubset<T, UserMusicInventoryFindUniqueArgs<ExtArgs>>): Prisma__UserMusicInventoryClient<$Result.GetResult<Prisma.$UserMusicInventoryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserMusicInventory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserMusicInventoryFindUniqueOrThrowArgs} args - Arguments to find a UserMusicInventory
+     * @example
+     * // Get one UserMusicInventory
+     * const userMusicInventory = await prisma.userMusicInventory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserMusicInventoryFindUniqueOrThrowArgs>(args: SelectSubset<T, UserMusicInventoryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserMusicInventoryClient<$Result.GetResult<Prisma.$UserMusicInventoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserMusicInventory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserMusicInventoryFindFirstArgs} args - Arguments to find a UserMusicInventory
+     * @example
+     * // Get one UserMusicInventory
+     * const userMusicInventory = await prisma.userMusicInventory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserMusicInventoryFindFirstArgs>(args?: SelectSubset<T, UserMusicInventoryFindFirstArgs<ExtArgs>>): Prisma__UserMusicInventoryClient<$Result.GetResult<Prisma.$UserMusicInventoryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserMusicInventory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserMusicInventoryFindFirstOrThrowArgs} args - Arguments to find a UserMusicInventory
+     * @example
+     * // Get one UserMusicInventory
+     * const userMusicInventory = await prisma.userMusicInventory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserMusicInventoryFindFirstOrThrowArgs>(args?: SelectSubset<T, UserMusicInventoryFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserMusicInventoryClient<$Result.GetResult<Prisma.$UserMusicInventoryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserMusicInventories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserMusicInventoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserMusicInventories
+     * const userMusicInventories = await prisma.userMusicInventory.findMany()
+     * 
+     * // Get first 10 UserMusicInventories
+     * const userMusicInventories = await prisma.userMusicInventory.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userMusicInventoryWithIdOnly = await prisma.userMusicInventory.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserMusicInventoryFindManyArgs>(args?: SelectSubset<T, UserMusicInventoryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserMusicInventoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserMusicInventory.
+     * @param {UserMusicInventoryCreateArgs} args - Arguments to create a UserMusicInventory.
+     * @example
+     * // Create one UserMusicInventory
+     * const UserMusicInventory = await prisma.userMusicInventory.create({
+     *   data: {
+     *     // ... data to create a UserMusicInventory
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserMusicInventoryCreateArgs>(args: SelectSubset<T, UserMusicInventoryCreateArgs<ExtArgs>>): Prisma__UserMusicInventoryClient<$Result.GetResult<Prisma.$UserMusicInventoryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserMusicInventories.
+     * @param {UserMusicInventoryCreateManyArgs} args - Arguments to create many UserMusicInventories.
+     * @example
+     * // Create many UserMusicInventories
+     * const userMusicInventory = await prisma.userMusicInventory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserMusicInventoryCreateManyArgs>(args?: SelectSubset<T, UserMusicInventoryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserMusicInventories and returns the data saved in the database.
+     * @param {UserMusicInventoryCreateManyAndReturnArgs} args - Arguments to create many UserMusicInventories.
+     * @example
+     * // Create many UserMusicInventories
+     * const userMusicInventory = await prisma.userMusicInventory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserMusicInventories and only return the `id`
+     * const userMusicInventoryWithIdOnly = await prisma.userMusicInventory.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserMusicInventoryCreateManyAndReturnArgs>(args?: SelectSubset<T, UserMusicInventoryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserMusicInventoryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserMusicInventory.
+     * @param {UserMusicInventoryDeleteArgs} args - Arguments to delete one UserMusicInventory.
+     * @example
+     * // Delete one UserMusicInventory
+     * const UserMusicInventory = await prisma.userMusicInventory.delete({
+     *   where: {
+     *     // ... filter to delete one UserMusicInventory
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserMusicInventoryDeleteArgs>(args: SelectSubset<T, UserMusicInventoryDeleteArgs<ExtArgs>>): Prisma__UserMusicInventoryClient<$Result.GetResult<Prisma.$UserMusicInventoryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserMusicInventory.
+     * @param {UserMusicInventoryUpdateArgs} args - Arguments to update one UserMusicInventory.
+     * @example
+     * // Update one UserMusicInventory
+     * const userMusicInventory = await prisma.userMusicInventory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserMusicInventoryUpdateArgs>(args: SelectSubset<T, UserMusicInventoryUpdateArgs<ExtArgs>>): Prisma__UserMusicInventoryClient<$Result.GetResult<Prisma.$UserMusicInventoryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserMusicInventories.
+     * @param {UserMusicInventoryDeleteManyArgs} args - Arguments to filter UserMusicInventories to delete.
+     * @example
+     * // Delete a few UserMusicInventories
+     * const { count } = await prisma.userMusicInventory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserMusicInventoryDeleteManyArgs>(args?: SelectSubset<T, UserMusicInventoryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserMusicInventories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserMusicInventoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserMusicInventories
+     * const userMusicInventory = await prisma.userMusicInventory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserMusicInventoryUpdateManyArgs>(args: SelectSubset<T, UserMusicInventoryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserMusicInventories and returns the data updated in the database.
+     * @param {UserMusicInventoryUpdateManyAndReturnArgs} args - Arguments to update many UserMusicInventories.
+     * @example
+     * // Update many UserMusicInventories
+     * const userMusicInventory = await prisma.userMusicInventory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserMusicInventories and only return the `id`
+     * const userMusicInventoryWithIdOnly = await prisma.userMusicInventory.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserMusicInventoryUpdateManyAndReturnArgs>(args: SelectSubset<T, UserMusicInventoryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserMusicInventoryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserMusicInventory.
+     * @param {UserMusicInventoryUpsertArgs} args - Arguments to update or create a UserMusicInventory.
+     * @example
+     * // Update or create a UserMusicInventory
+     * const userMusicInventory = await prisma.userMusicInventory.upsert({
+     *   create: {
+     *     // ... data to create a UserMusicInventory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserMusicInventory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserMusicInventoryUpsertArgs>(args: SelectSubset<T, UserMusicInventoryUpsertArgs<ExtArgs>>): Prisma__UserMusicInventoryClient<$Result.GetResult<Prisma.$UserMusicInventoryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserMusicInventories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserMusicInventoryCountArgs} args - Arguments to filter UserMusicInventories to count.
+     * @example
+     * // Count the number of UserMusicInventories
+     * const count = await prisma.userMusicInventory.count({
+     *   where: {
+     *     // ... the filter for the UserMusicInventories we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserMusicInventoryCountArgs>(
+      args?: Subset<T, UserMusicInventoryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserMusicInventoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserMusicInventory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserMusicInventoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserMusicInventoryAggregateArgs>(args: Subset<T, UserMusicInventoryAggregateArgs>): Prisma.PrismaPromise<GetUserMusicInventoryAggregateType<T>>
+
+    /**
+     * Group by UserMusicInventory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserMusicInventoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserMusicInventoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserMusicInventoryGroupByArgs['orderBy'] }
+        : { orderBy?: UserMusicInventoryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserMusicInventoryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserMusicInventoryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserMusicInventory model
+   */
+  readonly fields: UserMusicInventoryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserMusicInventory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserMusicInventoryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    track<T extends SpinMusicTrackDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SpinMusicTrackDefaultArgs<ExtArgs>>): Prisma__SpinMusicTrackClient<$Result.GetResult<Prisma.$SpinMusicTrackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserMusicInventory model
+   */
+  interface UserMusicInventoryFieldRefs {
+    readonly id: FieldRef<"UserMusicInventory", 'String'>
+    readonly userId: FieldRef<"UserMusicInventory", 'String'>
+    readonly trackId: FieldRef<"UserMusicInventory", 'String'>
+    readonly equipped: FieldRef<"UserMusicInventory", 'Boolean'>
+    readonly createdAt: FieldRef<"UserMusicInventory", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserMusicInventory findUnique
+   */
+  export type UserMusicInventoryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryInclude<ExtArgs> | null
+    /**
+     * Filter, which UserMusicInventory to fetch.
+     */
+    where: UserMusicInventoryWhereUniqueInput
+  }
+
+  /**
+   * UserMusicInventory findUniqueOrThrow
+   */
+  export type UserMusicInventoryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryInclude<ExtArgs> | null
+    /**
+     * Filter, which UserMusicInventory to fetch.
+     */
+    where: UserMusicInventoryWhereUniqueInput
+  }
+
+  /**
+   * UserMusicInventory findFirst
+   */
+  export type UserMusicInventoryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryInclude<ExtArgs> | null
+    /**
+     * Filter, which UserMusicInventory to fetch.
+     */
+    where?: UserMusicInventoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserMusicInventories to fetch.
+     */
+    orderBy?: UserMusicInventoryOrderByWithRelationInput | UserMusicInventoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserMusicInventories.
+     */
+    cursor?: UserMusicInventoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserMusicInventories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserMusicInventories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserMusicInventories.
+     */
+    distinct?: UserMusicInventoryScalarFieldEnum | UserMusicInventoryScalarFieldEnum[]
+  }
+
+  /**
+   * UserMusicInventory findFirstOrThrow
+   */
+  export type UserMusicInventoryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryInclude<ExtArgs> | null
+    /**
+     * Filter, which UserMusicInventory to fetch.
+     */
+    where?: UserMusicInventoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserMusicInventories to fetch.
+     */
+    orderBy?: UserMusicInventoryOrderByWithRelationInput | UserMusicInventoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserMusicInventories.
+     */
+    cursor?: UserMusicInventoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserMusicInventories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserMusicInventories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserMusicInventories.
+     */
+    distinct?: UserMusicInventoryScalarFieldEnum | UserMusicInventoryScalarFieldEnum[]
+  }
+
+  /**
+   * UserMusicInventory findMany
+   */
+  export type UserMusicInventoryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryInclude<ExtArgs> | null
+    /**
+     * Filter, which UserMusicInventories to fetch.
+     */
+    where?: UserMusicInventoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserMusicInventories to fetch.
+     */
+    orderBy?: UserMusicInventoryOrderByWithRelationInput | UserMusicInventoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserMusicInventories.
+     */
+    cursor?: UserMusicInventoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserMusicInventories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserMusicInventories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserMusicInventories.
+     */
+    distinct?: UserMusicInventoryScalarFieldEnum | UserMusicInventoryScalarFieldEnum[]
+  }
+
+  /**
+   * UserMusicInventory create
+   */
+  export type UserMusicInventoryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserMusicInventory.
+     */
+    data: XOR<UserMusicInventoryCreateInput, UserMusicInventoryUncheckedCreateInput>
+  }
+
+  /**
+   * UserMusicInventory createMany
+   */
+  export type UserMusicInventoryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserMusicInventories.
+     */
+    data: UserMusicInventoryCreateManyInput | UserMusicInventoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserMusicInventory createManyAndReturn
+   */
+  export type UserMusicInventoryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserMusicInventories.
+     */
+    data: UserMusicInventoryCreateManyInput | UserMusicInventoryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserMusicInventory update
+   */
+  export type UserMusicInventoryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserMusicInventory.
+     */
+    data: XOR<UserMusicInventoryUpdateInput, UserMusicInventoryUncheckedUpdateInput>
+    /**
+     * Choose, which UserMusicInventory to update.
+     */
+    where: UserMusicInventoryWhereUniqueInput
+  }
+
+  /**
+   * UserMusicInventory updateMany
+   */
+  export type UserMusicInventoryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserMusicInventories.
+     */
+    data: XOR<UserMusicInventoryUpdateManyMutationInput, UserMusicInventoryUncheckedUpdateManyInput>
+    /**
+     * Filter which UserMusicInventories to update
+     */
+    where?: UserMusicInventoryWhereInput
+    /**
+     * Limit how many UserMusicInventories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserMusicInventory updateManyAndReturn
+   */
+  export type UserMusicInventoryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * The data used to update UserMusicInventories.
+     */
+    data: XOR<UserMusicInventoryUpdateManyMutationInput, UserMusicInventoryUncheckedUpdateManyInput>
+    /**
+     * Filter which UserMusicInventories to update
+     */
+    where?: UserMusicInventoryWhereInput
+    /**
+     * Limit how many UserMusicInventories to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserMusicInventory upsert
+   */
+  export type UserMusicInventoryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserMusicInventory to update in case it exists.
+     */
+    where: UserMusicInventoryWhereUniqueInput
+    /**
+     * In case the UserMusicInventory found by the `where` argument doesn't exist, create a new UserMusicInventory with this data.
+     */
+    create: XOR<UserMusicInventoryCreateInput, UserMusicInventoryUncheckedCreateInput>
+    /**
+     * In case the UserMusicInventory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserMusicInventoryUpdateInput, UserMusicInventoryUncheckedUpdateInput>
+  }
+
+  /**
+   * UserMusicInventory delete
+   */
+  export type UserMusicInventoryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryInclude<ExtArgs> | null
+    /**
+     * Filter which UserMusicInventory to delete.
+     */
+    where: UserMusicInventoryWhereUniqueInput
+  }
+
+  /**
+   * UserMusicInventory deleteMany
+   */
+  export type UserMusicInventoryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserMusicInventories to delete
+     */
+    where?: UserMusicInventoryWhereInput
+    /**
+     * Limit how many UserMusicInventories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserMusicInventory without action
+   */
+  export type UserMusicInventoryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserMusicInventory
+     */
+    select?: UserMusicInventorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserMusicInventory
+     */
+    omit?: UserMusicInventoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserMusicInventoryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SpinCollectionItem
+   */
+
+  export type AggregateSpinCollectionItem = {
+    _count: SpinCollectionItemCountAggregateOutputType | null
+    _avg: SpinCollectionItemAvgAggregateOutputType | null
+    _sum: SpinCollectionItemSumAggregateOutputType | null
+    _min: SpinCollectionItemMinAggregateOutputType | null
+    _max: SpinCollectionItemMaxAggregateOutputType | null
+  }
+
+  export type SpinCollectionItemAvgAggregateOutputType = {
+    tier: number | null
+  }
+
+  export type SpinCollectionItemSumAggregateOutputType = {
+    tier: number | null
+  }
+
+  export type SpinCollectionItemMinAggregateOutputType = {
+    id: string | null
+    slug: string | null
+    name: string | null
+    type: $Enums.SpinItemType | null
+    tier: number | null
+    priceWei: string | null
+    priceAsset: string | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SpinCollectionItemMaxAggregateOutputType = {
+    id: string | null
+    slug: string | null
+    name: string | null
+    type: $Enums.SpinItemType | null
+    tier: number | null
+    priceWei: string | null
+    priceAsset: string | null
+    active: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SpinCollectionItemCountAggregateOutputType = {
+    id: number
+    slug: number
+    name: number
+    type: number
+    tier: number
+    priceWei: number
+    priceAsset: number
+    effect: number
+    active: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SpinCollectionItemAvgAggregateInputType = {
+    tier?: true
+  }
+
+  export type SpinCollectionItemSumAggregateInputType = {
+    tier?: true
+  }
+
+  export type SpinCollectionItemMinAggregateInputType = {
+    id?: true
+    slug?: true
+    name?: true
+    type?: true
+    tier?: true
+    priceWei?: true
+    priceAsset?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SpinCollectionItemMaxAggregateInputType = {
+    id?: true
+    slug?: true
+    name?: true
+    type?: true
+    tier?: true
+    priceWei?: true
+    priceAsset?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SpinCollectionItemCountAggregateInputType = {
+    id?: true
+    slug?: true
+    name?: true
+    type?: true
+    tier?: true
+    priceWei?: true
+    priceAsset?: true
+    effect?: true
+    active?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SpinCollectionItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SpinCollectionItem to aggregate.
+     */
+    where?: SpinCollectionItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinCollectionItems to fetch.
+     */
+    orderBy?: SpinCollectionItemOrderByWithRelationInput | SpinCollectionItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SpinCollectionItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinCollectionItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinCollectionItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SpinCollectionItems
+    **/
+    _count?: true | SpinCollectionItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SpinCollectionItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SpinCollectionItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SpinCollectionItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SpinCollectionItemMaxAggregateInputType
+  }
+
+  export type GetSpinCollectionItemAggregateType<T extends SpinCollectionItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateSpinCollectionItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSpinCollectionItem[P]>
+      : GetScalarType<T[P], AggregateSpinCollectionItem[P]>
+  }
+
+
+
+
+  export type SpinCollectionItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SpinCollectionItemWhereInput
+    orderBy?: SpinCollectionItemOrderByWithAggregationInput | SpinCollectionItemOrderByWithAggregationInput[]
+    by: SpinCollectionItemScalarFieldEnum[] | SpinCollectionItemScalarFieldEnum
+    having?: SpinCollectionItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SpinCollectionItemCountAggregateInputType | true
+    _avg?: SpinCollectionItemAvgAggregateInputType
+    _sum?: SpinCollectionItemSumAggregateInputType
+    _min?: SpinCollectionItemMinAggregateInputType
+    _max?: SpinCollectionItemMaxAggregateInputType
+  }
+
+  export type SpinCollectionItemGroupByOutputType = {
+    id: string
+    slug: string
+    name: string
+    type: $Enums.SpinItemType
+    tier: number
+    priceWei: string
+    priceAsset: string
+    effect: JsonValue | null
+    active: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: SpinCollectionItemCountAggregateOutputType | null
+    _avg: SpinCollectionItemAvgAggregateOutputType | null
+    _sum: SpinCollectionItemSumAggregateOutputType | null
+    _min: SpinCollectionItemMinAggregateOutputType | null
+    _max: SpinCollectionItemMaxAggregateOutputType | null
+  }
+
+  type GetSpinCollectionItemGroupByPayload<T extends SpinCollectionItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SpinCollectionItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SpinCollectionItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SpinCollectionItemGroupByOutputType[P]>
+            : GetScalarType<T[P], SpinCollectionItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SpinCollectionItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slug?: boolean
+    name?: boolean
+    type?: boolean
+    tier?: boolean
+    priceWei?: boolean
+    priceAsset?: boolean
+    effect?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    owners?: boolean | SpinCollectionItem$ownersArgs<ExtArgs>
+    _count?: boolean | SpinCollectionItemCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["spinCollectionItem"]>
+
+  export type SpinCollectionItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slug?: boolean
+    name?: boolean
+    type?: boolean
+    tier?: boolean
+    priceWei?: boolean
+    priceAsset?: boolean
+    effect?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["spinCollectionItem"]>
+
+  export type SpinCollectionItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    slug?: boolean
+    name?: boolean
+    type?: boolean
+    tier?: boolean
+    priceWei?: boolean
+    priceAsset?: boolean
+    effect?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["spinCollectionItem"]>
+
+  export type SpinCollectionItemSelectScalar = {
+    id?: boolean
+    slug?: boolean
+    name?: boolean
+    type?: boolean
+    tier?: boolean
+    priceWei?: boolean
+    priceAsset?: boolean
+    effect?: boolean
+    active?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SpinCollectionItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "slug" | "name" | "type" | "tier" | "priceWei" | "priceAsset" | "effect" | "active" | "createdAt" | "updatedAt", ExtArgs["result"]["spinCollectionItem"]>
+  export type SpinCollectionItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    owners?: boolean | SpinCollectionItem$ownersArgs<ExtArgs>
+    _count?: boolean | SpinCollectionItemCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SpinCollectionItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type SpinCollectionItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $SpinCollectionItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SpinCollectionItem"
+    objects: {
+      owners: Prisma.$UserInventoryItemPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      slug: string
+      name: string
+      type: $Enums.SpinItemType
+      tier: number
+      priceWei: string
+      priceAsset: string
+      effect: Prisma.JsonValue | null
+      active: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["spinCollectionItem"]>
+    composites: {}
+  }
+
+  type SpinCollectionItemGetPayload<S extends boolean | null | undefined | SpinCollectionItemDefaultArgs> = $Result.GetResult<Prisma.$SpinCollectionItemPayload, S>
+
+  type SpinCollectionItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SpinCollectionItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SpinCollectionItemCountAggregateInputType | true
+    }
+
+  export interface SpinCollectionItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SpinCollectionItem'], meta: { name: 'SpinCollectionItem' } }
+    /**
+     * Find zero or one SpinCollectionItem that matches the filter.
+     * @param {SpinCollectionItemFindUniqueArgs} args - Arguments to find a SpinCollectionItem
+     * @example
+     * // Get one SpinCollectionItem
+     * const spinCollectionItem = await prisma.spinCollectionItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SpinCollectionItemFindUniqueArgs>(args: SelectSubset<T, SpinCollectionItemFindUniqueArgs<ExtArgs>>): Prisma__SpinCollectionItemClient<$Result.GetResult<Prisma.$SpinCollectionItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SpinCollectionItem that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SpinCollectionItemFindUniqueOrThrowArgs} args - Arguments to find a SpinCollectionItem
+     * @example
+     * // Get one SpinCollectionItem
+     * const spinCollectionItem = await prisma.spinCollectionItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SpinCollectionItemFindUniqueOrThrowArgs>(args: SelectSubset<T, SpinCollectionItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SpinCollectionItemClient<$Result.GetResult<Prisma.$SpinCollectionItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SpinCollectionItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinCollectionItemFindFirstArgs} args - Arguments to find a SpinCollectionItem
+     * @example
+     * // Get one SpinCollectionItem
+     * const spinCollectionItem = await prisma.spinCollectionItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SpinCollectionItemFindFirstArgs>(args?: SelectSubset<T, SpinCollectionItemFindFirstArgs<ExtArgs>>): Prisma__SpinCollectionItemClient<$Result.GetResult<Prisma.$SpinCollectionItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SpinCollectionItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinCollectionItemFindFirstOrThrowArgs} args - Arguments to find a SpinCollectionItem
+     * @example
+     * // Get one SpinCollectionItem
+     * const spinCollectionItem = await prisma.spinCollectionItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SpinCollectionItemFindFirstOrThrowArgs>(args?: SelectSubset<T, SpinCollectionItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__SpinCollectionItemClient<$Result.GetResult<Prisma.$SpinCollectionItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SpinCollectionItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinCollectionItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SpinCollectionItems
+     * const spinCollectionItems = await prisma.spinCollectionItem.findMany()
+     * 
+     * // Get first 10 SpinCollectionItems
+     * const spinCollectionItems = await prisma.spinCollectionItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const spinCollectionItemWithIdOnly = await prisma.spinCollectionItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SpinCollectionItemFindManyArgs>(args?: SelectSubset<T, SpinCollectionItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinCollectionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SpinCollectionItem.
+     * @param {SpinCollectionItemCreateArgs} args - Arguments to create a SpinCollectionItem.
+     * @example
+     * // Create one SpinCollectionItem
+     * const SpinCollectionItem = await prisma.spinCollectionItem.create({
+     *   data: {
+     *     // ... data to create a SpinCollectionItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends SpinCollectionItemCreateArgs>(args: SelectSubset<T, SpinCollectionItemCreateArgs<ExtArgs>>): Prisma__SpinCollectionItemClient<$Result.GetResult<Prisma.$SpinCollectionItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SpinCollectionItems.
+     * @param {SpinCollectionItemCreateManyArgs} args - Arguments to create many SpinCollectionItems.
+     * @example
+     * // Create many SpinCollectionItems
+     * const spinCollectionItem = await prisma.spinCollectionItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SpinCollectionItemCreateManyArgs>(args?: SelectSubset<T, SpinCollectionItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SpinCollectionItems and returns the data saved in the database.
+     * @param {SpinCollectionItemCreateManyAndReturnArgs} args - Arguments to create many SpinCollectionItems.
+     * @example
+     * // Create many SpinCollectionItems
+     * const spinCollectionItem = await prisma.spinCollectionItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SpinCollectionItems and only return the `id`
+     * const spinCollectionItemWithIdOnly = await prisma.spinCollectionItem.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SpinCollectionItemCreateManyAndReturnArgs>(args?: SelectSubset<T, SpinCollectionItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinCollectionItemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SpinCollectionItem.
+     * @param {SpinCollectionItemDeleteArgs} args - Arguments to delete one SpinCollectionItem.
+     * @example
+     * // Delete one SpinCollectionItem
+     * const SpinCollectionItem = await prisma.spinCollectionItem.delete({
+     *   where: {
+     *     // ... filter to delete one SpinCollectionItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SpinCollectionItemDeleteArgs>(args: SelectSubset<T, SpinCollectionItemDeleteArgs<ExtArgs>>): Prisma__SpinCollectionItemClient<$Result.GetResult<Prisma.$SpinCollectionItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SpinCollectionItem.
+     * @param {SpinCollectionItemUpdateArgs} args - Arguments to update one SpinCollectionItem.
+     * @example
+     * // Update one SpinCollectionItem
+     * const spinCollectionItem = await prisma.spinCollectionItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SpinCollectionItemUpdateArgs>(args: SelectSubset<T, SpinCollectionItemUpdateArgs<ExtArgs>>): Prisma__SpinCollectionItemClient<$Result.GetResult<Prisma.$SpinCollectionItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SpinCollectionItems.
+     * @param {SpinCollectionItemDeleteManyArgs} args - Arguments to filter SpinCollectionItems to delete.
+     * @example
+     * // Delete a few SpinCollectionItems
+     * const { count } = await prisma.spinCollectionItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SpinCollectionItemDeleteManyArgs>(args?: SelectSubset<T, SpinCollectionItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SpinCollectionItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinCollectionItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SpinCollectionItems
+     * const spinCollectionItem = await prisma.spinCollectionItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SpinCollectionItemUpdateManyArgs>(args: SelectSubset<T, SpinCollectionItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SpinCollectionItems and returns the data updated in the database.
+     * @param {SpinCollectionItemUpdateManyAndReturnArgs} args - Arguments to update many SpinCollectionItems.
+     * @example
+     * // Update many SpinCollectionItems
+     * const spinCollectionItem = await prisma.spinCollectionItem.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SpinCollectionItems and only return the `id`
+     * const spinCollectionItemWithIdOnly = await prisma.spinCollectionItem.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SpinCollectionItemUpdateManyAndReturnArgs>(args: SelectSubset<T, SpinCollectionItemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinCollectionItemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SpinCollectionItem.
+     * @param {SpinCollectionItemUpsertArgs} args - Arguments to update or create a SpinCollectionItem.
+     * @example
+     * // Update or create a SpinCollectionItem
+     * const spinCollectionItem = await prisma.spinCollectionItem.upsert({
+     *   create: {
+     *     // ... data to create a SpinCollectionItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SpinCollectionItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SpinCollectionItemUpsertArgs>(args: SelectSubset<T, SpinCollectionItemUpsertArgs<ExtArgs>>): Prisma__SpinCollectionItemClient<$Result.GetResult<Prisma.$SpinCollectionItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SpinCollectionItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinCollectionItemCountArgs} args - Arguments to filter SpinCollectionItems to count.
+     * @example
+     * // Count the number of SpinCollectionItems
+     * const count = await prisma.spinCollectionItem.count({
+     *   where: {
+     *     // ... the filter for the SpinCollectionItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends SpinCollectionItemCountArgs>(
+      args?: Subset<T, SpinCollectionItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SpinCollectionItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SpinCollectionItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinCollectionItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SpinCollectionItemAggregateArgs>(args: Subset<T, SpinCollectionItemAggregateArgs>): Prisma.PrismaPromise<GetSpinCollectionItemAggregateType<T>>
+
+    /**
+     * Group by SpinCollectionItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinCollectionItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SpinCollectionItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SpinCollectionItemGroupByArgs['orderBy'] }
+        : { orderBy?: SpinCollectionItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SpinCollectionItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSpinCollectionItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SpinCollectionItem model
+   */
+  readonly fields: SpinCollectionItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SpinCollectionItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SpinCollectionItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    owners<T extends SpinCollectionItem$ownersArgs<ExtArgs> = {}>(args?: Subset<T, SpinCollectionItem$ownersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserInventoryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SpinCollectionItem model
+   */
+  interface SpinCollectionItemFieldRefs {
+    readonly id: FieldRef<"SpinCollectionItem", 'String'>
+    readonly slug: FieldRef<"SpinCollectionItem", 'String'>
+    readonly name: FieldRef<"SpinCollectionItem", 'String'>
+    readonly type: FieldRef<"SpinCollectionItem", 'SpinItemType'>
+    readonly tier: FieldRef<"SpinCollectionItem", 'Int'>
+    readonly priceWei: FieldRef<"SpinCollectionItem", 'String'>
+    readonly priceAsset: FieldRef<"SpinCollectionItem", 'String'>
+    readonly effect: FieldRef<"SpinCollectionItem", 'Json'>
+    readonly active: FieldRef<"SpinCollectionItem", 'Boolean'>
+    readonly createdAt: FieldRef<"SpinCollectionItem", 'DateTime'>
+    readonly updatedAt: FieldRef<"SpinCollectionItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SpinCollectionItem findUnique
+   */
+  export type SpinCollectionItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinCollectionItem
+     */
+    select?: SpinCollectionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinCollectionItem
+     */
+    omit?: SpinCollectionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinCollectionItemInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinCollectionItem to fetch.
+     */
+    where: SpinCollectionItemWhereUniqueInput
+  }
+
+  /**
+   * SpinCollectionItem findUniqueOrThrow
+   */
+  export type SpinCollectionItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinCollectionItem
+     */
+    select?: SpinCollectionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinCollectionItem
+     */
+    omit?: SpinCollectionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinCollectionItemInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinCollectionItem to fetch.
+     */
+    where: SpinCollectionItemWhereUniqueInput
+  }
+
+  /**
+   * SpinCollectionItem findFirst
+   */
+  export type SpinCollectionItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinCollectionItem
+     */
+    select?: SpinCollectionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinCollectionItem
+     */
+    omit?: SpinCollectionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinCollectionItemInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinCollectionItem to fetch.
+     */
+    where?: SpinCollectionItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinCollectionItems to fetch.
+     */
+    orderBy?: SpinCollectionItemOrderByWithRelationInput | SpinCollectionItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SpinCollectionItems.
+     */
+    cursor?: SpinCollectionItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinCollectionItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinCollectionItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinCollectionItems.
+     */
+    distinct?: SpinCollectionItemScalarFieldEnum | SpinCollectionItemScalarFieldEnum[]
+  }
+
+  /**
+   * SpinCollectionItem findFirstOrThrow
+   */
+  export type SpinCollectionItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinCollectionItem
+     */
+    select?: SpinCollectionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinCollectionItem
+     */
+    omit?: SpinCollectionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinCollectionItemInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinCollectionItem to fetch.
+     */
+    where?: SpinCollectionItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinCollectionItems to fetch.
+     */
+    orderBy?: SpinCollectionItemOrderByWithRelationInput | SpinCollectionItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SpinCollectionItems.
+     */
+    cursor?: SpinCollectionItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinCollectionItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinCollectionItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinCollectionItems.
+     */
+    distinct?: SpinCollectionItemScalarFieldEnum | SpinCollectionItemScalarFieldEnum[]
+  }
+
+  /**
+   * SpinCollectionItem findMany
+   */
+  export type SpinCollectionItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinCollectionItem
+     */
+    select?: SpinCollectionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinCollectionItem
+     */
+    omit?: SpinCollectionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinCollectionItemInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinCollectionItems to fetch.
+     */
+    where?: SpinCollectionItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinCollectionItems to fetch.
+     */
+    orderBy?: SpinCollectionItemOrderByWithRelationInput | SpinCollectionItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SpinCollectionItems.
+     */
+    cursor?: SpinCollectionItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinCollectionItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinCollectionItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinCollectionItems.
+     */
+    distinct?: SpinCollectionItemScalarFieldEnum | SpinCollectionItemScalarFieldEnum[]
+  }
+
+  /**
+   * SpinCollectionItem create
+   */
+  export type SpinCollectionItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinCollectionItem
+     */
+    select?: SpinCollectionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinCollectionItem
+     */
+    omit?: SpinCollectionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinCollectionItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SpinCollectionItem.
+     */
+    data: XOR<SpinCollectionItemCreateInput, SpinCollectionItemUncheckedCreateInput>
+  }
+
+  /**
+   * SpinCollectionItem createMany
+   */
+  export type SpinCollectionItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SpinCollectionItems.
+     */
+    data: SpinCollectionItemCreateManyInput | SpinCollectionItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SpinCollectionItem createManyAndReturn
+   */
+  export type SpinCollectionItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinCollectionItem
+     */
+    select?: SpinCollectionItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinCollectionItem
+     */
+    omit?: SpinCollectionItemOmit<ExtArgs> | null
+    /**
+     * The data used to create many SpinCollectionItems.
+     */
+    data: SpinCollectionItemCreateManyInput | SpinCollectionItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SpinCollectionItem update
+   */
+  export type SpinCollectionItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinCollectionItem
+     */
+    select?: SpinCollectionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinCollectionItem
+     */
+    omit?: SpinCollectionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinCollectionItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SpinCollectionItem.
+     */
+    data: XOR<SpinCollectionItemUpdateInput, SpinCollectionItemUncheckedUpdateInput>
+    /**
+     * Choose, which SpinCollectionItem to update.
+     */
+    where: SpinCollectionItemWhereUniqueInput
+  }
+
+  /**
+   * SpinCollectionItem updateMany
+   */
+  export type SpinCollectionItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SpinCollectionItems.
+     */
+    data: XOR<SpinCollectionItemUpdateManyMutationInput, SpinCollectionItemUncheckedUpdateManyInput>
+    /**
+     * Filter which SpinCollectionItems to update
+     */
+    where?: SpinCollectionItemWhereInput
+    /**
+     * Limit how many SpinCollectionItems to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SpinCollectionItem updateManyAndReturn
+   */
+  export type SpinCollectionItemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinCollectionItem
+     */
+    select?: SpinCollectionItemSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinCollectionItem
+     */
+    omit?: SpinCollectionItemOmit<ExtArgs> | null
+    /**
+     * The data used to update SpinCollectionItems.
+     */
+    data: XOR<SpinCollectionItemUpdateManyMutationInput, SpinCollectionItemUncheckedUpdateManyInput>
+    /**
+     * Filter which SpinCollectionItems to update
+     */
+    where?: SpinCollectionItemWhereInput
+    /**
+     * Limit how many SpinCollectionItems to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SpinCollectionItem upsert
+   */
+  export type SpinCollectionItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinCollectionItem
+     */
+    select?: SpinCollectionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinCollectionItem
+     */
+    omit?: SpinCollectionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinCollectionItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SpinCollectionItem to update in case it exists.
+     */
+    where: SpinCollectionItemWhereUniqueInput
+    /**
+     * In case the SpinCollectionItem found by the `where` argument doesn't exist, create a new SpinCollectionItem with this data.
+     */
+    create: XOR<SpinCollectionItemCreateInput, SpinCollectionItemUncheckedCreateInput>
+    /**
+     * In case the SpinCollectionItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SpinCollectionItemUpdateInput, SpinCollectionItemUncheckedUpdateInput>
+  }
+
+  /**
+   * SpinCollectionItem delete
+   */
+  export type SpinCollectionItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinCollectionItem
+     */
+    select?: SpinCollectionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinCollectionItem
+     */
+    omit?: SpinCollectionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinCollectionItemInclude<ExtArgs> | null
+    /**
+     * Filter which SpinCollectionItem to delete.
+     */
+    where: SpinCollectionItemWhereUniqueInput
+  }
+
+  /**
+   * SpinCollectionItem deleteMany
+   */
+  export type SpinCollectionItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SpinCollectionItems to delete
+     */
+    where?: SpinCollectionItemWhereInput
+    /**
+     * Limit how many SpinCollectionItems to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SpinCollectionItem.owners
+   */
+  export type SpinCollectionItem$ownersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemInclude<ExtArgs> | null
+    where?: UserInventoryItemWhereInput
+    orderBy?: UserInventoryItemOrderByWithRelationInput | UserInventoryItemOrderByWithRelationInput[]
+    cursor?: UserInventoryItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserInventoryItemScalarFieldEnum | UserInventoryItemScalarFieldEnum[]
+  }
+
+  /**
+   * SpinCollectionItem without action
+   */
+  export type SpinCollectionItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinCollectionItem
+     */
+    select?: SpinCollectionItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinCollectionItem
+     */
+    omit?: SpinCollectionItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinCollectionItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model UserInventoryItem
+   */
+
+  export type AggregateUserInventoryItem = {
+    _count: UserInventoryItemCountAggregateOutputType | null
+    _min: UserInventoryItemMinAggregateOutputType | null
+    _max: UserInventoryItemMaxAggregateOutputType | null
+  }
+
+  export type UserInventoryItemMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    itemId: string | null
+    equipped: boolean | null
+    createdAt: Date | null
+  }
+
+  export type UserInventoryItemMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    itemId: string | null
+    equipped: boolean | null
+    createdAt: Date | null
+  }
+
+  export type UserInventoryItemCountAggregateOutputType = {
+    id: number
+    userId: number
+    itemId: number
+    equipped: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type UserInventoryItemMinAggregateInputType = {
+    id?: true
+    userId?: true
+    itemId?: true
+    equipped?: true
+    createdAt?: true
+  }
+
+  export type UserInventoryItemMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    itemId?: true
+    equipped?: true
+    createdAt?: true
+  }
+
+  export type UserInventoryItemCountAggregateInputType = {
+    id?: true
+    userId?: true
+    itemId?: true
+    equipped?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type UserInventoryItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserInventoryItem to aggregate.
+     */
+    where?: UserInventoryItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserInventoryItems to fetch.
+     */
+    orderBy?: UserInventoryItemOrderByWithRelationInput | UserInventoryItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserInventoryItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserInventoryItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserInventoryItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserInventoryItems
+    **/
+    _count?: true | UserInventoryItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserInventoryItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserInventoryItemMaxAggregateInputType
+  }
+
+  export type GetUserInventoryItemAggregateType<T extends UserInventoryItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserInventoryItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserInventoryItem[P]>
+      : GetScalarType<T[P], AggregateUserInventoryItem[P]>
+  }
+
+
+
+
+  export type UserInventoryItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserInventoryItemWhereInput
+    orderBy?: UserInventoryItemOrderByWithAggregationInput | UserInventoryItemOrderByWithAggregationInput[]
+    by: UserInventoryItemScalarFieldEnum[] | UserInventoryItemScalarFieldEnum
+    having?: UserInventoryItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserInventoryItemCountAggregateInputType | true
+    _min?: UserInventoryItemMinAggregateInputType
+    _max?: UserInventoryItemMaxAggregateInputType
+  }
+
+  export type UserInventoryItemGroupByOutputType = {
+    id: string
+    userId: string
+    itemId: string
+    equipped: boolean
+    createdAt: Date
+    _count: UserInventoryItemCountAggregateOutputType | null
+    _min: UserInventoryItemMinAggregateOutputType | null
+    _max: UserInventoryItemMaxAggregateOutputType | null
+  }
+
+  type GetUserInventoryItemGroupByPayload<T extends UserInventoryItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserInventoryItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserInventoryItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserInventoryItemGroupByOutputType[P]>
+            : GetScalarType<T[P], UserInventoryItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserInventoryItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    itemId?: boolean
+    equipped?: boolean
+    createdAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    item?: boolean | SpinCollectionItemDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userInventoryItem"]>
+
+  export type UserInventoryItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    itemId?: boolean
+    equipped?: boolean
+    createdAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    item?: boolean | SpinCollectionItemDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userInventoryItem"]>
+
+  export type UserInventoryItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    itemId?: boolean
+    equipped?: boolean
+    createdAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    item?: boolean | SpinCollectionItemDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userInventoryItem"]>
+
+  export type UserInventoryItemSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    itemId?: boolean
+    equipped?: boolean
+    createdAt?: boolean
+  }
+
+  export type UserInventoryItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "itemId" | "equipped" | "createdAt", ExtArgs["result"]["userInventoryItem"]>
+  export type UserInventoryItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    item?: boolean | SpinCollectionItemDefaultArgs<ExtArgs>
+  }
+  export type UserInventoryItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    item?: boolean | SpinCollectionItemDefaultArgs<ExtArgs>
+  }
+  export type UserInventoryItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    item?: boolean | SpinCollectionItemDefaultArgs<ExtArgs>
+  }
+
+  export type $UserInventoryItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserInventoryItem"
+    objects: {
+      user: Prisma.$UserProfilePayload<ExtArgs>
+      item: Prisma.$SpinCollectionItemPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      itemId: string
+      equipped: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["userInventoryItem"]>
+    composites: {}
+  }
+
+  type UserInventoryItemGetPayload<S extends boolean | null | undefined | UserInventoryItemDefaultArgs> = $Result.GetResult<Prisma.$UserInventoryItemPayload, S>
+
+  type UserInventoryItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserInventoryItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserInventoryItemCountAggregateInputType | true
+    }
+
+  export interface UserInventoryItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserInventoryItem'], meta: { name: 'UserInventoryItem' } }
+    /**
+     * Find zero or one UserInventoryItem that matches the filter.
+     * @param {UserInventoryItemFindUniqueArgs} args - Arguments to find a UserInventoryItem
+     * @example
+     * // Get one UserInventoryItem
+     * const userInventoryItem = await prisma.userInventoryItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserInventoryItemFindUniqueArgs>(args: SelectSubset<T, UserInventoryItemFindUniqueArgs<ExtArgs>>): Prisma__UserInventoryItemClient<$Result.GetResult<Prisma.$UserInventoryItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserInventoryItem that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserInventoryItemFindUniqueOrThrowArgs} args - Arguments to find a UserInventoryItem
+     * @example
+     * // Get one UserInventoryItem
+     * const userInventoryItem = await prisma.userInventoryItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserInventoryItemFindUniqueOrThrowArgs>(args: SelectSubset<T, UserInventoryItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserInventoryItemClient<$Result.GetResult<Prisma.$UserInventoryItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserInventoryItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserInventoryItemFindFirstArgs} args - Arguments to find a UserInventoryItem
+     * @example
+     * // Get one UserInventoryItem
+     * const userInventoryItem = await prisma.userInventoryItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserInventoryItemFindFirstArgs>(args?: SelectSubset<T, UserInventoryItemFindFirstArgs<ExtArgs>>): Prisma__UserInventoryItemClient<$Result.GetResult<Prisma.$UserInventoryItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserInventoryItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserInventoryItemFindFirstOrThrowArgs} args - Arguments to find a UserInventoryItem
+     * @example
+     * // Get one UserInventoryItem
+     * const userInventoryItem = await prisma.userInventoryItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserInventoryItemFindFirstOrThrowArgs>(args?: SelectSubset<T, UserInventoryItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserInventoryItemClient<$Result.GetResult<Prisma.$UserInventoryItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserInventoryItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserInventoryItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserInventoryItems
+     * const userInventoryItems = await prisma.userInventoryItem.findMany()
+     * 
+     * // Get first 10 UserInventoryItems
+     * const userInventoryItems = await prisma.userInventoryItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userInventoryItemWithIdOnly = await prisma.userInventoryItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserInventoryItemFindManyArgs>(args?: SelectSubset<T, UserInventoryItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserInventoryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserInventoryItem.
+     * @param {UserInventoryItemCreateArgs} args - Arguments to create a UserInventoryItem.
+     * @example
+     * // Create one UserInventoryItem
+     * const UserInventoryItem = await prisma.userInventoryItem.create({
+     *   data: {
+     *     // ... data to create a UserInventoryItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserInventoryItemCreateArgs>(args: SelectSubset<T, UserInventoryItemCreateArgs<ExtArgs>>): Prisma__UserInventoryItemClient<$Result.GetResult<Prisma.$UserInventoryItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserInventoryItems.
+     * @param {UserInventoryItemCreateManyArgs} args - Arguments to create many UserInventoryItems.
+     * @example
+     * // Create many UserInventoryItems
+     * const userInventoryItem = await prisma.userInventoryItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserInventoryItemCreateManyArgs>(args?: SelectSubset<T, UserInventoryItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many UserInventoryItems and returns the data saved in the database.
+     * @param {UserInventoryItemCreateManyAndReturnArgs} args - Arguments to create many UserInventoryItems.
+     * @example
+     * // Create many UserInventoryItems
+     * const userInventoryItem = await prisma.userInventoryItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many UserInventoryItems and only return the `id`
+     * const userInventoryItemWithIdOnly = await prisma.userInventoryItem.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends UserInventoryItemCreateManyAndReturnArgs>(args?: SelectSubset<T, UserInventoryItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserInventoryItemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a UserInventoryItem.
+     * @param {UserInventoryItemDeleteArgs} args - Arguments to delete one UserInventoryItem.
+     * @example
+     * // Delete one UserInventoryItem
+     * const UserInventoryItem = await prisma.userInventoryItem.delete({
+     *   where: {
+     *     // ... filter to delete one UserInventoryItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserInventoryItemDeleteArgs>(args: SelectSubset<T, UserInventoryItemDeleteArgs<ExtArgs>>): Prisma__UserInventoryItemClient<$Result.GetResult<Prisma.$UserInventoryItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserInventoryItem.
+     * @param {UserInventoryItemUpdateArgs} args - Arguments to update one UserInventoryItem.
+     * @example
+     * // Update one UserInventoryItem
+     * const userInventoryItem = await prisma.userInventoryItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserInventoryItemUpdateArgs>(args: SelectSubset<T, UserInventoryItemUpdateArgs<ExtArgs>>): Prisma__UserInventoryItemClient<$Result.GetResult<Prisma.$UserInventoryItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserInventoryItems.
+     * @param {UserInventoryItemDeleteManyArgs} args - Arguments to filter UserInventoryItems to delete.
+     * @example
+     * // Delete a few UserInventoryItems
+     * const { count } = await prisma.userInventoryItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserInventoryItemDeleteManyArgs>(args?: SelectSubset<T, UserInventoryItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserInventoryItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserInventoryItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserInventoryItems
+     * const userInventoryItem = await prisma.userInventoryItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserInventoryItemUpdateManyArgs>(args: SelectSubset<T, UserInventoryItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserInventoryItems and returns the data updated in the database.
+     * @param {UserInventoryItemUpdateManyAndReturnArgs} args - Arguments to update many UserInventoryItems.
+     * @example
+     * // Update many UserInventoryItems
+     * const userInventoryItem = await prisma.userInventoryItem.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more UserInventoryItems and only return the `id`
+     * const userInventoryItemWithIdOnly = await prisma.userInventoryItem.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends UserInventoryItemUpdateManyAndReturnArgs>(args: SelectSubset<T, UserInventoryItemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserInventoryItemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one UserInventoryItem.
+     * @param {UserInventoryItemUpsertArgs} args - Arguments to update or create a UserInventoryItem.
+     * @example
+     * // Update or create a UserInventoryItem
+     * const userInventoryItem = await prisma.userInventoryItem.upsert({
+     *   create: {
+     *     // ... data to create a UserInventoryItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserInventoryItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserInventoryItemUpsertArgs>(args: SelectSubset<T, UserInventoryItemUpsertArgs<ExtArgs>>): Prisma__UserInventoryItemClient<$Result.GetResult<Prisma.$UserInventoryItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of UserInventoryItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserInventoryItemCountArgs} args - Arguments to filter UserInventoryItems to count.
+     * @example
+     * // Count the number of UserInventoryItems
+     * const count = await prisma.userInventoryItem.count({
+     *   where: {
+     *     // ... the filter for the UserInventoryItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserInventoryItemCountArgs>(
+      args?: Subset<T, UserInventoryItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserInventoryItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserInventoryItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserInventoryItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserInventoryItemAggregateArgs>(args: Subset<T, UserInventoryItemAggregateArgs>): Prisma.PrismaPromise<GetUserInventoryItemAggregateType<T>>
+
+    /**
+     * Group by UserInventoryItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserInventoryItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserInventoryItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserInventoryItemGroupByArgs['orderBy'] }
+        : { orderBy?: UserInventoryItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserInventoryItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserInventoryItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserInventoryItem model
+   */
+  readonly fields: UserInventoryItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserInventoryItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserInventoryItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    item<T extends SpinCollectionItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SpinCollectionItemDefaultArgs<ExtArgs>>): Prisma__SpinCollectionItemClient<$Result.GetResult<Prisma.$SpinCollectionItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserInventoryItem model
+   */
+  interface UserInventoryItemFieldRefs {
+    readonly id: FieldRef<"UserInventoryItem", 'String'>
+    readonly userId: FieldRef<"UserInventoryItem", 'String'>
+    readonly itemId: FieldRef<"UserInventoryItem", 'String'>
+    readonly equipped: FieldRef<"UserInventoryItem", 'Boolean'>
+    readonly createdAt: FieldRef<"UserInventoryItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserInventoryItem findUnique
+   */
+  export type UserInventoryItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemInclude<ExtArgs> | null
+    /**
+     * Filter, which UserInventoryItem to fetch.
+     */
+    where: UserInventoryItemWhereUniqueInput
+  }
+
+  /**
+   * UserInventoryItem findUniqueOrThrow
+   */
+  export type UserInventoryItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemInclude<ExtArgs> | null
+    /**
+     * Filter, which UserInventoryItem to fetch.
+     */
+    where: UserInventoryItemWhereUniqueInput
+  }
+
+  /**
+   * UserInventoryItem findFirst
+   */
+  export type UserInventoryItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemInclude<ExtArgs> | null
+    /**
+     * Filter, which UserInventoryItem to fetch.
+     */
+    where?: UserInventoryItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserInventoryItems to fetch.
+     */
+    orderBy?: UserInventoryItemOrderByWithRelationInput | UserInventoryItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserInventoryItems.
+     */
+    cursor?: UserInventoryItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserInventoryItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserInventoryItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserInventoryItems.
+     */
+    distinct?: UserInventoryItemScalarFieldEnum | UserInventoryItemScalarFieldEnum[]
+  }
+
+  /**
+   * UserInventoryItem findFirstOrThrow
+   */
+  export type UserInventoryItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemInclude<ExtArgs> | null
+    /**
+     * Filter, which UserInventoryItem to fetch.
+     */
+    where?: UserInventoryItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserInventoryItems to fetch.
+     */
+    orderBy?: UserInventoryItemOrderByWithRelationInput | UserInventoryItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserInventoryItems.
+     */
+    cursor?: UserInventoryItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserInventoryItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserInventoryItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserInventoryItems.
+     */
+    distinct?: UserInventoryItemScalarFieldEnum | UserInventoryItemScalarFieldEnum[]
+  }
+
+  /**
+   * UserInventoryItem findMany
+   */
+  export type UserInventoryItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemInclude<ExtArgs> | null
+    /**
+     * Filter, which UserInventoryItems to fetch.
+     */
+    where?: UserInventoryItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserInventoryItems to fetch.
+     */
+    orderBy?: UserInventoryItemOrderByWithRelationInput | UserInventoryItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserInventoryItems.
+     */
+    cursor?: UserInventoryItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserInventoryItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserInventoryItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserInventoryItems.
+     */
+    distinct?: UserInventoryItemScalarFieldEnum | UserInventoryItemScalarFieldEnum[]
+  }
+
+  /**
+   * UserInventoryItem create
+   */
+  export type UserInventoryItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserInventoryItem.
+     */
+    data: XOR<UserInventoryItemCreateInput, UserInventoryItemUncheckedCreateInput>
+  }
+
+  /**
+   * UserInventoryItem createMany
+   */
+  export type UserInventoryItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserInventoryItems.
+     */
+    data: UserInventoryItemCreateManyInput | UserInventoryItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * UserInventoryItem createManyAndReturn
+   */
+  export type UserInventoryItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * The data used to create many UserInventoryItems.
+     */
+    data: UserInventoryItemCreateManyInput | UserInventoryItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserInventoryItem update
+   */
+  export type UserInventoryItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserInventoryItem.
+     */
+    data: XOR<UserInventoryItemUpdateInput, UserInventoryItemUncheckedUpdateInput>
+    /**
+     * Choose, which UserInventoryItem to update.
+     */
+    where: UserInventoryItemWhereUniqueInput
+  }
+
+  /**
+   * UserInventoryItem updateMany
+   */
+  export type UserInventoryItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserInventoryItems.
+     */
+    data: XOR<UserInventoryItemUpdateManyMutationInput, UserInventoryItemUncheckedUpdateManyInput>
+    /**
+     * Filter which UserInventoryItems to update
+     */
+    where?: UserInventoryItemWhereInput
+    /**
+     * Limit how many UserInventoryItems to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserInventoryItem updateManyAndReturn
+   */
+  export type UserInventoryItemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * The data used to update UserInventoryItems.
+     */
+    data: XOR<UserInventoryItemUpdateManyMutationInput, UserInventoryItemUncheckedUpdateManyInput>
+    /**
+     * Filter which UserInventoryItems to update
+     */
+    where?: UserInventoryItemWhereInput
+    /**
+     * Limit how many UserInventoryItems to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * UserInventoryItem upsert
+   */
+  export type UserInventoryItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserInventoryItem to update in case it exists.
+     */
+    where: UserInventoryItemWhereUniqueInput
+    /**
+     * In case the UserInventoryItem found by the `where` argument doesn't exist, create a new UserInventoryItem with this data.
+     */
+    create: XOR<UserInventoryItemCreateInput, UserInventoryItemUncheckedCreateInput>
+    /**
+     * In case the UserInventoryItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserInventoryItemUpdateInput, UserInventoryItemUncheckedUpdateInput>
+  }
+
+  /**
+   * UserInventoryItem delete
+   */
+  export type UserInventoryItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemInclude<ExtArgs> | null
+    /**
+     * Filter which UserInventoryItem to delete.
+     */
+    where: UserInventoryItemWhereUniqueInput
+  }
+
+  /**
+   * UserInventoryItem deleteMany
+   */
+  export type UserInventoryItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserInventoryItems to delete
+     */
+    where?: UserInventoryItemWhereInput
+    /**
+     * Limit how many UserInventoryItems to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserInventoryItem without action
+   */
+  export type UserInventoryItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserInventoryItem
+     */
+    select?: UserInventoryItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserInventoryItem
+     */
+    omit?: UserInventoryItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInventoryItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SpinSession
+   */
+
+  export type AggregateSpinSession = {
+    _count: SpinSessionCountAggregateOutputType | null
+    _min: SpinSessionMinAggregateOutputType | null
+    _max: SpinSessionMaxAggregateOutputType | null
+  }
+
+  export type SpinSessionMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    status: $Enums.SpinSessionStatus | null
+    entryTxHash: string | null
+    entryAsset: string | null
+    serverSeed: string | null
+    cashEarnedWei: string | null
+    cashAsset: string | null
+    wheelRewardId: string | null
+    startedAt: Date | null
+    finishedAt: Date | null
+    expiresAt: Date | null
+  }
+
+  export type SpinSessionMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    status: $Enums.SpinSessionStatus | null
+    entryTxHash: string | null
+    entryAsset: string | null
+    serverSeed: string | null
+    cashEarnedWei: string | null
+    cashAsset: string | null
+    wheelRewardId: string | null
+    startedAt: Date | null
+    finishedAt: Date | null
+    expiresAt: Date | null
+  }
+
+  export type SpinSessionCountAggregateOutputType = {
+    id: number
+    userId: number
+    status: number
+    entryTxHash: number
+    entryAsset: number
+    serverSeed: number
+    loadout: number
+    bubblePlan: number
+    cashEarnedWei: number
+    cashAsset: number
+    wheelRewardId: number
+    startedAt: number
+    finishedAt: number
+    expiresAt: number
+    _all: number
+  }
+
+
+  export type SpinSessionMinAggregateInputType = {
+    id?: true
+    userId?: true
+    status?: true
+    entryTxHash?: true
+    entryAsset?: true
+    serverSeed?: true
+    cashEarnedWei?: true
+    cashAsset?: true
+    wheelRewardId?: true
+    startedAt?: true
+    finishedAt?: true
+    expiresAt?: true
+  }
+
+  export type SpinSessionMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    status?: true
+    entryTxHash?: true
+    entryAsset?: true
+    serverSeed?: true
+    cashEarnedWei?: true
+    cashAsset?: true
+    wheelRewardId?: true
+    startedAt?: true
+    finishedAt?: true
+    expiresAt?: true
+  }
+
+  export type SpinSessionCountAggregateInputType = {
+    id?: true
+    userId?: true
+    status?: true
+    entryTxHash?: true
+    entryAsset?: true
+    serverSeed?: true
+    loadout?: true
+    bubblePlan?: true
+    cashEarnedWei?: true
+    cashAsset?: true
+    wheelRewardId?: true
+    startedAt?: true
+    finishedAt?: true
+    expiresAt?: true
+    _all?: true
+  }
+
+  export type SpinSessionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SpinSession to aggregate.
+     */
+    where?: SpinSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinSessions to fetch.
+     */
+    orderBy?: SpinSessionOrderByWithRelationInput | SpinSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SpinSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SpinSessions
+    **/
+    _count?: true | SpinSessionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SpinSessionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SpinSessionMaxAggregateInputType
+  }
+
+  export type GetSpinSessionAggregateType<T extends SpinSessionAggregateArgs> = {
+        [P in keyof T & keyof AggregateSpinSession]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSpinSession[P]>
+      : GetScalarType<T[P], AggregateSpinSession[P]>
+  }
+
+
+
+
+  export type SpinSessionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SpinSessionWhereInput
+    orderBy?: SpinSessionOrderByWithAggregationInput | SpinSessionOrderByWithAggregationInput[]
+    by: SpinSessionScalarFieldEnum[] | SpinSessionScalarFieldEnum
+    having?: SpinSessionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SpinSessionCountAggregateInputType | true
+    _min?: SpinSessionMinAggregateInputType
+    _max?: SpinSessionMaxAggregateInputType
+  }
+
+  export type SpinSessionGroupByOutputType = {
+    id: string
+    userId: string
+    status: $Enums.SpinSessionStatus
+    entryTxHash: string | null
+    entryAsset: string | null
+    serverSeed: string
+    loadout: JsonValue | null
+    bubblePlan: JsonValue | null
+    cashEarnedWei: string
+    cashAsset: string
+    wheelRewardId: string | null
+    startedAt: Date
+    finishedAt: Date | null
+    expiresAt: Date
+    _count: SpinSessionCountAggregateOutputType | null
+    _min: SpinSessionMinAggregateOutputType | null
+    _max: SpinSessionMaxAggregateOutputType | null
+  }
+
+  type GetSpinSessionGroupByPayload<T extends SpinSessionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SpinSessionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SpinSessionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SpinSessionGroupByOutputType[P]>
+            : GetScalarType<T[P], SpinSessionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SpinSessionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    status?: boolean
+    entryTxHash?: boolean
+    entryAsset?: boolean
+    serverSeed?: boolean
+    loadout?: boolean
+    bubblePlan?: boolean
+    cashEarnedWei?: boolean
+    cashAsset?: boolean
+    wheelRewardId?: boolean
+    startedAt?: boolean
+    finishedAt?: boolean
+    expiresAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    bubbleHits?: boolean | SpinSession$bubbleHitsArgs<ExtArgs>
+    pendings?: boolean | SpinSession$pendingsArgs<ExtArgs>
+    _count?: boolean | SpinSessionCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["spinSession"]>
+
+  export type SpinSessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    status?: boolean
+    entryTxHash?: boolean
+    entryAsset?: boolean
+    serverSeed?: boolean
+    loadout?: boolean
+    bubblePlan?: boolean
+    cashEarnedWei?: boolean
+    cashAsset?: boolean
+    wheelRewardId?: boolean
+    startedAt?: boolean
+    finishedAt?: boolean
+    expiresAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["spinSession"]>
+
+  export type SpinSessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    status?: boolean
+    entryTxHash?: boolean
+    entryAsset?: boolean
+    serverSeed?: boolean
+    loadout?: boolean
+    bubblePlan?: boolean
+    cashEarnedWei?: boolean
+    cashAsset?: boolean
+    wheelRewardId?: boolean
+    startedAt?: boolean
+    finishedAt?: boolean
+    expiresAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["spinSession"]>
+
+  export type SpinSessionSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    status?: boolean
+    entryTxHash?: boolean
+    entryAsset?: boolean
+    serverSeed?: boolean
+    loadout?: boolean
+    bubblePlan?: boolean
+    cashEarnedWei?: boolean
+    cashAsset?: boolean
+    wheelRewardId?: boolean
+    startedAt?: boolean
+    finishedAt?: boolean
+    expiresAt?: boolean
+  }
+
+  export type SpinSessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "status" | "entryTxHash" | "entryAsset" | "serverSeed" | "loadout" | "bubblePlan" | "cashEarnedWei" | "cashAsset" | "wheelRewardId" | "startedAt" | "finishedAt" | "expiresAt", ExtArgs["result"]["spinSession"]>
+  export type SpinSessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    bubbleHits?: boolean | SpinSession$bubbleHitsArgs<ExtArgs>
+    pendings?: boolean | SpinSession$pendingsArgs<ExtArgs>
+    _count?: boolean | SpinSessionCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type SpinSessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }
+  export type SpinSessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $SpinSessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SpinSession"
+    objects: {
+      user: Prisma.$UserProfilePayload<ExtArgs>
+      bubbleHits: Prisma.$BubbleHitPayload<ExtArgs>[]
+      pendings: Prisma.$SpinRewardPendingPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      status: $Enums.SpinSessionStatus
+      entryTxHash: string | null
+      entryAsset: string | null
+      serverSeed: string
+      loadout: Prisma.JsonValue | null
+      bubblePlan: Prisma.JsonValue | null
+      cashEarnedWei: string
+      cashAsset: string
+      wheelRewardId: string | null
+      startedAt: Date
+      finishedAt: Date | null
+      expiresAt: Date
+    }, ExtArgs["result"]["spinSession"]>
+    composites: {}
+  }
+
+  type SpinSessionGetPayload<S extends boolean | null | undefined | SpinSessionDefaultArgs> = $Result.GetResult<Prisma.$SpinSessionPayload, S>
+
+  type SpinSessionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SpinSessionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SpinSessionCountAggregateInputType | true
+    }
+
+  export interface SpinSessionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SpinSession'], meta: { name: 'SpinSession' } }
+    /**
+     * Find zero or one SpinSession that matches the filter.
+     * @param {SpinSessionFindUniqueArgs} args - Arguments to find a SpinSession
+     * @example
+     * // Get one SpinSession
+     * const spinSession = await prisma.spinSession.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SpinSessionFindUniqueArgs>(args: SelectSubset<T, SpinSessionFindUniqueArgs<ExtArgs>>): Prisma__SpinSessionClient<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SpinSession that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SpinSessionFindUniqueOrThrowArgs} args - Arguments to find a SpinSession
+     * @example
+     * // Get one SpinSession
+     * const spinSession = await prisma.spinSession.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SpinSessionFindUniqueOrThrowArgs>(args: SelectSubset<T, SpinSessionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SpinSessionClient<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SpinSession that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinSessionFindFirstArgs} args - Arguments to find a SpinSession
+     * @example
+     * // Get one SpinSession
+     * const spinSession = await prisma.spinSession.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SpinSessionFindFirstArgs>(args?: SelectSubset<T, SpinSessionFindFirstArgs<ExtArgs>>): Prisma__SpinSessionClient<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SpinSession that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinSessionFindFirstOrThrowArgs} args - Arguments to find a SpinSession
+     * @example
+     * // Get one SpinSession
+     * const spinSession = await prisma.spinSession.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SpinSessionFindFirstOrThrowArgs>(args?: SelectSubset<T, SpinSessionFindFirstOrThrowArgs<ExtArgs>>): Prisma__SpinSessionClient<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SpinSessions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinSessionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SpinSessions
+     * const spinSessions = await prisma.spinSession.findMany()
+     * 
+     * // Get first 10 SpinSessions
+     * const spinSessions = await prisma.spinSession.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const spinSessionWithIdOnly = await prisma.spinSession.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SpinSessionFindManyArgs>(args?: SelectSubset<T, SpinSessionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SpinSession.
+     * @param {SpinSessionCreateArgs} args - Arguments to create a SpinSession.
+     * @example
+     * // Create one SpinSession
+     * const SpinSession = await prisma.spinSession.create({
+     *   data: {
+     *     // ... data to create a SpinSession
+     *   }
+     * })
+     * 
+     */
+    create<T extends SpinSessionCreateArgs>(args: SelectSubset<T, SpinSessionCreateArgs<ExtArgs>>): Prisma__SpinSessionClient<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SpinSessions.
+     * @param {SpinSessionCreateManyArgs} args - Arguments to create many SpinSessions.
+     * @example
+     * // Create many SpinSessions
+     * const spinSession = await prisma.spinSession.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SpinSessionCreateManyArgs>(args?: SelectSubset<T, SpinSessionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SpinSessions and returns the data saved in the database.
+     * @param {SpinSessionCreateManyAndReturnArgs} args - Arguments to create many SpinSessions.
+     * @example
+     * // Create many SpinSessions
+     * const spinSession = await prisma.spinSession.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SpinSessions and only return the `id`
+     * const spinSessionWithIdOnly = await prisma.spinSession.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SpinSessionCreateManyAndReturnArgs>(args?: SelectSubset<T, SpinSessionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SpinSession.
+     * @param {SpinSessionDeleteArgs} args - Arguments to delete one SpinSession.
+     * @example
+     * // Delete one SpinSession
+     * const SpinSession = await prisma.spinSession.delete({
+     *   where: {
+     *     // ... filter to delete one SpinSession
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SpinSessionDeleteArgs>(args: SelectSubset<T, SpinSessionDeleteArgs<ExtArgs>>): Prisma__SpinSessionClient<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SpinSession.
+     * @param {SpinSessionUpdateArgs} args - Arguments to update one SpinSession.
+     * @example
+     * // Update one SpinSession
+     * const spinSession = await prisma.spinSession.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SpinSessionUpdateArgs>(args: SelectSubset<T, SpinSessionUpdateArgs<ExtArgs>>): Prisma__SpinSessionClient<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SpinSessions.
+     * @param {SpinSessionDeleteManyArgs} args - Arguments to filter SpinSessions to delete.
+     * @example
+     * // Delete a few SpinSessions
+     * const { count } = await prisma.spinSession.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SpinSessionDeleteManyArgs>(args?: SelectSubset<T, SpinSessionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SpinSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinSessionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SpinSessions
+     * const spinSession = await prisma.spinSession.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SpinSessionUpdateManyArgs>(args: SelectSubset<T, SpinSessionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SpinSessions and returns the data updated in the database.
+     * @param {SpinSessionUpdateManyAndReturnArgs} args - Arguments to update many SpinSessions.
+     * @example
+     * // Update many SpinSessions
+     * const spinSession = await prisma.spinSession.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SpinSessions and only return the `id`
+     * const spinSessionWithIdOnly = await prisma.spinSession.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SpinSessionUpdateManyAndReturnArgs>(args: SelectSubset<T, SpinSessionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SpinSession.
+     * @param {SpinSessionUpsertArgs} args - Arguments to update or create a SpinSession.
+     * @example
+     * // Update or create a SpinSession
+     * const spinSession = await prisma.spinSession.upsert({
+     *   create: {
+     *     // ... data to create a SpinSession
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SpinSession we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SpinSessionUpsertArgs>(args: SelectSubset<T, SpinSessionUpsertArgs<ExtArgs>>): Prisma__SpinSessionClient<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SpinSessions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinSessionCountArgs} args - Arguments to filter SpinSessions to count.
+     * @example
+     * // Count the number of SpinSessions
+     * const count = await prisma.spinSession.count({
+     *   where: {
+     *     // ... the filter for the SpinSessions we want to count
+     *   }
+     * })
+    **/
+    count<T extends SpinSessionCountArgs>(
+      args?: Subset<T, SpinSessionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SpinSessionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SpinSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinSessionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SpinSessionAggregateArgs>(args: Subset<T, SpinSessionAggregateArgs>): Prisma.PrismaPromise<GetSpinSessionAggregateType<T>>
+
+    /**
+     * Group by SpinSession.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinSessionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SpinSessionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SpinSessionGroupByArgs['orderBy'] }
+        : { orderBy?: SpinSessionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SpinSessionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSpinSessionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SpinSession model
+   */
+  readonly fields: SpinSessionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SpinSession.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SpinSessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    bubbleHits<T extends SpinSession$bubbleHitsArgs<ExtArgs> = {}>(args?: Subset<T, SpinSession$bubbleHitsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BubbleHitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pendings<T extends SpinSession$pendingsArgs<ExtArgs> = {}>(args?: Subset<T, SpinSession$pendingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinRewardPendingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SpinSession model
+   */
+  interface SpinSessionFieldRefs {
+    readonly id: FieldRef<"SpinSession", 'String'>
+    readonly userId: FieldRef<"SpinSession", 'String'>
+    readonly status: FieldRef<"SpinSession", 'SpinSessionStatus'>
+    readonly entryTxHash: FieldRef<"SpinSession", 'String'>
+    readonly entryAsset: FieldRef<"SpinSession", 'String'>
+    readonly serverSeed: FieldRef<"SpinSession", 'String'>
+    readonly loadout: FieldRef<"SpinSession", 'Json'>
+    readonly bubblePlan: FieldRef<"SpinSession", 'Json'>
+    readonly cashEarnedWei: FieldRef<"SpinSession", 'String'>
+    readonly cashAsset: FieldRef<"SpinSession", 'String'>
+    readonly wheelRewardId: FieldRef<"SpinSession", 'String'>
+    readonly startedAt: FieldRef<"SpinSession", 'DateTime'>
+    readonly finishedAt: FieldRef<"SpinSession", 'DateTime'>
+    readonly expiresAt: FieldRef<"SpinSession", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SpinSession findUnique
+   */
+  export type SpinSessionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinSession to fetch.
+     */
+    where: SpinSessionWhereUniqueInput
+  }
+
+  /**
+   * SpinSession findUniqueOrThrow
+   */
+  export type SpinSessionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinSession to fetch.
+     */
+    where: SpinSessionWhereUniqueInput
+  }
+
+  /**
+   * SpinSession findFirst
+   */
+  export type SpinSessionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinSession to fetch.
+     */
+    where?: SpinSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinSessions to fetch.
+     */
+    orderBy?: SpinSessionOrderByWithRelationInput | SpinSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SpinSessions.
+     */
+    cursor?: SpinSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinSessions.
+     */
+    distinct?: SpinSessionScalarFieldEnum | SpinSessionScalarFieldEnum[]
+  }
+
+  /**
+   * SpinSession findFirstOrThrow
+   */
+  export type SpinSessionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinSession to fetch.
+     */
+    where?: SpinSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinSessions to fetch.
+     */
+    orderBy?: SpinSessionOrderByWithRelationInput | SpinSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SpinSessions.
+     */
+    cursor?: SpinSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinSessions.
+     */
+    distinct?: SpinSessionScalarFieldEnum | SpinSessionScalarFieldEnum[]
+  }
+
+  /**
+   * SpinSession findMany
+   */
+  export type SpinSessionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinSessions to fetch.
+     */
+    where?: SpinSessionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinSessions to fetch.
+     */
+    orderBy?: SpinSessionOrderByWithRelationInput | SpinSessionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SpinSessions.
+     */
+    cursor?: SpinSessionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinSessions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinSessions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinSessions.
+     */
+    distinct?: SpinSessionScalarFieldEnum | SpinSessionScalarFieldEnum[]
+  }
+
+  /**
+   * SpinSession create
+   */
+  export type SpinSessionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SpinSession.
+     */
+    data: XOR<SpinSessionCreateInput, SpinSessionUncheckedCreateInput>
+  }
+
+  /**
+   * SpinSession createMany
+   */
+  export type SpinSessionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SpinSessions.
+     */
+    data: SpinSessionCreateManyInput | SpinSessionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SpinSession createManyAndReturn
+   */
+  export type SpinSessionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * The data used to create many SpinSessions.
+     */
+    data: SpinSessionCreateManyInput | SpinSessionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SpinSession update
+   */
+  export type SpinSessionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SpinSession.
+     */
+    data: XOR<SpinSessionUpdateInput, SpinSessionUncheckedUpdateInput>
+    /**
+     * Choose, which SpinSession to update.
+     */
+    where: SpinSessionWhereUniqueInput
+  }
+
+  /**
+   * SpinSession updateMany
+   */
+  export type SpinSessionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SpinSessions.
+     */
+    data: XOR<SpinSessionUpdateManyMutationInput, SpinSessionUncheckedUpdateManyInput>
+    /**
+     * Filter which SpinSessions to update
+     */
+    where?: SpinSessionWhereInput
+    /**
+     * Limit how many SpinSessions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SpinSession updateManyAndReturn
+   */
+  export type SpinSessionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * The data used to update SpinSessions.
+     */
+    data: XOR<SpinSessionUpdateManyMutationInput, SpinSessionUncheckedUpdateManyInput>
+    /**
+     * Filter which SpinSessions to update
+     */
+    where?: SpinSessionWhereInput
+    /**
+     * Limit how many SpinSessions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SpinSession upsert
+   */
+  export type SpinSessionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SpinSession to update in case it exists.
+     */
+    where: SpinSessionWhereUniqueInput
+    /**
+     * In case the SpinSession found by the `where` argument doesn't exist, create a new SpinSession with this data.
+     */
+    create: XOR<SpinSessionCreateInput, SpinSessionUncheckedCreateInput>
+    /**
+     * In case the SpinSession was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SpinSessionUpdateInput, SpinSessionUncheckedUpdateInput>
+  }
+
+  /**
+   * SpinSession delete
+   */
+  export type SpinSessionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionInclude<ExtArgs> | null
+    /**
+     * Filter which SpinSession to delete.
+     */
+    where: SpinSessionWhereUniqueInput
+  }
+
+  /**
+   * SpinSession deleteMany
+   */
+  export type SpinSessionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SpinSessions to delete
+     */
+    where?: SpinSessionWhereInput
+    /**
+     * Limit how many SpinSessions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SpinSession.bubbleHits
+   */
+  export type SpinSession$bubbleHitsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitInclude<ExtArgs> | null
+    where?: BubbleHitWhereInput
+    orderBy?: BubbleHitOrderByWithRelationInput | BubbleHitOrderByWithRelationInput[]
+    cursor?: BubbleHitWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BubbleHitScalarFieldEnum | BubbleHitScalarFieldEnum[]
+  }
+
+  /**
+   * SpinSession.pendings
+   */
+  export type SpinSession$pendingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingInclude<ExtArgs> | null
+    where?: SpinRewardPendingWhereInput
+    orderBy?: SpinRewardPendingOrderByWithRelationInput | SpinRewardPendingOrderByWithRelationInput[]
+    cursor?: SpinRewardPendingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SpinRewardPendingScalarFieldEnum | SpinRewardPendingScalarFieldEnum[]
+  }
+
+  /**
+   * SpinSession without action
+   */
+  export type SpinSessionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BubbleHit
+   */
+
+  export type AggregateBubbleHit = {
+    _count: BubbleHitCountAggregateOutputType | null
+    _avg: BubbleHitAvgAggregateOutputType | null
+    _sum: BubbleHitSumAggregateOutputType | null
+    _min: BubbleHitMinAggregateOutputType | null
+    _max: BubbleHitMaxAggregateOutputType | null
+  }
+
+  export type BubbleHitAvgAggregateOutputType = {
+    taps: number | null
+  }
+
+  export type BubbleHitSumAggregateOutputType = {
+    taps: number | null
+  }
+
+  export type BubbleHitMinAggregateOutputType = {
+    id: string | null
+    sessionId: string | null
+    userId: string | null
+    bubbleId: string | null
+    amountWei: string | null
+    asset: string | null
+    taps: number | null
+    createdAt: Date | null
+  }
+
+  export type BubbleHitMaxAggregateOutputType = {
+    id: string | null
+    sessionId: string | null
+    userId: string | null
+    bubbleId: string | null
+    amountWei: string | null
+    asset: string | null
+    taps: number | null
+    createdAt: Date | null
+  }
+
+  export type BubbleHitCountAggregateOutputType = {
+    id: number
+    sessionId: number
+    userId: number
+    bubbleId: number
+    amountWei: number
+    asset: number
+    taps: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type BubbleHitAvgAggregateInputType = {
+    taps?: true
+  }
+
+  export type BubbleHitSumAggregateInputType = {
+    taps?: true
+  }
+
+  export type BubbleHitMinAggregateInputType = {
+    id?: true
+    sessionId?: true
+    userId?: true
+    bubbleId?: true
+    amountWei?: true
+    asset?: true
+    taps?: true
+    createdAt?: true
+  }
+
+  export type BubbleHitMaxAggregateInputType = {
+    id?: true
+    sessionId?: true
+    userId?: true
+    bubbleId?: true
+    amountWei?: true
+    asset?: true
+    taps?: true
+    createdAt?: true
+  }
+
+  export type BubbleHitCountAggregateInputType = {
+    id?: true
+    sessionId?: true
+    userId?: true
+    bubbleId?: true
+    amountWei?: true
+    asset?: true
+    taps?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type BubbleHitAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BubbleHit to aggregate.
+     */
+    where?: BubbleHitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BubbleHits to fetch.
+     */
+    orderBy?: BubbleHitOrderByWithRelationInput | BubbleHitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BubbleHitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BubbleHits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BubbleHits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BubbleHits
+    **/
+    _count?: true | BubbleHitCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BubbleHitAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BubbleHitSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BubbleHitMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BubbleHitMaxAggregateInputType
+  }
+
+  export type GetBubbleHitAggregateType<T extends BubbleHitAggregateArgs> = {
+        [P in keyof T & keyof AggregateBubbleHit]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBubbleHit[P]>
+      : GetScalarType<T[P], AggregateBubbleHit[P]>
+  }
+
+
+
+
+  export type BubbleHitGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BubbleHitWhereInput
+    orderBy?: BubbleHitOrderByWithAggregationInput | BubbleHitOrderByWithAggregationInput[]
+    by: BubbleHitScalarFieldEnum[] | BubbleHitScalarFieldEnum
+    having?: BubbleHitScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BubbleHitCountAggregateInputType | true
+    _avg?: BubbleHitAvgAggregateInputType
+    _sum?: BubbleHitSumAggregateInputType
+    _min?: BubbleHitMinAggregateInputType
+    _max?: BubbleHitMaxAggregateInputType
+  }
+
+  export type BubbleHitGroupByOutputType = {
+    id: string
+    sessionId: string
+    userId: string
+    bubbleId: string
+    amountWei: string
+    asset: string
+    taps: number
+    createdAt: Date
+    _count: BubbleHitCountAggregateOutputType | null
+    _avg: BubbleHitAvgAggregateOutputType | null
+    _sum: BubbleHitSumAggregateOutputType | null
+    _min: BubbleHitMinAggregateOutputType | null
+    _max: BubbleHitMaxAggregateOutputType | null
+  }
+
+  type GetBubbleHitGroupByPayload<T extends BubbleHitGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BubbleHitGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BubbleHitGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BubbleHitGroupByOutputType[P]>
+            : GetScalarType<T[P], BubbleHitGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BubbleHitSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sessionId?: boolean
+    userId?: boolean
+    bubbleId?: boolean
+    amountWei?: boolean
+    asset?: boolean
+    taps?: boolean
+    createdAt?: boolean
+    session?: boolean | SpinSessionDefaultArgs<ExtArgs>
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bubbleHit"]>
+
+  export type BubbleHitSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sessionId?: boolean
+    userId?: boolean
+    bubbleId?: boolean
+    amountWei?: boolean
+    asset?: boolean
+    taps?: boolean
+    createdAt?: boolean
+    session?: boolean | SpinSessionDefaultArgs<ExtArgs>
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bubbleHit"]>
+
+  export type BubbleHitSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    sessionId?: boolean
+    userId?: boolean
+    bubbleId?: boolean
+    amountWei?: boolean
+    asset?: boolean
+    taps?: boolean
+    createdAt?: boolean
+    session?: boolean | SpinSessionDefaultArgs<ExtArgs>
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bubbleHit"]>
+
+  export type BubbleHitSelectScalar = {
+    id?: boolean
+    sessionId?: boolean
+    userId?: boolean
+    bubbleId?: boolean
+    amountWei?: boolean
+    asset?: boolean
+    taps?: boolean
+    createdAt?: boolean
+  }
+
+  export type BubbleHitOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "sessionId" | "userId" | "bubbleId" | "amountWei" | "asset" | "taps" | "createdAt", ExtArgs["result"]["bubbleHit"]>
+  export type BubbleHitInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | SpinSessionDefaultArgs<ExtArgs>
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }
+  export type BubbleHitIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | SpinSessionDefaultArgs<ExtArgs>
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }
+  export type BubbleHitIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    session?: boolean | SpinSessionDefaultArgs<ExtArgs>
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $BubbleHitPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BubbleHit"
+    objects: {
+      session: Prisma.$SpinSessionPayload<ExtArgs>
+      user: Prisma.$UserProfilePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      sessionId: string
+      userId: string
+      bubbleId: string
+      amountWei: string
+      asset: string
+      taps: number
+      createdAt: Date
+    }, ExtArgs["result"]["bubbleHit"]>
+    composites: {}
+  }
+
+  type BubbleHitGetPayload<S extends boolean | null | undefined | BubbleHitDefaultArgs> = $Result.GetResult<Prisma.$BubbleHitPayload, S>
+
+  type BubbleHitCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BubbleHitFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BubbleHitCountAggregateInputType | true
+    }
+
+  export interface BubbleHitDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BubbleHit'], meta: { name: 'BubbleHit' } }
+    /**
+     * Find zero or one BubbleHit that matches the filter.
+     * @param {BubbleHitFindUniqueArgs} args - Arguments to find a BubbleHit
+     * @example
+     * // Get one BubbleHit
+     * const bubbleHit = await prisma.bubbleHit.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BubbleHitFindUniqueArgs>(args: SelectSubset<T, BubbleHitFindUniqueArgs<ExtArgs>>): Prisma__BubbleHitClient<$Result.GetResult<Prisma.$BubbleHitPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BubbleHit that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BubbleHitFindUniqueOrThrowArgs} args - Arguments to find a BubbleHit
+     * @example
+     * // Get one BubbleHit
+     * const bubbleHit = await prisma.bubbleHit.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BubbleHitFindUniqueOrThrowArgs>(args: SelectSubset<T, BubbleHitFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BubbleHitClient<$Result.GetResult<Prisma.$BubbleHitPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BubbleHit that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BubbleHitFindFirstArgs} args - Arguments to find a BubbleHit
+     * @example
+     * // Get one BubbleHit
+     * const bubbleHit = await prisma.bubbleHit.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BubbleHitFindFirstArgs>(args?: SelectSubset<T, BubbleHitFindFirstArgs<ExtArgs>>): Prisma__BubbleHitClient<$Result.GetResult<Prisma.$BubbleHitPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BubbleHit that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BubbleHitFindFirstOrThrowArgs} args - Arguments to find a BubbleHit
+     * @example
+     * // Get one BubbleHit
+     * const bubbleHit = await prisma.bubbleHit.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BubbleHitFindFirstOrThrowArgs>(args?: SelectSubset<T, BubbleHitFindFirstOrThrowArgs<ExtArgs>>): Prisma__BubbleHitClient<$Result.GetResult<Prisma.$BubbleHitPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BubbleHits that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BubbleHitFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BubbleHits
+     * const bubbleHits = await prisma.bubbleHit.findMany()
+     * 
+     * // Get first 10 BubbleHits
+     * const bubbleHits = await prisma.bubbleHit.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bubbleHitWithIdOnly = await prisma.bubbleHit.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BubbleHitFindManyArgs>(args?: SelectSubset<T, BubbleHitFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BubbleHitPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BubbleHit.
+     * @param {BubbleHitCreateArgs} args - Arguments to create a BubbleHit.
+     * @example
+     * // Create one BubbleHit
+     * const BubbleHit = await prisma.bubbleHit.create({
+     *   data: {
+     *     // ... data to create a BubbleHit
+     *   }
+     * })
+     * 
+     */
+    create<T extends BubbleHitCreateArgs>(args: SelectSubset<T, BubbleHitCreateArgs<ExtArgs>>): Prisma__BubbleHitClient<$Result.GetResult<Prisma.$BubbleHitPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BubbleHits.
+     * @param {BubbleHitCreateManyArgs} args - Arguments to create many BubbleHits.
+     * @example
+     * // Create many BubbleHits
+     * const bubbleHit = await prisma.bubbleHit.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BubbleHitCreateManyArgs>(args?: SelectSubset<T, BubbleHitCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BubbleHits and returns the data saved in the database.
+     * @param {BubbleHitCreateManyAndReturnArgs} args - Arguments to create many BubbleHits.
+     * @example
+     * // Create many BubbleHits
+     * const bubbleHit = await prisma.bubbleHit.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BubbleHits and only return the `id`
+     * const bubbleHitWithIdOnly = await prisma.bubbleHit.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BubbleHitCreateManyAndReturnArgs>(args?: SelectSubset<T, BubbleHitCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BubbleHitPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BubbleHit.
+     * @param {BubbleHitDeleteArgs} args - Arguments to delete one BubbleHit.
+     * @example
+     * // Delete one BubbleHit
+     * const BubbleHit = await prisma.bubbleHit.delete({
+     *   where: {
+     *     // ... filter to delete one BubbleHit
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BubbleHitDeleteArgs>(args: SelectSubset<T, BubbleHitDeleteArgs<ExtArgs>>): Prisma__BubbleHitClient<$Result.GetResult<Prisma.$BubbleHitPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BubbleHit.
+     * @param {BubbleHitUpdateArgs} args - Arguments to update one BubbleHit.
+     * @example
+     * // Update one BubbleHit
+     * const bubbleHit = await prisma.bubbleHit.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BubbleHitUpdateArgs>(args: SelectSubset<T, BubbleHitUpdateArgs<ExtArgs>>): Prisma__BubbleHitClient<$Result.GetResult<Prisma.$BubbleHitPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BubbleHits.
+     * @param {BubbleHitDeleteManyArgs} args - Arguments to filter BubbleHits to delete.
+     * @example
+     * // Delete a few BubbleHits
+     * const { count } = await prisma.bubbleHit.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BubbleHitDeleteManyArgs>(args?: SelectSubset<T, BubbleHitDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BubbleHits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BubbleHitUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BubbleHits
+     * const bubbleHit = await prisma.bubbleHit.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BubbleHitUpdateManyArgs>(args: SelectSubset<T, BubbleHitUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BubbleHits and returns the data updated in the database.
+     * @param {BubbleHitUpdateManyAndReturnArgs} args - Arguments to update many BubbleHits.
+     * @example
+     * // Update many BubbleHits
+     * const bubbleHit = await prisma.bubbleHit.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BubbleHits and only return the `id`
+     * const bubbleHitWithIdOnly = await prisma.bubbleHit.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BubbleHitUpdateManyAndReturnArgs>(args: SelectSubset<T, BubbleHitUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BubbleHitPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BubbleHit.
+     * @param {BubbleHitUpsertArgs} args - Arguments to update or create a BubbleHit.
+     * @example
+     * // Update or create a BubbleHit
+     * const bubbleHit = await prisma.bubbleHit.upsert({
+     *   create: {
+     *     // ... data to create a BubbleHit
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BubbleHit we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BubbleHitUpsertArgs>(args: SelectSubset<T, BubbleHitUpsertArgs<ExtArgs>>): Prisma__BubbleHitClient<$Result.GetResult<Prisma.$BubbleHitPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BubbleHits.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BubbleHitCountArgs} args - Arguments to filter BubbleHits to count.
+     * @example
+     * // Count the number of BubbleHits
+     * const count = await prisma.bubbleHit.count({
+     *   where: {
+     *     // ... the filter for the BubbleHits we want to count
+     *   }
+     * })
+    **/
+    count<T extends BubbleHitCountArgs>(
+      args?: Subset<T, BubbleHitCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BubbleHitCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BubbleHit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BubbleHitAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BubbleHitAggregateArgs>(args: Subset<T, BubbleHitAggregateArgs>): Prisma.PrismaPromise<GetBubbleHitAggregateType<T>>
+
+    /**
+     * Group by BubbleHit.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BubbleHitGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BubbleHitGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BubbleHitGroupByArgs['orderBy'] }
+        : { orderBy?: BubbleHitGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BubbleHitGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBubbleHitGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BubbleHit model
+   */
+  readonly fields: BubbleHitFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BubbleHit.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BubbleHitClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    session<T extends SpinSessionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SpinSessionDefaultArgs<ExtArgs>>): Prisma__SpinSessionClient<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BubbleHit model
+   */
+  interface BubbleHitFieldRefs {
+    readonly id: FieldRef<"BubbleHit", 'String'>
+    readonly sessionId: FieldRef<"BubbleHit", 'String'>
+    readonly userId: FieldRef<"BubbleHit", 'String'>
+    readonly bubbleId: FieldRef<"BubbleHit", 'String'>
+    readonly amountWei: FieldRef<"BubbleHit", 'String'>
+    readonly asset: FieldRef<"BubbleHit", 'String'>
+    readonly taps: FieldRef<"BubbleHit", 'Int'>
+    readonly createdAt: FieldRef<"BubbleHit", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BubbleHit findUnique
+   */
+  export type BubbleHitFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitInclude<ExtArgs> | null
+    /**
+     * Filter, which BubbleHit to fetch.
+     */
+    where: BubbleHitWhereUniqueInput
+  }
+
+  /**
+   * BubbleHit findUniqueOrThrow
+   */
+  export type BubbleHitFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitInclude<ExtArgs> | null
+    /**
+     * Filter, which BubbleHit to fetch.
+     */
+    where: BubbleHitWhereUniqueInput
+  }
+
+  /**
+   * BubbleHit findFirst
+   */
+  export type BubbleHitFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitInclude<ExtArgs> | null
+    /**
+     * Filter, which BubbleHit to fetch.
+     */
+    where?: BubbleHitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BubbleHits to fetch.
+     */
+    orderBy?: BubbleHitOrderByWithRelationInput | BubbleHitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BubbleHits.
+     */
+    cursor?: BubbleHitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BubbleHits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BubbleHits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BubbleHits.
+     */
+    distinct?: BubbleHitScalarFieldEnum | BubbleHitScalarFieldEnum[]
+  }
+
+  /**
+   * BubbleHit findFirstOrThrow
+   */
+  export type BubbleHitFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitInclude<ExtArgs> | null
+    /**
+     * Filter, which BubbleHit to fetch.
+     */
+    where?: BubbleHitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BubbleHits to fetch.
+     */
+    orderBy?: BubbleHitOrderByWithRelationInput | BubbleHitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BubbleHits.
+     */
+    cursor?: BubbleHitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BubbleHits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BubbleHits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BubbleHits.
+     */
+    distinct?: BubbleHitScalarFieldEnum | BubbleHitScalarFieldEnum[]
+  }
+
+  /**
+   * BubbleHit findMany
+   */
+  export type BubbleHitFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitInclude<ExtArgs> | null
+    /**
+     * Filter, which BubbleHits to fetch.
+     */
+    where?: BubbleHitWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BubbleHits to fetch.
+     */
+    orderBy?: BubbleHitOrderByWithRelationInput | BubbleHitOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BubbleHits.
+     */
+    cursor?: BubbleHitWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BubbleHits from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BubbleHits.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BubbleHits.
+     */
+    distinct?: BubbleHitScalarFieldEnum | BubbleHitScalarFieldEnum[]
+  }
+
+  /**
+   * BubbleHit create
+   */
+  export type BubbleHitCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BubbleHit.
+     */
+    data: XOR<BubbleHitCreateInput, BubbleHitUncheckedCreateInput>
+  }
+
+  /**
+   * BubbleHit createMany
+   */
+  export type BubbleHitCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BubbleHits.
+     */
+    data: BubbleHitCreateManyInput | BubbleHitCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BubbleHit createManyAndReturn
+   */
+  export type BubbleHitCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * The data used to create many BubbleHits.
+     */
+    data: BubbleHitCreateManyInput | BubbleHitCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BubbleHit update
+   */
+  export type BubbleHitUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BubbleHit.
+     */
+    data: XOR<BubbleHitUpdateInput, BubbleHitUncheckedUpdateInput>
+    /**
+     * Choose, which BubbleHit to update.
+     */
+    where: BubbleHitWhereUniqueInput
+  }
+
+  /**
+   * BubbleHit updateMany
+   */
+  export type BubbleHitUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BubbleHits.
+     */
+    data: XOR<BubbleHitUpdateManyMutationInput, BubbleHitUncheckedUpdateManyInput>
+    /**
+     * Filter which BubbleHits to update
+     */
+    where?: BubbleHitWhereInput
+    /**
+     * Limit how many BubbleHits to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BubbleHit updateManyAndReturn
+   */
+  export type BubbleHitUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * The data used to update BubbleHits.
+     */
+    data: XOR<BubbleHitUpdateManyMutationInput, BubbleHitUncheckedUpdateManyInput>
+    /**
+     * Filter which BubbleHits to update
+     */
+    where?: BubbleHitWhereInput
+    /**
+     * Limit how many BubbleHits to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BubbleHit upsert
+   */
+  export type BubbleHitUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BubbleHit to update in case it exists.
+     */
+    where: BubbleHitWhereUniqueInput
+    /**
+     * In case the BubbleHit found by the `where` argument doesn't exist, create a new BubbleHit with this data.
+     */
+    create: XOR<BubbleHitCreateInput, BubbleHitUncheckedCreateInput>
+    /**
+     * In case the BubbleHit was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BubbleHitUpdateInput, BubbleHitUncheckedUpdateInput>
+  }
+
+  /**
+   * BubbleHit delete
+   */
+  export type BubbleHitDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitInclude<ExtArgs> | null
+    /**
+     * Filter which BubbleHit to delete.
+     */
+    where: BubbleHitWhereUniqueInput
+  }
+
+  /**
+   * BubbleHit deleteMany
+   */
+  export type BubbleHitDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BubbleHits to delete
+     */
+    where?: BubbleHitWhereInput
+    /**
+     * Limit how many BubbleHits to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BubbleHit without action
+   */
+  export type BubbleHitDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BubbleHit
+     */
+    select?: BubbleHitSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BubbleHit
+     */
+    omit?: BubbleHitOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BubbleHitInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model SpinRewardPending
+   */
+
+  export type AggregateSpinRewardPending = {
+    _count: SpinRewardPendingCountAggregateOutputType | null
+    _min: SpinRewardPendingMinAggregateOutputType | null
+    _max: SpinRewardPendingMaxAggregateOutputType | null
+  }
+
+  export type SpinRewardPendingMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    wallet: string | null
+    sessionId: string | null
+    asset: string | null
+    amountWei: string | null
+    requestId: string | null
+    source: $Enums.SpinRewardSource | null
+    status: $Enums.SpinRewardPendingStatus | null
+    creditTxHash: string | null
+    withdrawTxHash: string | null
+    lastError: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SpinRewardPendingMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    wallet: string | null
+    sessionId: string | null
+    asset: string | null
+    amountWei: string | null
+    requestId: string | null
+    source: $Enums.SpinRewardSource | null
+    status: $Enums.SpinRewardPendingStatus | null
+    creditTxHash: string | null
+    withdrawTxHash: string | null
+    lastError: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type SpinRewardPendingCountAggregateOutputType = {
+    id: number
+    userId: number
+    wallet: number
+    sessionId: number
+    asset: number
+    amountWei: number
+    requestId: number
+    source: number
+    status: number
+    creditTxHash: number
+    withdrawTxHash: number
+    lastError: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type SpinRewardPendingMinAggregateInputType = {
+    id?: true
+    userId?: true
+    wallet?: true
+    sessionId?: true
+    asset?: true
+    amountWei?: true
+    requestId?: true
+    source?: true
+    status?: true
+    creditTxHash?: true
+    withdrawTxHash?: true
+    lastError?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SpinRewardPendingMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    wallet?: true
+    sessionId?: true
+    asset?: true
+    amountWei?: true
+    requestId?: true
+    source?: true
+    status?: true
+    creditTxHash?: true
+    withdrawTxHash?: true
+    lastError?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type SpinRewardPendingCountAggregateInputType = {
+    id?: true
+    userId?: true
+    wallet?: true
+    sessionId?: true
+    asset?: true
+    amountWei?: true
+    requestId?: true
+    source?: true
+    status?: true
+    creditTxHash?: true
+    withdrawTxHash?: true
+    lastError?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type SpinRewardPendingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SpinRewardPending to aggregate.
+     */
+    where?: SpinRewardPendingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinRewardPendings to fetch.
+     */
+    orderBy?: SpinRewardPendingOrderByWithRelationInput | SpinRewardPendingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SpinRewardPendingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinRewardPendings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinRewardPendings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SpinRewardPendings
+    **/
+    _count?: true | SpinRewardPendingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SpinRewardPendingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SpinRewardPendingMaxAggregateInputType
+  }
+
+  export type GetSpinRewardPendingAggregateType<T extends SpinRewardPendingAggregateArgs> = {
+        [P in keyof T & keyof AggregateSpinRewardPending]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSpinRewardPending[P]>
+      : GetScalarType<T[P], AggregateSpinRewardPending[P]>
+  }
+
+
+
+
+  export type SpinRewardPendingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SpinRewardPendingWhereInput
+    orderBy?: SpinRewardPendingOrderByWithAggregationInput | SpinRewardPendingOrderByWithAggregationInput[]
+    by: SpinRewardPendingScalarFieldEnum[] | SpinRewardPendingScalarFieldEnum
+    having?: SpinRewardPendingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SpinRewardPendingCountAggregateInputType | true
+    _min?: SpinRewardPendingMinAggregateInputType
+    _max?: SpinRewardPendingMaxAggregateInputType
+  }
+
+  export type SpinRewardPendingGroupByOutputType = {
+    id: string
+    userId: string
+    wallet: string
+    sessionId: string | null
+    asset: string
+    amountWei: string
+    requestId: string
+    source: $Enums.SpinRewardSource
+    status: $Enums.SpinRewardPendingStatus
+    creditTxHash: string | null
+    withdrawTxHash: string | null
+    lastError: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: SpinRewardPendingCountAggregateOutputType | null
+    _min: SpinRewardPendingMinAggregateOutputType | null
+    _max: SpinRewardPendingMaxAggregateOutputType | null
+  }
+
+  type GetSpinRewardPendingGroupByPayload<T extends SpinRewardPendingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SpinRewardPendingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SpinRewardPendingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SpinRewardPendingGroupByOutputType[P]>
+            : GetScalarType<T[P], SpinRewardPendingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SpinRewardPendingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    wallet?: boolean
+    sessionId?: boolean
+    asset?: boolean
+    amountWei?: boolean
+    requestId?: boolean
+    source?: boolean
+    status?: boolean
+    creditTxHash?: boolean
+    withdrawTxHash?: boolean
+    lastError?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    session?: boolean | SpinRewardPending$sessionArgs<ExtArgs>
+  }, ExtArgs["result"]["spinRewardPending"]>
+
+  export type SpinRewardPendingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    wallet?: boolean
+    sessionId?: boolean
+    asset?: boolean
+    amountWei?: boolean
+    requestId?: boolean
+    source?: boolean
+    status?: boolean
+    creditTxHash?: boolean
+    withdrawTxHash?: boolean
+    lastError?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    session?: boolean | SpinRewardPending$sessionArgs<ExtArgs>
+  }, ExtArgs["result"]["spinRewardPending"]>
+
+  export type SpinRewardPendingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    wallet?: boolean
+    sessionId?: boolean
+    asset?: boolean
+    amountWei?: boolean
+    requestId?: boolean
+    source?: boolean
+    status?: boolean
+    creditTxHash?: boolean
+    withdrawTxHash?: boolean
+    lastError?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    session?: boolean | SpinRewardPending$sessionArgs<ExtArgs>
+  }, ExtArgs["result"]["spinRewardPending"]>
+
+  export type SpinRewardPendingSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    wallet?: boolean
+    sessionId?: boolean
+    asset?: boolean
+    amountWei?: boolean
+    requestId?: boolean
+    source?: boolean
+    status?: boolean
+    creditTxHash?: boolean
+    withdrawTxHash?: boolean
+    lastError?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type SpinRewardPendingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "wallet" | "sessionId" | "asset" | "amountWei" | "requestId" | "source" | "status" | "creditTxHash" | "withdrawTxHash" | "lastError" | "createdAt" | "updatedAt", ExtArgs["result"]["spinRewardPending"]>
+  export type SpinRewardPendingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    session?: boolean | SpinRewardPending$sessionArgs<ExtArgs>
+  }
+  export type SpinRewardPendingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    session?: boolean | SpinRewardPending$sessionArgs<ExtArgs>
+  }
+  export type SpinRewardPendingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+    session?: boolean | SpinRewardPending$sessionArgs<ExtArgs>
+  }
+
+  export type $SpinRewardPendingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SpinRewardPending"
+    objects: {
+      user: Prisma.$UserProfilePayload<ExtArgs>
+      session: Prisma.$SpinSessionPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      wallet: string
+      sessionId: string | null
+      asset: string
+      amountWei: string
+      requestId: string
+      source: $Enums.SpinRewardSource
+      status: $Enums.SpinRewardPendingStatus
+      creditTxHash: string | null
+      withdrawTxHash: string | null
+      lastError: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["spinRewardPending"]>
+    composites: {}
+  }
+
+  type SpinRewardPendingGetPayload<S extends boolean | null | undefined | SpinRewardPendingDefaultArgs> = $Result.GetResult<Prisma.$SpinRewardPendingPayload, S>
+
+  type SpinRewardPendingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SpinRewardPendingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SpinRewardPendingCountAggregateInputType | true
+    }
+
+  export interface SpinRewardPendingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SpinRewardPending'], meta: { name: 'SpinRewardPending' } }
+    /**
+     * Find zero or one SpinRewardPending that matches the filter.
+     * @param {SpinRewardPendingFindUniqueArgs} args - Arguments to find a SpinRewardPending
+     * @example
+     * // Get one SpinRewardPending
+     * const spinRewardPending = await prisma.spinRewardPending.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SpinRewardPendingFindUniqueArgs>(args: SelectSubset<T, SpinRewardPendingFindUniqueArgs<ExtArgs>>): Prisma__SpinRewardPendingClient<$Result.GetResult<Prisma.$SpinRewardPendingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SpinRewardPending that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SpinRewardPendingFindUniqueOrThrowArgs} args - Arguments to find a SpinRewardPending
+     * @example
+     * // Get one SpinRewardPending
+     * const spinRewardPending = await prisma.spinRewardPending.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SpinRewardPendingFindUniqueOrThrowArgs>(args: SelectSubset<T, SpinRewardPendingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SpinRewardPendingClient<$Result.GetResult<Prisma.$SpinRewardPendingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SpinRewardPending that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinRewardPendingFindFirstArgs} args - Arguments to find a SpinRewardPending
+     * @example
+     * // Get one SpinRewardPending
+     * const spinRewardPending = await prisma.spinRewardPending.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SpinRewardPendingFindFirstArgs>(args?: SelectSubset<T, SpinRewardPendingFindFirstArgs<ExtArgs>>): Prisma__SpinRewardPendingClient<$Result.GetResult<Prisma.$SpinRewardPendingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SpinRewardPending that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinRewardPendingFindFirstOrThrowArgs} args - Arguments to find a SpinRewardPending
+     * @example
+     * // Get one SpinRewardPending
+     * const spinRewardPending = await prisma.spinRewardPending.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SpinRewardPendingFindFirstOrThrowArgs>(args?: SelectSubset<T, SpinRewardPendingFindFirstOrThrowArgs<ExtArgs>>): Prisma__SpinRewardPendingClient<$Result.GetResult<Prisma.$SpinRewardPendingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SpinRewardPendings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinRewardPendingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SpinRewardPendings
+     * const spinRewardPendings = await prisma.spinRewardPending.findMany()
+     * 
+     * // Get first 10 SpinRewardPendings
+     * const spinRewardPendings = await prisma.spinRewardPending.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const spinRewardPendingWithIdOnly = await prisma.spinRewardPending.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SpinRewardPendingFindManyArgs>(args?: SelectSubset<T, SpinRewardPendingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinRewardPendingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SpinRewardPending.
+     * @param {SpinRewardPendingCreateArgs} args - Arguments to create a SpinRewardPending.
+     * @example
+     * // Create one SpinRewardPending
+     * const SpinRewardPending = await prisma.spinRewardPending.create({
+     *   data: {
+     *     // ... data to create a SpinRewardPending
+     *   }
+     * })
+     * 
+     */
+    create<T extends SpinRewardPendingCreateArgs>(args: SelectSubset<T, SpinRewardPendingCreateArgs<ExtArgs>>): Prisma__SpinRewardPendingClient<$Result.GetResult<Prisma.$SpinRewardPendingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SpinRewardPendings.
+     * @param {SpinRewardPendingCreateManyArgs} args - Arguments to create many SpinRewardPendings.
+     * @example
+     * // Create many SpinRewardPendings
+     * const spinRewardPending = await prisma.spinRewardPending.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SpinRewardPendingCreateManyArgs>(args?: SelectSubset<T, SpinRewardPendingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SpinRewardPendings and returns the data saved in the database.
+     * @param {SpinRewardPendingCreateManyAndReturnArgs} args - Arguments to create many SpinRewardPendings.
+     * @example
+     * // Create many SpinRewardPendings
+     * const spinRewardPending = await prisma.spinRewardPending.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SpinRewardPendings and only return the `id`
+     * const spinRewardPendingWithIdOnly = await prisma.spinRewardPending.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SpinRewardPendingCreateManyAndReturnArgs>(args?: SelectSubset<T, SpinRewardPendingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinRewardPendingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SpinRewardPending.
+     * @param {SpinRewardPendingDeleteArgs} args - Arguments to delete one SpinRewardPending.
+     * @example
+     * // Delete one SpinRewardPending
+     * const SpinRewardPending = await prisma.spinRewardPending.delete({
+     *   where: {
+     *     // ... filter to delete one SpinRewardPending
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SpinRewardPendingDeleteArgs>(args: SelectSubset<T, SpinRewardPendingDeleteArgs<ExtArgs>>): Prisma__SpinRewardPendingClient<$Result.GetResult<Prisma.$SpinRewardPendingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SpinRewardPending.
+     * @param {SpinRewardPendingUpdateArgs} args - Arguments to update one SpinRewardPending.
+     * @example
+     * // Update one SpinRewardPending
+     * const spinRewardPending = await prisma.spinRewardPending.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SpinRewardPendingUpdateArgs>(args: SelectSubset<T, SpinRewardPendingUpdateArgs<ExtArgs>>): Prisma__SpinRewardPendingClient<$Result.GetResult<Prisma.$SpinRewardPendingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SpinRewardPendings.
+     * @param {SpinRewardPendingDeleteManyArgs} args - Arguments to filter SpinRewardPendings to delete.
+     * @example
+     * // Delete a few SpinRewardPendings
+     * const { count } = await prisma.spinRewardPending.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SpinRewardPendingDeleteManyArgs>(args?: SelectSubset<T, SpinRewardPendingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SpinRewardPendings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinRewardPendingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SpinRewardPendings
+     * const spinRewardPending = await prisma.spinRewardPending.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SpinRewardPendingUpdateManyArgs>(args: SelectSubset<T, SpinRewardPendingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SpinRewardPendings and returns the data updated in the database.
+     * @param {SpinRewardPendingUpdateManyAndReturnArgs} args - Arguments to update many SpinRewardPendings.
+     * @example
+     * // Update many SpinRewardPendings
+     * const spinRewardPending = await prisma.spinRewardPending.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SpinRewardPendings and only return the `id`
+     * const spinRewardPendingWithIdOnly = await prisma.spinRewardPending.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SpinRewardPendingUpdateManyAndReturnArgs>(args: SelectSubset<T, SpinRewardPendingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SpinRewardPendingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SpinRewardPending.
+     * @param {SpinRewardPendingUpsertArgs} args - Arguments to update or create a SpinRewardPending.
+     * @example
+     * // Update or create a SpinRewardPending
+     * const spinRewardPending = await prisma.spinRewardPending.upsert({
+     *   create: {
+     *     // ... data to create a SpinRewardPending
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SpinRewardPending we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SpinRewardPendingUpsertArgs>(args: SelectSubset<T, SpinRewardPendingUpsertArgs<ExtArgs>>): Prisma__SpinRewardPendingClient<$Result.GetResult<Prisma.$SpinRewardPendingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SpinRewardPendings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinRewardPendingCountArgs} args - Arguments to filter SpinRewardPendings to count.
+     * @example
+     * // Count the number of SpinRewardPendings
+     * const count = await prisma.spinRewardPending.count({
+     *   where: {
+     *     // ... the filter for the SpinRewardPendings we want to count
+     *   }
+     * })
+    **/
+    count<T extends SpinRewardPendingCountArgs>(
+      args?: Subset<T, SpinRewardPendingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SpinRewardPendingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SpinRewardPending.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinRewardPendingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SpinRewardPendingAggregateArgs>(args: Subset<T, SpinRewardPendingAggregateArgs>): Prisma.PrismaPromise<GetSpinRewardPendingAggregateType<T>>
+
+    /**
+     * Group by SpinRewardPending.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SpinRewardPendingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SpinRewardPendingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SpinRewardPendingGroupByArgs['orderBy'] }
+        : { orderBy?: SpinRewardPendingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SpinRewardPendingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSpinRewardPendingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SpinRewardPending model
+   */
+  readonly fields: SpinRewardPendingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SpinRewardPending.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SpinRewardPendingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    session<T extends SpinRewardPending$sessionArgs<ExtArgs> = {}>(args?: Subset<T, SpinRewardPending$sessionArgs<ExtArgs>>): Prisma__SpinSessionClient<$Result.GetResult<Prisma.$SpinSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SpinRewardPending model
+   */
+  interface SpinRewardPendingFieldRefs {
+    readonly id: FieldRef<"SpinRewardPending", 'String'>
+    readonly userId: FieldRef<"SpinRewardPending", 'String'>
+    readonly wallet: FieldRef<"SpinRewardPending", 'String'>
+    readonly sessionId: FieldRef<"SpinRewardPending", 'String'>
+    readonly asset: FieldRef<"SpinRewardPending", 'String'>
+    readonly amountWei: FieldRef<"SpinRewardPending", 'String'>
+    readonly requestId: FieldRef<"SpinRewardPending", 'String'>
+    readonly source: FieldRef<"SpinRewardPending", 'SpinRewardSource'>
+    readonly status: FieldRef<"SpinRewardPending", 'SpinRewardPendingStatus'>
+    readonly creditTxHash: FieldRef<"SpinRewardPending", 'String'>
+    readonly withdrawTxHash: FieldRef<"SpinRewardPending", 'String'>
+    readonly lastError: FieldRef<"SpinRewardPending", 'String'>
+    readonly createdAt: FieldRef<"SpinRewardPending", 'DateTime'>
+    readonly updatedAt: FieldRef<"SpinRewardPending", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SpinRewardPending findUnique
+   */
+  export type SpinRewardPendingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinRewardPending to fetch.
+     */
+    where: SpinRewardPendingWhereUniqueInput
+  }
+
+  /**
+   * SpinRewardPending findUniqueOrThrow
+   */
+  export type SpinRewardPendingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinRewardPending to fetch.
+     */
+    where: SpinRewardPendingWhereUniqueInput
+  }
+
+  /**
+   * SpinRewardPending findFirst
+   */
+  export type SpinRewardPendingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinRewardPending to fetch.
+     */
+    where?: SpinRewardPendingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinRewardPendings to fetch.
+     */
+    orderBy?: SpinRewardPendingOrderByWithRelationInput | SpinRewardPendingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SpinRewardPendings.
+     */
+    cursor?: SpinRewardPendingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinRewardPendings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinRewardPendings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinRewardPendings.
+     */
+    distinct?: SpinRewardPendingScalarFieldEnum | SpinRewardPendingScalarFieldEnum[]
+  }
+
+  /**
+   * SpinRewardPending findFirstOrThrow
+   */
+  export type SpinRewardPendingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinRewardPending to fetch.
+     */
+    where?: SpinRewardPendingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinRewardPendings to fetch.
+     */
+    orderBy?: SpinRewardPendingOrderByWithRelationInput | SpinRewardPendingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SpinRewardPendings.
+     */
+    cursor?: SpinRewardPendingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinRewardPendings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinRewardPendings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinRewardPendings.
+     */
+    distinct?: SpinRewardPendingScalarFieldEnum | SpinRewardPendingScalarFieldEnum[]
+  }
+
+  /**
+   * SpinRewardPending findMany
+   */
+  export type SpinRewardPendingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingInclude<ExtArgs> | null
+    /**
+     * Filter, which SpinRewardPendings to fetch.
+     */
+    where?: SpinRewardPendingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SpinRewardPendings to fetch.
+     */
+    orderBy?: SpinRewardPendingOrderByWithRelationInput | SpinRewardPendingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SpinRewardPendings.
+     */
+    cursor?: SpinRewardPendingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SpinRewardPendings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SpinRewardPendings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SpinRewardPendings.
+     */
+    distinct?: SpinRewardPendingScalarFieldEnum | SpinRewardPendingScalarFieldEnum[]
+  }
+
+  /**
+   * SpinRewardPending create
+   */
+  export type SpinRewardPendingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SpinRewardPending.
+     */
+    data: XOR<SpinRewardPendingCreateInput, SpinRewardPendingUncheckedCreateInput>
+  }
+
+  /**
+   * SpinRewardPending createMany
+   */
+  export type SpinRewardPendingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SpinRewardPendings.
+     */
+    data: SpinRewardPendingCreateManyInput | SpinRewardPendingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SpinRewardPending createManyAndReturn
+   */
+  export type SpinRewardPendingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * The data used to create many SpinRewardPendings.
+     */
+    data: SpinRewardPendingCreateManyInput | SpinRewardPendingCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SpinRewardPending update
+   */
+  export type SpinRewardPendingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SpinRewardPending.
+     */
+    data: XOR<SpinRewardPendingUpdateInput, SpinRewardPendingUncheckedUpdateInput>
+    /**
+     * Choose, which SpinRewardPending to update.
+     */
+    where: SpinRewardPendingWhereUniqueInput
+  }
+
+  /**
+   * SpinRewardPending updateMany
+   */
+  export type SpinRewardPendingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SpinRewardPendings.
+     */
+    data: XOR<SpinRewardPendingUpdateManyMutationInput, SpinRewardPendingUncheckedUpdateManyInput>
+    /**
+     * Filter which SpinRewardPendings to update
+     */
+    where?: SpinRewardPendingWhereInput
+    /**
+     * Limit how many SpinRewardPendings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SpinRewardPending updateManyAndReturn
+   */
+  export type SpinRewardPendingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * The data used to update SpinRewardPendings.
+     */
+    data: XOR<SpinRewardPendingUpdateManyMutationInput, SpinRewardPendingUncheckedUpdateManyInput>
+    /**
+     * Filter which SpinRewardPendings to update
+     */
+    where?: SpinRewardPendingWhereInput
+    /**
+     * Limit how many SpinRewardPendings to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SpinRewardPending upsert
+   */
+  export type SpinRewardPendingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SpinRewardPending to update in case it exists.
+     */
+    where: SpinRewardPendingWhereUniqueInput
+    /**
+     * In case the SpinRewardPending found by the `where` argument doesn't exist, create a new SpinRewardPending with this data.
+     */
+    create: XOR<SpinRewardPendingCreateInput, SpinRewardPendingUncheckedCreateInput>
+    /**
+     * In case the SpinRewardPending was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SpinRewardPendingUpdateInput, SpinRewardPendingUncheckedUpdateInput>
+  }
+
+  /**
+   * SpinRewardPending delete
+   */
+  export type SpinRewardPendingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingInclude<ExtArgs> | null
+    /**
+     * Filter which SpinRewardPending to delete.
+     */
+    where: SpinRewardPendingWhereUniqueInput
+  }
+
+  /**
+   * SpinRewardPending deleteMany
+   */
+  export type SpinRewardPendingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SpinRewardPendings to delete
+     */
+    where?: SpinRewardPendingWhereInput
+    /**
+     * Limit how many SpinRewardPendings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SpinRewardPending.session
+   */
+  export type SpinRewardPending$sessionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinSession
+     */
+    select?: SpinSessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinSession
+     */
+    omit?: SpinSessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinSessionInclude<ExtArgs> | null
+    where?: SpinSessionWhereInput
+  }
+
+  /**
+   * SpinRewardPending without action
+   */
+  export type SpinRewardPendingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SpinRewardPending
+     */
+    select?: SpinRewardPendingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SpinRewardPending
+     */
+    omit?: SpinRewardPendingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SpinRewardPendingInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -122327,6 +132646,135 @@ export namespace Prisma {
   export type SchedulerMetricScalarFieldEnum = (typeof SchedulerMetricScalarFieldEnum)[keyof typeof SchedulerMetricScalarFieldEnum]
 
 
+  export const SpinConfigScalarFieldEnum: {
+    id: 'id',
+    key: 'key',
+    treasuryBps: 'treasuryBps',
+    entryFeeWei: 'entryFeeWei',
+    entryAsset: 'entryAsset',
+    xpCostPerSpin: 'xpCostPerSpin',
+    spinDurationSec: 'spinDurationSec',
+    maxBubbleCashWei: 'maxBubbleCashWei',
+    maxCashPerSpinWei: 'maxCashPerSpinWei',
+    baseWheelRpm: 'baseWheelRpm',
+    metadata: 'metadata',
+    updatedAt: 'updatedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type SpinConfigScalarFieldEnum = (typeof SpinConfigScalarFieldEnum)[keyof typeof SpinConfigScalarFieldEnum]
+
+
+  export const SpinMusicTrackScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    artist: 'artist',
+    url: 'url',
+    tier: 'tier',
+    priceWei: 'priceWei',
+    priceAsset: 'priceAsset',
+    durationSec: 'durationSec',
+    active: 'active',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SpinMusicTrackScalarFieldEnum = (typeof SpinMusicTrackScalarFieldEnum)[keyof typeof SpinMusicTrackScalarFieldEnum]
+
+
+  export const UserMusicInventoryScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    trackId: 'trackId',
+    equipped: 'equipped',
+    createdAt: 'createdAt'
+  };
+
+  export type UserMusicInventoryScalarFieldEnum = (typeof UserMusicInventoryScalarFieldEnum)[keyof typeof UserMusicInventoryScalarFieldEnum]
+
+
+  export const SpinCollectionItemScalarFieldEnum: {
+    id: 'id',
+    slug: 'slug',
+    name: 'name',
+    type: 'type',
+    tier: 'tier',
+    priceWei: 'priceWei',
+    priceAsset: 'priceAsset',
+    effect: 'effect',
+    active: 'active',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SpinCollectionItemScalarFieldEnum = (typeof SpinCollectionItemScalarFieldEnum)[keyof typeof SpinCollectionItemScalarFieldEnum]
+
+
+  export const UserInventoryItemScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    itemId: 'itemId',
+    equipped: 'equipped',
+    createdAt: 'createdAt'
+  };
+
+  export type UserInventoryItemScalarFieldEnum = (typeof UserInventoryItemScalarFieldEnum)[keyof typeof UserInventoryItemScalarFieldEnum]
+
+
+  export const SpinSessionScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    status: 'status',
+    entryTxHash: 'entryTxHash',
+    entryAsset: 'entryAsset',
+    serverSeed: 'serverSeed',
+    loadout: 'loadout',
+    bubblePlan: 'bubblePlan',
+    cashEarnedWei: 'cashEarnedWei',
+    cashAsset: 'cashAsset',
+    wheelRewardId: 'wheelRewardId',
+    startedAt: 'startedAt',
+    finishedAt: 'finishedAt',
+    expiresAt: 'expiresAt'
+  };
+
+  export type SpinSessionScalarFieldEnum = (typeof SpinSessionScalarFieldEnum)[keyof typeof SpinSessionScalarFieldEnum]
+
+
+  export const BubbleHitScalarFieldEnum: {
+    id: 'id',
+    sessionId: 'sessionId',
+    userId: 'userId',
+    bubbleId: 'bubbleId',
+    amountWei: 'amountWei',
+    asset: 'asset',
+    taps: 'taps',
+    createdAt: 'createdAt'
+  };
+
+  export type BubbleHitScalarFieldEnum = (typeof BubbleHitScalarFieldEnum)[keyof typeof BubbleHitScalarFieldEnum]
+
+
+  export const SpinRewardPendingScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    wallet: 'wallet',
+    sessionId: 'sessionId',
+    asset: 'asset',
+    amountWei: 'amountWei',
+    requestId: 'requestId',
+    source: 'source',
+    status: 'status',
+    creditTxHash: 'creditTxHash',
+    withdrawTxHash: 'withdrawTxHash',
+    lastError: 'lastError',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type SpinRewardPendingScalarFieldEnum = (typeof SpinRewardPendingScalarFieldEnum)[keyof typeof SpinRewardPendingScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -123183,6 +133631,76 @@ export namespace Prisma {
    */
   export type ListEnumHealthStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HealthStatus[]'>
     
+
+
+  /**
+   * Reference to a field of type 'SpinMusicTier'
+   */
+  export type EnumSpinMusicTierFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpinMusicTier'>
+    
+
+
+  /**
+   * Reference to a field of type 'SpinMusicTier[]'
+   */
+  export type ListEnumSpinMusicTierFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpinMusicTier[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SpinItemType'
+   */
+  export type EnumSpinItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpinItemType'>
+    
+
+
+  /**
+   * Reference to a field of type 'SpinItemType[]'
+   */
+  export type ListEnumSpinItemTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpinItemType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SpinSessionStatus'
+   */
+  export type EnumSpinSessionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpinSessionStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SpinSessionStatus[]'
+   */
+  export type ListEnumSpinSessionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpinSessionStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SpinRewardSource'
+   */
+  export type EnumSpinRewardSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpinRewardSource'>
+    
+
+
+  /**
+   * Reference to a field of type 'SpinRewardSource[]'
+   */
+  export type ListEnumSpinRewardSourceFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpinRewardSource[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'SpinRewardPendingStatus'
+   */
+  export type EnumSpinRewardPendingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpinRewardPendingStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'SpinRewardPendingStatus[]'
+   */
+  export type ListEnumSpinRewardPendingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SpinRewardPendingStatus[]'>
+    
   /**
    * Deep Input Types
    */
@@ -123251,6 +133769,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalListRelationFilter
     campaignTargets?: CampaignTargetListRelationFilter
     skillBoostPayments?: SkillBoostPaymentListRelationFilter
+    spinSessions?: SpinSessionListRelationFilter
+    spinMusicOwned?: UserMusicInventoryListRelationFilter
+    spinInventory?: UserInventoryItemListRelationFilter
+    spinRewardPendings?: SpinRewardPendingListRelationFilter
+    bubbleHits?: BubbleHitListRelationFilter
   }
 
   export type UserProfileOrderByWithRelationInput = {
@@ -123313,6 +133836,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalOrderByRelationAggregateInput
     campaignTargets?: CampaignTargetOrderByRelationAggregateInput
     skillBoostPayments?: SkillBoostPaymentOrderByRelationAggregateInput
+    spinSessions?: SpinSessionOrderByRelationAggregateInput
+    spinMusicOwned?: UserMusicInventoryOrderByRelationAggregateInput
+    spinInventory?: UserInventoryItemOrderByRelationAggregateInput
+    spinRewardPendings?: SpinRewardPendingOrderByRelationAggregateInput
+    bubbleHits?: BubbleHitOrderByRelationAggregateInput
   }
 
   export type UserProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -123378,6 +133906,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalListRelationFilter
     campaignTargets?: CampaignTargetListRelationFilter
     skillBoostPayments?: SkillBoostPaymentListRelationFilter
+    spinSessions?: SpinSessionListRelationFilter
+    spinMusicOwned?: UserMusicInventoryListRelationFilter
+    spinInventory?: UserInventoryItemListRelationFilter
+    spinRewardPendings?: SpinRewardPendingListRelationFilter
+    bubbleHits?: BubbleHitListRelationFilter
   }, "id" | "wallet">
 
   export type UserProfileOrderByWithAggregationInput = {
@@ -130653,6 +141186,677 @@ export namespace Prisma {
     recordedAt?: DateTimeWithAggregatesFilter<"SchedulerMetric"> | Date | string
   }
 
+  export type SpinConfigWhereInput = {
+    AND?: SpinConfigWhereInput | SpinConfigWhereInput[]
+    OR?: SpinConfigWhereInput[]
+    NOT?: SpinConfigWhereInput | SpinConfigWhereInput[]
+    id?: UuidFilter<"SpinConfig"> | string
+    key?: StringFilter<"SpinConfig"> | string
+    treasuryBps?: IntFilter<"SpinConfig"> | number
+    entryFeeWei?: StringFilter<"SpinConfig"> | string
+    entryAsset?: StringFilter<"SpinConfig"> | string
+    xpCostPerSpin?: IntFilter<"SpinConfig"> | number
+    spinDurationSec?: IntFilter<"SpinConfig"> | number
+    maxBubbleCashWei?: StringFilter<"SpinConfig"> | string
+    maxCashPerSpinWei?: StringFilter<"SpinConfig"> | string
+    baseWheelRpm?: IntFilter<"SpinConfig"> | number
+    metadata?: JsonNullableFilter<"SpinConfig">
+    updatedAt?: DateTimeFilter<"SpinConfig"> | Date | string
+    createdAt?: DateTimeFilter<"SpinConfig"> | Date | string
+  }
+
+  export type SpinConfigOrderByWithRelationInput = {
+    id?: SortOrder
+    key?: SortOrder
+    treasuryBps?: SortOrder
+    entryFeeWei?: SortOrder
+    entryAsset?: SortOrder
+    xpCostPerSpin?: SortOrder
+    spinDurationSec?: SortOrder
+    maxBubbleCashWei?: SortOrder
+    maxCashPerSpinWei?: SortOrder
+    baseWheelRpm?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SpinConfigWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    key?: string
+    AND?: SpinConfigWhereInput | SpinConfigWhereInput[]
+    OR?: SpinConfigWhereInput[]
+    NOT?: SpinConfigWhereInput | SpinConfigWhereInput[]
+    treasuryBps?: IntFilter<"SpinConfig"> | number
+    entryFeeWei?: StringFilter<"SpinConfig"> | string
+    entryAsset?: StringFilter<"SpinConfig"> | string
+    xpCostPerSpin?: IntFilter<"SpinConfig"> | number
+    spinDurationSec?: IntFilter<"SpinConfig"> | number
+    maxBubbleCashWei?: StringFilter<"SpinConfig"> | string
+    maxCashPerSpinWei?: StringFilter<"SpinConfig"> | string
+    baseWheelRpm?: IntFilter<"SpinConfig"> | number
+    metadata?: JsonNullableFilter<"SpinConfig">
+    updatedAt?: DateTimeFilter<"SpinConfig"> | Date | string
+    createdAt?: DateTimeFilter<"SpinConfig"> | Date | string
+  }, "id" | "key">
+
+  export type SpinConfigOrderByWithAggregationInput = {
+    id?: SortOrder
+    key?: SortOrder
+    treasuryBps?: SortOrder
+    entryFeeWei?: SortOrder
+    entryAsset?: SortOrder
+    xpCostPerSpin?: SortOrder
+    spinDurationSec?: SortOrder
+    maxBubbleCashWei?: SortOrder
+    maxCashPerSpinWei?: SortOrder
+    baseWheelRpm?: SortOrder
+    metadata?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+    _count?: SpinConfigCountOrderByAggregateInput
+    _avg?: SpinConfigAvgOrderByAggregateInput
+    _max?: SpinConfigMaxOrderByAggregateInput
+    _min?: SpinConfigMinOrderByAggregateInput
+    _sum?: SpinConfigSumOrderByAggregateInput
+  }
+
+  export type SpinConfigScalarWhereWithAggregatesInput = {
+    AND?: SpinConfigScalarWhereWithAggregatesInput | SpinConfigScalarWhereWithAggregatesInput[]
+    OR?: SpinConfigScalarWhereWithAggregatesInput[]
+    NOT?: SpinConfigScalarWhereWithAggregatesInput | SpinConfigScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SpinConfig"> | string
+    key?: StringWithAggregatesFilter<"SpinConfig"> | string
+    treasuryBps?: IntWithAggregatesFilter<"SpinConfig"> | number
+    entryFeeWei?: StringWithAggregatesFilter<"SpinConfig"> | string
+    entryAsset?: StringWithAggregatesFilter<"SpinConfig"> | string
+    xpCostPerSpin?: IntWithAggregatesFilter<"SpinConfig"> | number
+    spinDurationSec?: IntWithAggregatesFilter<"SpinConfig"> | number
+    maxBubbleCashWei?: StringWithAggregatesFilter<"SpinConfig"> | string
+    maxCashPerSpinWei?: StringWithAggregatesFilter<"SpinConfig"> | string
+    baseWheelRpm?: IntWithAggregatesFilter<"SpinConfig"> | number
+    metadata?: JsonNullableWithAggregatesFilter<"SpinConfig">
+    updatedAt?: DateTimeWithAggregatesFilter<"SpinConfig"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"SpinConfig"> | Date | string
+  }
+
+  export type SpinMusicTrackWhereInput = {
+    AND?: SpinMusicTrackWhereInput | SpinMusicTrackWhereInput[]
+    OR?: SpinMusicTrackWhereInput[]
+    NOT?: SpinMusicTrackWhereInput | SpinMusicTrackWhereInput[]
+    id?: UuidFilter<"SpinMusicTrack"> | string
+    title?: StringFilter<"SpinMusicTrack"> | string
+    artist?: StringNullableFilter<"SpinMusicTrack"> | string | null
+    url?: StringFilter<"SpinMusicTrack"> | string
+    tier?: EnumSpinMusicTierFilter<"SpinMusicTrack"> | $Enums.SpinMusicTier
+    priceWei?: StringFilter<"SpinMusicTrack"> | string
+    priceAsset?: StringFilter<"SpinMusicTrack"> | string
+    durationSec?: IntFilter<"SpinMusicTrack"> | number
+    active?: BoolFilter<"SpinMusicTrack"> | boolean
+    createdAt?: DateTimeFilter<"SpinMusicTrack"> | Date | string
+    updatedAt?: DateTimeFilter<"SpinMusicTrack"> | Date | string
+    owners?: UserMusicInventoryListRelationFilter
+  }
+
+  export type SpinMusicTrackOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    artist?: SortOrderInput | SortOrder
+    url?: SortOrder
+    tier?: SortOrder
+    priceWei?: SortOrder
+    priceAsset?: SortOrder
+    durationSec?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    owners?: UserMusicInventoryOrderByRelationAggregateInput
+  }
+
+  export type SpinMusicTrackWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SpinMusicTrackWhereInput | SpinMusicTrackWhereInput[]
+    OR?: SpinMusicTrackWhereInput[]
+    NOT?: SpinMusicTrackWhereInput | SpinMusicTrackWhereInput[]
+    title?: StringFilter<"SpinMusicTrack"> | string
+    artist?: StringNullableFilter<"SpinMusicTrack"> | string | null
+    url?: StringFilter<"SpinMusicTrack"> | string
+    tier?: EnumSpinMusicTierFilter<"SpinMusicTrack"> | $Enums.SpinMusicTier
+    priceWei?: StringFilter<"SpinMusicTrack"> | string
+    priceAsset?: StringFilter<"SpinMusicTrack"> | string
+    durationSec?: IntFilter<"SpinMusicTrack"> | number
+    active?: BoolFilter<"SpinMusicTrack"> | boolean
+    createdAt?: DateTimeFilter<"SpinMusicTrack"> | Date | string
+    updatedAt?: DateTimeFilter<"SpinMusicTrack"> | Date | string
+    owners?: UserMusicInventoryListRelationFilter
+  }, "id">
+
+  export type SpinMusicTrackOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    artist?: SortOrderInput | SortOrder
+    url?: SortOrder
+    tier?: SortOrder
+    priceWei?: SortOrder
+    priceAsset?: SortOrder
+    durationSec?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SpinMusicTrackCountOrderByAggregateInput
+    _avg?: SpinMusicTrackAvgOrderByAggregateInput
+    _max?: SpinMusicTrackMaxOrderByAggregateInput
+    _min?: SpinMusicTrackMinOrderByAggregateInput
+    _sum?: SpinMusicTrackSumOrderByAggregateInput
+  }
+
+  export type SpinMusicTrackScalarWhereWithAggregatesInput = {
+    AND?: SpinMusicTrackScalarWhereWithAggregatesInput | SpinMusicTrackScalarWhereWithAggregatesInput[]
+    OR?: SpinMusicTrackScalarWhereWithAggregatesInput[]
+    NOT?: SpinMusicTrackScalarWhereWithAggregatesInput | SpinMusicTrackScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SpinMusicTrack"> | string
+    title?: StringWithAggregatesFilter<"SpinMusicTrack"> | string
+    artist?: StringNullableWithAggregatesFilter<"SpinMusicTrack"> | string | null
+    url?: StringWithAggregatesFilter<"SpinMusicTrack"> | string
+    tier?: EnumSpinMusicTierWithAggregatesFilter<"SpinMusicTrack"> | $Enums.SpinMusicTier
+    priceWei?: StringWithAggregatesFilter<"SpinMusicTrack"> | string
+    priceAsset?: StringWithAggregatesFilter<"SpinMusicTrack"> | string
+    durationSec?: IntWithAggregatesFilter<"SpinMusicTrack"> | number
+    active?: BoolWithAggregatesFilter<"SpinMusicTrack"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"SpinMusicTrack"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SpinMusicTrack"> | Date | string
+  }
+
+  export type UserMusicInventoryWhereInput = {
+    AND?: UserMusicInventoryWhereInput | UserMusicInventoryWhereInput[]
+    OR?: UserMusicInventoryWhereInput[]
+    NOT?: UserMusicInventoryWhereInput | UserMusicInventoryWhereInput[]
+    id?: UuidFilter<"UserMusicInventory"> | string
+    userId?: UuidFilter<"UserMusicInventory"> | string
+    trackId?: UuidFilter<"UserMusicInventory"> | string
+    equipped?: BoolFilter<"UserMusicInventory"> | boolean
+    createdAt?: DateTimeFilter<"UserMusicInventory"> | Date | string
+    user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    track?: XOR<SpinMusicTrackScalarRelationFilter, SpinMusicTrackWhereInput>
+  }
+
+  export type UserMusicInventoryOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    trackId?: SortOrder
+    equipped?: SortOrder
+    createdAt?: SortOrder
+    user?: UserProfileOrderByWithRelationInput
+    track?: SpinMusicTrackOrderByWithRelationInput
+  }
+
+  export type UserMusicInventoryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_trackId?: UserMusicInventoryUserIdTrackIdCompoundUniqueInput
+    AND?: UserMusicInventoryWhereInput | UserMusicInventoryWhereInput[]
+    OR?: UserMusicInventoryWhereInput[]
+    NOT?: UserMusicInventoryWhereInput | UserMusicInventoryWhereInput[]
+    userId?: UuidFilter<"UserMusicInventory"> | string
+    trackId?: UuidFilter<"UserMusicInventory"> | string
+    equipped?: BoolFilter<"UserMusicInventory"> | boolean
+    createdAt?: DateTimeFilter<"UserMusicInventory"> | Date | string
+    user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    track?: XOR<SpinMusicTrackScalarRelationFilter, SpinMusicTrackWhereInput>
+  }, "id" | "userId_trackId">
+
+  export type UserMusicInventoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    trackId?: SortOrder
+    equipped?: SortOrder
+    createdAt?: SortOrder
+    _count?: UserMusicInventoryCountOrderByAggregateInput
+    _max?: UserMusicInventoryMaxOrderByAggregateInput
+    _min?: UserMusicInventoryMinOrderByAggregateInput
+  }
+
+  export type UserMusicInventoryScalarWhereWithAggregatesInput = {
+    AND?: UserMusicInventoryScalarWhereWithAggregatesInput | UserMusicInventoryScalarWhereWithAggregatesInput[]
+    OR?: UserMusicInventoryScalarWhereWithAggregatesInput[]
+    NOT?: UserMusicInventoryScalarWhereWithAggregatesInput | UserMusicInventoryScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"UserMusicInventory"> | string
+    userId?: UuidWithAggregatesFilter<"UserMusicInventory"> | string
+    trackId?: UuidWithAggregatesFilter<"UserMusicInventory"> | string
+    equipped?: BoolWithAggregatesFilter<"UserMusicInventory"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"UserMusicInventory"> | Date | string
+  }
+
+  export type SpinCollectionItemWhereInput = {
+    AND?: SpinCollectionItemWhereInput | SpinCollectionItemWhereInput[]
+    OR?: SpinCollectionItemWhereInput[]
+    NOT?: SpinCollectionItemWhereInput | SpinCollectionItemWhereInput[]
+    id?: UuidFilter<"SpinCollectionItem"> | string
+    slug?: StringFilter<"SpinCollectionItem"> | string
+    name?: StringFilter<"SpinCollectionItem"> | string
+    type?: EnumSpinItemTypeFilter<"SpinCollectionItem"> | $Enums.SpinItemType
+    tier?: IntFilter<"SpinCollectionItem"> | number
+    priceWei?: StringFilter<"SpinCollectionItem"> | string
+    priceAsset?: StringFilter<"SpinCollectionItem"> | string
+    effect?: JsonNullableFilter<"SpinCollectionItem">
+    active?: BoolFilter<"SpinCollectionItem"> | boolean
+    createdAt?: DateTimeFilter<"SpinCollectionItem"> | Date | string
+    updatedAt?: DateTimeFilter<"SpinCollectionItem"> | Date | string
+    owners?: UserInventoryItemListRelationFilter
+  }
+
+  export type SpinCollectionItemOrderByWithRelationInput = {
+    id?: SortOrder
+    slug?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    tier?: SortOrder
+    priceWei?: SortOrder
+    priceAsset?: SortOrder
+    effect?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    owners?: UserInventoryItemOrderByRelationAggregateInput
+  }
+
+  export type SpinCollectionItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    slug?: string
+    AND?: SpinCollectionItemWhereInput | SpinCollectionItemWhereInput[]
+    OR?: SpinCollectionItemWhereInput[]
+    NOT?: SpinCollectionItemWhereInput | SpinCollectionItemWhereInput[]
+    name?: StringFilter<"SpinCollectionItem"> | string
+    type?: EnumSpinItemTypeFilter<"SpinCollectionItem"> | $Enums.SpinItemType
+    tier?: IntFilter<"SpinCollectionItem"> | number
+    priceWei?: StringFilter<"SpinCollectionItem"> | string
+    priceAsset?: StringFilter<"SpinCollectionItem"> | string
+    effect?: JsonNullableFilter<"SpinCollectionItem">
+    active?: BoolFilter<"SpinCollectionItem"> | boolean
+    createdAt?: DateTimeFilter<"SpinCollectionItem"> | Date | string
+    updatedAt?: DateTimeFilter<"SpinCollectionItem"> | Date | string
+    owners?: UserInventoryItemListRelationFilter
+  }, "id" | "slug">
+
+  export type SpinCollectionItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    slug?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    tier?: SortOrder
+    priceWei?: SortOrder
+    priceAsset?: SortOrder
+    effect?: SortOrderInput | SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SpinCollectionItemCountOrderByAggregateInput
+    _avg?: SpinCollectionItemAvgOrderByAggregateInput
+    _max?: SpinCollectionItemMaxOrderByAggregateInput
+    _min?: SpinCollectionItemMinOrderByAggregateInput
+    _sum?: SpinCollectionItemSumOrderByAggregateInput
+  }
+
+  export type SpinCollectionItemScalarWhereWithAggregatesInput = {
+    AND?: SpinCollectionItemScalarWhereWithAggregatesInput | SpinCollectionItemScalarWhereWithAggregatesInput[]
+    OR?: SpinCollectionItemScalarWhereWithAggregatesInput[]
+    NOT?: SpinCollectionItemScalarWhereWithAggregatesInput | SpinCollectionItemScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SpinCollectionItem"> | string
+    slug?: StringWithAggregatesFilter<"SpinCollectionItem"> | string
+    name?: StringWithAggregatesFilter<"SpinCollectionItem"> | string
+    type?: EnumSpinItemTypeWithAggregatesFilter<"SpinCollectionItem"> | $Enums.SpinItemType
+    tier?: IntWithAggregatesFilter<"SpinCollectionItem"> | number
+    priceWei?: StringWithAggregatesFilter<"SpinCollectionItem"> | string
+    priceAsset?: StringWithAggregatesFilter<"SpinCollectionItem"> | string
+    effect?: JsonNullableWithAggregatesFilter<"SpinCollectionItem">
+    active?: BoolWithAggregatesFilter<"SpinCollectionItem"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"SpinCollectionItem"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SpinCollectionItem"> | Date | string
+  }
+
+  export type UserInventoryItemWhereInput = {
+    AND?: UserInventoryItemWhereInput | UserInventoryItemWhereInput[]
+    OR?: UserInventoryItemWhereInput[]
+    NOT?: UserInventoryItemWhereInput | UserInventoryItemWhereInput[]
+    id?: UuidFilter<"UserInventoryItem"> | string
+    userId?: UuidFilter<"UserInventoryItem"> | string
+    itemId?: UuidFilter<"UserInventoryItem"> | string
+    equipped?: BoolFilter<"UserInventoryItem"> | boolean
+    createdAt?: DateTimeFilter<"UserInventoryItem"> | Date | string
+    user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    item?: XOR<SpinCollectionItemScalarRelationFilter, SpinCollectionItemWhereInput>
+  }
+
+  export type UserInventoryItemOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    itemId?: SortOrder
+    equipped?: SortOrder
+    createdAt?: SortOrder
+    user?: UserProfileOrderByWithRelationInput
+    item?: SpinCollectionItemOrderByWithRelationInput
+  }
+
+  export type UserInventoryItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_itemId?: UserInventoryItemUserIdItemIdCompoundUniqueInput
+    AND?: UserInventoryItemWhereInput | UserInventoryItemWhereInput[]
+    OR?: UserInventoryItemWhereInput[]
+    NOT?: UserInventoryItemWhereInput | UserInventoryItemWhereInput[]
+    userId?: UuidFilter<"UserInventoryItem"> | string
+    itemId?: UuidFilter<"UserInventoryItem"> | string
+    equipped?: BoolFilter<"UserInventoryItem"> | boolean
+    createdAt?: DateTimeFilter<"UserInventoryItem"> | Date | string
+    user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    item?: XOR<SpinCollectionItemScalarRelationFilter, SpinCollectionItemWhereInput>
+  }, "id" | "userId_itemId">
+
+  export type UserInventoryItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    itemId?: SortOrder
+    equipped?: SortOrder
+    createdAt?: SortOrder
+    _count?: UserInventoryItemCountOrderByAggregateInput
+    _max?: UserInventoryItemMaxOrderByAggregateInput
+    _min?: UserInventoryItemMinOrderByAggregateInput
+  }
+
+  export type UserInventoryItemScalarWhereWithAggregatesInput = {
+    AND?: UserInventoryItemScalarWhereWithAggregatesInput | UserInventoryItemScalarWhereWithAggregatesInput[]
+    OR?: UserInventoryItemScalarWhereWithAggregatesInput[]
+    NOT?: UserInventoryItemScalarWhereWithAggregatesInput | UserInventoryItemScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"UserInventoryItem"> | string
+    userId?: UuidWithAggregatesFilter<"UserInventoryItem"> | string
+    itemId?: UuidWithAggregatesFilter<"UserInventoryItem"> | string
+    equipped?: BoolWithAggregatesFilter<"UserInventoryItem"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"UserInventoryItem"> | Date | string
+  }
+
+  export type SpinSessionWhereInput = {
+    AND?: SpinSessionWhereInput | SpinSessionWhereInput[]
+    OR?: SpinSessionWhereInput[]
+    NOT?: SpinSessionWhereInput | SpinSessionWhereInput[]
+    id?: UuidFilter<"SpinSession"> | string
+    userId?: UuidFilter<"SpinSession"> | string
+    status?: EnumSpinSessionStatusFilter<"SpinSession"> | $Enums.SpinSessionStatus
+    entryTxHash?: StringNullableFilter<"SpinSession"> | string | null
+    entryAsset?: StringNullableFilter<"SpinSession"> | string | null
+    serverSeed?: StringFilter<"SpinSession"> | string
+    loadout?: JsonNullableFilter<"SpinSession">
+    bubblePlan?: JsonNullableFilter<"SpinSession">
+    cashEarnedWei?: StringFilter<"SpinSession"> | string
+    cashAsset?: StringFilter<"SpinSession"> | string
+    wheelRewardId?: UuidNullableFilter<"SpinSession"> | string | null
+    startedAt?: DateTimeFilter<"SpinSession"> | Date | string
+    finishedAt?: DateTimeNullableFilter<"SpinSession"> | Date | string | null
+    expiresAt?: DateTimeFilter<"SpinSession"> | Date | string
+    user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    bubbleHits?: BubbleHitListRelationFilter
+    pendings?: SpinRewardPendingListRelationFilter
+  }
+
+  export type SpinSessionOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    entryTxHash?: SortOrderInput | SortOrder
+    entryAsset?: SortOrderInput | SortOrder
+    serverSeed?: SortOrder
+    loadout?: SortOrderInput | SortOrder
+    bubblePlan?: SortOrderInput | SortOrder
+    cashEarnedWei?: SortOrder
+    cashAsset?: SortOrder
+    wheelRewardId?: SortOrderInput | SortOrder
+    startedAt?: SortOrder
+    finishedAt?: SortOrderInput | SortOrder
+    expiresAt?: SortOrder
+    user?: UserProfileOrderByWithRelationInput
+    bubbleHits?: BubbleHitOrderByRelationAggregateInput
+    pendings?: SpinRewardPendingOrderByRelationAggregateInput
+  }
+
+  export type SpinSessionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SpinSessionWhereInput | SpinSessionWhereInput[]
+    OR?: SpinSessionWhereInput[]
+    NOT?: SpinSessionWhereInput | SpinSessionWhereInput[]
+    userId?: UuidFilter<"SpinSession"> | string
+    status?: EnumSpinSessionStatusFilter<"SpinSession"> | $Enums.SpinSessionStatus
+    entryTxHash?: StringNullableFilter<"SpinSession"> | string | null
+    entryAsset?: StringNullableFilter<"SpinSession"> | string | null
+    serverSeed?: StringFilter<"SpinSession"> | string
+    loadout?: JsonNullableFilter<"SpinSession">
+    bubblePlan?: JsonNullableFilter<"SpinSession">
+    cashEarnedWei?: StringFilter<"SpinSession"> | string
+    cashAsset?: StringFilter<"SpinSession"> | string
+    wheelRewardId?: UuidNullableFilter<"SpinSession"> | string | null
+    startedAt?: DateTimeFilter<"SpinSession"> | Date | string
+    finishedAt?: DateTimeNullableFilter<"SpinSession"> | Date | string | null
+    expiresAt?: DateTimeFilter<"SpinSession"> | Date | string
+    user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    bubbleHits?: BubbleHitListRelationFilter
+    pendings?: SpinRewardPendingListRelationFilter
+  }, "id">
+
+  export type SpinSessionOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    entryTxHash?: SortOrderInput | SortOrder
+    entryAsset?: SortOrderInput | SortOrder
+    serverSeed?: SortOrder
+    loadout?: SortOrderInput | SortOrder
+    bubblePlan?: SortOrderInput | SortOrder
+    cashEarnedWei?: SortOrder
+    cashAsset?: SortOrder
+    wheelRewardId?: SortOrderInput | SortOrder
+    startedAt?: SortOrder
+    finishedAt?: SortOrderInput | SortOrder
+    expiresAt?: SortOrder
+    _count?: SpinSessionCountOrderByAggregateInput
+    _max?: SpinSessionMaxOrderByAggregateInput
+    _min?: SpinSessionMinOrderByAggregateInput
+  }
+
+  export type SpinSessionScalarWhereWithAggregatesInput = {
+    AND?: SpinSessionScalarWhereWithAggregatesInput | SpinSessionScalarWhereWithAggregatesInput[]
+    OR?: SpinSessionScalarWhereWithAggregatesInput[]
+    NOT?: SpinSessionScalarWhereWithAggregatesInput | SpinSessionScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SpinSession"> | string
+    userId?: UuidWithAggregatesFilter<"SpinSession"> | string
+    status?: EnumSpinSessionStatusWithAggregatesFilter<"SpinSession"> | $Enums.SpinSessionStatus
+    entryTxHash?: StringNullableWithAggregatesFilter<"SpinSession"> | string | null
+    entryAsset?: StringNullableWithAggregatesFilter<"SpinSession"> | string | null
+    serverSeed?: StringWithAggregatesFilter<"SpinSession"> | string
+    loadout?: JsonNullableWithAggregatesFilter<"SpinSession">
+    bubblePlan?: JsonNullableWithAggregatesFilter<"SpinSession">
+    cashEarnedWei?: StringWithAggregatesFilter<"SpinSession"> | string
+    cashAsset?: StringWithAggregatesFilter<"SpinSession"> | string
+    wheelRewardId?: UuidNullableWithAggregatesFilter<"SpinSession"> | string | null
+    startedAt?: DateTimeWithAggregatesFilter<"SpinSession"> | Date | string
+    finishedAt?: DateTimeNullableWithAggregatesFilter<"SpinSession"> | Date | string | null
+    expiresAt?: DateTimeWithAggregatesFilter<"SpinSession"> | Date | string
+  }
+
+  export type BubbleHitWhereInput = {
+    AND?: BubbleHitWhereInput | BubbleHitWhereInput[]
+    OR?: BubbleHitWhereInput[]
+    NOT?: BubbleHitWhereInput | BubbleHitWhereInput[]
+    id?: UuidFilter<"BubbleHit"> | string
+    sessionId?: UuidFilter<"BubbleHit"> | string
+    userId?: UuidFilter<"BubbleHit"> | string
+    bubbleId?: StringFilter<"BubbleHit"> | string
+    amountWei?: StringFilter<"BubbleHit"> | string
+    asset?: StringFilter<"BubbleHit"> | string
+    taps?: IntFilter<"BubbleHit"> | number
+    createdAt?: DateTimeFilter<"BubbleHit"> | Date | string
+    session?: XOR<SpinSessionScalarRelationFilter, SpinSessionWhereInput>
+    user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+  }
+
+  export type BubbleHitOrderByWithRelationInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    userId?: SortOrder
+    bubbleId?: SortOrder
+    amountWei?: SortOrder
+    asset?: SortOrder
+    taps?: SortOrder
+    createdAt?: SortOrder
+    session?: SpinSessionOrderByWithRelationInput
+    user?: UserProfileOrderByWithRelationInput
+  }
+
+  export type BubbleHitWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    sessionId_bubbleId?: BubbleHitSessionIdBubbleIdCompoundUniqueInput
+    AND?: BubbleHitWhereInput | BubbleHitWhereInput[]
+    OR?: BubbleHitWhereInput[]
+    NOT?: BubbleHitWhereInput | BubbleHitWhereInput[]
+    sessionId?: UuidFilter<"BubbleHit"> | string
+    userId?: UuidFilter<"BubbleHit"> | string
+    bubbleId?: StringFilter<"BubbleHit"> | string
+    amountWei?: StringFilter<"BubbleHit"> | string
+    asset?: StringFilter<"BubbleHit"> | string
+    taps?: IntFilter<"BubbleHit"> | number
+    createdAt?: DateTimeFilter<"BubbleHit"> | Date | string
+    session?: XOR<SpinSessionScalarRelationFilter, SpinSessionWhereInput>
+    user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+  }, "id" | "sessionId_bubbleId">
+
+  export type BubbleHitOrderByWithAggregationInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    userId?: SortOrder
+    bubbleId?: SortOrder
+    amountWei?: SortOrder
+    asset?: SortOrder
+    taps?: SortOrder
+    createdAt?: SortOrder
+    _count?: BubbleHitCountOrderByAggregateInput
+    _avg?: BubbleHitAvgOrderByAggregateInput
+    _max?: BubbleHitMaxOrderByAggregateInput
+    _min?: BubbleHitMinOrderByAggregateInput
+    _sum?: BubbleHitSumOrderByAggregateInput
+  }
+
+  export type BubbleHitScalarWhereWithAggregatesInput = {
+    AND?: BubbleHitScalarWhereWithAggregatesInput | BubbleHitScalarWhereWithAggregatesInput[]
+    OR?: BubbleHitScalarWhereWithAggregatesInput[]
+    NOT?: BubbleHitScalarWhereWithAggregatesInput | BubbleHitScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"BubbleHit"> | string
+    sessionId?: UuidWithAggregatesFilter<"BubbleHit"> | string
+    userId?: UuidWithAggregatesFilter<"BubbleHit"> | string
+    bubbleId?: StringWithAggregatesFilter<"BubbleHit"> | string
+    amountWei?: StringWithAggregatesFilter<"BubbleHit"> | string
+    asset?: StringWithAggregatesFilter<"BubbleHit"> | string
+    taps?: IntWithAggregatesFilter<"BubbleHit"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"BubbleHit"> | Date | string
+  }
+
+  export type SpinRewardPendingWhereInput = {
+    AND?: SpinRewardPendingWhereInput | SpinRewardPendingWhereInput[]
+    OR?: SpinRewardPendingWhereInput[]
+    NOT?: SpinRewardPendingWhereInput | SpinRewardPendingWhereInput[]
+    id?: UuidFilter<"SpinRewardPending"> | string
+    userId?: UuidFilter<"SpinRewardPending"> | string
+    wallet?: StringFilter<"SpinRewardPending"> | string
+    sessionId?: UuidNullableFilter<"SpinRewardPending"> | string | null
+    asset?: StringFilter<"SpinRewardPending"> | string
+    amountWei?: StringFilter<"SpinRewardPending"> | string
+    requestId?: StringFilter<"SpinRewardPending"> | string
+    source?: EnumSpinRewardSourceFilter<"SpinRewardPending"> | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusFilter<"SpinRewardPending"> | $Enums.SpinRewardPendingStatus
+    creditTxHash?: StringNullableFilter<"SpinRewardPending"> | string | null
+    withdrawTxHash?: StringNullableFilter<"SpinRewardPending"> | string | null
+    lastError?: StringNullableFilter<"SpinRewardPending"> | string | null
+    createdAt?: DateTimeFilter<"SpinRewardPending"> | Date | string
+    updatedAt?: DateTimeFilter<"SpinRewardPending"> | Date | string
+    user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    session?: XOR<SpinSessionNullableScalarRelationFilter, SpinSessionWhereInput> | null
+  }
+
+  export type SpinRewardPendingOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    wallet?: SortOrder
+    sessionId?: SortOrderInput | SortOrder
+    asset?: SortOrder
+    amountWei?: SortOrder
+    requestId?: SortOrder
+    source?: SortOrder
+    status?: SortOrder
+    creditTxHash?: SortOrderInput | SortOrder
+    withdrawTxHash?: SortOrderInput | SortOrder
+    lastError?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserProfileOrderByWithRelationInput
+    session?: SpinSessionOrderByWithRelationInput
+  }
+
+  export type SpinRewardPendingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    requestId?: string
+    AND?: SpinRewardPendingWhereInput | SpinRewardPendingWhereInput[]
+    OR?: SpinRewardPendingWhereInput[]
+    NOT?: SpinRewardPendingWhereInput | SpinRewardPendingWhereInput[]
+    userId?: UuidFilter<"SpinRewardPending"> | string
+    wallet?: StringFilter<"SpinRewardPending"> | string
+    sessionId?: UuidNullableFilter<"SpinRewardPending"> | string | null
+    asset?: StringFilter<"SpinRewardPending"> | string
+    amountWei?: StringFilter<"SpinRewardPending"> | string
+    source?: EnumSpinRewardSourceFilter<"SpinRewardPending"> | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusFilter<"SpinRewardPending"> | $Enums.SpinRewardPendingStatus
+    creditTxHash?: StringNullableFilter<"SpinRewardPending"> | string | null
+    withdrawTxHash?: StringNullableFilter<"SpinRewardPending"> | string | null
+    lastError?: StringNullableFilter<"SpinRewardPending"> | string | null
+    createdAt?: DateTimeFilter<"SpinRewardPending"> | Date | string
+    updatedAt?: DateTimeFilter<"SpinRewardPending"> | Date | string
+    user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+    session?: XOR<SpinSessionNullableScalarRelationFilter, SpinSessionWhereInput> | null
+  }, "id" | "requestId">
+
+  export type SpinRewardPendingOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    wallet?: SortOrder
+    sessionId?: SortOrderInput | SortOrder
+    asset?: SortOrder
+    amountWei?: SortOrder
+    requestId?: SortOrder
+    source?: SortOrder
+    status?: SortOrder
+    creditTxHash?: SortOrderInput | SortOrder
+    withdrawTxHash?: SortOrderInput | SortOrder
+    lastError?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: SpinRewardPendingCountOrderByAggregateInput
+    _max?: SpinRewardPendingMaxOrderByAggregateInput
+    _min?: SpinRewardPendingMinOrderByAggregateInput
+  }
+
+  export type SpinRewardPendingScalarWhereWithAggregatesInput = {
+    AND?: SpinRewardPendingScalarWhereWithAggregatesInput | SpinRewardPendingScalarWhereWithAggregatesInput[]
+    OR?: SpinRewardPendingScalarWhereWithAggregatesInput[]
+    NOT?: SpinRewardPendingScalarWhereWithAggregatesInput | SpinRewardPendingScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SpinRewardPending"> | string
+    userId?: UuidWithAggregatesFilter<"SpinRewardPending"> | string
+    wallet?: StringWithAggregatesFilter<"SpinRewardPending"> | string
+    sessionId?: UuidNullableWithAggregatesFilter<"SpinRewardPending"> | string | null
+    asset?: StringWithAggregatesFilter<"SpinRewardPending"> | string
+    amountWei?: StringWithAggregatesFilter<"SpinRewardPending"> | string
+    requestId?: StringWithAggregatesFilter<"SpinRewardPending"> | string
+    source?: EnumSpinRewardSourceWithAggregatesFilter<"SpinRewardPending"> | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusWithAggregatesFilter<"SpinRewardPending"> | $Enums.SpinRewardPendingStatus
+    creditTxHash?: StringNullableWithAggregatesFilter<"SpinRewardPending"> | string | null
+    withdrawTxHash?: StringNullableWithAggregatesFilter<"SpinRewardPending"> | string | null
+    lastError?: StringNullableWithAggregatesFilter<"SpinRewardPending"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"SpinRewardPending"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"SpinRewardPending"> | Date | string
+  }
+
   export type UserProfileCreateInput = {
     id?: string
     wallet: string
@@ -130713,6 +141917,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateInput = {
@@ -130775,6 +141984,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUpdateInput = {
@@ -130837,6 +142051,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateInput = {
@@ -130899,6 +142118,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateManyInput = {
@@ -138878,6 +150102,748 @@ export namespace Prisma {
     recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SpinConfigCreateInput = {
+    id?: string
+    key?: string
+    treasuryBps?: number
+    entryFeeWei?: string
+    entryAsset?: string
+    xpCostPerSpin?: number
+    spinDurationSec?: number
+    maxBubbleCashWei?: string
+    maxCashPerSpinWei?: string
+    baseWheelRpm?: number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type SpinConfigUncheckedCreateInput = {
+    id?: string
+    key?: string
+    treasuryBps?: number
+    entryFeeWei?: string
+    entryAsset?: string
+    xpCostPerSpin?: number
+    spinDurationSec?: number
+    maxBubbleCashWei?: string
+    maxCashPerSpinWei?: string
+    baseWheelRpm?: number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type SpinConfigUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    treasuryBps?: IntFieldUpdateOperationsInput | number
+    entryFeeWei?: StringFieldUpdateOperationsInput | string
+    entryAsset?: StringFieldUpdateOperationsInput | string
+    xpCostPerSpin?: IntFieldUpdateOperationsInput | number
+    spinDurationSec?: IntFieldUpdateOperationsInput | number
+    maxBubbleCashWei?: StringFieldUpdateOperationsInput | string
+    maxCashPerSpinWei?: StringFieldUpdateOperationsInput | string
+    baseWheelRpm?: IntFieldUpdateOperationsInput | number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinConfigUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    treasuryBps?: IntFieldUpdateOperationsInput | number
+    entryFeeWei?: StringFieldUpdateOperationsInput | string
+    entryAsset?: StringFieldUpdateOperationsInput | string
+    xpCostPerSpin?: IntFieldUpdateOperationsInput | number
+    spinDurationSec?: IntFieldUpdateOperationsInput | number
+    maxBubbleCashWei?: StringFieldUpdateOperationsInput | string
+    maxCashPerSpinWei?: StringFieldUpdateOperationsInput | string
+    baseWheelRpm?: IntFieldUpdateOperationsInput | number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinConfigCreateManyInput = {
+    id?: string
+    key?: string
+    treasuryBps?: number
+    entryFeeWei?: string
+    entryAsset?: string
+    xpCostPerSpin?: number
+    spinDurationSec?: number
+    maxBubbleCashWei?: string
+    maxCashPerSpinWei?: string
+    baseWheelRpm?: number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type SpinConfigUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    treasuryBps?: IntFieldUpdateOperationsInput | number
+    entryFeeWei?: StringFieldUpdateOperationsInput | string
+    entryAsset?: StringFieldUpdateOperationsInput | string
+    xpCostPerSpin?: IntFieldUpdateOperationsInput | number
+    spinDurationSec?: IntFieldUpdateOperationsInput | number
+    maxBubbleCashWei?: StringFieldUpdateOperationsInput | string
+    maxCashPerSpinWei?: StringFieldUpdateOperationsInput | string
+    baseWheelRpm?: IntFieldUpdateOperationsInput | number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinConfigUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    key?: StringFieldUpdateOperationsInput | string
+    treasuryBps?: IntFieldUpdateOperationsInput | number
+    entryFeeWei?: StringFieldUpdateOperationsInput | string
+    entryAsset?: StringFieldUpdateOperationsInput | string
+    xpCostPerSpin?: IntFieldUpdateOperationsInput | number
+    spinDurationSec?: IntFieldUpdateOperationsInput | number
+    maxBubbleCashWei?: StringFieldUpdateOperationsInput | string
+    maxCashPerSpinWei?: StringFieldUpdateOperationsInput | string
+    baseWheelRpm?: IntFieldUpdateOperationsInput | number
+    metadata?: NullableJsonNullValueInput | InputJsonValue
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinMusicTrackCreateInput = {
+    id?: string
+    title: string
+    artist?: string | null
+    url: string
+    tier?: $Enums.SpinMusicTier
+    priceWei?: string
+    priceAsset?: string
+    durationSec?: number
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owners?: UserMusicInventoryCreateNestedManyWithoutTrackInput
+  }
+
+  export type SpinMusicTrackUncheckedCreateInput = {
+    id?: string
+    title: string
+    artist?: string | null
+    url: string
+    tier?: $Enums.SpinMusicTier
+    priceWei?: string
+    priceAsset?: string
+    durationSec?: number
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owners?: UserMusicInventoryUncheckedCreateNestedManyWithoutTrackInput
+  }
+
+  export type SpinMusicTrackUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    artist?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: StringFieldUpdateOperationsInput | string
+    tier?: EnumSpinMusicTierFieldUpdateOperationsInput | $Enums.SpinMusicTier
+    priceWei?: StringFieldUpdateOperationsInput | string
+    priceAsset?: StringFieldUpdateOperationsInput | string
+    durationSec?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owners?: UserMusicInventoryUpdateManyWithoutTrackNestedInput
+  }
+
+  export type SpinMusicTrackUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    artist?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: StringFieldUpdateOperationsInput | string
+    tier?: EnumSpinMusicTierFieldUpdateOperationsInput | $Enums.SpinMusicTier
+    priceWei?: StringFieldUpdateOperationsInput | string
+    priceAsset?: StringFieldUpdateOperationsInput | string
+    durationSec?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owners?: UserMusicInventoryUncheckedUpdateManyWithoutTrackNestedInput
+  }
+
+  export type SpinMusicTrackCreateManyInput = {
+    id?: string
+    title: string
+    artist?: string | null
+    url: string
+    tier?: $Enums.SpinMusicTier
+    priceWei?: string
+    priceAsset?: string
+    durationSec?: number
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SpinMusicTrackUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    artist?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: StringFieldUpdateOperationsInput | string
+    tier?: EnumSpinMusicTierFieldUpdateOperationsInput | $Enums.SpinMusicTier
+    priceWei?: StringFieldUpdateOperationsInput | string
+    priceAsset?: StringFieldUpdateOperationsInput | string
+    durationSec?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinMusicTrackUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    artist?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: StringFieldUpdateOperationsInput | string
+    tier?: EnumSpinMusicTierFieldUpdateOperationsInput | $Enums.SpinMusicTier
+    priceWei?: StringFieldUpdateOperationsInput | string
+    priceAsset?: StringFieldUpdateOperationsInput | string
+    durationSec?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserMusicInventoryCreateInput = {
+    id?: string
+    equipped?: boolean
+    createdAt?: Date | string
+    user: UserProfileCreateNestedOneWithoutSpinMusicOwnedInput
+    track: SpinMusicTrackCreateNestedOneWithoutOwnersInput
+  }
+
+  export type UserMusicInventoryUncheckedCreateInput = {
+    id?: string
+    userId: string
+    trackId: string
+    equipped?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserMusicInventoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserProfileUpdateOneRequiredWithoutSpinMusicOwnedNestedInput
+    track?: SpinMusicTrackUpdateOneRequiredWithoutOwnersNestedInput
+  }
+
+  export type UserMusicInventoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    trackId?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserMusicInventoryCreateManyInput = {
+    id?: string
+    userId: string
+    trackId: string
+    equipped?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserMusicInventoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserMusicInventoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    trackId?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinCollectionItemCreateInput = {
+    id?: string
+    slug: string
+    name: string
+    type?: $Enums.SpinItemType
+    tier?: number
+    priceWei?: string
+    priceAsset?: string
+    effect?: NullableJsonNullValueInput | InputJsonValue
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owners?: UserInventoryItemCreateNestedManyWithoutItemInput
+  }
+
+  export type SpinCollectionItemUncheckedCreateInput = {
+    id?: string
+    slug: string
+    name: string
+    type?: $Enums.SpinItemType
+    tier?: number
+    priceWei?: string
+    priceAsset?: string
+    effect?: NullableJsonNullValueInput | InputJsonValue
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    owners?: UserInventoryItemUncheckedCreateNestedManyWithoutItemInput
+  }
+
+  export type SpinCollectionItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumSpinItemTypeFieldUpdateOperationsInput | $Enums.SpinItemType
+    tier?: IntFieldUpdateOperationsInput | number
+    priceWei?: StringFieldUpdateOperationsInput | string
+    priceAsset?: StringFieldUpdateOperationsInput | string
+    effect?: NullableJsonNullValueInput | InputJsonValue
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owners?: UserInventoryItemUpdateManyWithoutItemNestedInput
+  }
+
+  export type SpinCollectionItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumSpinItemTypeFieldUpdateOperationsInput | $Enums.SpinItemType
+    tier?: IntFieldUpdateOperationsInput | number
+    priceWei?: StringFieldUpdateOperationsInput | string
+    priceAsset?: StringFieldUpdateOperationsInput | string
+    effect?: NullableJsonNullValueInput | InputJsonValue
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    owners?: UserInventoryItemUncheckedUpdateManyWithoutItemNestedInput
+  }
+
+  export type SpinCollectionItemCreateManyInput = {
+    id?: string
+    slug: string
+    name: string
+    type?: $Enums.SpinItemType
+    tier?: number
+    priceWei?: string
+    priceAsset?: string
+    effect?: NullableJsonNullValueInput | InputJsonValue
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SpinCollectionItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumSpinItemTypeFieldUpdateOperationsInput | $Enums.SpinItemType
+    tier?: IntFieldUpdateOperationsInput | number
+    priceWei?: StringFieldUpdateOperationsInput | string
+    priceAsset?: StringFieldUpdateOperationsInput | string
+    effect?: NullableJsonNullValueInput | InputJsonValue
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinCollectionItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumSpinItemTypeFieldUpdateOperationsInput | $Enums.SpinItemType
+    tier?: IntFieldUpdateOperationsInput | number
+    priceWei?: StringFieldUpdateOperationsInput | string
+    priceAsset?: StringFieldUpdateOperationsInput | string
+    effect?: NullableJsonNullValueInput | InputJsonValue
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserInventoryItemCreateInput = {
+    id?: string
+    equipped?: boolean
+    createdAt?: Date | string
+    user: UserProfileCreateNestedOneWithoutSpinInventoryInput
+    item: SpinCollectionItemCreateNestedOneWithoutOwnersInput
+  }
+
+  export type UserInventoryItemUncheckedCreateInput = {
+    id?: string
+    userId: string
+    itemId: string
+    equipped?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserInventoryItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserProfileUpdateOneRequiredWithoutSpinInventoryNestedInput
+    item?: SpinCollectionItemUpdateOneRequiredWithoutOwnersNestedInput
+  }
+
+  export type UserInventoryItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    itemId?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserInventoryItemCreateManyInput = {
+    id?: string
+    userId: string
+    itemId: string
+    equipped?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserInventoryItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserInventoryItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    itemId?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinSessionCreateInput = {
+    id?: string
+    status?: $Enums.SpinSessionStatus
+    entryTxHash?: string | null
+    entryAsset?: string | null
+    serverSeed: string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: string
+    cashAsset?: string
+    wheelRewardId?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    expiresAt: Date | string
+    user: UserProfileCreateNestedOneWithoutSpinSessionsInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutSessionInput
+    pendings?: SpinRewardPendingCreateNestedManyWithoutSessionInput
+  }
+
+  export type SpinSessionUncheckedCreateInput = {
+    id?: string
+    userId: string
+    status?: $Enums.SpinSessionStatus
+    entryTxHash?: string | null
+    entryAsset?: string | null
+    serverSeed: string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: string
+    cashAsset?: string
+    wheelRewardId?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    expiresAt: Date | string
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutSessionInput
+    pendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type SpinSessionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumSpinSessionStatusFieldUpdateOperationsInput | $Enums.SpinSessionStatus
+    entryTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    entryAsset?: NullableStringFieldUpdateOperationsInput | string | null
+    serverSeed?: StringFieldUpdateOperationsInput | string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: StringFieldUpdateOperationsInput | string
+    cashAsset?: StringFieldUpdateOperationsInput | string
+    wheelRewardId?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserProfileUpdateOneRequiredWithoutSpinSessionsNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutSessionNestedInput
+    pendings?: SpinRewardPendingUpdateManyWithoutSessionNestedInput
+  }
+
+  export type SpinSessionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumSpinSessionStatusFieldUpdateOperationsInput | $Enums.SpinSessionStatus
+    entryTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    entryAsset?: NullableStringFieldUpdateOperationsInput | string | null
+    serverSeed?: StringFieldUpdateOperationsInput | string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: StringFieldUpdateOperationsInput | string
+    cashAsset?: StringFieldUpdateOperationsInput | string
+    wheelRewardId?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutSessionNestedInput
+    pendings?: SpinRewardPendingUncheckedUpdateManyWithoutSessionNestedInput
+  }
+
+  export type SpinSessionCreateManyInput = {
+    id?: string
+    userId: string
+    status?: $Enums.SpinSessionStatus
+    entryTxHash?: string | null
+    entryAsset?: string | null
+    serverSeed: string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: string
+    cashAsset?: string
+    wheelRewardId?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    expiresAt: Date | string
+  }
+
+  export type SpinSessionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumSpinSessionStatusFieldUpdateOperationsInput | $Enums.SpinSessionStatus
+    entryTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    entryAsset?: NullableStringFieldUpdateOperationsInput | string | null
+    serverSeed?: StringFieldUpdateOperationsInput | string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: StringFieldUpdateOperationsInput | string
+    cashAsset?: StringFieldUpdateOperationsInput | string
+    wheelRewardId?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinSessionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumSpinSessionStatusFieldUpdateOperationsInput | $Enums.SpinSessionStatus
+    entryTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    entryAsset?: NullableStringFieldUpdateOperationsInput | string | null
+    serverSeed?: StringFieldUpdateOperationsInput | string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: StringFieldUpdateOperationsInput | string
+    cashAsset?: StringFieldUpdateOperationsInput | string
+    wheelRewardId?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BubbleHitCreateInput = {
+    id?: string
+    bubbleId: string
+    amountWei: string
+    asset: string
+    taps?: number
+    createdAt?: Date | string
+    session: SpinSessionCreateNestedOneWithoutBubbleHitsInput
+    user: UserProfileCreateNestedOneWithoutBubbleHitsInput
+  }
+
+  export type BubbleHitUncheckedCreateInput = {
+    id?: string
+    sessionId: string
+    userId: string
+    bubbleId: string
+    amountWei: string
+    asset: string
+    taps?: number
+    createdAt?: Date | string
+  }
+
+  export type BubbleHitUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bubbleId?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    taps?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    session?: SpinSessionUpdateOneRequiredWithoutBubbleHitsNestedInput
+    user?: UserProfileUpdateOneRequiredWithoutBubbleHitsNestedInput
+  }
+
+  export type BubbleHitUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bubbleId?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    taps?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BubbleHitCreateManyInput = {
+    id?: string
+    sessionId: string
+    userId: string
+    bubbleId: string
+    amountWei: string
+    asset: string
+    taps?: number
+    createdAt?: Date | string
+  }
+
+  export type BubbleHitUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bubbleId?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    taps?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BubbleHitUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bubbleId?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    taps?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinRewardPendingCreateInput = {
+    id?: string
+    wallet: string
+    asset: string
+    amountWei: string
+    requestId: string
+    source?: $Enums.SpinRewardSource
+    status?: $Enums.SpinRewardPendingStatus
+    creditTxHash?: string | null
+    withdrawTxHash?: string | null
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserProfileCreateNestedOneWithoutSpinRewardPendingsInput
+    session?: SpinSessionCreateNestedOneWithoutPendingsInput
+  }
+
+  export type SpinRewardPendingUncheckedCreateInput = {
+    id?: string
+    userId: string
+    wallet: string
+    sessionId?: string | null
+    asset: string
+    amountWei: string
+    requestId: string
+    source?: $Enums.SpinRewardSource
+    status?: $Enums.SpinRewardPendingStatus
+    creditTxHash?: string | null
+    withdrawTxHash?: string | null
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SpinRewardPendingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    requestId?: StringFieldUpdateOperationsInput | string
+    source?: EnumSpinRewardSourceFieldUpdateOperationsInput | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusFieldUpdateOperationsInput | $Enums.SpinRewardPendingStatus
+    creditTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    withdrawTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserProfileUpdateOneRequiredWithoutSpinRewardPendingsNestedInput
+    session?: SpinSessionUpdateOneWithoutPendingsNestedInput
+  }
+
+  export type SpinRewardPendingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    requestId?: StringFieldUpdateOperationsInput | string
+    source?: EnumSpinRewardSourceFieldUpdateOperationsInput | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusFieldUpdateOperationsInput | $Enums.SpinRewardPendingStatus
+    creditTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    withdrawTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinRewardPendingCreateManyInput = {
+    id?: string
+    userId: string
+    wallet: string
+    sessionId?: string | null
+    asset: string
+    amountWei: string
+    requestId: string
+    source?: $Enums.SpinRewardSource
+    status?: $Enums.SpinRewardPendingStatus
+    creditTxHash?: string | null
+    withdrawTxHash?: string | null
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SpinRewardPendingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    requestId?: StringFieldUpdateOperationsInput | string
+    source?: EnumSpinRewardSourceFieldUpdateOperationsInput | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusFieldUpdateOperationsInput | $Enums.SpinRewardPendingStatus
+    creditTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    withdrawTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinRewardPendingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    requestId?: StringFieldUpdateOperationsInput | string
+    source?: EnumSpinRewardSourceFieldUpdateOperationsInput | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusFieldUpdateOperationsInput | $Enums.SpinRewardPendingStatus
+    creditTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    withdrawTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -139190,6 +151156,36 @@ export namespace Prisma {
     none?: SkillBoostPaymentWhereInput
   }
 
+  export type SpinSessionListRelationFilter = {
+    every?: SpinSessionWhereInput
+    some?: SpinSessionWhereInput
+    none?: SpinSessionWhereInput
+  }
+
+  export type UserMusicInventoryListRelationFilter = {
+    every?: UserMusicInventoryWhereInput
+    some?: UserMusicInventoryWhereInput
+    none?: UserMusicInventoryWhereInput
+  }
+
+  export type UserInventoryItemListRelationFilter = {
+    every?: UserInventoryItemWhereInput
+    some?: UserInventoryItemWhereInput
+    none?: UserInventoryItemWhereInput
+  }
+
+  export type SpinRewardPendingListRelationFilter = {
+    every?: SpinRewardPendingWhereInput
+    some?: SpinRewardPendingWhereInput
+    none?: SpinRewardPendingWhereInput
+  }
+
+  export type BubbleHitListRelationFilter = {
+    every?: BubbleHitWhereInput
+    some?: BubbleHitWhereInput
+    none?: BubbleHitWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -139328,6 +151324,26 @@ export namespace Prisma {
   }
 
   export type SkillBoostPaymentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SpinSessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserMusicInventoryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserInventoryItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SpinRewardPendingOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BubbleHitOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -144846,6 +156862,471 @@ export namespace Prisma {
     queueDelayMs?: SortOrder
   }
 
+  export type SpinConfigCountOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    treasuryBps?: SortOrder
+    entryFeeWei?: SortOrder
+    entryAsset?: SortOrder
+    xpCostPerSpin?: SortOrder
+    spinDurationSec?: SortOrder
+    maxBubbleCashWei?: SortOrder
+    maxCashPerSpinWei?: SortOrder
+    baseWheelRpm?: SortOrder
+    metadata?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SpinConfigAvgOrderByAggregateInput = {
+    treasuryBps?: SortOrder
+    xpCostPerSpin?: SortOrder
+    spinDurationSec?: SortOrder
+    baseWheelRpm?: SortOrder
+  }
+
+  export type SpinConfigMaxOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    treasuryBps?: SortOrder
+    entryFeeWei?: SortOrder
+    entryAsset?: SortOrder
+    xpCostPerSpin?: SortOrder
+    spinDurationSec?: SortOrder
+    maxBubbleCashWei?: SortOrder
+    maxCashPerSpinWei?: SortOrder
+    baseWheelRpm?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SpinConfigMinOrderByAggregateInput = {
+    id?: SortOrder
+    key?: SortOrder
+    treasuryBps?: SortOrder
+    entryFeeWei?: SortOrder
+    entryAsset?: SortOrder
+    xpCostPerSpin?: SortOrder
+    spinDurationSec?: SortOrder
+    maxBubbleCashWei?: SortOrder
+    maxCashPerSpinWei?: SortOrder
+    baseWheelRpm?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SpinConfigSumOrderByAggregateInput = {
+    treasuryBps?: SortOrder
+    xpCostPerSpin?: SortOrder
+    spinDurationSec?: SortOrder
+    baseWheelRpm?: SortOrder
+  }
+
+  export type EnumSpinMusicTierFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinMusicTier | EnumSpinMusicTierFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinMusicTier[] | ListEnumSpinMusicTierFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinMusicTier[] | ListEnumSpinMusicTierFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinMusicTierFilter<$PrismaModel> | $Enums.SpinMusicTier
+  }
+
+  export type SpinMusicTrackCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    artist?: SortOrder
+    url?: SortOrder
+    tier?: SortOrder
+    priceWei?: SortOrder
+    priceAsset?: SortOrder
+    durationSec?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SpinMusicTrackAvgOrderByAggregateInput = {
+    durationSec?: SortOrder
+  }
+
+  export type SpinMusicTrackMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    artist?: SortOrder
+    url?: SortOrder
+    tier?: SortOrder
+    priceWei?: SortOrder
+    priceAsset?: SortOrder
+    durationSec?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SpinMusicTrackMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    artist?: SortOrder
+    url?: SortOrder
+    tier?: SortOrder
+    priceWei?: SortOrder
+    priceAsset?: SortOrder
+    durationSec?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SpinMusicTrackSumOrderByAggregateInput = {
+    durationSec?: SortOrder
+  }
+
+  export type EnumSpinMusicTierWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinMusicTier | EnumSpinMusicTierFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinMusicTier[] | ListEnumSpinMusicTierFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinMusicTier[] | ListEnumSpinMusicTierFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinMusicTierWithAggregatesFilter<$PrismaModel> | $Enums.SpinMusicTier
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSpinMusicTierFilter<$PrismaModel>
+    _max?: NestedEnumSpinMusicTierFilter<$PrismaModel>
+  }
+
+  export type SpinMusicTrackScalarRelationFilter = {
+    is?: SpinMusicTrackWhereInput
+    isNot?: SpinMusicTrackWhereInput
+  }
+
+  export type UserMusicInventoryUserIdTrackIdCompoundUniqueInput = {
+    userId: string
+    trackId: string
+  }
+
+  export type UserMusicInventoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    trackId?: SortOrder
+    equipped?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserMusicInventoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    trackId?: SortOrder
+    equipped?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserMusicInventoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    trackId?: SortOrder
+    equipped?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type EnumSpinItemTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinItemType | EnumSpinItemTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinItemType[] | ListEnumSpinItemTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinItemType[] | ListEnumSpinItemTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinItemTypeFilter<$PrismaModel> | $Enums.SpinItemType
+  }
+
+  export type SpinCollectionItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    slug?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    tier?: SortOrder
+    priceWei?: SortOrder
+    priceAsset?: SortOrder
+    effect?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SpinCollectionItemAvgOrderByAggregateInput = {
+    tier?: SortOrder
+  }
+
+  export type SpinCollectionItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    slug?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    tier?: SortOrder
+    priceWei?: SortOrder
+    priceAsset?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SpinCollectionItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    slug?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    tier?: SortOrder
+    priceWei?: SortOrder
+    priceAsset?: SortOrder
+    active?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SpinCollectionItemSumOrderByAggregateInput = {
+    tier?: SortOrder
+  }
+
+  export type EnumSpinItemTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinItemType | EnumSpinItemTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinItemType[] | ListEnumSpinItemTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinItemType[] | ListEnumSpinItemTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinItemTypeWithAggregatesFilter<$PrismaModel> | $Enums.SpinItemType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSpinItemTypeFilter<$PrismaModel>
+    _max?: NestedEnumSpinItemTypeFilter<$PrismaModel>
+  }
+
+  export type SpinCollectionItemScalarRelationFilter = {
+    is?: SpinCollectionItemWhereInput
+    isNot?: SpinCollectionItemWhereInput
+  }
+
+  export type UserInventoryItemUserIdItemIdCompoundUniqueInput = {
+    userId: string
+    itemId: string
+  }
+
+  export type UserInventoryItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    itemId?: SortOrder
+    equipped?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserInventoryItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    itemId?: SortOrder
+    equipped?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type UserInventoryItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    itemId?: SortOrder
+    equipped?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type EnumSpinSessionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinSessionStatus | EnumSpinSessionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinSessionStatus[] | ListEnumSpinSessionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinSessionStatus[] | ListEnumSpinSessionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinSessionStatusFilter<$PrismaModel> | $Enums.SpinSessionStatus
+  }
+
+  export type SpinSessionCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    entryTxHash?: SortOrder
+    entryAsset?: SortOrder
+    serverSeed?: SortOrder
+    loadout?: SortOrder
+    bubblePlan?: SortOrder
+    cashEarnedWei?: SortOrder
+    cashAsset?: SortOrder
+    wheelRewardId?: SortOrder
+    startedAt?: SortOrder
+    finishedAt?: SortOrder
+    expiresAt?: SortOrder
+  }
+
+  export type SpinSessionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    entryTxHash?: SortOrder
+    entryAsset?: SortOrder
+    serverSeed?: SortOrder
+    cashEarnedWei?: SortOrder
+    cashAsset?: SortOrder
+    wheelRewardId?: SortOrder
+    startedAt?: SortOrder
+    finishedAt?: SortOrder
+    expiresAt?: SortOrder
+  }
+
+  export type SpinSessionMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    entryTxHash?: SortOrder
+    entryAsset?: SortOrder
+    serverSeed?: SortOrder
+    cashEarnedWei?: SortOrder
+    cashAsset?: SortOrder
+    wheelRewardId?: SortOrder
+    startedAt?: SortOrder
+    finishedAt?: SortOrder
+    expiresAt?: SortOrder
+  }
+
+  export type EnumSpinSessionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinSessionStatus | EnumSpinSessionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinSessionStatus[] | ListEnumSpinSessionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinSessionStatus[] | ListEnumSpinSessionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinSessionStatusWithAggregatesFilter<$PrismaModel> | $Enums.SpinSessionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSpinSessionStatusFilter<$PrismaModel>
+    _max?: NestedEnumSpinSessionStatusFilter<$PrismaModel>
+  }
+
+  export type SpinSessionScalarRelationFilter = {
+    is?: SpinSessionWhereInput
+    isNot?: SpinSessionWhereInput
+  }
+
+  export type BubbleHitSessionIdBubbleIdCompoundUniqueInput = {
+    sessionId: string
+    bubbleId: string
+  }
+
+  export type BubbleHitCountOrderByAggregateInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    userId?: SortOrder
+    bubbleId?: SortOrder
+    amountWei?: SortOrder
+    asset?: SortOrder
+    taps?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BubbleHitAvgOrderByAggregateInput = {
+    taps?: SortOrder
+  }
+
+  export type BubbleHitMaxOrderByAggregateInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    userId?: SortOrder
+    bubbleId?: SortOrder
+    amountWei?: SortOrder
+    asset?: SortOrder
+    taps?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BubbleHitMinOrderByAggregateInput = {
+    id?: SortOrder
+    sessionId?: SortOrder
+    userId?: SortOrder
+    bubbleId?: SortOrder
+    amountWei?: SortOrder
+    asset?: SortOrder
+    taps?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type BubbleHitSumOrderByAggregateInput = {
+    taps?: SortOrder
+  }
+
+  export type EnumSpinRewardSourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinRewardSource | EnumSpinRewardSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinRewardSource[] | ListEnumSpinRewardSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinRewardSource[] | ListEnumSpinRewardSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinRewardSourceFilter<$PrismaModel> | $Enums.SpinRewardSource
+  }
+
+  export type EnumSpinRewardPendingStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinRewardPendingStatus | EnumSpinRewardPendingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinRewardPendingStatus[] | ListEnumSpinRewardPendingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinRewardPendingStatus[] | ListEnumSpinRewardPendingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinRewardPendingStatusFilter<$PrismaModel> | $Enums.SpinRewardPendingStatus
+  }
+
+  export type SpinSessionNullableScalarRelationFilter = {
+    is?: SpinSessionWhereInput | null
+    isNot?: SpinSessionWhereInput | null
+  }
+
+  export type SpinRewardPendingCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    wallet?: SortOrder
+    sessionId?: SortOrder
+    asset?: SortOrder
+    amountWei?: SortOrder
+    requestId?: SortOrder
+    source?: SortOrder
+    status?: SortOrder
+    creditTxHash?: SortOrder
+    withdrawTxHash?: SortOrder
+    lastError?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SpinRewardPendingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    wallet?: SortOrder
+    sessionId?: SortOrder
+    asset?: SortOrder
+    amountWei?: SortOrder
+    requestId?: SortOrder
+    source?: SortOrder
+    status?: SortOrder
+    creditTxHash?: SortOrder
+    withdrawTxHash?: SortOrder
+    lastError?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type SpinRewardPendingMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    wallet?: SortOrder
+    sessionId?: SortOrder
+    asset?: SortOrder
+    amountWei?: SortOrder
+    requestId?: SortOrder
+    source?: SortOrder
+    status?: SortOrder
+    creditTxHash?: SortOrder
+    withdrawTxHash?: SortOrder
+    lastError?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumSpinRewardSourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinRewardSource | EnumSpinRewardSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinRewardSource[] | ListEnumSpinRewardSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinRewardSource[] | ListEnumSpinRewardSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinRewardSourceWithAggregatesFilter<$PrismaModel> | $Enums.SpinRewardSource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSpinRewardSourceFilter<$PrismaModel>
+    _max?: NestedEnumSpinRewardSourceFilter<$PrismaModel>
+  }
+
+  export type EnumSpinRewardPendingStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinRewardPendingStatus | EnumSpinRewardPendingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinRewardPendingStatus[] | ListEnumSpinRewardPendingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinRewardPendingStatus[] | ListEnumSpinRewardPendingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinRewardPendingStatusWithAggregatesFilter<$PrismaModel> | $Enums.SpinRewardPendingStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSpinRewardPendingStatusFilter<$PrismaModel>
+    _max?: NestedEnumSpinRewardPendingStatusFilter<$PrismaModel>
+  }
+
   export type PredictionCreateNestedManyWithoutUserInput = {
     create?: XOR<PredictionCreateWithoutUserInput, PredictionUncheckedCreateWithoutUserInput> | PredictionCreateWithoutUserInput[] | PredictionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PredictionCreateOrConnectWithoutUserInput | PredictionCreateOrConnectWithoutUserInput[]
@@ -145144,6 +157625,41 @@ export namespace Prisma {
     connect?: SkillBoostPaymentWhereUniqueInput | SkillBoostPaymentWhereUniqueInput[]
   }
 
+  export type SpinSessionCreateNestedManyWithoutUserInput = {
+    create?: XOR<SpinSessionCreateWithoutUserInput, SpinSessionUncheckedCreateWithoutUserInput> | SpinSessionCreateWithoutUserInput[] | SpinSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SpinSessionCreateOrConnectWithoutUserInput | SpinSessionCreateOrConnectWithoutUserInput[]
+    createMany?: SpinSessionCreateManyUserInputEnvelope
+    connect?: SpinSessionWhereUniqueInput | SpinSessionWhereUniqueInput[]
+  }
+
+  export type UserMusicInventoryCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserMusicInventoryCreateWithoutUserInput, UserMusicInventoryUncheckedCreateWithoutUserInput> | UserMusicInventoryCreateWithoutUserInput[] | UserMusicInventoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserMusicInventoryCreateOrConnectWithoutUserInput | UserMusicInventoryCreateOrConnectWithoutUserInput[]
+    createMany?: UserMusicInventoryCreateManyUserInputEnvelope
+    connect?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+  }
+
+  export type UserInventoryItemCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserInventoryItemCreateWithoutUserInput, UserInventoryItemUncheckedCreateWithoutUserInput> | UserInventoryItemCreateWithoutUserInput[] | UserInventoryItemUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserInventoryItemCreateOrConnectWithoutUserInput | UserInventoryItemCreateOrConnectWithoutUserInput[]
+    createMany?: UserInventoryItemCreateManyUserInputEnvelope
+    connect?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+  }
+
+  export type SpinRewardPendingCreateNestedManyWithoutUserInput = {
+    create?: XOR<SpinRewardPendingCreateWithoutUserInput, SpinRewardPendingUncheckedCreateWithoutUserInput> | SpinRewardPendingCreateWithoutUserInput[] | SpinRewardPendingUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SpinRewardPendingCreateOrConnectWithoutUserInput | SpinRewardPendingCreateOrConnectWithoutUserInput[]
+    createMany?: SpinRewardPendingCreateManyUserInputEnvelope
+    connect?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+  }
+
+  export type BubbleHitCreateNestedManyWithoutUserInput = {
+    create?: XOR<BubbleHitCreateWithoutUserInput, BubbleHitUncheckedCreateWithoutUserInput> | BubbleHitCreateWithoutUserInput[] | BubbleHitUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BubbleHitCreateOrConnectWithoutUserInput | BubbleHitCreateOrConnectWithoutUserInput[]
+    createMany?: BubbleHitCreateManyUserInputEnvelope
+    connect?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+  }
+
   export type PredictionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<PredictionCreateWithoutUserInput, PredictionUncheckedCreateWithoutUserInput> | PredictionCreateWithoutUserInput[] | PredictionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PredictionCreateOrConnectWithoutUserInput | PredictionCreateOrConnectWithoutUserInput[]
@@ -145440,6 +157956,41 @@ export namespace Prisma {
     connectOrCreate?: SkillBoostPaymentCreateOrConnectWithoutUserInput | SkillBoostPaymentCreateOrConnectWithoutUserInput[]
     createMany?: SkillBoostPaymentCreateManyUserInputEnvelope
     connect?: SkillBoostPaymentWhereUniqueInput | SkillBoostPaymentWhereUniqueInput[]
+  }
+
+  export type SpinSessionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SpinSessionCreateWithoutUserInput, SpinSessionUncheckedCreateWithoutUserInput> | SpinSessionCreateWithoutUserInput[] | SpinSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SpinSessionCreateOrConnectWithoutUserInput | SpinSessionCreateOrConnectWithoutUserInput[]
+    createMany?: SpinSessionCreateManyUserInputEnvelope
+    connect?: SpinSessionWhereUniqueInput | SpinSessionWhereUniqueInput[]
+  }
+
+  export type UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserMusicInventoryCreateWithoutUserInput, UserMusicInventoryUncheckedCreateWithoutUserInput> | UserMusicInventoryCreateWithoutUserInput[] | UserMusicInventoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserMusicInventoryCreateOrConnectWithoutUserInput | UserMusicInventoryCreateOrConnectWithoutUserInput[]
+    createMany?: UserMusicInventoryCreateManyUserInputEnvelope
+    connect?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+  }
+
+  export type UserInventoryItemUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserInventoryItemCreateWithoutUserInput, UserInventoryItemUncheckedCreateWithoutUserInput> | UserInventoryItemCreateWithoutUserInput[] | UserInventoryItemUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserInventoryItemCreateOrConnectWithoutUserInput | UserInventoryItemCreateOrConnectWithoutUserInput[]
+    createMany?: UserInventoryItemCreateManyUserInputEnvelope
+    connect?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+  }
+
+  export type SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SpinRewardPendingCreateWithoutUserInput, SpinRewardPendingUncheckedCreateWithoutUserInput> | SpinRewardPendingCreateWithoutUserInput[] | SpinRewardPendingUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SpinRewardPendingCreateOrConnectWithoutUserInput | SpinRewardPendingCreateOrConnectWithoutUserInput[]
+    createMany?: SpinRewardPendingCreateManyUserInputEnvelope
+    connect?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+  }
+
+  export type BubbleHitUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<BubbleHitCreateWithoutUserInput, BubbleHitUncheckedCreateWithoutUserInput> | BubbleHitCreateWithoutUserInput[] | BubbleHitUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BubbleHitCreateOrConnectWithoutUserInput | BubbleHitCreateOrConnectWithoutUserInput[]
+    createMany?: BubbleHitCreateManyUserInputEnvelope
+    connect?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -146068,6 +158619,76 @@ export namespace Prisma {
     deleteMany?: SkillBoostPaymentScalarWhereInput | SkillBoostPaymentScalarWhereInput[]
   }
 
+  export type SpinSessionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SpinSessionCreateWithoutUserInput, SpinSessionUncheckedCreateWithoutUserInput> | SpinSessionCreateWithoutUserInput[] | SpinSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SpinSessionCreateOrConnectWithoutUserInput | SpinSessionCreateOrConnectWithoutUserInput[]
+    upsert?: SpinSessionUpsertWithWhereUniqueWithoutUserInput | SpinSessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SpinSessionCreateManyUserInputEnvelope
+    set?: SpinSessionWhereUniqueInput | SpinSessionWhereUniqueInput[]
+    disconnect?: SpinSessionWhereUniqueInput | SpinSessionWhereUniqueInput[]
+    delete?: SpinSessionWhereUniqueInput | SpinSessionWhereUniqueInput[]
+    connect?: SpinSessionWhereUniqueInput | SpinSessionWhereUniqueInput[]
+    update?: SpinSessionUpdateWithWhereUniqueWithoutUserInput | SpinSessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SpinSessionUpdateManyWithWhereWithoutUserInput | SpinSessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SpinSessionScalarWhereInput | SpinSessionScalarWhereInput[]
+  }
+
+  export type UserMusicInventoryUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserMusicInventoryCreateWithoutUserInput, UserMusicInventoryUncheckedCreateWithoutUserInput> | UserMusicInventoryCreateWithoutUserInput[] | UserMusicInventoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserMusicInventoryCreateOrConnectWithoutUserInput | UserMusicInventoryCreateOrConnectWithoutUserInput[]
+    upsert?: UserMusicInventoryUpsertWithWhereUniqueWithoutUserInput | UserMusicInventoryUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserMusicInventoryCreateManyUserInputEnvelope
+    set?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    disconnect?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    delete?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    connect?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    update?: UserMusicInventoryUpdateWithWhereUniqueWithoutUserInput | UserMusicInventoryUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserMusicInventoryUpdateManyWithWhereWithoutUserInput | UserMusicInventoryUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserMusicInventoryScalarWhereInput | UserMusicInventoryScalarWhereInput[]
+  }
+
+  export type UserInventoryItemUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserInventoryItemCreateWithoutUserInput, UserInventoryItemUncheckedCreateWithoutUserInput> | UserInventoryItemCreateWithoutUserInput[] | UserInventoryItemUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserInventoryItemCreateOrConnectWithoutUserInput | UserInventoryItemCreateOrConnectWithoutUserInput[]
+    upsert?: UserInventoryItemUpsertWithWhereUniqueWithoutUserInput | UserInventoryItemUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserInventoryItemCreateManyUserInputEnvelope
+    set?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    disconnect?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    delete?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    connect?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    update?: UserInventoryItemUpdateWithWhereUniqueWithoutUserInput | UserInventoryItemUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserInventoryItemUpdateManyWithWhereWithoutUserInput | UserInventoryItemUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserInventoryItemScalarWhereInput | UserInventoryItemScalarWhereInput[]
+  }
+
+  export type SpinRewardPendingUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SpinRewardPendingCreateWithoutUserInput, SpinRewardPendingUncheckedCreateWithoutUserInput> | SpinRewardPendingCreateWithoutUserInput[] | SpinRewardPendingUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SpinRewardPendingCreateOrConnectWithoutUserInput | SpinRewardPendingCreateOrConnectWithoutUserInput[]
+    upsert?: SpinRewardPendingUpsertWithWhereUniqueWithoutUserInput | SpinRewardPendingUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SpinRewardPendingCreateManyUserInputEnvelope
+    set?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    disconnect?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    delete?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    connect?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    update?: SpinRewardPendingUpdateWithWhereUniqueWithoutUserInput | SpinRewardPendingUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SpinRewardPendingUpdateManyWithWhereWithoutUserInput | SpinRewardPendingUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SpinRewardPendingScalarWhereInput | SpinRewardPendingScalarWhereInput[]
+  }
+
+  export type BubbleHitUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BubbleHitCreateWithoutUserInput, BubbleHitUncheckedCreateWithoutUserInput> | BubbleHitCreateWithoutUserInput[] | BubbleHitUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BubbleHitCreateOrConnectWithoutUserInput | BubbleHitCreateOrConnectWithoutUserInput[]
+    upsert?: BubbleHitUpsertWithWhereUniqueWithoutUserInput | BubbleHitUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BubbleHitCreateManyUserInputEnvelope
+    set?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    disconnect?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    delete?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    connect?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    update?: BubbleHitUpdateWithWhereUniqueWithoutUserInput | BubbleHitUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BubbleHitUpdateManyWithWhereWithoutUserInput | BubbleHitUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BubbleHitScalarWhereInput | BubbleHitScalarWhereInput[]
+  }
+
   export type PredictionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<PredictionCreateWithoutUserInput, PredictionUncheckedCreateWithoutUserInput> | PredictionCreateWithoutUserInput[] | PredictionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PredictionCreateOrConnectWithoutUserInput | PredictionCreateOrConnectWithoutUserInput[]
@@ -146656,6 +159277,76 @@ export namespace Prisma {
     update?: SkillBoostPaymentUpdateWithWhereUniqueWithoutUserInput | SkillBoostPaymentUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: SkillBoostPaymentUpdateManyWithWhereWithoutUserInput | SkillBoostPaymentUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: SkillBoostPaymentScalarWhereInput | SkillBoostPaymentScalarWhereInput[]
+  }
+
+  export type SpinSessionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SpinSessionCreateWithoutUserInput, SpinSessionUncheckedCreateWithoutUserInput> | SpinSessionCreateWithoutUserInput[] | SpinSessionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SpinSessionCreateOrConnectWithoutUserInput | SpinSessionCreateOrConnectWithoutUserInput[]
+    upsert?: SpinSessionUpsertWithWhereUniqueWithoutUserInput | SpinSessionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SpinSessionCreateManyUserInputEnvelope
+    set?: SpinSessionWhereUniqueInput | SpinSessionWhereUniqueInput[]
+    disconnect?: SpinSessionWhereUniqueInput | SpinSessionWhereUniqueInput[]
+    delete?: SpinSessionWhereUniqueInput | SpinSessionWhereUniqueInput[]
+    connect?: SpinSessionWhereUniqueInput | SpinSessionWhereUniqueInput[]
+    update?: SpinSessionUpdateWithWhereUniqueWithoutUserInput | SpinSessionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SpinSessionUpdateManyWithWhereWithoutUserInput | SpinSessionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SpinSessionScalarWhereInput | SpinSessionScalarWhereInput[]
+  }
+
+  export type UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserMusicInventoryCreateWithoutUserInput, UserMusicInventoryUncheckedCreateWithoutUserInput> | UserMusicInventoryCreateWithoutUserInput[] | UserMusicInventoryUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserMusicInventoryCreateOrConnectWithoutUserInput | UserMusicInventoryCreateOrConnectWithoutUserInput[]
+    upsert?: UserMusicInventoryUpsertWithWhereUniqueWithoutUserInput | UserMusicInventoryUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserMusicInventoryCreateManyUserInputEnvelope
+    set?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    disconnect?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    delete?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    connect?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    update?: UserMusicInventoryUpdateWithWhereUniqueWithoutUserInput | UserMusicInventoryUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserMusicInventoryUpdateManyWithWhereWithoutUserInput | UserMusicInventoryUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserMusicInventoryScalarWhereInput | UserMusicInventoryScalarWhereInput[]
+  }
+
+  export type UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserInventoryItemCreateWithoutUserInput, UserInventoryItemUncheckedCreateWithoutUserInput> | UserInventoryItemCreateWithoutUserInput[] | UserInventoryItemUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserInventoryItemCreateOrConnectWithoutUserInput | UserInventoryItemCreateOrConnectWithoutUserInput[]
+    upsert?: UserInventoryItemUpsertWithWhereUniqueWithoutUserInput | UserInventoryItemUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserInventoryItemCreateManyUserInputEnvelope
+    set?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    disconnect?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    delete?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    connect?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    update?: UserInventoryItemUpdateWithWhereUniqueWithoutUserInput | UserInventoryItemUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserInventoryItemUpdateManyWithWhereWithoutUserInput | UserInventoryItemUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserInventoryItemScalarWhereInput | UserInventoryItemScalarWhereInput[]
+  }
+
+  export type SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SpinRewardPendingCreateWithoutUserInput, SpinRewardPendingUncheckedCreateWithoutUserInput> | SpinRewardPendingCreateWithoutUserInput[] | SpinRewardPendingUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SpinRewardPendingCreateOrConnectWithoutUserInput | SpinRewardPendingCreateOrConnectWithoutUserInput[]
+    upsert?: SpinRewardPendingUpsertWithWhereUniqueWithoutUserInput | SpinRewardPendingUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SpinRewardPendingCreateManyUserInputEnvelope
+    set?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    disconnect?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    delete?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    connect?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    update?: SpinRewardPendingUpdateWithWhereUniqueWithoutUserInput | SpinRewardPendingUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SpinRewardPendingUpdateManyWithWhereWithoutUserInput | SpinRewardPendingUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SpinRewardPendingScalarWhereInput | SpinRewardPendingScalarWhereInput[]
+  }
+
+  export type BubbleHitUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<BubbleHitCreateWithoutUserInput, BubbleHitUncheckedCreateWithoutUserInput> | BubbleHitCreateWithoutUserInput[] | BubbleHitUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: BubbleHitCreateOrConnectWithoutUserInput | BubbleHitCreateOrConnectWithoutUserInput[]
+    upsert?: BubbleHitUpsertWithWhereUniqueWithoutUserInput | BubbleHitUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: BubbleHitCreateManyUserInputEnvelope
+    set?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    disconnect?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    delete?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    connect?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    update?: BubbleHitUpdateWithWhereUniqueWithoutUserInput | BubbleHitUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: BubbleHitUpdateManyWithWhereWithoutUserInput | BubbleHitUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: BubbleHitScalarWhereInput | BubbleHitScalarWhereInput[]
   }
 
   export type PredictionCreateNestedManyWithoutTournamentInput = {
@@ -149378,6 +162069,322 @@ export namespace Prisma {
     set?: $Enums.HealthStatus
   }
 
+  export type UserMusicInventoryCreateNestedManyWithoutTrackInput = {
+    create?: XOR<UserMusicInventoryCreateWithoutTrackInput, UserMusicInventoryUncheckedCreateWithoutTrackInput> | UserMusicInventoryCreateWithoutTrackInput[] | UserMusicInventoryUncheckedCreateWithoutTrackInput[]
+    connectOrCreate?: UserMusicInventoryCreateOrConnectWithoutTrackInput | UserMusicInventoryCreateOrConnectWithoutTrackInput[]
+    createMany?: UserMusicInventoryCreateManyTrackInputEnvelope
+    connect?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+  }
+
+  export type UserMusicInventoryUncheckedCreateNestedManyWithoutTrackInput = {
+    create?: XOR<UserMusicInventoryCreateWithoutTrackInput, UserMusicInventoryUncheckedCreateWithoutTrackInput> | UserMusicInventoryCreateWithoutTrackInput[] | UserMusicInventoryUncheckedCreateWithoutTrackInput[]
+    connectOrCreate?: UserMusicInventoryCreateOrConnectWithoutTrackInput | UserMusicInventoryCreateOrConnectWithoutTrackInput[]
+    createMany?: UserMusicInventoryCreateManyTrackInputEnvelope
+    connect?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+  }
+
+  export type EnumSpinMusicTierFieldUpdateOperationsInput = {
+    set?: $Enums.SpinMusicTier
+  }
+
+  export type UserMusicInventoryUpdateManyWithoutTrackNestedInput = {
+    create?: XOR<UserMusicInventoryCreateWithoutTrackInput, UserMusicInventoryUncheckedCreateWithoutTrackInput> | UserMusicInventoryCreateWithoutTrackInput[] | UserMusicInventoryUncheckedCreateWithoutTrackInput[]
+    connectOrCreate?: UserMusicInventoryCreateOrConnectWithoutTrackInput | UserMusicInventoryCreateOrConnectWithoutTrackInput[]
+    upsert?: UserMusicInventoryUpsertWithWhereUniqueWithoutTrackInput | UserMusicInventoryUpsertWithWhereUniqueWithoutTrackInput[]
+    createMany?: UserMusicInventoryCreateManyTrackInputEnvelope
+    set?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    disconnect?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    delete?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    connect?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    update?: UserMusicInventoryUpdateWithWhereUniqueWithoutTrackInput | UserMusicInventoryUpdateWithWhereUniqueWithoutTrackInput[]
+    updateMany?: UserMusicInventoryUpdateManyWithWhereWithoutTrackInput | UserMusicInventoryUpdateManyWithWhereWithoutTrackInput[]
+    deleteMany?: UserMusicInventoryScalarWhereInput | UserMusicInventoryScalarWhereInput[]
+  }
+
+  export type UserMusicInventoryUncheckedUpdateManyWithoutTrackNestedInput = {
+    create?: XOR<UserMusicInventoryCreateWithoutTrackInput, UserMusicInventoryUncheckedCreateWithoutTrackInput> | UserMusicInventoryCreateWithoutTrackInput[] | UserMusicInventoryUncheckedCreateWithoutTrackInput[]
+    connectOrCreate?: UserMusicInventoryCreateOrConnectWithoutTrackInput | UserMusicInventoryCreateOrConnectWithoutTrackInput[]
+    upsert?: UserMusicInventoryUpsertWithWhereUniqueWithoutTrackInput | UserMusicInventoryUpsertWithWhereUniqueWithoutTrackInput[]
+    createMany?: UserMusicInventoryCreateManyTrackInputEnvelope
+    set?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    disconnect?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    delete?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    connect?: UserMusicInventoryWhereUniqueInput | UserMusicInventoryWhereUniqueInput[]
+    update?: UserMusicInventoryUpdateWithWhereUniqueWithoutTrackInput | UserMusicInventoryUpdateWithWhereUniqueWithoutTrackInput[]
+    updateMany?: UserMusicInventoryUpdateManyWithWhereWithoutTrackInput | UserMusicInventoryUpdateManyWithWhereWithoutTrackInput[]
+    deleteMany?: UserMusicInventoryScalarWhereInput | UserMusicInventoryScalarWhereInput[]
+  }
+
+  export type UserProfileCreateNestedOneWithoutSpinMusicOwnedInput = {
+    create?: XOR<UserProfileCreateWithoutSpinMusicOwnedInput, UserProfileUncheckedCreateWithoutSpinMusicOwnedInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutSpinMusicOwnedInput
+    connect?: UserProfileWhereUniqueInput
+  }
+
+  export type SpinMusicTrackCreateNestedOneWithoutOwnersInput = {
+    create?: XOR<SpinMusicTrackCreateWithoutOwnersInput, SpinMusicTrackUncheckedCreateWithoutOwnersInput>
+    connectOrCreate?: SpinMusicTrackCreateOrConnectWithoutOwnersInput
+    connect?: SpinMusicTrackWhereUniqueInput
+  }
+
+  export type UserProfileUpdateOneRequiredWithoutSpinMusicOwnedNestedInput = {
+    create?: XOR<UserProfileCreateWithoutSpinMusicOwnedInput, UserProfileUncheckedCreateWithoutSpinMusicOwnedInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutSpinMusicOwnedInput
+    upsert?: UserProfileUpsertWithoutSpinMusicOwnedInput
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutSpinMusicOwnedInput, UserProfileUpdateWithoutSpinMusicOwnedInput>, UserProfileUncheckedUpdateWithoutSpinMusicOwnedInput>
+  }
+
+  export type SpinMusicTrackUpdateOneRequiredWithoutOwnersNestedInput = {
+    create?: XOR<SpinMusicTrackCreateWithoutOwnersInput, SpinMusicTrackUncheckedCreateWithoutOwnersInput>
+    connectOrCreate?: SpinMusicTrackCreateOrConnectWithoutOwnersInput
+    upsert?: SpinMusicTrackUpsertWithoutOwnersInput
+    connect?: SpinMusicTrackWhereUniqueInput
+    update?: XOR<XOR<SpinMusicTrackUpdateToOneWithWhereWithoutOwnersInput, SpinMusicTrackUpdateWithoutOwnersInput>, SpinMusicTrackUncheckedUpdateWithoutOwnersInput>
+  }
+
+  export type UserInventoryItemCreateNestedManyWithoutItemInput = {
+    create?: XOR<UserInventoryItemCreateWithoutItemInput, UserInventoryItemUncheckedCreateWithoutItemInput> | UserInventoryItemCreateWithoutItemInput[] | UserInventoryItemUncheckedCreateWithoutItemInput[]
+    connectOrCreate?: UserInventoryItemCreateOrConnectWithoutItemInput | UserInventoryItemCreateOrConnectWithoutItemInput[]
+    createMany?: UserInventoryItemCreateManyItemInputEnvelope
+    connect?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+  }
+
+  export type UserInventoryItemUncheckedCreateNestedManyWithoutItemInput = {
+    create?: XOR<UserInventoryItemCreateWithoutItemInput, UserInventoryItemUncheckedCreateWithoutItemInput> | UserInventoryItemCreateWithoutItemInput[] | UserInventoryItemUncheckedCreateWithoutItemInput[]
+    connectOrCreate?: UserInventoryItemCreateOrConnectWithoutItemInput | UserInventoryItemCreateOrConnectWithoutItemInput[]
+    createMany?: UserInventoryItemCreateManyItemInputEnvelope
+    connect?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+  }
+
+  export type EnumSpinItemTypeFieldUpdateOperationsInput = {
+    set?: $Enums.SpinItemType
+  }
+
+  export type UserInventoryItemUpdateManyWithoutItemNestedInput = {
+    create?: XOR<UserInventoryItemCreateWithoutItemInput, UserInventoryItemUncheckedCreateWithoutItemInput> | UserInventoryItemCreateWithoutItemInput[] | UserInventoryItemUncheckedCreateWithoutItemInput[]
+    connectOrCreate?: UserInventoryItemCreateOrConnectWithoutItemInput | UserInventoryItemCreateOrConnectWithoutItemInput[]
+    upsert?: UserInventoryItemUpsertWithWhereUniqueWithoutItemInput | UserInventoryItemUpsertWithWhereUniqueWithoutItemInput[]
+    createMany?: UserInventoryItemCreateManyItemInputEnvelope
+    set?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    disconnect?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    delete?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    connect?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    update?: UserInventoryItemUpdateWithWhereUniqueWithoutItemInput | UserInventoryItemUpdateWithWhereUniqueWithoutItemInput[]
+    updateMany?: UserInventoryItemUpdateManyWithWhereWithoutItemInput | UserInventoryItemUpdateManyWithWhereWithoutItemInput[]
+    deleteMany?: UserInventoryItemScalarWhereInput | UserInventoryItemScalarWhereInput[]
+  }
+
+  export type UserInventoryItemUncheckedUpdateManyWithoutItemNestedInput = {
+    create?: XOR<UserInventoryItemCreateWithoutItemInput, UserInventoryItemUncheckedCreateWithoutItemInput> | UserInventoryItemCreateWithoutItemInput[] | UserInventoryItemUncheckedCreateWithoutItemInput[]
+    connectOrCreate?: UserInventoryItemCreateOrConnectWithoutItemInput | UserInventoryItemCreateOrConnectWithoutItemInput[]
+    upsert?: UserInventoryItemUpsertWithWhereUniqueWithoutItemInput | UserInventoryItemUpsertWithWhereUniqueWithoutItemInput[]
+    createMany?: UserInventoryItemCreateManyItemInputEnvelope
+    set?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    disconnect?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    delete?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    connect?: UserInventoryItemWhereUniqueInput | UserInventoryItemWhereUniqueInput[]
+    update?: UserInventoryItemUpdateWithWhereUniqueWithoutItemInput | UserInventoryItemUpdateWithWhereUniqueWithoutItemInput[]
+    updateMany?: UserInventoryItemUpdateManyWithWhereWithoutItemInput | UserInventoryItemUpdateManyWithWhereWithoutItemInput[]
+    deleteMany?: UserInventoryItemScalarWhereInput | UserInventoryItemScalarWhereInput[]
+  }
+
+  export type UserProfileCreateNestedOneWithoutSpinInventoryInput = {
+    create?: XOR<UserProfileCreateWithoutSpinInventoryInput, UserProfileUncheckedCreateWithoutSpinInventoryInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutSpinInventoryInput
+    connect?: UserProfileWhereUniqueInput
+  }
+
+  export type SpinCollectionItemCreateNestedOneWithoutOwnersInput = {
+    create?: XOR<SpinCollectionItemCreateWithoutOwnersInput, SpinCollectionItemUncheckedCreateWithoutOwnersInput>
+    connectOrCreate?: SpinCollectionItemCreateOrConnectWithoutOwnersInput
+    connect?: SpinCollectionItemWhereUniqueInput
+  }
+
+  export type UserProfileUpdateOneRequiredWithoutSpinInventoryNestedInput = {
+    create?: XOR<UserProfileCreateWithoutSpinInventoryInput, UserProfileUncheckedCreateWithoutSpinInventoryInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutSpinInventoryInput
+    upsert?: UserProfileUpsertWithoutSpinInventoryInput
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutSpinInventoryInput, UserProfileUpdateWithoutSpinInventoryInput>, UserProfileUncheckedUpdateWithoutSpinInventoryInput>
+  }
+
+  export type SpinCollectionItemUpdateOneRequiredWithoutOwnersNestedInput = {
+    create?: XOR<SpinCollectionItemCreateWithoutOwnersInput, SpinCollectionItemUncheckedCreateWithoutOwnersInput>
+    connectOrCreate?: SpinCollectionItemCreateOrConnectWithoutOwnersInput
+    upsert?: SpinCollectionItemUpsertWithoutOwnersInput
+    connect?: SpinCollectionItemWhereUniqueInput
+    update?: XOR<XOR<SpinCollectionItemUpdateToOneWithWhereWithoutOwnersInput, SpinCollectionItemUpdateWithoutOwnersInput>, SpinCollectionItemUncheckedUpdateWithoutOwnersInput>
+  }
+
+  export type UserProfileCreateNestedOneWithoutSpinSessionsInput = {
+    create?: XOR<UserProfileCreateWithoutSpinSessionsInput, UserProfileUncheckedCreateWithoutSpinSessionsInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutSpinSessionsInput
+    connect?: UserProfileWhereUniqueInput
+  }
+
+  export type BubbleHitCreateNestedManyWithoutSessionInput = {
+    create?: XOR<BubbleHitCreateWithoutSessionInput, BubbleHitUncheckedCreateWithoutSessionInput> | BubbleHitCreateWithoutSessionInput[] | BubbleHitUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: BubbleHitCreateOrConnectWithoutSessionInput | BubbleHitCreateOrConnectWithoutSessionInput[]
+    createMany?: BubbleHitCreateManySessionInputEnvelope
+    connect?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+  }
+
+  export type SpinRewardPendingCreateNestedManyWithoutSessionInput = {
+    create?: XOR<SpinRewardPendingCreateWithoutSessionInput, SpinRewardPendingUncheckedCreateWithoutSessionInput> | SpinRewardPendingCreateWithoutSessionInput[] | SpinRewardPendingUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: SpinRewardPendingCreateOrConnectWithoutSessionInput | SpinRewardPendingCreateOrConnectWithoutSessionInput[]
+    createMany?: SpinRewardPendingCreateManySessionInputEnvelope
+    connect?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+  }
+
+  export type BubbleHitUncheckedCreateNestedManyWithoutSessionInput = {
+    create?: XOR<BubbleHitCreateWithoutSessionInput, BubbleHitUncheckedCreateWithoutSessionInput> | BubbleHitCreateWithoutSessionInput[] | BubbleHitUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: BubbleHitCreateOrConnectWithoutSessionInput | BubbleHitCreateOrConnectWithoutSessionInput[]
+    createMany?: BubbleHitCreateManySessionInputEnvelope
+    connect?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+  }
+
+  export type SpinRewardPendingUncheckedCreateNestedManyWithoutSessionInput = {
+    create?: XOR<SpinRewardPendingCreateWithoutSessionInput, SpinRewardPendingUncheckedCreateWithoutSessionInput> | SpinRewardPendingCreateWithoutSessionInput[] | SpinRewardPendingUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: SpinRewardPendingCreateOrConnectWithoutSessionInput | SpinRewardPendingCreateOrConnectWithoutSessionInput[]
+    createMany?: SpinRewardPendingCreateManySessionInputEnvelope
+    connect?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+  }
+
+  export type EnumSpinSessionStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SpinSessionStatus
+  }
+
+  export type UserProfileUpdateOneRequiredWithoutSpinSessionsNestedInput = {
+    create?: XOR<UserProfileCreateWithoutSpinSessionsInput, UserProfileUncheckedCreateWithoutSpinSessionsInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutSpinSessionsInput
+    upsert?: UserProfileUpsertWithoutSpinSessionsInput
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutSpinSessionsInput, UserProfileUpdateWithoutSpinSessionsInput>, UserProfileUncheckedUpdateWithoutSpinSessionsInput>
+  }
+
+  export type BubbleHitUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<BubbleHitCreateWithoutSessionInput, BubbleHitUncheckedCreateWithoutSessionInput> | BubbleHitCreateWithoutSessionInput[] | BubbleHitUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: BubbleHitCreateOrConnectWithoutSessionInput | BubbleHitCreateOrConnectWithoutSessionInput[]
+    upsert?: BubbleHitUpsertWithWhereUniqueWithoutSessionInput | BubbleHitUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: BubbleHitCreateManySessionInputEnvelope
+    set?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    disconnect?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    delete?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    connect?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    update?: BubbleHitUpdateWithWhereUniqueWithoutSessionInput | BubbleHitUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: BubbleHitUpdateManyWithWhereWithoutSessionInput | BubbleHitUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: BubbleHitScalarWhereInput | BubbleHitScalarWhereInput[]
+  }
+
+  export type SpinRewardPendingUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<SpinRewardPendingCreateWithoutSessionInput, SpinRewardPendingUncheckedCreateWithoutSessionInput> | SpinRewardPendingCreateWithoutSessionInput[] | SpinRewardPendingUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: SpinRewardPendingCreateOrConnectWithoutSessionInput | SpinRewardPendingCreateOrConnectWithoutSessionInput[]
+    upsert?: SpinRewardPendingUpsertWithWhereUniqueWithoutSessionInput | SpinRewardPendingUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: SpinRewardPendingCreateManySessionInputEnvelope
+    set?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    disconnect?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    delete?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    connect?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    update?: SpinRewardPendingUpdateWithWhereUniqueWithoutSessionInput | SpinRewardPendingUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: SpinRewardPendingUpdateManyWithWhereWithoutSessionInput | SpinRewardPendingUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: SpinRewardPendingScalarWhereInput | SpinRewardPendingScalarWhereInput[]
+  }
+
+  export type BubbleHitUncheckedUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<BubbleHitCreateWithoutSessionInput, BubbleHitUncheckedCreateWithoutSessionInput> | BubbleHitCreateWithoutSessionInput[] | BubbleHitUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: BubbleHitCreateOrConnectWithoutSessionInput | BubbleHitCreateOrConnectWithoutSessionInput[]
+    upsert?: BubbleHitUpsertWithWhereUniqueWithoutSessionInput | BubbleHitUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: BubbleHitCreateManySessionInputEnvelope
+    set?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    disconnect?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    delete?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    connect?: BubbleHitWhereUniqueInput | BubbleHitWhereUniqueInput[]
+    update?: BubbleHitUpdateWithWhereUniqueWithoutSessionInput | BubbleHitUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: BubbleHitUpdateManyWithWhereWithoutSessionInput | BubbleHitUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: BubbleHitScalarWhereInput | BubbleHitScalarWhereInput[]
+  }
+
+  export type SpinRewardPendingUncheckedUpdateManyWithoutSessionNestedInput = {
+    create?: XOR<SpinRewardPendingCreateWithoutSessionInput, SpinRewardPendingUncheckedCreateWithoutSessionInput> | SpinRewardPendingCreateWithoutSessionInput[] | SpinRewardPendingUncheckedCreateWithoutSessionInput[]
+    connectOrCreate?: SpinRewardPendingCreateOrConnectWithoutSessionInput | SpinRewardPendingCreateOrConnectWithoutSessionInput[]
+    upsert?: SpinRewardPendingUpsertWithWhereUniqueWithoutSessionInput | SpinRewardPendingUpsertWithWhereUniqueWithoutSessionInput[]
+    createMany?: SpinRewardPendingCreateManySessionInputEnvelope
+    set?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    disconnect?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    delete?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    connect?: SpinRewardPendingWhereUniqueInput | SpinRewardPendingWhereUniqueInput[]
+    update?: SpinRewardPendingUpdateWithWhereUniqueWithoutSessionInput | SpinRewardPendingUpdateWithWhereUniqueWithoutSessionInput[]
+    updateMany?: SpinRewardPendingUpdateManyWithWhereWithoutSessionInput | SpinRewardPendingUpdateManyWithWhereWithoutSessionInput[]
+    deleteMany?: SpinRewardPendingScalarWhereInput | SpinRewardPendingScalarWhereInput[]
+  }
+
+  export type SpinSessionCreateNestedOneWithoutBubbleHitsInput = {
+    create?: XOR<SpinSessionCreateWithoutBubbleHitsInput, SpinSessionUncheckedCreateWithoutBubbleHitsInput>
+    connectOrCreate?: SpinSessionCreateOrConnectWithoutBubbleHitsInput
+    connect?: SpinSessionWhereUniqueInput
+  }
+
+  export type UserProfileCreateNestedOneWithoutBubbleHitsInput = {
+    create?: XOR<UserProfileCreateWithoutBubbleHitsInput, UserProfileUncheckedCreateWithoutBubbleHitsInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutBubbleHitsInput
+    connect?: UserProfileWhereUniqueInput
+  }
+
+  export type SpinSessionUpdateOneRequiredWithoutBubbleHitsNestedInput = {
+    create?: XOR<SpinSessionCreateWithoutBubbleHitsInput, SpinSessionUncheckedCreateWithoutBubbleHitsInput>
+    connectOrCreate?: SpinSessionCreateOrConnectWithoutBubbleHitsInput
+    upsert?: SpinSessionUpsertWithoutBubbleHitsInput
+    connect?: SpinSessionWhereUniqueInput
+    update?: XOR<XOR<SpinSessionUpdateToOneWithWhereWithoutBubbleHitsInput, SpinSessionUpdateWithoutBubbleHitsInput>, SpinSessionUncheckedUpdateWithoutBubbleHitsInput>
+  }
+
+  export type UserProfileUpdateOneRequiredWithoutBubbleHitsNestedInput = {
+    create?: XOR<UserProfileCreateWithoutBubbleHitsInput, UserProfileUncheckedCreateWithoutBubbleHitsInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutBubbleHitsInput
+    upsert?: UserProfileUpsertWithoutBubbleHitsInput
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutBubbleHitsInput, UserProfileUpdateWithoutBubbleHitsInput>, UserProfileUncheckedUpdateWithoutBubbleHitsInput>
+  }
+
+  export type UserProfileCreateNestedOneWithoutSpinRewardPendingsInput = {
+    create?: XOR<UserProfileCreateWithoutSpinRewardPendingsInput, UserProfileUncheckedCreateWithoutSpinRewardPendingsInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutSpinRewardPendingsInput
+    connect?: UserProfileWhereUniqueInput
+  }
+
+  export type SpinSessionCreateNestedOneWithoutPendingsInput = {
+    create?: XOR<SpinSessionCreateWithoutPendingsInput, SpinSessionUncheckedCreateWithoutPendingsInput>
+    connectOrCreate?: SpinSessionCreateOrConnectWithoutPendingsInput
+    connect?: SpinSessionWhereUniqueInput
+  }
+
+  export type EnumSpinRewardSourceFieldUpdateOperationsInput = {
+    set?: $Enums.SpinRewardSource
+  }
+
+  export type EnumSpinRewardPendingStatusFieldUpdateOperationsInput = {
+    set?: $Enums.SpinRewardPendingStatus
+  }
+
+  export type UserProfileUpdateOneRequiredWithoutSpinRewardPendingsNestedInput = {
+    create?: XOR<UserProfileCreateWithoutSpinRewardPendingsInput, UserProfileUncheckedCreateWithoutSpinRewardPendingsInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutSpinRewardPendingsInput
+    upsert?: UserProfileUpsertWithoutSpinRewardPendingsInput
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutSpinRewardPendingsInput, UserProfileUpdateWithoutSpinRewardPendingsInput>, UserProfileUncheckedUpdateWithoutSpinRewardPendingsInput>
+  }
+
+  export type SpinSessionUpdateOneWithoutPendingsNestedInput = {
+    create?: XOR<SpinSessionCreateWithoutPendingsInput, SpinSessionUncheckedCreateWithoutPendingsInput>
+    connectOrCreate?: SpinSessionCreateOrConnectWithoutPendingsInput
+    upsert?: SpinSessionUpsertWithoutPendingsInput
+    disconnect?: SpinSessionWhereInput | boolean
+    delete?: SpinSessionWhereInput | boolean
+    connect?: SpinSessionWhereUniqueInput
+    update?: XOR<XOR<SpinSessionUpdateToOneWithWhereWithoutPendingsInput, SpinSessionUpdateWithoutPendingsInput>, SpinSessionUncheckedUpdateWithoutPendingsInput>
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -150589,6 +163596,91 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumHealthStatusFilter<$PrismaModel>
     _max?: NestedEnumHealthStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSpinMusicTierFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinMusicTier | EnumSpinMusicTierFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinMusicTier[] | ListEnumSpinMusicTierFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinMusicTier[] | ListEnumSpinMusicTierFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinMusicTierFilter<$PrismaModel> | $Enums.SpinMusicTier
+  }
+
+  export type NestedEnumSpinMusicTierWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinMusicTier | EnumSpinMusicTierFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinMusicTier[] | ListEnumSpinMusicTierFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinMusicTier[] | ListEnumSpinMusicTierFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinMusicTierWithAggregatesFilter<$PrismaModel> | $Enums.SpinMusicTier
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSpinMusicTierFilter<$PrismaModel>
+    _max?: NestedEnumSpinMusicTierFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSpinItemTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinItemType | EnumSpinItemTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinItemType[] | ListEnumSpinItemTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinItemType[] | ListEnumSpinItemTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinItemTypeFilter<$PrismaModel> | $Enums.SpinItemType
+  }
+
+  export type NestedEnumSpinItemTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinItemType | EnumSpinItemTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinItemType[] | ListEnumSpinItemTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinItemType[] | ListEnumSpinItemTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinItemTypeWithAggregatesFilter<$PrismaModel> | $Enums.SpinItemType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSpinItemTypeFilter<$PrismaModel>
+    _max?: NestedEnumSpinItemTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSpinSessionStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinSessionStatus | EnumSpinSessionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinSessionStatus[] | ListEnumSpinSessionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinSessionStatus[] | ListEnumSpinSessionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinSessionStatusFilter<$PrismaModel> | $Enums.SpinSessionStatus
+  }
+
+  export type NestedEnumSpinSessionStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinSessionStatus | EnumSpinSessionStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinSessionStatus[] | ListEnumSpinSessionStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinSessionStatus[] | ListEnumSpinSessionStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinSessionStatusWithAggregatesFilter<$PrismaModel> | $Enums.SpinSessionStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSpinSessionStatusFilter<$PrismaModel>
+    _max?: NestedEnumSpinSessionStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSpinRewardSourceFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinRewardSource | EnumSpinRewardSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinRewardSource[] | ListEnumSpinRewardSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinRewardSource[] | ListEnumSpinRewardSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinRewardSourceFilter<$PrismaModel> | $Enums.SpinRewardSource
+  }
+
+  export type NestedEnumSpinRewardPendingStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinRewardPendingStatus | EnumSpinRewardPendingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinRewardPendingStatus[] | ListEnumSpinRewardPendingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinRewardPendingStatus[] | ListEnumSpinRewardPendingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinRewardPendingStatusFilter<$PrismaModel> | $Enums.SpinRewardPendingStatus
+  }
+
+  export type NestedEnumSpinRewardSourceWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinRewardSource | EnumSpinRewardSourceFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinRewardSource[] | ListEnumSpinRewardSourceFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinRewardSource[] | ListEnumSpinRewardSourceFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinRewardSourceWithAggregatesFilter<$PrismaModel> | $Enums.SpinRewardSource
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSpinRewardSourceFilter<$PrismaModel>
+    _max?: NestedEnumSpinRewardSourceFilter<$PrismaModel>
+  }
+
+  export type NestedEnumSpinRewardPendingStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.SpinRewardPendingStatus | EnumSpinRewardPendingStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.SpinRewardPendingStatus[] | ListEnumSpinRewardPendingStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.SpinRewardPendingStatus[] | ListEnumSpinRewardPendingStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumSpinRewardPendingStatusWithAggregatesFilter<$PrismaModel> | $Enums.SpinRewardPendingStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumSpinRewardPendingStatusFilter<$PrismaModel>
+    _max?: NestedEnumSpinRewardPendingStatusFilter<$PrismaModel>
   }
 
   export type PredictionCreateWithoutUserInput = {
@@ -151968,6 +165060,172 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SpinSessionCreateWithoutUserInput = {
+    id?: string
+    status?: $Enums.SpinSessionStatus
+    entryTxHash?: string | null
+    entryAsset?: string | null
+    serverSeed: string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: string
+    cashAsset?: string
+    wheelRewardId?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    expiresAt: Date | string
+    bubbleHits?: BubbleHitCreateNestedManyWithoutSessionInput
+    pendings?: SpinRewardPendingCreateNestedManyWithoutSessionInput
+  }
+
+  export type SpinSessionUncheckedCreateWithoutUserInput = {
+    id?: string
+    status?: $Enums.SpinSessionStatus
+    entryTxHash?: string | null
+    entryAsset?: string | null
+    serverSeed: string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: string
+    cashAsset?: string
+    wheelRewardId?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    expiresAt: Date | string
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutSessionInput
+    pendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type SpinSessionCreateOrConnectWithoutUserInput = {
+    where: SpinSessionWhereUniqueInput
+    create: XOR<SpinSessionCreateWithoutUserInput, SpinSessionUncheckedCreateWithoutUserInput>
+  }
+
+  export type SpinSessionCreateManyUserInputEnvelope = {
+    data: SpinSessionCreateManyUserInput | SpinSessionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserMusicInventoryCreateWithoutUserInput = {
+    id?: string
+    equipped?: boolean
+    createdAt?: Date | string
+    track: SpinMusicTrackCreateNestedOneWithoutOwnersInput
+  }
+
+  export type UserMusicInventoryUncheckedCreateWithoutUserInput = {
+    id?: string
+    trackId: string
+    equipped?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserMusicInventoryCreateOrConnectWithoutUserInput = {
+    where: UserMusicInventoryWhereUniqueInput
+    create: XOR<UserMusicInventoryCreateWithoutUserInput, UserMusicInventoryUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserMusicInventoryCreateManyUserInputEnvelope = {
+    data: UserMusicInventoryCreateManyUserInput | UserMusicInventoryCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserInventoryItemCreateWithoutUserInput = {
+    id?: string
+    equipped?: boolean
+    createdAt?: Date | string
+    item: SpinCollectionItemCreateNestedOneWithoutOwnersInput
+  }
+
+  export type UserInventoryItemUncheckedCreateWithoutUserInput = {
+    id?: string
+    itemId: string
+    equipped?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserInventoryItemCreateOrConnectWithoutUserInput = {
+    where: UserInventoryItemWhereUniqueInput
+    create: XOR<UserInventoryItemCreateWithoutUserInput, UserInventoryItemUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserInventoryItemCreateManyUserInputEnvelope = {
+    data: UserInventoryItemCreateManyUserInput | UserInventoryItemCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SpinRewardPendingCreateWithoutUserInput = {
+    id?: string
+    wallet: string
+    asset: string
+    amountWei: string
+    requestId: string
+    source?: $Enums.SpinRewardSource
+    status?: $Enums.SpinRewardPendingStatus
+    creditTxHash?: string | null
+    withdrawTxHash?: string | null
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    session?: SpinSessionCreateNestedOneWithoutPendingsInput
+  }
+
+  export type SpinRewardPendingUncheckedCreateWithoutUserInput = {
+    id?: string
+    wallet: string
+    sessionId?: string | null
+    asset: string
+    amountWei: string
+    requestId: string
+    source?: $Enums.SpinRewardSource
+    status?: $Enums.SpinRewardPendingStatus
+    creditTxHash?: string | null
+    withdrawTxHash?: string | null
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SpinRewardPendingCreateOrConnectWithoutUserInput = {
+    where: SpinRewardPendingWhereUniqueInput
+    create: XOR<SpinRewardPendingCreateWithoutUserInput, SpinRewardPendingUncheckedCreateWithoutUserInput>
+  }
+
+  export type SpinRewardPendingCreateManyUserInputEnvelope = {
+    data: SpinRewardPendingCreateManyUserInput | SpinRewardPendingCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BubbleHitCreateWithoutUserInput = {
+    id?: string
+    bubbleId: string
+    amountWei: string
+    asset: string
+    taps?: number
+    createdAt?: Date | string
+    session: SpinSessionCreateNestedOneWithoutBubbleHitsInput
+  }
+
+  export type BubbleHitUncheckedCreateWithoutUserInput = {
+    id?: string
+    sessionId: string
+    bubbleId: string
+    amountWei: string
+    asset: string
+    taps?: number
+    createdAt?: Date | string
+  }
+
+  export type BubbleHitCreateOrConnectWithoutUserInput = {
+    where: BubbleHitWhereUniqueInput
+    create: XOR<BubbleHitCreateWithoutUserInput, BubbleHitUncheckedCreateWithoutUserInput>
+  }
+
+  export type BubbleHitCreateManyUserInputEnvelope = {
+    data: BubbleHitCreateManyUserInput | BubbleHitCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PredictionUpsertWithWhereUniqueWithoutUserInput = {
     where: PredictionWhereUniqueInput
     update: XOR<PredictionUpdateWithoutUserInput, PredictionUncheckedUpdateWithoutUserInput>
@@ -153221,6 +166479,162 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"SkillBoostPayment"> | Date | string
   }
 
+  export type SpinSessionUpsertWithWhereUniqueWithoutUserInput = {
+    where: SpinSessionWhereUniqueInput
+    update: XOR<SpinSessionUpdateWithoutUserInput, SpinSessionUncheckedUpdateWithoutUserInput>
+    create: XOR<SpinSessionCreateWithoutUserInput, SpinSessionUncheckedCreateWithoutUserInput>
+  }
+
+  export type SpinSessionUpdateWithWhereUniqueWithoutUserInput = {
+    where: SpinSessionWhereUniqueInput
+    data: XOR<SpinSessionUpdateWithoutUserInput, SpinSessionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SpinSessionUpdateManyWithWhereWithoutUserInput = {
+    where: SpinSessionScalarWhereInput
+    data: XOR<SpinSessionUpdateManyMutationInput, SpinSessionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SpinSessionScalarWhereInput = {
+    AND?: SpinSessionScalarWhereInput | SpinSessionScalarWhereInput[]
+    OR?: SpinSessionScalarWhereInput[]
+    NOT?: SpinSessionScalarWhereInput | SpinSessionScalarWhereInput[]
+    id?: UuidFilter<"SpinSession"> | string
+    userId?: UuidFilter<"SpinSession"> | string
+    status?: EnumSpinSessionStatusFilter<"SpinSession"> | $Enums.SpinSessionStatus
+    entryTxHash?: StringNullableFilter<"SpinSession"> | string | null
+    entryAsset?: StringNullableFilter<"SpinSession"> | string | null
+    serverSeed?: StringFilter<"SpinSession"> | string
+    loadout?: JsonNullableFilter<"SpinSession">
+    bubblePlan?: JsonNullableFilter<"SpinSession">
+    cashEarnedWei?: StringFilter<"SpinSession"> | string
+    cashAsset?: StringFilter<"SpinSession"> | string
+    wheelRewardId?: UuidNullableFilter<"SpinSession"> | string | null
+    startedAt?: DateTimeFilter<"SpinSession"> | Date | string
+    finishedAt?: DateTimeNullableFilter<"SpinSession"> | Date | string | null
+    expiresAt?: DateTimeFilter<"SpinSession"> | Date | string
+  }
+
+  export type UserMusicInventoryUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserMusicInventoryWhereUniqueInput
+    update: XOR<UserMusicInventoryUpdateWithoutUserInput, UserMusicInventoryUncheckedUpdateWithoutUserInput>
+    create: XOR<UserMusicInventoryCreateWithoutUserInput, UserMusicInventoryUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserMusicInventoryUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserMusicInventoryWhereUniqueInput
+    data: XOR<UserMusicInventoryUpdateWithoutUserInput, UserMusicInventoryUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserMusicInventoryUpdateManyWithWhereWithoutUserInput = {
+    where: UserMusicInventoryScalarWhereInput
+    data: XOR<UserMusicInventoryUpdateManyMutationInput, UserMusicInventoryUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserMusicInventoryScalarWhereInput = {
+    AND?: UserMusicInventoryScalarWhereInput | UserMusicInventoryScalarWhereInput[]
+    OR?: UserMusicInventoryScalarWhereInput[]
+    NOT?: UserMusicInventoryScalarWhereInput | UserMusicInventoryScalarWhereInput[]
+    id?: UuidFilter<"UserMusicInventory"> | string
+    userId?: UuidFilter<"UserMusicInventory"> | string
+    trackId?: UuidFilter<"UserMusicInventory"> | string
+    equipped?: BoolFilter<"UserMusicInventory"> | boolean
+    createdAt?: DateTimeFilter<"UserMusicInventory"> | Date | string
+  }
+
+  export type UserInventoryItemUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserInventoryItemWhereUniqueInput
+    update: XOR<UserInventoryItemUpdateWithoutUserInput, UserInventoryItemUncheckedUpdateWithoutUserInput>
+    create: XOR<UserInventoryItemCreateWithoutUserInput, UserInventoryItemUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserInventoryItemUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserInventoryItemWhereUniqueInput
+    data: XOR<UserInventoryItemUpdateWithoutUserInput, UserInventoryItemUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserInventoryItemUpdateManyWithWhereWithoutUserInput = {
+    where: UserInventoryItemScalarWhereInput
+    data: XOR<UserInventoryItemUpdateManyMutationInput, UserInventoryItemUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserInventoryItemScalarWhereInput = {
+    AND?: UserInventoryItemScalarWhereInput | UserInventoryItemScalarWhereInput[]
+    OR?: UserInventoryItemScalarWhereInput[]
+    NOT?: UserInventoryItemScalarWhereInput | UserInventoryItemScalarWhereInput[]
+    id?: UuidFilter<"UserInventoryItem"> | string
+    userId?: UuidFilter<"UserInventoryItem"> | string
+    itemId?: UuidFilter<"UserInventoryItem"> | string
+    equipped?: BoolFilter<"UserInventoryItem"> | boolean
+    createdAt?: DateTimeFilter<"UserInventoryItem"> | Date | string
+  }
+
+  export type SpinRewardPendingUpsertWithWhereUniqueWithoutUserInput = {
+    where: SpinRewardPendingWhereUniqueInput
+    update: XOR<SpinRewardPendingUpdateWithoutUserInput, SpinRewardPendingUncheckedUpdateWithoutUserInput>
+    create: XOR<SpinRewardPendingCreateWithoutUserInput, SpinRewardPendingUncheckedCreateWithoutUserInput>
+  }
+
+  export type SpinRewardPendingUpdateWithWhereUniqueWithoutUserInput = {
+    where: SpinRewardPendingWhereUniqueInput
+    data: XOR<SpinRewardPendingUpdateWithoutUserInput, SpinRewardPendingUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SpinRewardPendingUpdateManyWithWhereWithoutUserInput = {
+    where: SpinRewardPendingScalarWhereInput
+    data: XOR<SpinRewardPendingUpdateManyMutationInput, SpinRewardPendingUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SpinRewardPendingScalarWhereInput = {
+    AND?: SpinRewardPendingScalarWhereInput | SpinRewardPendingScalarWhereInput[]
+    OR?: SpinRewardPendingScalarWhereInput[]
+    NOT?: SpinRewardPendingScalarWhereInput | SpinRewardPendingScalarWhereInput[]
+    id?: UuidFilter<"SpinRewardPending"> | string
+    userId?: UuidFilter<"SpinRewardPending"> | string
+    wallet?: StringFilter<"SpinRewardPending"> | string
+    sessionId?: UuidNullableFilter<"SpinRewardPending"> | string | null
+    asset?: StringFilter<"SpinRewardPending"> | string
+    amountWei?: StringFilter<"SpinRewardPending"> | string
+    requestId?: StringFilter<"SpinRewardPending"> | string
+    source?: EnumSpinRewardSourceFilter<"SpinRewardPending"> | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusFilter<"SpinRewardPending"> | $Enums.SpinRewardPendingStatus
+    creditTxHash?: StringNullableFilter<"SpinRewardPending"> | string | null
+    withdrawTxHash?: StringNullableFilter<"SpinRewardPending"> | string | null
+    lastError?: StringNullableFilter<"SpinRewardPending"> | string | null
+    createdAt?: DateTimeFilter<"SpinRewardPending"> | Date | string
+    updatedAt?: DateTimeFilter<"SpinRewardPending"> | Date | string
+  }
+
+  export type BubbleHitUpsertWithWhereUniqueWithoutUserInput = {
+    where: BubbleHitWhereUniqueInput
+    update: XOR<BubbleHitUpdateWithoutUserInput, BubbleHitUncheckedUpdateWithoutUserInput>
+    create: XOR<BubbleHitCreateWithoutUserInput, BubbleHitUncheckedCreateWithoutUserInput>
+  }
+
+  export type BubbleHitUpdateWithWhereUniqueWithoutUserInput = {
+    where: BubbleHitWhereUniqueInput
+    data: XOR<BubbleHitUpdateWithoutUserInput, BubbleHitUncheckedUpdateWithoutUserInput>
+  }
+
+  export type BubbleHitUpdateManyWithWhereWithoutUserInput = {
+    where: BubbleHitScalarWhereInput
+    data: XOR<BubbleHitUpdateManyMutationInput, BubbleHitUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type BubbleHitScalarWhereInput = {
+    AND?: BubbleHitScalarWhereInput | BubbleHitScalarWhereInput[]
+    OR?: BubbleHitScalarWhereInput[]
+    NOT?: BubbleHitScalarWhereInput | BubbleHitScalarWhereInput[]
+    id?: UuidFilter<"BubbleHit"> | string
+    sessionId?: UuidFilter<"BubbleHit"> | string
+    userId?: UuidFilter<"BubbleHit"> | string
+    bubbleId?: StringFilter<"BubbleHit"> | string
+    amountWei?: StringFilter<"BubbleHit"> | string
+    asset?: StringFilter<"BubbleHit"> | string
+    taps?: IntFilter<"BubbleHit"> | number
+    createdAt?: DateTimeFilter<"BubbleHit"> | Date | string
+  }
+
   export type PredictionCreateWithoutTournamentInput = {
     id?: string
     predictionValue: number
@@ -153549,6 +166963,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutPredictionsInput = {
@@ -153610,6 +167029,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutPredictionsInput = {
@@ -153738,6 +167162,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutPredictionsInput = {
@@ -153799,6 +167228,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserMissionCreateWithoutMissionInput = {
@@ -153969,6 +167403,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutUserMissionsInput = {
@@ -154030,6 +167469,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutUserMissionsInput = {
@@ -154150,6 +167594,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutUserMissionsInput = {
@@ -154211,6 +167660,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DailyMissionUpsertWithoutUserMissionsInput = {
@@ -154413,6 +167867,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutSpinLedgersInput = {
@@ -154474,6 +167933,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutSpinLedgersInput = {
@@ -154551,6 +168015,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutSpinLedgersInput = {
@@ -154612,6 +168081,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutRewardLedgersInput = {
@@ -154673,6 +168147,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutRewardLedgersInput = {
@@ -154734,6 +168213,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutRewardLedgersInput = {
@@ -154811,6 +168295,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutRewardLedgersInput = {
@@ -154872,6 +168361,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutActivitiesInput = {
@@ -154933,6 +168427,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutActivitiesInput = {
@@ -154994,6 +168493,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutActivitiesInput = {
@@ -155071,6 +168575,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutActivitiesInput = {
@@ -155132,6 +168641,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutLeaderboardSnapshotsInput = {
@@ -155193,6 +168707,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutLeaderboardSnapshotsInput = {
@@ -155254,6 +168773,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutLeaderboardSnapshotsInput = {
@@ -155376,6 +168900,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutLeaderboardSnapshotsInput = {
@@ -155437,6 +168966,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TournamentUpsertWithoutLeaderboardSnapshotsInput = {
@@ -155549,6 +169083,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNotificationsInput = {
@@ -155610,6 +169149,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNotificationsInput = {
@@ -155687,6 +169231,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNotificationsInput = {
@@ -155748,6 +169297,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TournamentCreateWithoutExecutionsInput = {
@@ -155905,6 +169459,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutPendingRewardsInput = {
@@ -155966,6 +169525,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutPendingRewardsInput = {
@@ -156088,6 +169652,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutPendingRewardsInput = {
@@ -156149,6 +169718,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TournamentUpsertWithoutPendingRewardsInput = {
@@ -156261,6 +169835,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutSessionsInput = {
@@ -156322,6 +169901,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutSessionsInput = {
@@ -156422,6 +170006,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutSessionsInput = {
@@ -156483,6 +170072,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RefreshTokenUpsertWithoutSessionInput = {
@@ -156641,6 +170235,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutPlayerStatsInput = {
@@ -156702,6 +170301,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutPlayerStatsInput = {
@@ -156779,6 +170383,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutPlayerStatsInput = {
@@ -156840,6 +170449,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutNotificationPrefsInput = {
@@ -156901,6 +170515,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNotificationPrefsInput = {
@@ -156962,6 +170581,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNotificationPrefsInput = {
@@ -157039,6 +170663,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNotificationPrefsInput = {
@@ -157100,6 +170729,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AchievementRuleCreateWithoutAchievementInput = {
@@ -157587,6 +171221,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutUserAchievementsInput = {
@@ -157648,6 +171287,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutUserAchievementsInput = {
@@ -157766,6 +171410,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutUserAchievementsInput = {
@@ -157827,6 +171476,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AchievementUpsertWithoutUserAchievementsInput = {
@@ -157935,6 +171589,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutPlayerIdentityInput = {
@@ -157996,6 +171655,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutPlayerIdentityInput = {
@@ -158109,6 +171773,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutPlayerIdentityInput = {
@@ -158170,6 +171839,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PlayerIdentityVersionUpsertWithWhereUniqueWithoutIdentityInput = {
@@ -158328,6 +172002,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutProgressSnapshotsInput = {
@@ -158389,6 +172068,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutProgressSnapshotsInput = {
@@ -158466,6 +172150,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutProgressSnapshotsInput = {
@@ -158527,6 +172216,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutUnlockAnimationsInput = {
@@ -158588,6 +172282,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutUnlockAnimationsInput = {
@@ -158649,6 +172348,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutUnlockAnimationsInput = {
@@ -158726,6 +172430,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutUnlockAnimationsInput = {
@@ -158787,6 +172496,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SpinHistoryCreateWithoutSpinRewardInput = {
@@ -158902,6 +172616,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutSpinHistoriesInput = {
@@ -158963,6 +172682,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutSpinHistoriesInput = {
@@ -159071,6 +172795,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutSpinHistoriesInput = {
@@ -159132,6 +172861,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SpinRewardUpsertWithoutSpinHistoriesInput = {
@@ -159230,6 +172964,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutRewardClaimsInput = {
@@ -159291,6 +173030,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutRewardClaimsInput = {
@@ -159368,6 +173112,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutRewardClaimsInput = {
@@ -159429,6 +173178,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutFriendRequestsSentInput = {
@@ -159490,6 +173244,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutFriendRequestsSentInput = {
@@ -159551,6 +173310,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutFriendRequestsSentInput = {
@@ -159617,6 +173381,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutFriendRequestsReceivedInput = {
@@ -159678,6 +173447,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutFriendRequestsReceivedInput = {
@@ -159755,6 +173529,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutFriendRequestsSentInput = {
@@ -159816,6 +173595,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUpsertWithoutFriendRequestsReceivedInput = {
@@ -159888,6 +173672,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutFriendRequestsReceivedInput = {
@@ -159949,6 +173738,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutFriendsAsUserInput = {
@@ -160010,6 +173804,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutFriendsAsUserInput = {
@@ -160071,6 +173870,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutFriendsAsUserInput = {
@@ -160137,6 +173941,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutFriendsAsFriendInput = {
@@ -160198,6 +174007,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutFriendsAsFriendInput = {
@@ -160275,6 +174089,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutFriendsAsUserInput = {
@@ -160336,6 +174155,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUpsertWithoutFriendsAsFriendInput = {
@@ -160408,6 +174232,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutFriendsAsFriendInput = {
@@ -160469,6 +174298,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutReferralsMadeInput = {
@@ -160530,6 +174364,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutReferralsMadeInput = {
@@ -160591,6 +174430,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutReferralsMadeInput = {
@@ -160657,6 +174501,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutReferralsReceivedInput = {
@@ -160718,6 +174567,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutReferralsReceivedInput = {
@@ -160851,6 +174705,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutReferralsMadeInput = {
@@ -160912,6 +174771,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUpsertWithoutReferralsReceivedInput = {
@@ -160984,6 +174848,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutReferralsReceivedInput = {
@@ -161045,6 +174914,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ReferralRewardUpsertWithWhereUniqueWithoutReferralInput = {
@@ -161244,6 +175118,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutInviteCodesInput = {
@@ -161305,6 +175184,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutInviteCodesInput = {
@@ -161382,6 +175266,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutInviteCodesInput = {
@@ -161443,6 +175332,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutCommunityPostsInput = {
@@ -161504,6 +175398,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutCommunityPostsInput = {
@@ -161565,6 +175464,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutCommunityPostsInput = {
@@ -161642,6 +175546,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutCommunityPostsInput = {
@@ -161703,6 +175612,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutFeedItemsOwnedInput = {
@@ -161764,6 +175678,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutFeedItemsOwnedInput = {
@@ -161825,6 +175744,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutFeedItemsOwnedInput = {
@@ -161891,6 +175815,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutFeedItemsActedInput = {
@@ -161952,6 +175881,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutFeedItemsActedInput = {
@@ -162029,6 +175963,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutFeedItemsOwnedInput = {
@@ -162090,6 +176029,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUpsertWithoutFeedItemsActedInput = {
@@ -162162,6 +176106,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutFeedItemsActedInput = {
@@ -162223,6 +176172,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutPresencesInput = {
@@ -162284,6 +176238,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutPresencesInput = {
@@ -162345,6 +176304,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutPresencesInput = {
@@ -162422,6 +176386,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutPresencesInput = {
@@ -162483,6 +176452,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutPresenceSessionsInput = {
@@ -162544,6 +176518,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutPresenceSessionsInput = {
@@ -162605,6 +176584,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutPresenceSessionsInput = {
@@ -162682,6 +176666,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutPresenceSessionsInput = {
@@ -162743,6 +176732,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ReferralCreateWithoutFraudSignalsInput = {
@@ -162884,6 +176878,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutRelationshipsInitiatedInput = {
@@ -162945,6 +176944,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutRelationshipsInitiatedInput = {
@@ -163011,6 +177015,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutRelationshipsTargetedInput = {
@@ -163072,6 +177081,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutRelationshipsTargetedInput = {
@@ -163149,6 +177163,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutRelationshipsInitiatedInput = {
@@ -163210,6 +177229,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUpsertWithoutRelationshipsTargetedInput = {
@@ -163282,6 +177306,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutRelationshipsTargetedInput = {
@@ -163343,6 +177372,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutSocialSettingsInput = {
@@ -163404,6 +177438,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutSocialSettingsInput = {
@@ -163465,6 +177504,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutSocialSettingsInput = {
@@ -163542,6 +177586,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutSocialSettingsInput = {
@@ -163603,6 +177652,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ArenaMatchCreateWithoutArenaInput = {
@@ -164079,6 +178133,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutArenaQueueEntriesInput = {
@@ -164140,6 +178199,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutArenaQueueEntriesInput = {
@@ -164262,6 +178326,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutArenaQueueEntriesInput = {
@@ -164323,6 +178392,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ArenaMatchUpsertWithoutQueueEntriesInput = {
@@ -164480,6 +178554,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutArenaInvitationsSentInput = {
@@ -164541,6 +178620,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutArenaInvitationsSentInput = {
@@ -164607,6 +178691,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutArenaInvitationsRecvInput = {
@@ -164668,6 +178757,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutArenaInvitationsRecvInput = {
@@ -164796,6 +178890,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutArenaInvitationsSentInput = {
@@ -164857,6 +178956,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUpsertWithoutArenaInvitationsRecvInput = {
@@ -164929,6 +179033,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutArenaInvitationsRecvInput = {
@@ -164990,6 +179099,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ArenaMatchCreateWithoutParticipantsInput = {
@@ -165096,6 +179210,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutMatchParticipantsInput = {
@@ -165157,6 +179276,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutMatchParticipantsInput = {
@@ -165285,6 +179409,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutMatchParticipantsInput = {
@@ -165346,6 +179475,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ArenaMatchCreateWithoutResultInput = {
@@ -165599,6 +179733,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutArenaRatingsInput = {
@@ -165660,6 +179799,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutArenaRatingsInput = {
@@ -165737,6 +179881,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutArenaRatingsInput = {
@@ -165798,6 +179947,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutArenaSeasonStatsInput = {
@@ -165859,6 +180013,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutArenaSeasonStatsInput = {
@@ -165920,6 +180079,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutArenaSeasonStatsInput = {
@@ -165997,6 +180161,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutArenaSeasonStatsInput = {
@@ -166058,6 +180227,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutArenaPresenceInput = {
@@ -166119,6 +180293,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutArenaPresenceInput = {
@@ -166180,6 +180359,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutArenaPresenceInput = {
@@ -166257,6 +180441,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutArenaPresenceInput = {
@@ -166318,6 +180507,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutSkillBoostPaymentsInput = {
@@ -166379,6 +180573,11 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutSkillBoostPaymentsInput = {
@@ -166440,6 +180639,11 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutSkillBoostPaymentsInput = {
@@ -166517,6 +180721,11 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutSkillBoostPaymentsInput = {
@@ -166578,6 +180787,11 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SeasonTierCreateWithoutSeasonInput = {
@@ -167427,6 +181641,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutSeasonProgressInput = {
@@ -167488,6 +181707,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutSeasonProgressInput = {
@@ -167610,6 +181834,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutSeasonProgressInput = {
@@ -167671,6 +181900,11 @@ export namespace Prisma {
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SeasonUpsertWithoutProgressInput = {
@@ -167917,6 +182151,11 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutBannerDismissalsInput = {
@@ -167978,6 +182217,11 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutBannerDismissalsInput = {
@@ -168098,6 +182342,11 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutBannerDismissalsInput = {
@@ -168159,6 +182408,11 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BannerUpsertWithoutDismissalsInput = {
@@ -168576,6 +182830,11 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutCampaignTargetsInput = {
@@ -168637,6 +182896,11 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutCampaignTargetsInput = {
@@ -168757,6 +183021,11 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutCampaignTargetsInput = {
@@ -168818,6 +183087,11 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ScheduledJobDependencyCreateWithoutJobInput = {
@@ -169213,6 +183487,1910 @@ export namespace Prisma {
     enabled?: BoolFieldUpdateOperationsInput | boolean
     silenceUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserMusicInventoryCreateWithoutTrackInput = {
+    id?: string
+    equipped?: boolean
+    createdAt?: Date | string
+    user: UserProfileCreateNestedOneWithoutSpinMusicOwnedInput
+  }
+
+  export type UserMusicInventoryUncheckedCreateWithoutTrackInput = {
+    id?: string
+    userId: string
+    equipped?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserMusicInventoryCreateOrConnectWithoutTrackInput = {
+    where: UserMusicInventoryWhereUniqueInput
+    create: XOR<UserMusicInventoryCreateWithoutTrackInput, UserMusicInventoryUncheckedCreateWithoutTrackInput>
+  }
+
+  export type UserMusicInventoryCreateManyTrackInputEnvelope = {
+    data: UserMusicInventoryCreateManyTrackInput | UserMusicInventoryCreateManyTrackInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserMusicInventoryUpsertWithWhereUniqueWithoutTrackInput = {
+    where: UserMusicInventoryWhereUniqueInput
+    update: XOR<UserMusicInventoryUpdateWithoutTrackInput, UserMusicInventoryUncheckedUpdateWithoutTrackInput>
+    create: XOR<UserMusicInventoryCreateWithoutTrackInput, UserMusicInventoryUncheckedCreateWithoutTrackInput>
+  }
+
+  export type UserMusicInventoryUpdateWithWhereUniqueWithoutTrackInput = {
+    where: UserMusicInventoryWhereUniqueInput
+    data: XOR<UserMusicInventoryUpdateWithoutTrackInput, UserMusicInventoryUncheckedUpdateWithoutTrackInput>
+  }
+
+  export type UserMusicInventoryUpdateManyWithWhereWithoutTrackInput = {
+    where: UserMusicInventoryScalarWhereInput
+    data: XOR<UserMusicInventoryUpdateManyMutationInput, UserMusicInventoryUncheckedUpdateManyWithoutTrackInput>
+  }
+
+  export type UserProfileCreateWithoutSpinMusicOwnedInput = {
+    id?: string
+    wallet: string
+    username?: string | null
+    avatar?: string | null
+    xp?: number
+    points?: number
+    spins?: number
+    level?: number
+    currentRank?: number | null
+    lastLogin?: Date | string | null
+    totalActivity?: number
+    currentStreak?: number
+    longestStreak?: number
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    predictions?: PredictionCreateNestedManyWithoutUserInput
+    userMissions?: UserMissionCreateNestedManyWithoutUserInput
+    spinLedgers?: SpinLedgerCreateNestedManyWithoutUserInput
+    rewardLedgers?: RewardLedgerCreateNestedManyWithoutUserInput
+    activities?: ActivityCreateNestedManyWithoutUserInput
+    leaderboardSnapshots?: LeaderboardSnapshotCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    pendingRewards?: PendingRewardCreateNestedManyWithoutUserInput
+    spinHistories?: SpinHistoryCreateNestedManyWithoutUserInput
+    rewardClaims?: RewardClaimCreateNestedManyWithoutUserInput
+    playerStats?: PlayerStatisticCreateNestedManyWithoutUserInput
+    notificationPrefs?: NotificationPreferenceCreateNestedManyWithoutUserInput
+    playerIdentity?: PlayerIdentityCreateNestedOneWithoutUserInput
+    userAchievements?: UserAchievementCreateNestedManyWithoutUserInput
+    progressSnapshots?: ProgressSnapshotCreateNestedManyWithoutUserInput
+    unlockAnimations?: UnlockAnimationCreateNestedManyWithoutUserInput
+    friendRequestsSent?: FriendRequestCreateNestedManyWithoutSenderInput
+    friendRequestsReceived?: FriendRequestCreateNestedManyWithoutReceiverInput
+    friendsAsUser?: FriendshipCreateNestedManyWithoutUserInput
+    friendsAsFriend?: FriendshipCreateNestedManyWithoutFriendInput
+    referralsMade?: ReferralCreateNestedManyWithoutReferrerInput
+    referralsReceived?: ReferralCreateNestedManyWithoutReferredInput
+    inviteCodes?: InviteCodeCreateNestedManyWithoutOwnerInput
+    communityPosts?: CommunityPostCreateNestedManyWithoutAuthorInput
+    feedItemsOwned?: FeedItemCreateNestedManyWithoutUserInput
+    feedItemsActed?: FeedItemCreateNestedManyWithoutActorInput
+    presences?: PresenceCreateNestedManyWithoutUserInput
+    presenceSessions?: PresenceSessionCreateNestedManyWithoutUserInput
+    relationshipsInitiated?: PlayerRelationshipCreateNestedManyWithoutInitiatorInput
+    relationshipsTargeted?: PlayerRelationshipCreateNestedManyWithoutTargetInput
+    socialSettings?: SocialSettingsCreateNestedOneWithoutUserInput
+    arenaRatings?: ArenaRatingCreateNestedManyWithoutUserInput
+    arenaQueueEntries?: ArenaQueueCreateNestedManyWithoutUserInput
+    matchParticipants?: MatchParticipantCreateNestedManyWithoutUserInput
+    arenaInvitationsSent?: ArenaInvitationCreateNestedManyWithoutSenderInput
+    arenaInvitationsRecv?: ArenaInvitationCreateNestedManyWithoutReceiverInput
+    arenaPresence?: ArenaPresenceCreateNestedOneWithoutUserInput
+    arenaSeasonStats?: ArenaSeasonStatisticCreateNestedManyWithoutUserInput
+    seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
+    bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
+    campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileUncheckedCreateWithoutSpinMusicOwnedInput = {
+    id?: string
+    wallet: string
+    username?: string | null
+    avatar?: string | null
+    xp?: number
+    points?: number
+    spins?: number
+    level?: number
+    currentRank?: number | null
+    lastLogin?: Date | string | null
+    totalActivity?: number
+    currentStreak?: number
+    longestStreak?: number
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    predictions?: PredictionUncheckedCreateNestedManyWithoutUserInput
+    userMissions?: UserMissionUncheckedCreateNestedManyWithoutUserInput
+    spinLedgers?: SpinLedgerUncheckedCreateNestedManyWithoutUserInput
+    rewardLedgers?: RewardLedgerUncheckedCreateNestedManyWithoutUserInput
+    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
+    leaderboardSnapshots?: LeaderboardSnapshotUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    pendingRewards?: PendingRewardUncheckedCreateNestedManyWithoutUserInput
+    spinHistories?: SpinHistoryUncheckedCreateNestedManyWithoutUserInput
+    rewardClaims?: RewardClaimUncheckedCreateNestedManyWithoutUserInput
+    playerStats?: PlayerStatisticUncheckedCreateNestedManyWithoutUserInput
+    notificationPrefs?: NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
+    playerIdentity?: PlayerIdentityUncheckedCreateNestedOneWithoutUserInput
+    userAchievements?: UserAchievementUncheckedCreateNestedManyWithoutUserInput
+    progressSnapshots?: ProgressSnapshotUncheckedCreateNestedManyWithoutUserInput
+    unlockAnimations?: UnlockAnimationUncheckedCreateNestedManyWithoutUserInput
+    friendRequestsSent?: FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+    friendRequestsReceived?: FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+    friendsAsUser?: FriendshipUncheckedCreateNestedManyWithoutUserInput
+    friendsAsFriend?: FriendshipUncheckedCreateNestedManyWithoutFriendInput
+    referralsMade?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralsReceived?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    inviteCodes?: InviteCodeUncheckedCreateNestedManyWithoutOwnerInput
+    communityPosts?: CommunityPostUncheckedCreateNestedManyWithoutAuthorInput
+    feedItemsOwned?: FeedItemUncheckedCreateNestedManyWithoutUserInput
+    feedItemsActed?: FeedItemUncheckedCreateNestedManyWithoutActorInput
+    presences?: PresenceUncheckedCreateNestedManyWithoutUserInput
+    presenceSessions?: PresenceSessionUncheckedCreateNestedManyWithoutUserInput
+    relationshipsInitiated?: PlayerRelationshipUncheckedCreateNestedManyWithoutInitiatorInput
+    relationshipsTargeted?: PlayerRelationshipUncheckedCreateNestedManyWithoutTargetInput
+    socialSettings?: SocialSettingsUncheckedCreateNestedOneWithoutUserInput
+    arenaRatings?: ArenaRatingUncheckedCreateNestedManyWithoutUserInput
+    arenaQueueEntries?: ArenaQueueUncheckedCreateNestedManyWithoutUserInput
+    matchParticipants?: MatchParticipantUncheckedCreateNestedManyWithoutUserInput
+    arenaInvitationsSent?: ArenaInvitationUncheckedCreateNestedManyWithoutSenderInput
+    arenaInvitationsRecv?: ArenaInvitationUncheckedCreateNestedManyWithoutReceiverInput
+    arenaPresence?: ArenaPresenceUncheckedCreateNestedOneWithoutUserInput
+    arenaSeasonStats?: ArenaSeasonStatisticUncheckedCreateNestedManyWithoutUserInput
+    seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
+    bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
+    campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileCreateOrConnectWithoutSpinMusicOwnedInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutSpinMusicOwnedInput, UserProfileUncheckedCreateWithoutSpinMusicOwnedInput>
+  }
+
+  export type SpinMusicTrackCreateWithoutOwnersInput = {
+    id?: string
+    title: string
+    artist?: string | null
+    url: string
+    tier?: $Enums.SpinMusicTier
+    priceWei?: string
+    priceAsset?: string
+    durationSec?: number
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SpinMusicTrackUncheckedCreateWithoutOwnersInput = {
+    id?: string
+    title: string
+    artist?: string | null
+    url: string
+    tier?: $Enums.SpinMusicTier
+    priceWei?: string
+    priceAsset?: string
+    durationSec?: number
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SpinMusicTrackCreateOrConnectWithoutOwnersInput = {
+    where: SpinMusicTrackWhereUniqueInput
+    create: XOR<SpinMusicTrackCreateWithoutOwnersInput, SpinMusicTrackUncheckedCreateWithoutOwnersInput>
+  }
+
+  export type UserProfileUpsertWithoutSpinMusicOwnedInput = {
+    update: XOR<UserProfileUpdateWithoutSpinMusicOwnedInput, UserProfileUncheckedUpdateWithoutSpinMusicOwnedInput>
+    create: XOR<UserProfileCreateWithoutSpinMusicOwnedInput, UserProfileUncheckedCreateWithoutSpinMusicOwnedInput>
+    where?: UserProfileWhereInput
+  }
+
+  export type UserProfileUpdateToOneWithWhereWithoutSpinMusicOwnedInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutSpinMusicOwnedInput, UserProfileUncheckedUpdateWithoutSpinMusicOwnedInput>
+  }
+
+  export type UserProfileUpdateWithoutSpinMusicOwnedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    xp?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    spins?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    currentRank?: NullableIntFieldUpdateOperationsInput | number | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalActivity?: IntFieldUpdateOperationsInput | number
+    currentStreak?: IntFieldUpdateOperationsInput | number
+    longestStreak?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    predictions?: PredictionUpdateManyWithoutUserNestedInput
+    userMissions?: UserMissionUpdateManyWithoutUserNestedInput
+    spinLedgers?: SpinLedgerUpdateManyWithoutUserNestedInput
+    rewardLedgers?: RewardLedgerUpdateManyWithoutUserNestedInput
+    activities?: ActivityUpdateManyWithoutUserNestedInput
+    leaderboardSnapshots?: LeaderboardSnapshotUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    pendingRewards?: PendingRewardUpdateManyWithoutUserNestedInput
+    spinHistories?: SpinHistoryUpdateManyWithoutUserNestedInput
+    rewardClaims?: RewardClaimUpdateManyWithoutUserNestedInput
+    playerStats?: PlayerStatisticUpdateManyWithoutUserNestedInput
+    notificationPrefs?: NotificationPreferenceUpdateManyWithoutUserNestedInput
+    playerIdentity?: PlayerIdentityUpdateOneWithoutUserNestedInput
+    userAchievements?: UserAchievementUpdateManyWithoutUserNestedInput
+    progressSnapshots?: ProgressSnapshotUpdateManyWithoutUserNestedInput
+    unlockAnimations?: UnlockAnimationUpdateManyWithoutUserNestedInput
+    friendRequestsSent?: FriendRequestUpdateManyWithoutSenderNestedInput
+    friendRequestsReceived?: FriendRequestUpdateManyWithoutReceiverNestedInput
+    friendsAsUser?: FriendshipUpdateManyWithoutUserNestedInput
+    friendsAsFriend?: FriendshipUpdateManyWithoutFriendNestedInput
+    referralsMade?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralsReceived?: ReferralUpdateManyWithoutReferredNestedInput
+    inviteCodes?: InviteCodeUpdateManyWithoutOwnerNestedInput
+    communityPosts?: CommunityPostUpdateManyWithoutAuthorNestedInput
+    feedItemsOwned?: FeedItemUpdateManyWithoutUserNestedInput
+    feedItemsActed?: FeedItemUpdateManyWithoutActorNestedInput
+    presences?: PresenceUpdateManyWithoutUserNestedInput
+    presenceSessions?: PresenceSessionUpdateManyWithoutUserNestedInput
+    relationshipsInitiated?: PlayerRelationshipUpdateManyWithoutInitiatorNestedInput
+    relationshipsTargeted?: PlayerRelationshipUpdateManyWithoutTargetNestedInput
+    socialSettings?: SocialSettingsUpdateOneWithoutUserNestedInput
+    arenaRatings?: ArenaRatingUpdateManyWithoutUserNestedInput
+    arenaQueueEntries?: ArenaQueueUpdateManyWithoutUserNestedInput
+    matchParticipants?: MatchParticipantUpdateManyWithoutUserNestedInput
+    arenaInvitationsSent?: ArenaInvitationUpdateManyWithoutSenderNestedInput
+    arenaInvitationsRecv?: ArenaInvitationUpdateManyWithoutReceiverNestedInput
+    arenaPresence?: ArenaPresenceUpdateOneWithoutUserNestedInput
+    arenaSeasonStats?: ArenaSeasonStatisticUpdateManyWithoutUserNestedInput
+    seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
+    bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
+    campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutSpinMusicOwnedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    xp?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    spins?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    currentRank?: NullableIntFieldUpdateOperationsInput | number | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalActivity?: IntFieldUpdateOperationsInput | number
+    currentStreak?: IntFieldUpdateOperationsInput | number
+    longestStreak?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    predictions?: PredictionUncheckedUpdateManyWithoutUserNestedInput
+    userMissions?: UserMissionUncheckedUpdateManyWithoutUserNestedInput
+    spinLedgers?: SpinLedgerUncheckedUpdateManyWithoutUserNestedInput
+    rewardLedgers?: RewardLedgerUncheckedUpdateManyWithoutUserNestedInput
+    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
+    leaderboardSnapshots?: LeaderboardSnapshotUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    pendingRewards?: PendingRewardUncheckedUpdateManyWithoutUserNestedInput
+    spinHistories?: SpinHistoryUncheckedUpdateManyWithoutUserNestedInput
+    rewardClaims?: RewardClaimUncheckedUpdateManyWithoutUserNestedInput
+    playerStats?: PlayerStatisticUncheckedUpdateManyWithoutUserNestedInput
+    notificationPrefs?: NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
+    playerIdentity?: PlayerIdentityUncheckedUpdateOneWithoutUserNestedInput
+    userAchievements?: UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+    progressSnapshots?: ProgressSnapshotUncheckedUpdateManyWithoutUserNestedInput
+    unlockAnimations?: UnlockAnimationUncheckedUpdateManyWithoutUserNestedInput
+    friendRequestsSent?: FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+    friendRequestsReceived?: FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+    friendsAsUser?: FriendshipUncheckedUpdateManyWithoutUserNestedInput
+    friendsAsFriend?: FriendshipUncheckedUpdateManyWithoutFriendNestedInput
+    referralsMade?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralsReceived?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    inviteCodes?: InviteCodeUncheckedUpdateManyWithoutOwnerNestedInput
+    communityPosts?: CommunityPostUncheckedUpdateManyWithoutAuthorNestedInput
+    feedItemsOwned?: FeedItemUncheckedUpdateManyWithoutUserNestedInput
+    feedItemsActed?: FeedItemUncheckedUpdateManyWithoutActorNestedInput
+    presences?: PresenceUncheckedUpdateManyWithoutUserNestedInput
+    presenceSessions?: PresenceSessionUncheckedUpdateManyWithoutUserNestedInput
+    relationshipsInitiated?: PlayerRelationshipUncheckedUpdateManyWithoutInitiatorNestedInput
+    relationshipsTargeted?: PlayerRelationshipUncheckedUpdateManyWithoutTargetNestedInput
+    socialSettings?: SocialSettingsUncheckedUpdateOneWithoutUserNestedInput
+    arenaRatings?: ArenaRatingUncheckedUpdateManyWithoutUserNestedInput
+    arenaQueueEntries?: ArenaQueueUncheckedUpdateManyWithoutUserNestedInput
+    matchParticipants?: MatchParticipantUncheckedUpdateManyWithoutUserNestedInput
+    arenaInvitationsSent?: ArenaInvitationUncheckedUpdateManyWithoutSenderNestedInput
+    arenaInvitationsRecv?: ArenaInvitationUncheckedUpdateManyWithoutReceiverNestedInput
+    arenaPresence?: ArenaPresenceUncheckedUpdateOneWithoutUserNestedInput
+    arenaSeasonStats?: ArenaSeasonStatisticUncheckedUpdateManyWithoutUserNestedInput
+    seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
+    bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
+    campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type SpinMusicTrackUpsertWithoutOwnersInput = {
+    update: XOR<SpinMusicTrackUpdateWithoutOwnersInput, SpinMusicTrackUncheckedUpdateWithoutOwnersInput>
+    create: XOR<SpinMusicTrackCreateWithoutOwnersInput, SpinMusicTrackUncheckedCreateWithoutOwnersInput>
+    where?: SpinMusicTrackWhereInput
+  }
+
+  export type SpinMusicTrackUpdateToOneWithWhereWithoutOwnersInput = {
+    where?: SpinMusicTrackWhereInput
+    data: XOR<SpinMusicTrackUpdateWithoutOwnersInput, SpinMusicTrackUncheckedUpdateWithoutOwnersInput>
+  }
+
+  export type SpinMusicTrackUpdateWithoutOwnersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    artist?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: StringFieldUpdateOperationsInput | string
+    tier?: EnumSpinMusicTierFieldUpdateOperationsInput | $Enums.SpinMusicTier
+    priceWei?: StringFieldUpdateOperationsInput | string
+    priceAsset?: StringFieldUpdateOperationsInput | string
+    durationSec?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinMusicTrackUncheckedUpdateWithoutOwnersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    artist?: NullableStringFieldUpdateOperationsInput | string | null
+    url?: StringFieldUpdateOperationsInput | string
+    tier?: EnumSpinMusicTierFieldUpdateOperationsInput | $Enums.SpinMusicTier
+    priceWei?: StringFieldUpdateOperationsInput | string
+    priceAsset?: StringFieldUpdateOperationsInput | string
+    durationSec?: IntFieldUpdateOperationsInput | number
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserInventoryItemCreateWithoutItemInput = {
+    id?: string
+    equipped?: boolean
+    createdAt?: Date | string
+    user: UserProfileCreateNestedOneWithoutSpinInventoryInput
+  }
+
+  export type UserInventoryItemUncheckedCreateWithoutItemInput = {
+    id?: string
+    userId: string
+    equipped?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserInventoryItemCreateOrConnectWithoutItemInput = {
+    where: UserInventoryItemWhereUniqueInput
+    create: XOR<UserInventoryItemCreateWithoutItemInput, UserInventoryItemUncheckedCreateWithoutItemInput>
+  }
+
+  export type UserInventoryItemCreateManyItemInputEnvelope = {
+    data: UserInventoryItemCreateManyItemInput | UserInventoryItemCreateManyItemInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserInventoryItemUpsertWithWhereUniqueWithoutItemInput = {
+    where: UserInventoryItemWhereUniqueInput
+    update: XOR<UserInventoryItemUpdateWithoutItemInput, UserInventoryItemUncheckedUpdateWithoutItemInput>
+    create: XOR<UserInventoryItemCreateWithoutItemInput, UserInventoryItemUncheckedCreateWithoutItemInput>
+  }
+
+  export type UserInventoryItemUpdateWithWhereUniqueWithoutItemInput = {
+    where: UserInventoryItemWhereUniqueInput
+    data: XOR<UserInventoryItemUpdateWithoutItemInput, UserInventoryItemUncheckedUpdateWithoutItemInput>
+  }
+
+  export type UserInventoryItemUpdateManyWithWhereWithoutItemInput = {
+    where: UserInventoryItemScalarWhereInput
+    data: XOR<UserInventoryItemUpdateManyMutationInput, UserInventoryItemUncheckedUpdateManyWithoutItemInput>
+  }
+
+  export type UserProfileCreateWithoutSpinInventoryInput = {
+    id?: string
+    wallet: string
+    username?: string | null
+    avatar?: string | null
+    xp?: number
+    points?: number
+    spins?: number
+    level?: number
+    currentRank?: number | null
+    lastLogin?: Date | string | null
+    totalActivity?: number
+    currentStreak?: number
+    longestStreak?: number
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    predictions?: PredictionCreateNestedManyWithoutUserInput
+    userMissions?: UserMissionCreateNestedManyWithoutUserInput
+    spinLedgers?: SpinLedgerCreateNestedManyWithoutUserInput
+    rewardLedgers?: RewardLedgerCreateNestedManyWithoutUserInput
+    activities?: ActivityCreateNestedManyWithoutUserInput
+    leaderboardSnapshots?: LeaderboardSnapshotCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    pendingRewards?: PendingRewardCreateNestedManyWithoutUserInput
+    spinHistories?: SpinHistoryCreateNestedManyWithoutUserInput
+    rewardClaims?: RewardClaimCreateNestedManyWithoutUserInput
+    playerStats?: PlayerStatisticCreateNestedManyWithoutUserInput
+    notificationPrefs?: NotificationPreferenceCreateNestedManyWithoutUserInput
+    playerIdentity?: PlayerIdentityCreateNestedOneWithoutUserInput
+    userAchievements?: UserAchievementCreateNestedManyWithoutUserInput
+    progressSnapshots?: ProgressSnapshotCreateNestedManyWithoutUserInput
+    unlockAnimations?: UnlockAnimationCreateNestedManyWithoutUserInput
+    friendRequestsSent?: FriendRequestCreateNestedManyWithoutSenderInput
+    friendRequestsReceived?: FriendRequestCreateNestedManyWithoutReceiverInput
+    friendsAsUser?: FriendshipCreateNestedManyWithoutUserInput
+    friendsAsFriend?: FriendshipCreateNestedManyWithoutFriendInput
+    referralsMade?: ReferralCreateNestedManyWithoutReferrerInput
+    referralsReceived?: ReferralCreateNestedManyWithoutReferredInput
+    inviteCodes?: InviteCodeCreateNestedManyWithoutOwnerInput
+    communityPosts?: CommunityPostCreateNestedManyWithoutAuthorInput
+    feedItemsOwned?: FeedItemCreateNestedManyWithoutUserInput
+    feedItemsActed?: FeedItemCreateNestedManyWithoutActorInput
+    presences?: PresenceCreateNestedManyWithoutUserInput
+    presenceSessions?: PresenceSessionCreateNestedManyWithoutUserInput
+    relationshipsInitiated?: PlayerRelationshipCreateNestedManyWithoutInitiatorInput
+    relationshipsTargeted?: PlayerRelationshipCreateNestedManyWithoutTargetInput
+    socialSettings?: SocialSettingsCreateNestedOneWithoutUserInput
+    arenaRatings?: ArenaRatingCreateNestedManyWithoutUserInput
+    arenaQueueEntries?: ArenaQueueCreateNestedManyWithoutUserInput
+    matchParticipants?: MatchParticipantCreateNestedManyWithoutUserInput
+    arenaInvitationsSent?: ArenaInvitationCreateNestedManyWithoutSenderInput
+    arenaInvitationsRecv?: ArenaInvitationCreateNestedManyWithoutReceiverInput
+    arenaPresence?: ArenaPresenceCreateNestedOneWithoutUserInput
+    arenaSeasonStats?: ArenaSeasonStatisticCreateNestedManyWithoutUserInput
+    seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
+    bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
+    campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileUncheckedCreateWithoutSpinInventoryInput = {
+    id?: string
+    wallet: string
+    username?: string | null
+    avatar?: string | null
+    xp?: number
+    points?: number
+    spins?: number
+    level?: number
+    currentRank?: number | null
+    lastLogin?: Date | string | null
+    totalActivity?: number
+    currentStreak?: number
+    longestStreak?: number
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    predictions?: PredictionUncheckedCreateNestedManyWithoutUserInput
+    userMissions?: UserMissionUncheckedCreateNestedManyWithoutUserInput
+    spinLedgers?: SpinLedgerUncheckedCreateNestedManyWithoutUserInput
+    rewardLedgers?: RewardLedgerUncheckedCreateNestedManyWithoutUserInput
+    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
+    leaderboardSnapshots?: LeaderboardSnapshotUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    pendingRewards?: PendingRewardUncheckedCreateNestedManyWithoutUserInput
+    spinHistories?: SpinHistoryUncheckedCreateNestedManyWithoutUserInput
+    rewardClaims?: RewardClaimUncheckedCreateNestedManyWithoutUserInput
+    playerStats?: PlayerStatisticUncheckedCreateNestedManyWithoutUserInput
+    notificationPrefs?: NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
+    playerIdentity?: PlayerIdentityUncheckedCreateNestedOneWithoutUserInput
+    userAchievements?: UserAchievementUncheckedCreateNestedManyWithoutUserInput
+    progressSnapshots?: ProgressSnapshotUncheckedCreateNestedManyWithoutUserInput
+    unlockAnimations?: UnlockAnimationUncheckedCreateNestedManyWithoutUserInput
+    friendRequestsSent?: FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+    friendRequestsReceived?: FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+    friendsAsUser?: FriendshipUncheckedCreateNestedManyWithoutUserInput
+    friendsAsFriend?: FriendshipUncheckedCreateNestedManyWithoutFriendInput
+    referralsMade?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralsReceived?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    inviteCodes?: InviteCodeUncheckedCreateNestedManyWithoutOwnerInput
+    communityPosts?: CommunityPostUncheckedCreateNestedManyWithoutAuthorInput
+    feedItemsOwned?: FeedItemUncheckedCreateNestedManyWithoutUserInput
+    feedItemsActed?: FeedItemUncheckedCreateNestedManyWithoutActorInput
+    presences?: PresenceUncheckedCreateNestedManyWithoutUserInput
+    presenceSessions?: PresenceSessionUncheckedCreateNestedManyWithoutUserInput
+    relationshipsInitiated?: PlayerRelationshipUncheckedCreateNestedManyWithoutInitiatorInput
+    relationshipsTargeted?: PlayerRelationshipUncheckedCreateNestedManyWithoutTargetInput
+    socialSettings?: SocialSettingsUncheckedCreateNestedOneWithoutUserInput
+    arenaRatings?: ArenaRatingUncheckedCreateNestedManyWithoutUserInput
+    arenaQueueEntries?: ArenaQueueUncheckedCreateNestedManyWithoutUserInput
+    matchParticipants?: MatchParticipantUncheckedCreateNestedManyWithoutUserInput
+    arenaInvitationsSent?: ArenaInvitationUncheckedCreateNestedManyWithoutSenderInput
+    arenaInvitationsRecv?: ArenaInvitationUncheckedCreateNestedManyWithoutReceiverInput
+    arenaPresence?: ArenaPresenceUncheckedCreateNestedOneWithoutUserInput
+    arenaSeasonStats?: ArenaSeasonStatisticUncheckedCreateNestedManyWithoutUserInput
+    seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
+    bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
+    campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileCreateOrConnectWithoutSpinInventoryInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutSpinInventoryInput, UserProfileUncheckedCreateWithoutSpinInventoryInput>
+  }
+
+  export type SpinCollectionItemCreateWithoutOwnersInput = {
+    id?: string
+    slug: string
+    name: string
+    type?: $Enums.SpinItemType
+    tier?: number
+    priceWei?: string
+    priceAsset?: string
+    effect?: NullableJsonNullValueInput | InputJsonValue
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SpinCollectionItemUncheckedCreateWithoutOwnersInput = {
+    id?: string
+    slug: string
+    name: string
+    type?: $Enums.SpinItemType
+    tier?: number
+    priceWei?: string
+    priceAsset?: string
+    effect?: NullableJsonNullValueInput | InputJsonValue
+    active?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SpinCollectionItemCreateOrConnectWithoutOwnersInput = {
+    where: SpinCollectionItemWhereUniqueInput
+    create: XOR<SpinCollectionItemCreateWithoutOwnersInput, SpinCollectionItemUncheckedCreateWithoutOwnersInput>
+  }
+
+  export type UserProfileUpsertWithoutSpinInventoryInput = {
+    update: XOR<UserProfileUpdateWithoutSpinInventoryInput, UserProfileUncheckedUpdateWithoutSpinInventoryInput>
+    create: XOR<UserProfileCreateWithoutSpinInventoryInput, UserProfileUncheckedCreateWithoutSpinInventoryInput>
+    where?: UserProfileWhereInput
+  }
+
+  export type UserProfileUpdateToOneWithWhereWithoutSpinInventoryInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutSpinInventoryInput, UserProfileUncheckedUpdateWithoutSpinInventoryInput>
+  }
+
+  export type UserProfileUpdateWithoutSpinInventoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    xp?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    spins?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    currentRank?: NullableIntFieldUpdateOperationsInput | number | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalActivity?: IntFieldUpdateOperationsInput | number
+    currentStreak?: IntFieldUpdateOperationsInput | number
+    longestStreak?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    predictions?: PredictionUpdateManyWithoutUserNestedInput
+    userMissions?: UserMissionUpdateManyWithoutUserNestedInput
+    spinLedgers?: SpinLedgerUpdateManyWithoutUserNestedInput
+    rewardLedgers?: RewardLedgerUpdateManyWithoutUserNestedInput
+    activities?: ActivityUpdateManyWithoutUserNestedInput
+    leaderboardSnapshots?: LeaderboardSnapshotUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    pendingRewards?: PendingRewardUpdateManyWithoutUserNestedInput
+    spinHistories?: SpinHistoryUpdateManyWithoutUserNestedInput
+    rewardClaims?: RewardClaimUpdateManyWithoutUserNestedInput
+    playerStats?: PlayerStatisticUpdateManyWithoutUserNestedInput
+    notificationPrefs?: NotificationPreferenceUpdateManyWithoutUserNestedInput
+    playerIdentity?: PlayerIdentityUpdateOneWithoutUserNestedInput
+    userAchievements?: UserAchievementUpdateManyWithoutUserNestedInput
+    progressSnapshots?: ProgressSnapshotUpdateManyWithoutUserNestedInput
+    unlockAnimations?: UnlockAnimationUpdateManyWithoutUserNestedInput
+    friendRequestsSent?: FriendRequestUpdateManyWithoutSenderNestedInput
+    friendRequestsReceived?: FriendRequestUpdateManyWithoutReceiverNestedInput
+    friendsAsUser?: FriendshipUpdateManyWithoutUserNestedInput
+    friendsAsFriend?: FriendshipUpdateManyWithoutFriendNestedInput
+    referralsMade?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralsReceived?: ReferralUpdateManyWithoutReferredNestedInput
+    inviteCodes?: InviteCodeUpdateManyWithoutOwnerNestedInput
+    communityPosts?: CommunityPostUpdateManyWithoutAuthorNestedInput
+    feedItemsOwned?: FeedItemUpdateManyWithoutUserNestedInput
+    feedItemsActed?: FeedItemUpdateManyWithoutActorNestedInput
+    presences?: PresenceUpdateManyWithoutUserNestedInput
+    presenceSessions?: PresenceSessionUpdateManyWithoutUserNestedInput
+    relationshipsInitiated?: PlayerRelationshipUpdateManyWithoutInitiatorNestedInput
+    relationshipsTargeted?: PlayerRelationshipUpdateManyWithoutTargetNestedInput
+    socialSettings?: SocialSettingsUpdateOneWithoutUserNestedInput
+    arenaRatings?: ArenaRatingUpdateManyWithoutUserNestedInput
+    arenaQueueEntries?: ArenaQueueUpdateManyWithoutUserNestedInput
+    matchParticipants?: MatchParticipantUpdateManyWithoutUserNestedInput
+    arenaInvitationsSent?: ArenaInvitationUpdateManyWithoutSenderNestedInput
+    arenaInvitationsRecv?: ArenaInvitationUpdateManyWithoutReceiverNestedInput
+    arenaPresence?: ArenaPresenceUpdateOneWithoutUserNestedInput
+    arenaSeasonStats?: ArenaSeasonStatisticUpdateManyWithoutUserNestedInput
+    seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
+    bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
+    campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutSpinInventoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    xp?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    spins?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    currentRank?: NullableIntFieldUpdateOperationsInput | number | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalActivity?: IntFieldUpdateOperationsInput | number
+    currentStreak?: IntFieldUpdateOperationsInput | number
+    longestStreak?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    predictions?: PredictionUncheckedUpdateManyWithoutUserNestedInput
+    userMissions?: UserMissionUncheckedUpdateManyWithoutUserNestedInput
+    spinLedgers?: SpinLedgerUncheckedUpdateManyWithoutUserNestedInput
+    rewardLedgers?: RewardLedgerUncheckedUpdateManyWithoutUserNestedInput
+    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
+    leaderboardSnapshots?: LeaderboardSnapshotUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    pendingRewards?: PendingRewardUncheckedUpdateManyWithoutUserNestedInput
+    spinHistories?: SpinHistoryUncheckedUpdateManyWithoutUserNestedInput
+    rewardClaims?: RewardClaimUncheckedUpdateManyWithoutUserNestedInput
+    playerStats?: PlayerStatisticUncheckedUpdateManyWithoutUserNestedInput
+    notificationPrefs?: NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
+    playerIdentity?: PlayerIdentityUncheckedUpdateOneWithoutUserNestedInput
+    userAchievements?: UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+    progressSnapshots?: ProgressSnapshotUncheckedUpdateManyWithoutUserNestedInput
+    unlockAnimations?: UnlockAnimationUncheckedUpdateManyWithoutUserNestedInput
+    friendRequestsSent?: FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+    friendRequestsReceived?: FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+    friendsAsUser?: FriendshipUncheckedUpdateManyWithoutUserNestedInput
+    friendsAsFriend?: FriendshipUncheckedUpdateManyWithoutFriendNestedInput
+    referralsMade?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralsReceived?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    inviteCodes?: InviteCodeUncheckedUpdateManyWithoutOwnerNestedInput
+    communityPosts?: CommunityPostUncheckedUpdateManyWithoutAuthorNestedInput
+    feedItemsOwned?: FeedItemUncheckedUpdateManyWithoutUserNestedInput
+    feedItemsActed?: FeedItemUncheckedUpdateManyWithoutActorNestedInput
+    presences?: PresenceUncheckedUpdateManyWithoutUserNestedInput
+    presenceSessions?: PresenceSessionUncheckedUpdateManyWithoutUserNestedInput
+    relationshipsInitiated?: PlayerRelationshipUncheckedUpdateManyWithoutInitiatorNestedInput
+    relationshipsTargeted?: PlayerRelationshipUncheckedUpdateManyWithoutTargetNestedInput
+    socialSettings?: SocialSettingsUncheckedUpdateOneWithoutUserNestedInput
+    arenaRatings?: ArenaRatingUncheckedUpdateManyWithoutUserNestedInput
+    arenaQueueEntries?: ArenaQueueUncheckedUpdateManyWithoutUserNestedInput
+    matchParticipants?: MatchParticipantUncheckedUpdateManyWithoutUserNestedInput
+    arenaInvitationsSent?: ArenaInvitationUncheckedUpdateManyWithoutSenderNestedInput
+    arenaInvitationsRecv?: ArenaInvitationUncheckedUpdateManyWithoutReceiverNestedInput
+    arenaPresence?: ArenaPresenceUncheckedUpdateOneWithoutUserNestedInput
+    arenaSeasonStats?: ArenaSeasonStatisticUncheckedUpdateManyWithoutUserNestedInput
+    seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
+    bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
+    campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type SpinCollectionItemUpsertWithoutOwnersInput = {
+    update: XOR<SpinCollectionItemUpdateWithoutOwnersInput, SpinCollectionItemUncheckedUpdateWithoutOwnersInput>
+    create: XOR<SpinCollectionItemCreateWithoutOwnersInput, SpinCollectionItemUncheckedCreateWithoutOwnersInput>
+    where?: SpinCollectionItemWhereInput
+  }
+
+  export type SpinCollectionItemUpdateToOneWithWhereWithoutOwnersInput = {
+    where?: SpinCollectionItemWhereInput
+    data: XOR<SpinCollectionItemUpdateWithoutOwnersInput, SpinCollectionItemUncheckedUpdateWithoutOwnersInput>
+  }
+
+  export type SpinCollectionItemUpdateWithoutOwnersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumSpinItemTypeFieldUpdateOperationsInput | $Enums.SpinItemType
+    tier?: IntFieldUpdateOperationsInput | number
+    priceWei?: StringFieldUpdateOperationsInput | string
+    priceAsset?: StringFieldUpdateOperationsInput | string
+    effect?: NullableJsonNullValueInput | InputJsonValue
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinCollectionItemUncheckedUpdateWithoutOwnersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumSpinItemTypeFieldUpdateOperationsInput | $Enums.SpinItemType
+    tier?: IntFieldUpdateOperationsInput | number
+    priceWei?: StringFieldUpdateOperationsInput | string
+    priceAsset?: StringFieldUpdateOperationsInput | string
+    effect?: NullableJsonNullValueInput | InputJsonValue
+    active?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserProfileCreateWithoutSpinSessionsInput = {
+    id?: string
+    wallet: string
+    username?: string | null
+    avatar?: string | null
+    xp?: number
+    points?: number
+    spins?: number
+    level?: number
+    currentRank?: number | null
+    lastLogin?: Date | string | null
+    totalActivity?: number
+    currentStreak?: number
+    longestStreak?: number
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    predictions?: PredictionCreateNestedManyWithoutUserInput
+    userMissions?: UserMissionCreateNestedManyWithoutUserInput
+    spinLedgers?: SpinLedgerCreateNestedManyWithoutUserInput
+    rewardLedgers?: RewardLedgerCreateNestedManyWithoutUserInput
+    activities?: ActivityCreateNestedManyWithoutUserInput
+    leaderboardSnapshots?: LeaderboardSnapshotCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    pendingRewards?: PendingRewardCreateNestedManyWithoutUserInput
+    spinHistories?: SpinHistoryCreateNestedManyWithoutUserInput
+    rewardClaims?: RewardClaimCreateNestedManyWithoutUserInput
+    playerStats?: PlayerStatisticCreateNestedManyWithoutUserInput
+    notificationPrefs?: NotificationPreferenceCreateNestedManyWithoutUserInput
+    playerIdentity?: PlayerIdentityCreateNestedOneWithoutUserInput
+    userAchievements?: UserAchievementCreateNestedManyWithoutUserInput
+    progressSnapshots?: ProgressSnapshotCreateNestedManyWithoutUserInput
+    unlockAnimations?: UnlockAnimationCreateNestedManyWithoutUserInput
+    friendRequestsSent?: FriendRequestCreateNestedManyWithoutSenderInput
+    friendRequestsReceived?: FriendRequestCreateNestedManyWithoutReceiverInput
+    friendsAsUser?: FriendshipCreateNestedManyWithoutUserInput
+    friendsAsFriend?: FriendshipCreateNestedManyWithoutFriendInput
+    referralsMade?: ReferralCreateNestedManyWithoutReferrerInput
+    referralsReceived?: ReferralCreateNestedManyWithoutReferredInput
+    inviteCodes?: InviteCodeCreateNestedManyWithoutOwnerInput
+    communityPosts?: CommunityPostCreateNestedManyWithoutAuthorInput
+    feedItemsOwned?: FeedItemCreateNestedManyWithoutUserInput
+    feedItemsActed?: FeedItemCreateNestedManyWithoutActorInput
+    presences?: PresenceCreateNestedManyWithoutUserInput
+    presenceSessions?: PresenceSessionCreateNestedManyWithoutUserInput
+    relationshipsInitiated?: PlayerRelationshipCreateNestedManyWithoutInitiatorInput
+    relationshipsTargeted?: PlayerRelationshipCreateNestedManyWithoutTargetInput
+    socialSettings?: SocialSettingsCreateNestedOneWithoutUserInput
+    arenaRatings?: ArenaRatingCreateNestedManyWithoutUserInput
+    arenaQueueEntries?: ArenaQueueCreateNestedManyWithoutUserInput
+    matchParticipants?: MatchParticipantCreateNestedManyWithoutUserInput
+    arenaInvitationsSent?: ArenaInvitationCreateNestedManyWithoutSenderInput
+    arenaInvitationsRecv?: ArenaInvitationCreateNestedManyWithoutReceiverInput
+    arenaPresence?: ArenaPresenceCreateNestedOneWithoutUserInput
+    arenaSeasonStats?: ArenaSeasonStatisticCreateNestedManyWithoutUserInput
+    seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
+    bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
+    campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileUncheckedCreateWithoutSpinSessionsInput = {
+    id?: string
+    wallet: string
+    username?: string | null
+    avatar?: string | null
+    xp?: number
+    points?: number
+    spins?: number
+    level?: number
+    currentRank?: number | null
+    lastLogin?: Date | string | null
+    totalActivity?: number
+    currentStreak?: number
+    longestStreak?: number
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    predictions?: PredictionUncheckedCreateNestedManyWithoutUserInput
+    userMissions?: UserMissionUncheckedCreateNestedManyWithoutUserInput
+    spinLedgers?: SpinLedgerUncheckedCreateNestedManyWithoutUserInput
+    rewardLedgers?: RewardLedgerUncheckedCreateNestedManyWithoutUserInput
+    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
+    leaderboardSnapshots?: LeaderboardSnapshotUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    pendingRewards?: PendingRewardUncheckedCreateNestedManyWithoutUserInput
+    spinHistories?: SpinHistoryUncheckedCreateNestedManyWithoutUserInput
+    rewardClaims?: RewardClaimUncheckedCreateNestedManyWithoutUserInput
+    playerStats?: PlayerStatisticUncheckedCreateNestedManyWithoutUserInput
+    notificationPrefs?: NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
+    playerIdentity?: PlayerIdentityUncheckedCreateNestedOneWithoutUserInput
+    userAchievements?: UserAchievementUncheckedCreateNestedManyWithoutUserInput
+    progressSnapshots?: ProgressSnapshotUncheckedCreateNestedManyWithoutUserInput
+    unlockAnimations?: UnlockAnimationUncheckedCreateNestedManyWithoutUserInput
+    friendRequestsSent?: FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+    friendRequestsReceived?: FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+    friendsAsUser?: FriendshipUncheckedCreateNestedManyWithoutUserInput
+    friendsAsFriend?: FriendshipUncheckedCreateNestedManyWithoutFriendInput
+    referralsMade?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralsReceived?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    inviteCodes?: InviteCodeUncheckedCreateNestedManyWithoutOwnerInput
+    communityPosts?: CommunityPostUncheckedCreateNestedManyWithoutAuthorInput
+    feedItemsOwned?: FeedItemUncheckedCreateNestedManyWithoutUserInput
+    feedItemsActed?: FeedItemUncheckedCreateNestedManyWithoutActorInput
+    presences?: PresenceUncheckedCreateNestedManyWithoutUserInput
+    presenceSessions?: PresenceSessionUncheckedCreateNestedManyWithoutUserInput
+    relationshipsInitiated?: PlayerRelationshipUncheckedCreateNestedManyWithoutInitiatorInput
+    relationshipsTargeted?: PlayerRelationshipUncheckedCreateNestedManyWithoutTargetInput
+    socialSettings?: SocialSettingsUncheckedCreateNestedOneWithoutUserInput
+    arenaRatings?: ArenaRatingUncheckedCreateNestedManyWithoutUserInput
+    arenaQueueEntries?: ArenaQueueUncheckedCreateNestedManyWithoutUserInput
+    matchParticipants?: MatchParticipantUncheckedCreateNestedManyWithoutUserInput
+    arenaInvitationsSent?: ArenaInvitationUncheckedCreateNestedManyWithoutSenderInput
+    arenaInvitationsRecv?: ArenaInvitationUncheckedCreateNestedManyWithoutReceiverInput
+    arenaPresence?: ArenaPresenceUncheckedCreateNestedOneWithoutUserInput
+    arenaSeasonStats?: ArenaSeasonStatisticUncheckedCreateNestedManyWithoutUserInput
+    seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
+    bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
+    campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileCreateOrConnectWithoutSpinSessionsInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutSpinSessionsInput, UserProfileUncheckedCreateWithoutSpinSessionsInput>
+  }
+
+  export type BubbleHitCreateWithoutSessionInput = {
+    id?: string
+    bubbleId: string
+    amountWei: string
+    asset: string
+    taps?: number
+    createdAt?: Date | string
+    user: UserProfileCreateNestedOneWithoutBubbleHitsInput
+  }
+
+  export type BubbleHitUncheckedCreateWithoutSessionInput = {
+    id?: string
+    userId: string
+    bubbleId: string
+    amountWei: string
+    asset: string
+    taps?: number
+    createdAt?: Date | string
+  }
+
+  export type BubbleHitCreateOrConnectWithoutSessionInput = {
+    where: BubbleHitWhereUniqueInput
+    create: XOR<BubbleHitCreateWithoutSessionInput, BubbleHitUncheckedCreateWithoutSessionInput>
+  }
+
+  export type BubbleHitCreateManySessionInputEnvelope = {
+    data: BubbleHitCreateManySessionInput | BubbleHitCreateManySessionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SpinRewardPendingCreateWithoutSessionInput = {
+    id?: string
+    wallet: string
+    asset: string
+    amountWei: string
+    requestId: string
+    source?: $Enums.SpinRewardSource
+    status?: $Enums.SpinRewardPendingStatus
+    creditTxHash?: string | null
+    withdrawTxHash?: string | null
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserProfileCreateNestedOneWithoutSpinRewardPendingsInput
+  }
+
+  export type SpinRewardPendingUncheckedCreateWithoutSessionInput = {
+    id?: string
+    userId: string
+    wallet: string
+    asset: string
+    amountWei: string
+    requestId: string
+    source?: $Enums.SpinRewardSource
+    status?: $Enums.SpinRewardPendingStatus
+    creditTxHash?: string | null
+    withdrawTxHash?: string | null
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type SpinRewardPendingCreateOrConnectWithoutSessionInput = {
+    where: SpinRewardPendingWhereUniqueInput
+    create: XOR<SpinRewardPendingCreateWithoutSessionInput, SpinRewardPendingUncheckedCreateWithoutSessionInput>
+  }
+
+  export type SpinRewardPendingCreateManySessionInputEnvelope = {
+    data: SpinRewardPendingCreateManySessionInput | SpinRewardPendingCreateManySessionInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserProfileUpsertWithoutSpinSessionsInput = {
+    update: XOR<UserProfileUpdateWithoutSpinSessionsInput, UserProfileUncheckedUpdateWithoutSpinSessionsInput>
+    create: XOR<UserProfileCreateWithoutSpinSessionsInput, UserProfileUncheckedCreateWithoutSpinSessionsInput>
+    where?: UserProfileWhereInput
+  }
+
+  export type UserProfileUpdateToOneWithWhereWithoutSpinSessionsInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutSpinSessionsInput, UserProfileUncheckedUpdateWithoutSpinSessionsInput>
+  }
+
+  export type UserProfileUpdateWithoutSpinSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    xp?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    spins?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    currentRank?: NullableIntFieldUpdateOperationsInput | number | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalActivity?: IntFieldUpdateOperationsInput | number
+    currentStreak?: IntFieldUpdateOperationsInput | number
+    longestStreak?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    predictions?: PredictionUpdateManyWithoutUserNestedInput
+    userMissions?: UserMissionUpdateManyWithoutUserNestedInput
+    spinLedgers?: SpinLedgerUpdateManyWithoutUserNestedInput
+    rewardLedgers?: RewardLedgerUpdateManyWithoutUserNestedInput
+    activities?: ActivityUpdateManyWithoutUserNestedInput
+    leaderboardSnapshots?: LeaderboardSnapshotUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    pendingRewards?: PendingRewardUpdateManyWithoutUserNestedInput
+    spinHistories?: SpinHistoryUpdateManyWithoutUserNestedInput
+    rewardClaims?: RewardClaimUpdateManyWithoutUserNestedInput
+    playerStats?: PlayerStatisticUpdateManyWithoutUserNestedInput
+    notificationPrefs?: NotificationPreferenceUpdateManyWithoutUserNestedInput
+    playerIdentity?: PlayerIdentityUpdateOneWithoutUserNestedInput
+    userAchievements?: UserAchievementUpdateManyWithoutUserNestedInput
+    progressSnapshots?: ProgressSnapshotUpdateManyWithoutUserNestedInput
+    unlockAnimations?: UnlockAnimationUpdateManyWithoutUserNestedInput
+    friendRequestsSent?: FriendRequestUpdateManyWithoutSenderNestedInput
+    friendRequestsReceived?: FriendRequestUpdateManyWithoutReceiverNestedInput
+    friendsAsUser?: FriendshipUpdateManyWithoutUserNestedInput
+    friendsAsFriend?: FriendshipUpdateManyWithoutFriendNestedInput
+    referralsMade?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralsReceived?: ReferralUpdateManyWithoutReferredNestedInput
+    inviteCodes?: InviteCodeUpdateManyWithoutOwnerNestedInput
+    communityPosts?: CommunityPostUpdateManyWithoutAuthorNestedInput
+    feedItemsOwned?: FeedItemUpdateManyWithoutUserNestedInput
+    feedItemsActed?: FeedItemUpdateManyWithoutActorNestedInput
+    presences?: PresenceUpdateManyWithoutUserNestedInput
+    presenceSessions?: PresenceSessionUpdateManyWithoutUserNestedInput
+    relationshipsInitiated?: PlayerRelationshipUpdateManyWithoutInitiatorNestedInput
+    relationshipsTargeted?: PlayerRelationshipUpdateManyWithoutTargetNestedInput
+    socialSettings?: SocialSettingsUpdateOneWithoutUserNestedInput
+    arenaRatings?: ArenaRatingUpdateManyWithoutUserNestedInput
+    arenaQueueEntries?: ArenaQueueUpdateManyWithoutUserNestedInput
+    matchParticipants?: MatchParticipantUpdateManyWithoutUserNestedInput
+    arenaInvitationsSent?: ArenaInvitationUpdateManyWithoutSenderNestedInput
+    arenaInvitationsRecv?: ArenaInvitationUpdateManyWithoutReceiverNestedInput
+    arenaPresence?: ArenaPresenceUpdateOneWithoutUserNestedInput
+    arenaSeasonStats?: ArenaSeasonStatisticUpdateManyWithoutUserNestedInput
+    seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
+    bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
+    campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutSpinSessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    xp?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    spins?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    currentRank?: NullableIntFieldUpdateOperationsInput | number | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalActivity?: IntFieldUpdateOperationsInput | number
+    currentStreak?: IntFieldUpdateOperationsInput | number
+    longestStreak?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    predictions?: PredictionUncheckedUpdateManyWithoutUserNestedInput
+    userMissions?: UserMissionUncheckedUpdateManyWithoutUserNestedInput
+    spinLedgers?: SpinLedgerUncheckedUpdateManyWithoutUserNestedInput
+    rewardLedgers?: RewardLedgerUncheckedUpdateManyWithoutUserNestedInput
+    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
+    leaderboardSnapshots?: LeaderboardSnapshotUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    pendingRewards?: PendingRewardUncheckedUpdateManyWithoutUserNestedInput
+    spinHistories?: SpinHistoryUncheckedUpdateManyWithoutUserNestedInput
+    rewardClaims?: RewardClaimUncheckedUpdateManyWithoutUserNestedInput
+    playerStats?: PlayerStatisticUncheckedUpdateManyWithoutUserNestedInput
+    notificationPrefs?: NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
+    playerIdentity?: PlayerIdentityUncheckedUpdateOneWithoutUserNestedInput
+    userAchievements?: UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+    progressSnapshots?: ProgressSnapshotUncheckedUpdateManyWithoutUserNestedInput
+    unlockAnimations?: UnlockAnimationUncheckedUpdateManyWithoutUserNestedInput
+    friendRequestsSent?: FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+    friendRequestsReceived?: FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+    friendsAsUser?: FriendshipUncheckedUpdateManyWithoutUserNestedInput
+    friendsAsFriend?: FriendshipUncheckedUpdateManyWithoutFriendNestedInput
+    referralsMade?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralsReceived?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    inviteCodes?: InviteCodeUncheckedUpdateManyWithoutOwnerNestedInput
+    communityPosts?: CommunityPostUncheckedUpdateManyWithoutAuthorNestedInput
+    feedItemsOwned?: FeedItemUncheckedUpdateManyWithoutUserNestedInput
+    feedItemsActed?: FeedItemUncheckedUpdateManyWithoutActorNestedInput
+    presences?: PresenceUncheckedUpdateManyWithoutUserNestedInput
+    presenceSessions?: PresenceSessionUncheckedUpdateManyWithoutUserNestedInput
+    relationshipsInitiated?: PlayerRelationshipUncheckedUpdateManyWithoutInitiatorNestedInput
+    relationshipsTargeted?: PlayerRelationshipUncheckedUpdateManyWithoutTargetNestedInput
+    socialSettings?: SocialSettingsUncheckedUpdateOneWithoutUserNestedInput
+    arenaRatings?: ArenaRatingUncheckedUpdateManyWithoutUserNestedInput
+    arenaQueueEntries?: ArenaQueueUncheckedUpdateManyWithoutUserNestedInput
+    matchParticipants?: MatchParticipantUncheckedUpdateManyWithoutUserNestedInput
+    arenaInvitationsSent?: ArenaInvitationUncheckedUpdateManyWithoutSenderNestedInput
+    arenaInvitationsRecv?: ArenaInvitationUncheckedUpdateManyWithoutReceiverNestedInput
+    arenaPresence?: ArenaPresenceUncheckedUpdateOneWithoutUserNestedInput
+    arenaSeasonStats?: ArenaSeasonStatisticUncheckedUpdateManyWithoutUserNestedInput
+    seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
+    bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
+    campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type BubbleHitUpsertWithWhereUniqueWithoutSessionInput = {
+    where: BubbleHitWhereUniqueInput
+    update: XOR<BubbleHitUpdateWithoutSessionInput, BubbleHitUncheckedUpdateWithoutSessionInput>
+    create: XOR<BubbleHitCreateWithoutSessionInput, BubbleHitUncheckedCreateWithoutSessionInput>
+  }
+
+  export type BubbleHitUpdateWithWhereUniqueWithoutSessionInput = {
+    where: BubbleHitWhereUniqueInput
+    data: XOR<BubbleHitUpdateWithoutSessionInput, BubbleHitUncheckedUpdateWithoutSessionInput>
+  }
+
+  export type BubbleHitUpdateManyWithWhereWithoutSessionInput = {
+    where: BubbleHitScalarWhereInput
+    data: XOR<BubbleHitUpdateManyMutationInput, BubbleHitUncheckedUpdateManyWithoutSessionInput>
+  }
+
+  export type SpinRewardPendingUpsertWithWhereUniqueWithoutSessionInput = {
+    where: SpinRewardPendingWhereUniqueInput
+    update: XOR<SpinRewardPendingUpdateWithoutSessionInput, SpinRewardPendingUncheckedUpdateWithoutSessionInput>
+    create: XOR<SpinRewardPendingCreateWithoutSessionInput, SpinRewardPendingUncheckedCreateWithoutSessionInput>
+  }
+
+  export type SpinRewardPendingUpdateWithWhereUniqueWithoutSessionInput = {
+    where: SpinRewardPendingWhereUniqueInput
+    data: XOR<SpinRewardPendingUpdateWithoutSessionInput, SpinRewardPendingUncheckedUpdateWithoutSessionInput>
+  }
+
+  export type SpinRewardPendingUpdateManyWithWhereWithoutSessionInput = {
+    where: SpinRewardPendingScalarWhereInput
+    data: XOR<SpinRewardPendingUpdateManyMutationInput, SpinRewardPendingUncheckedUpdateManyWithoutSessionInput>
+  }
+
+  export type SpinSessionCreateWithoutBubbleHitsInput = {
+    id?: string
+    status?: $Enums.SpinSessionStatus
+    entryTxHash?: string | null
+    entryAsset?: string | null
+    serverSeed: string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: string
+    cashAsset?: string
+    wheelRewardId?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    expiresAt: Date | string
+    user: UserProfileCreateNestedOneWithoutSpinSessionsInput
+    pendings?: SpinRewardPendingCreateNestedManyWithoutSessionInput
+  }
+
+  export type SpinSessionUncheckedCreateWithoutBubbleHitsInput = {
+    id?: string
+    userId: string
+    status?: $Enums.SpinSessionStatus
+    entryTxHash?: string | null
+    entryAsset?: string | null
+    serverSeed: string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: string
+    cashAsset?: string
+    wheelRewardId?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    expiresAt: Date | string
+    pendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type SpinSessionCreateOrConnectWithoutBubbleHitsInput = {
+    where: SpinSessionWhereUniqueInput
+    create: XOR<SpinSessionCreateWithoutBubbleHitsInput, SpinSessionUncheckedCreateWithoutBubbleHitsInput>
+  }
+
+  export type UserProfileCreateWithoutBubbleHitsInput = {
+    id?: string
+    wallet: string
+    username?: string | null
+    avatar?: string | null
+    xp?: number
+    points?: number
+    spins?: number
+    level?: number
+    currentRank?: number | null
+    lastLogin?: Date | string | null
+    totalActivity?: number
+    currentStreak?: number
+    longestStreak?: number
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    predictions?: PredictionCreateNestedManyWithoutUserInput
+    userMissions?: UserMissionCreateNestedManyWithoutUserInput
+    spinLedgers?: SpinLedgerCreateNestedManyWithoutUserInput
+    rewardLedgers?: RewardLedgerCreateNestedManyWithoutUserInput
+    activities?: ActivityCreateNestedManyWithoutUserInput
+    leaderboardSnapshots?: LeaderboardSnapshotCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    pendingRewards?: PendingRewardCreateNestedManyWithoutUserInput
+    spinHistories?: SpinHistoryCreateNestedManyWithoutUserInput
+    rewardClaims?: RewardClaimCreateNestedManyWithoutUserInput
+    playerStats?: PlayerStatisticCreateNestedManyWithoutUserInput
+    notificationPrefs?: NotificationPreferenceCreateNestedManyWithoutUserInput
+    playerIdentity?: PlayerIdentityCreateNestedOneWithoutUserInput
+    userAchievements?: UserAchievementCreateNestedManyWithoutUserInput
+    progressSnapshots?: ProgressSnapshotCreateNestedManyWithoutUserInput
+    unlockAnimations?: UnlockAnimationCreateNestedManyWithoutUserInput
+    friendRequestsSent?: FriendRequestCreateNestedManyWithoutSenderInput
+    friendRequestsReceived?: FriendRequestCreateNestedManyWithoutReceiverInput
+    friendsAsUser?: FriendshipCreateNestedManyWithoutUserInput
+    friendsAsFriend?: FriendshipCreateNestedManyWithoutFriendInput
+    referralsMade?: ReferralCreateNestedManyWithoutReferrerInput
+    referralsReceived?: ReferralCreateNestedManyWithoutReferredInput
+    inviteCodes?: InviteCodeCreateNestedManyWithoutOwnerInput
+    communityPosts?: CommunityPostCreateNestedManyWithoutAuthorInput
+    feedItemsOwned?: FeedItemCreateNestedManyWithoutUserInput
+    feedItemsActed?: FeedItemCreateNestedManyWithoutActorInput
+    presences?: PresenceCreateNestedManyWithoutUserInput
+    presenceSessions?: PresenceSessionCreateNestedManyWithoutUserInput
+    relationshipsInitiated?: PlayerRelationshipCreateNestedManyWithoutInitiatorInput
+    relationshipsTargeted?: PlayerRelationshipCreateNestedManyWithoutTargetInput
+    socialSettings?: SocialSettingsCreateNestedOneWithoutUserInput
+    arenaRatings?: ArenaRatingCreateNestedManyWithoutUserInput
+    arenaQueueEntries?: ArenaQueueCreateNestedManyWithoutUserInput
+    matchParticipants?: MatchParticipantCreateNestedManyWithoutUserInput
+    arenaInvitationsSent?: ArenaInvitationCreateNestedManyWithoutSenderInput
+    arenaInvitationsRecv?: ArenaInvitationCreateNestedManyWithoutReceiverInput
+    arenaPresence?: ArenaPresenceCreateNestedOneWithoutUserInput
+    arenaSeasonStats?: ArenaSeasonStatisticCreateNestedManyWithoutUserInput
+    seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
+    bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
+    campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileUncheckedCreateWithoutBubbleHitsInput = {
+    id?: string
+    wallet: string
+    username?: string | null
+    avatar?: string | null
+    xp?: number
+    points?: number
+    spins?: number
+    level?: number
+    currentRank?: number | null
+    lastLogin?: Date | string | null
+    totalActivity?: number
+    currentStreak?: number
+    longestStreak?: number
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    predictions?: PredictionUncheckedCreateNestedManyWithoutUserInput
+    userMissions?: UserMissionUncheckedCreateNestedManyWithoutUserInput
+    spinLedgers?: SpinLedgerUncheckedCreateNestedManyWithoutUserInput
+    rewardLedgers?: RewardLedgerUncheckedCreateNestedManyWithoutUserInput
+    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
+    leaderboardSnapshots?: LeaderboardSnapshotUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    pendingRewards?: PendingRewardUncheckedCreateNestedManyWithoutUserInput
+    spinHistories?: SpinHistoryUncheckedCreateNestedManyWithoutUserInput
+    rewardClaims?: RewardClaimUncheckedCreateNestedManyWithoutUserInput
+    playerStats?: PlayerStatisticUncheckedCreateNestedManyWithoutUserInput
+    notificationPrefs?: NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
+    playerIdentity?: PlayerIdentityUncheckedCreateNestedOneWithoutUserInput
+    userAchievements?: UserAchievementUncheckedCreateNestedManyWithoutUserInput
+    progressSnapshots?: ProgressSnapshotUncheckedCreateNestedManyWithoutUserInput
+    unlockAnimations?: UnlockAnimationUncheckedCreateNestedManyWithoutUserInput
+    friendRequestsSent?: FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+    friendRequestsReceived?: FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+    friendsAsUser?: FriendshipUncheckedCreateNestedManyWithoutUserInput
+    friendsAsFriend?: FriendshipUncheckedCreateNestedManyWithoutFriendInput
+    referralsMade?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralsReceived?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    inviteCodes?: InviteCodeUncheckedCreateNestedManyWithoutOwnerInput
+    communityPosts?: CommunityPostUncheckedCreateNestedManyWithoutAuthorInput
+    feedItemsOwned?: FeedItemUncheckedCreateNestedManyWithoutUserInput
+    feedItemsActed?: FeedItemUncheckedCreateNestedManyWithoutActorInput
+    presences?: PresenceUncheckedCreateNestedManyWithoutUserInput
+    presenceSessions?: PresenceSessionUncheckedCreateNestedManyWithoutUserInput
+    relationshipsInitiated?: PlayerRelationshipUncheckedCreateNestedManyWithoutInitiatorInput
+    relationshipsTargeted?: PlayerRelationshipUncheckedCreateNestedManyWithoutTargetInput
+    socialSettings?: SocialSettingsUncheckedCreateNestedOneWithoutUserInput
+    arenaRatings?: ArenaRatingUncheckedCreateNestedManyWithoutUserInput
+    arenaQueueEntries?: ArenaQueueUncheckedCreateNestedManyWithoutUserInput
+    matchParticipants?: MatchParticipantUncheckedCreateNestedManyWithoutUserInput
+    arenaInvitationsSent?: ArenaInvitationUncheckedCreateNestedManyWithoutSenderInput
+    arenaInvitationsRecv?: ArenaInvitationUncheckedCreateNestedManyWithoutReceiverInput
+    arenaPresence?: ArenaPresenceUncheckedCreateNestedOneWithoutUserInput
+    arenaSeasonStats?: ArenaSeasonStatisticUncheckedCreateNestedManyWithoutUserInput
+    seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
+    bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
+    campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    spinRewardPendings?: SpinRewardPendingUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileCreateOrConnectWithoutBubbleHitsInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutBubbleHitsInput, UserProfileUncheckedCreateWithoutBubbleHitsInput>
+  }
+
+  export type SpinSessionUpsertWithoutBubbleHitsInput = {
+    update: XOR<SpinSessionUpdateWithoutBubbleHitsInput, SpinSessionUncheckedUpdateWithoutBubbleHitsInput>
+    create: XOR<SpinSessionCreateWithoutBubbleHitsInput, SpinSessionUncheckedCreateWithoutBubbleHitsInput>
+    where?: SpinSessionWhereInput
+  }
+
+  export type SpinSessionUpdateToOneWithWhereWithoutBubbleHitsInput = {
+    where?: SpinSessionWhereInput
+    data: XOR<SpinSessionUpdateWithoutBubbleHitsInput, SpinSessionUncheckedUpdateWithoutBubbleHitsInput>
+  }
+
+  export type SpinSessionUpdateWithoutBubbleHitsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumSpinSessionStatusFieldUpdateOperationsInput | $Enums.SpinSessionStatus
+    entryTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    entryAsset?: NullableStringFieldUpdateOperationsInput | string | null
+    serverSeed?: StringFieldUpdateOperationsInput | string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: StringFieldUpdateOperationsInput | string
+    cashAsset?: StringFieldUpdateOperationsInput | string
+    wheelRewardId?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserProfileUpdateOneRequiredWithoutSpinSessionsNestedInput
+    pendings?: SpinRewardPendingUpdateManyWithoutSessionNestedInput
+  }
+
+  export type SpinSessionUncheckedUpdateWithoutBubbleHitsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumSpinSessionStatusFieldUpdateOperationsInput | $Enums.SpinSessionStatus
+    entryTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    entryAsset?: NullableStringFieldUpdateOperationsInput | string | null
+    serverSeed?: StringFieldUpdateOperationsInput | string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: StringFieldUpdateOperationsInput | string
+    cashAsset?: StringFieldUpdateOperationsInput | string
+    wheelRewardId?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    pendings?: SpinRewardPendingUncheckedUpdateManyWithoutSessionNestedInput
+  }
+
+  export type UserProfileUpsertWithoutBubbleHitsInput = {
+    update: XOR<UserProfileUpdateWithoutBubbleHitsInput, UserProfileUncheckedUpdateWithoutBubbleHitsInput>
+    create: XOR<UserProfileCreateWithoutBubbleHitsInput, UserProfileUncheckedCreateWithoutBubbleHitsInput>
+    where?: UserProfileWhereInput
+  }
+
+  export type UserProfileUpdateToOneWithWhereWithoutBubbleHitsInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutBubbleHitsInput, UserProfileUncheckedUpdateWithoutBubbleHitsInput>
+  }
+
+  export type UserProfileUpdateWithoutBubbleHitsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    xp?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    spins?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    currentRank?: NullableIntFieldUpdateOperationsInput | number | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalActivity?: IntFieldUpdateOperationsInput | number
+    currentStreak?: IntFieldUpdateOperationsInput | number
+    longestStreak?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    predictions?: PredictionUpdateManyWithoutUserNestedInput
+    userMissions?: UserMissionUpdateManyWithoutUserNestedInput
+    spinLedgers?: SpinLedgerUpdateManyWithoutUserNestedInput
+    rewardLedgers?: RewardLedgerUpdateManyWithoutUserNestedInput
+    activities?: ActivityUpdateManyWithoutUserNestedInput
+    leaderboardSnapshots?: LeaderboardSnapshotUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    pendingRewards?: PendingRewardUpdateManyWithoutUserNestedInput
+    spinHistories?: SpinHistoryUpdateManyWithoutUserNestedInput
+    rewardClaims?: RewardClaimUpdateManyWithoutUserNestedInput
+    playerStats?: PlayerStatisticUpdateManyWithoutUserNestedInput
+    notificationPrefs?: NotificationPreferenceUpdateManyWithoutUserNestedInput
+    playerIdentity?: PlayerIdentityUpdateOneWithoutUserNestedInput
+    userAchievements?: UserAchievementUpdateManyWithoutUserNestedInput
+    progressSnapshots?: ProgressSnapshotUpdateManyWithoutUserNestedInput
+    unlockAnimations?: UnlockAnimationUpdateManyWithoutUserNestedInput
+    friendRequestsSent?: FriendRequestUpdateManyWithoutSenderNestedInput
+    friendRequestsReceived?: FriendRequestUpdateManyWithoutReceiverNestedInput
+    friendsAsUser?: FriendshipUpdateManyWithoutUserNestedInput
+    friendsAsFriend?: FriendshipUpdateManyWithoutFriendNestedInput
+    referralsMade?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralsReceived?: ReferralUpdateManyWithoutReferredNestedInput
+    inviteCodes?: InviteCodeUpdateManyWithoutOwnerNestedInput
+    communityPosts?: CommunityPostUpdateManyWithoutAuthorNestedInput
+    feedItemsOwned?: FeedItemUpdateManyWithoutUserNestedInput
+    feedItemsActed?: FeedItemUpdateManyWithoutActorNestedInput
+    presences?: PresenceUpdateManyWithoutUserNestedInput
+    presenceSessions?: PresenceSessionUpdateManyWithoutUserNestedInput
+    relationshipsInitiated?: PlayerRelationshipUpdateManyWithoutInitiatorNestedInput
+    relationshipsTargeted?: PlayerRelationshipUpdateManyWithoutTargetNestedInput
+    socialSettings?: SocialSettingsUpdateOneWithoutUserNestedInput
+    arenaRatings?: ArenaRatingUpdateManyWithoutUserNestedInput
+    arenaQueueEntries?: ArenaQueueUpdateManyWithoutUserNestedInput
+    matchParticipants?: MatchParticipantUpdateManyWithoutUserNestedInput
+    arenaInvitationsSent?: ArenaInvitationUpdateManyWithoutSenderNestedInput
+    arenaInvitationsRecv?: ArenaInvitationUpdateManyWithoutReceiverNestedInput
+    arenaPresence?: ArenaPresenceUpdateOneWithoutUserNestedInput
+    arenaSeasonStats?: ArenaSeasonStatisticUpdateManyWithoutUserNestedInput
+    seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
+    bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
+    campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutBubbleHitsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    xp?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    spins?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    currentRank?: NullableIntFieldUpdateOperationsInput | number | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalActivity?: IntFieldUpdateOperationsInput | number
+    currentStreak?: IntFieldUpdateOperationsInput | number
+    longestStreak?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    predictions?: PredictionUncheckedUpdateManyWithoutUserNestedInput
+    userMissions?: UserMissionUncheckedUpdateManyWithoutUserNestedInput
+    spinLedgers?: SpinLedgerUncheckedUpdateManyWithoutUserNestedInput
+    rewardLedgers?: RewardLedgerUncheckedUpdateManyWithoutUserNestedInput
+    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
+    leaderboardSnapshots?: LeaderboardSnapshotUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    pendingRewards?: PendingRewardUncheckedUpdateManyWithoutUserNestedInput
+    spinHistories?: SpinHistoryUncheckedUpdateManyWithoutUserNestedInput
+    rewardClaims?: RewardClaimUncheckedUpdateManyWithoutUserNestedInput
+    playerStats?: PlayerStatisticUncheckedUpdateManyWithoutUserNestedInput
+    notificationPrefs?: NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
+    playerIdentity?: PlayerIdentityUncheckedUpdateOneWithoutUserNestedInput
+    userAchievements?: UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+    progressSnapshots?: ProgressSnapshotUncheckedUpdateManyWithoutUserNestedInput
+    unlockAnimations?: UnlockAnimationUncheckedUpdateManyWithoutUserNestedInput
+    friendRequestsSent?: FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+    friendRequestsReceived?: FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+    friendsAsUser?: FriendshipUncheckedUpdateManyWithoutUserNestedInput
+    friendsAsFriend?: FriendshipUncheckedUpdateManyWithoutFriendNestedInput
+    referralsMade?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralsReceived?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    inviteCodes?: InviteCodeUncheckedUpdateManyWithoutOwnerNestedInput
+    communityPosts?: CommunityPostUncheckedUpdateManyWithoutAuthorNestedInput
+    feedItemsOwned?: FeedItemUncheckedUpdateManyWithoutUserNestedInput
+    feedItemsActed?: FeedItemUncheckedUpdateManyWithoutActorNestedInput
+    presences?: PresenceUncheckedUpdateManyWithoutUserNestedInput
+    presenceSessions?: PresenceSessionUncheckedUpdateManyWithoutUserNestedInput
+    relationshipsInitiated?: PlayerRelationshipUncheckedUpdateManyWithoutInitiatorNestedInput
+    relationshipsTargeted?: PlayerRelationshipUncheckedUpdateManyWithoutTargetNestedInput
+    socialSettings?: SocialSettingsUncheckedUpdateOneWithoutUserNestedInput
+    arenaRatings?: ArenaRatingUncheckedUpdateManyWithoutUserNestedInput
+    arenaQueueEntries?: ArenaQueueUncheckedUpdateManyWithoutUserNestedInput
+    matchParticipants?: MatchParticipantUncheckedUpdateManyWithoutUserNestedInput
+    arenaInvitationsSent?: ArenaInvitationUncheckedUpdateManyWithoutSenderNestedInput
+    arenaInvitationsRecv?: ArenaInvitationUncheckedUpdateManyWithoutReceiverNestedInput
+    arenaPresence?: ArenaPresenceUncheckedUpdateOneWithoutUserNestedInput
+    arenaSeasonStats?: ArenaSeasonStatisticUncheckedUpdateManyWithoutUserNestedInput
+    seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
+    bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
+    campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    spinRewardPendings?: SpinRewardPendingUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileCreateWithoutSpinRewardPendingsInput = {
+    id?: string
+    wallet: string
+    username?: string | null
+    avatar?: string | null
+    xp?: number
+    points?: number
+    spins?: number
+    level?: number
+    currentRank?: number | null
+    lastLogin?: Date | string | null
+    totalActivity?: number
+    currentStreak?: number
+    longestStreak?: number
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    predictions?: PredictionCreateNestedManyWithoutUserInput
+    userMissions?: UserMissionCreateNestedManyWithoutUserInput
+    spinLedgers?: SpinLedgerCreateNestedManyWithoutUserInput
+    rewardLedgers?: RewardLedgerCreateNestedManyWithoutUserInput
+    activities?: ActivityCreateNestedManyWithoutUserInput
+    leaderboardSnapshots?: LeaderboardSnapshotCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    pendingRewards?: PendingRewardCreateNestedManyWithoutUserInput
+    spinHistories?: SpinHistoryCreateNestedManyWithoutUserInput
+    rewardClaims?: RewardClaimCreateNestedManyWithoutUserInput
+    playerStats?: PlayerStatisticCreateNestedManyWithoutUserInput
+    notificationPrefs?: NotificationPreferenceCreateNestedManyWithoutUserInput
+    playerIdentity?: PlayerIdentityCreateNestedOneWithoutUserInput
+    userAchievements?: UserAchievementCreateNestedManyWithoutUserInput
+    progressSnapshots?: ProgressSnapshotCreateNestedManyWithoutUserInput
+    unlockAnimations?: UnlockAnimationCreateNestedManyWithoutUserInput
+    friendRequestsSent?: FriendRequestCreateNestedManyWithoutSenderInput
+    friendRequestsReceived?: FriendRequestCreateNestedManyWithoutReceiverInput
+    friendsAsUser?: FriendshipCreateNestedManyWithoutUserInput
+    friendsAsFriend?: FriendshipCreateNestedManyWithoutFriendInput
+    referralsMade?: ReferralCreateNestedManyWithoutReferrerInput
+    referralsReceived?: ReferralCreateNestedManyWithoutReferredInput
+    inviteCodes?: InviteCodeCreateNestedManyWithoutOwnerInput
+    communityPosts?: CommunityPostCreateNestedManyWithoutAuthorInput
+    feedItemsOwned?: FeedItemCreateNestedManyWithoutUserInput
+    feedItemsActed?: FeedItemCreateNestedManyWithoutActorInput
+    presences?: PresenceCreateNestedManyWithoutUserInput
+    presenceSessions?: PresenceSessionCreateNestedManyWithoutUserInput
+    relationshipsInitiated?: PlayerRelationshipCreateNestedManyWithoutInitiatorInput
+    relationshipsTargeted?: PlayerRelationshipCreateNestedManyWithoutTargetInput
+    socialSettings?: SocialSettingsCreateNestedOneWithoutUserInput
+    arenaRatings?: ArenaRatingCreateNestedManyWithoutUserInput
+    arenaQueueEntries?: ArenaQueueCreateNestedManyWithoutUserInput
+    matchParticipants?: MatchParticipantCreateNestedManyWithoutUserInput
+    arenaInvitationsSent?: ArenaInvitationCreateNestedManyWithoutSenderInput
+    arenaInvitationsRecv?: ArenaInvitationCreateNestedManyWithoutReceiverInput
+    arenaPresence?: ArenaPresenceCreateNestedOneWithoutUserInput
+    arenaSeasonStats?: ArenaSeasonStatisticCreateNestedManyWithoutUserInput
+    seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
+    bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
+    campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileUncheckedCreateWithoutSpinRewardPendingsInput = {
+    id?: string
+    wallet: string
+    username?: string | null
+    avatar?: string | null
+    xp?: number
+    points?: number
+    spins?: number
+    level?: number
+    currentRank?: number | null
+    lastLogin?: Date | string | null
+    totalActivity?: number
+    currentStreak?: number
+    longestStreak?: number
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    predictions?: PredictionUncheckedCreateNestedManyWithoutUserInput
+    userMissions?: UserMissionUncheckedCreateNestedManyWithoutUserInput
+    spinLedgers?: SpinLedgerUncheckedCreateNestedManyWithoutUserInput
+    rewardLedgers?: RewardLedgerUncheckedCreateNestedManyWithoutUserInput
+    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
+    leaderboardSnapshots?: LeaderboardSnapshotUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    pendingRewards?: PendingRewardUncheckedCreateNestedManyWithoutUserInput
+    spinHistories?: SpinHistoryUncheckedCreateNestedManyWithoutUserInput
+    rewardClaims?: RewardClaimUncheckedCreateNestedManyWithoutUserInput
+    playerStats?: PlayerStatisticUncheckedCreateNestedManyWithoutUserInput
+    notificationPrefs?: NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
+    playerIdentity?: PlayerIdentityUncheckedCreateNestedOneWithoutUserInput
+    userAchievements?: UserAchievementUncheckedCreateNestedManyWithoutUserInput
+    progressSnapshots?: ProgressSnapshotUncheckedCreateNestedManyWithoutUserInput
+    unlockAnimations?: UnlockAnimationUncheckedCreateNestedManyWithoutUserInput
+    friendRequestsSent?: FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+    friendRequestsReceived?: FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+    friendsAsUser?: FriendshipUncheckedCreateNestedManyWithoutUserInput
+    friendsAsFriend?: FriendshipUncheckedCreateNestedManyWithoutFriendInput
+    referralsMade?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralsReceived?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    inviteCodes?: InviteCodeUncheckedCreateNestedManyWithoutOwnerInput
+    communityPosts?: CommunityPostUncheckedCreateNestedManyWithoutAuthorInput
+    feedItemsOwned?: FeedItemUncheckedCreateNestedManyWithoutUserInput
+    feedItemsActed?: FeedItemUncheckedCreateNestedManyWithoutActorInput
+    presences?: PresenceUncheckedCreateNestedManyWithoutUserInput
+    presenceSessions?: PresenceSessionUncheckedCreateNestedManyWithoutUserInput
+    relationshipsInitiated?: PlayerRelationshipUncheckedCreateNestedManyWithoutInitiatorInput
+    relationshipsTargeted?: PlayerRelationshipUncheckedCreateNestedManyWithoutTargetInput
+    socialSettings?: SocialSettingsUncheckedCreateNestedOneWithoutUserInput
+    arenaRatings?: ArenaRatingUncheckedCreateNestedManyWithoutUserInput
+    arenaQueueEntries?: ArenaQueueUncheckedCreateNestedManyWithoutUserInput
+    matchParticipants?: MatchParticipantUncheckedCreateNestedManyWithoutUserInput
+    arenaInvitationsSent?: ArenaInvitationUncheckedCreateNestedManyWithoutSenderInput
+    arenaInvitationsRecv?: ArenaInvitationUncheckedCreateNestedManyWithoutReceiverInput
+    arenaPresence?: ArenaPresenceUncheckedCreateNestedOneWithoutUserInput
+    arenaSeasonStats?: ArenaSeasonStatisticUncheckedCreateNestedManyWithoutUserInput
+    seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
+    bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
+    campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
+    spinSessions?: SpinSessionUncheckedCreateNestedManyWithoutUserInput
+    spinMusicOwned?: UserMusicInventoryUncheckedCreateNestedManyWithoutUserInput
+    spinInventory?: UserInventoryItemUncheckedCreateNestedManyWithoutUserInput
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileCreateOrConnectWithoutSpinRewardPendingsInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutSpinRewardPendingsInput, UserProfileUncheckedCreateWithoutSpinRewardPendingsInput>
+  }
+
+  export type SpinSessionCreateWithoutPendingsInput = {
+    id?: string
+    status?: $Enums.SpinSessionStatus
+    entryTxHash?: string | null
+    entryAsset?: string | null
+    serverSeed: string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: string
+    cashAsset?: string
+    wheelRewardId?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    expiresAt: Date | string
+    user: UserProfileCreateNestedOneWithoutSpinSessionsInput
+    bubbleHits?: BubbleHitCreateNestedManyWithoutSessionInput
+  }
+
+  export type SpinSessionUncheckedCreateWithoutPendingsInput = {
+    id?: string
+    userId: string
+    status?: $Enums.SpinSessionStatus
+    entryTxHash?: string | null
+    entryAsset?: string | null
+    serverSeed: string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: string
+    cashAsset?: string
+    wheelRewardId?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    expiresAt: Date | string
+    bubbleHits?: BubbleHitUncheckedCreateNestedManyWithoutSessionInput
+  }
+
+  export type SpinSessionCreateOrConnectWithoutPendingsInput = {
+    where: SpinSessionWhereUniqueInput
+    create: XOR<SpinSessionCreateWithoutPendingsInput, SpinSessionUncheckedCreateWithoutPendingsInput>
+  }
+
+  export type UserProfileUpsertWithoutSpinRewardPendingsInput = {
+    update: XOR<UserProfileUpdateWithoutSpinRewardPendingsInput, UserProfileUncheckedUpdateWithoutSpinRewardPendingsInput>
+    create: XOR<UserProfileCreateWithoutSpinRewardPendingsInput, UserProfileUncheckedCreateWithoutSpinRewardPendingsInput>
+    where?: UserProfileWhereInput
+  }
+
+  export type UserProfileUpdateToOneWithWhereWithoutSpinRewardPendingsInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutSpinRewardPendingsInput, UserProfileUncheckedUpdateWithoutSpinRewardPendingsInput>
+  }
+
+  export type UserProfileUpdateWithoutSpinRewardPendingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    xp?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    spins?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    currentRank?: NullableIntFieldUpdateOperationsInput | number | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalActivity?: IntFieldUpdateOperationsInput | number
+    currentStreak?: IntFieldUpdateOperationsInput | number
+    longestStreak?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    predictions?: PredictionUpdateManyWithoutUserNestedInput
+    userMissions?: UserMissionUpdateManyWithoutUserNestedInput
+    spinLedgers?: SpinLedgerUpdateManyWithoutUserNestedInput
+    rewardLedgers?: RewardLedgerUpdateManyWithoutUserNestedInput
+    activities?: ActivityUpdateManyWithoutUserNestedInput
+    leaderboardSnapshots?: LeaderboardSnapshotUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    pendingRewards?: PendingRewardUpdateManyWithoutUserNestedInput
+    spinHistories?: SpinHistoryUpdateManyWithoutUserNestedInput
+    rewardClaims?: RewardClaimUpdateManyWithoutUserNestedInput
+    playerStats?: PlayerStatisticUpdateManyWithoutUserNestedInput
+    notificationPrefs?: NotificationPreferenceUpdateManyWithoutUserNestedInput
+    playerIdentity?: PlayerIdentityUpdateOneWithoutUserNestedInput
+    userAchievements?: UserAchievementUpdateManyWithoutUserNestedInput
+    progressSnapshots?: ProgressSnapshotUpdateManyWithoutUserNestedInput
+    unlockAnimations?: UnlockAnimationUpdateManyWithoutUserNestedInput
+    friendRequestsSent?: FriendRequestUpdateManyWithoutSenderNestedInput
+    friendRequestsReceived?: FriendRequestUpdateManyWithoutReceiverNestedInput
+    friendsAsUser?: FriendshipUpdateManyWithoutUserNestedInput
+    friendsAsFriend?: FriendshipUpdateManyWithoutFriendNestedInput
+    referralsMade?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralsReceived?: ReferralUpdateManyWithoutReferredNestedInput
+    inviteCodes?: InviteCodeUpdateManyWithoutOwnerNestedInput
+    communityPosts?: CommunityPostUpdateManyWithoutAuthorNestedInput
+    feedItemsOwned?: FeedItemUpdateManyWithoutUserNestedInput
+    feedItemsActed?: FeedItemUpdateManyWithoutActorNestedInput
+    presences?: PresenceUpdateManyWithoutUserNestedInput
+    presenceSessions?: PresenceSessionUpdateManyWithoutUserNestedInput
+    relationshipsInitiated?: PlayerRelationshipUpdateManyWithoutInitiatorNestedInput
+    relationshipsTargeted?: PlayerRelationshipUpdateManyWithoutTargetNestedInput
+    socialSettings?: SocialSettingsUpdateOneWithoutUserNestedInput
+    arenaRatings?: ArenaRatingUpdateManyWithoutUserNestedInput
+    arenaQueueEntries?: ArenaQueueUpdateManyWithoutUserNestedInput
+    matchParticipants?: MatchParticipantUpdateManyWithoutUserNestedInput
+    arenaInvitationsSent?: ArenaInvitationUpdateManyWithoutSenderNestedInput
+    arenaInvitationsRecv?: ArenaInvitationUpdateManyWithoutReceiverNestedInput
+    arenaPresence?: ArenaPresenceUpdateOneWithoutUserNestedInput
+    arenaSeasonStats?: ArenaSeasonStatisticUpdateManyWithoutUserNestedInput
+    seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
+    bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
+    campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutSpinRewardPendingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    xp?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    spins?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    currentRank?: NullableIntFieldUpdateOperationsInput | number | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalActivity?: IntFieldUpdateOperationsInput | number
+    currentStreak?: IntFieldUpdateOperationsInput | number
+    longestStreak?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    predictions?: PredictionUncheckedUpdateManyWithoutUserNestedInput
+    userMissions?: UserMissionUncheckedUpdateManyWithoutUserNestedInput
+    spinLedgers?: SpinLedgerUncheckedUpdateManyWithoutUserNestedInput
+    rewardLedgers?: RewardLedgerUncheckedUpdateManyWithoutUserNestedInput
+    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
+    leaderboardSnapshots?: LeaderboardSnapshotUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    pendingRewards?: PendingRewardUncheckedUpdateManyWithoutUserNestedInput
+    spinHistories?: SpinHistoryUncheckedUpdateManyWithoutUserNestedInput
+    rewardClaims?: RewardClaimUncheckedUpdateManyWithoutUserNestedInput
+    playerStats?: PlayerStatisticUncheckedUpdateManyWithoutUserNestedInput
+    notificationPrefs?: NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
+    playerIdentity?: PlayerIdentityUncheckedUpdateOneWithoutUserNestedInput
+    userAchievements?: UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+    progressSnapshots?: ProgressSnapshotUncheckedUpdateManyWithoutUserNestedInput
+    unlockAnimations?: UnlockAnimationUncheckedUpdateManyWithoutUserNestedInput
+    friendRequestsSent?: FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+    friendRequestsReceived?: FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+    friendsAsUser?: FriendshipUncheckedUpdateManyWithoutUserNestedInput
+    friendsAsFriend?: FriendshipUncheckedUpdateManyWithoutFriendNestedInput
+    referralsMade?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralsReceived?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    inviteCodes?: InviteCodeUncheckedUpdateManyWithoutOwnerNestedInput
+    communityPosts?: CommunityPostUncheckedUpdateManyWithoutAuthorNestedInput
+    feedItemsOwned?: FeedItemUncheckedUpdateManyWithoutUserNestedInput
+    feedItemsActed?: FeedItemUncheckedUpdateManyWithoutActorNestedInput
+    presences?: PresenceUncheckedUpdateManyWithoutUserNestedInput
+    presenceSessions?: PresenceSessionUncheckedUpdateManyWithoutUserNestedInput
+    relationshipsInitiated?: PlayerRelationshipUncheckedUpdateManyWithoutInitiatorNestedInput
+    relationshipsTargeted?: PlayerRelationshipUncheckedUpdateManyWithoutTargetNestedInput
+    socialSettings?: SocialSettingsUncheckedUpdateOneWithoutUserNestedInput
+    arenaRatings?: ArenaRatingUncheckedUpdateManyWithoutUserNestedInput
+    arenaQueueEntries?: ArenaQueueUncheckedUpdateManyWithoutUserNestedInput
+    matchParticipants?: MatchParticipantUncheckedUpdateManyWithoutUserNestedInput
+    arenaInvitationsSent?: ArenaInvitationUncheckedUpdateManyWithoutSenderNestedInput
+    arenaInvitationsRecv?: ArenaInvitationUncheckedUpdateManyWithoutReceiverNestedInput
+    arenaPresence?: ArenaPresenceUncheckedUpdateOneWithoutUserNestedInput
+    arenaSeasonStats?: ArenaSeasonStatisticUncheckedUpdateManyWithoutUserNestedInput
+    seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
+    bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
+    campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+    spinSessions?: SpinSessionUncheckedUpdateManyWithoutUserNestedInput
+    spinMusicOwned?: UserMusicInventoryUncheckedUpdateManyWithoutUserNestedInput
+    spinInventory?: UserInventoryItemUncheckedUpdateManyWithoutUserNestedInput
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type SpinSessionUpsertWithoutPendingsInput = {
+    update: XOR<SpinSessionUpdateWithoutPendingsInput, SpinSessionUncheckedUpdateWithoutPendingsInput>
+    create: XOR<SpinSessionCreateWithoutPendingsInput, SpinSessionUncheckedCreateWithoutPendingsInput>
+    where?: SpinSessionWhereInput
+  }
+
+  export type SpinSessionUpdateToOneWithWhereWithoutPendingsInput = {
+    where?: SpinSessionWhereInput
+    data: XOR<SpinSessionUpdateWithoutPendingsInput, SpinSessionUncheckedUpdateWithoutPendingsInput>
+  }
+
+  export type SpinSessionUpdateWithoutPendingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumSpinSessionStatusFieldUpdateOperationsInput | $Enums.SpinSessionStatus
+    entryTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    entryAsset?: NullableStringFieldUpdateOperationsInput | string | null
+    serverSeed?: StringFieldUpdateOperationsInput | string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: StringFieldUpdateOperationsInput | string
+    cashAsset?: StringFieldUpdateOperationsInput | string
+    wheelRewardId?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserProfileUpdateOneRequiredWithoutSpinSessionsNestedInput
+    bubbleHits?: BubbleHitUpdateManyWithoutSessionNestedInput
+  }
+
+  export type SpinSessionUncheckedUpdateWithoutPendingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumSpinSessionStatusFieldUpdateOperationsInput | $Enums.SpinSessionStatus
+    entryTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    entryAsset?: NullableStringFieldUpdateOperationsInput | string | null
+    serverSeed?: StringFieldUpdateOperationsInput | string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: StringFieldUpdateOperationsInput | string
+    cashAsset?: StringFieldUpdateOperationsInput | string
+    wheelRewardId?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutSessionNestedInput
   }
 
   export type PredictionCreateManyUserInput = {
@@ -169658,6 +185836,62 @@ export namespace Prisma {
     matchId?: string | null
     expiresAt?: Date | string | null
     verified?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SpinSessionCreateManyUserInput = {
+    id?: string
+    status?: $Enums.SpinSessionStatus
+    entryTxHash?: string | null
+    entryAsset?: string | null
+    serverSeed: string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: string
+    cashAsset?: string
+    wheelRewardId?: string | null
+    startedAt?: Date | string
+    finishedAt?: Date | string | null
+    expiresAt: Date | string
+  }
+
+  export type UserMusicInventoryCreateManyUserInput = {
+    id?: string
+    trackId: string
+    equipped?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserInventoryItemCreateManyUserInput = {
+    id?: string
+    itemId: string
+    equipped?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SpinRewardPendingCreateManyUserInput = {
+    id?: string
+    wallet: string
+    sessionId?: string | null
+    asset: string
+    amountWei: string
+    requestId: string
+    source?: $Enums.SpinRewardSource
+    status?: $Enums.SpinRewardPendingStatus
+    creditTxHash?: string | null
+    withdrawTxHash?: string | null
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BubbleHitCreateManyUserInput = {
+    id?: string
+    sessionId: string
+    bubbleId: string
+    amountWei: string
+    asset: string
+    taps?: number
     createdAt?: Date | string
   }
 
@@ -171009,6 +187243,178 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SpinSessionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumSpinSessionStatusFieldUpdateOperationsInput | $Enums.SpinSessionStatus
+    entryTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    entryAsset?: NullableStringFieldUpdateOperationsInput | string | null
+    serverSeed?: StringFieldUpdateOperationsInput | string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: StringFieldUpdateOperationsInput | string
+    cashAsset?: StringFieldUpdateOperationsInput | string
+    wheelRewardId?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bubbleHits?: BubbleHitUpdateManyWithoutSessionNestedInput
+    pendings?: SpinRewardPendingUpdateManyWithoutSessionNestedInput
+  }
+
+  export type SpinSessionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumSpinSessionStatusFieldUpdateOperationsInput | $Enums.SpinSessionStatus
+    entryTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    entryAsset?: NullableStringFieldUpdateOperationsInput | string | null
+    serverSeed?: StringFieldUpdateOperationsInput | string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: StringFieldUpdateOperationsInput | string
+    cashAsset?: StringFieldUpdateOperationsInput | string
+    wheelRewardId?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bubbleHits?: BubbleHitUncheckedUpdateManyWithoutSessionNestedInput
+    pendings?: SpinRewardPendingUncheckedUpdateManyWithoutSessionNestedInput
+  }
+
+  export type SpinSessionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?: EnumSpinSessionStatusFieldUpdateOperationsInput | $Enums.SpinSessionStatus
+    entryTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    entryAsset?: NullableStringFieldUpdateOperationsInput | string | null
+    serverSeed?: StringFieldUpdateOperationsInput | string
+    loadout?: NullableJsonNullValueInput | InputJsonValue
+    bubblePlan?: NullableJsonNullValueInput | InputJsonValue
+    cashEarnedWei?: StringFieldUpdateOperationsInput | string
+    cashAsset?: StringFieldUpdateOperationsInput | string
+    wheelRewardId?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserMusicInventoryUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    track?: SpinMusicTrackUpdateOneRequiredWithoutOwnersNestedInput
+  }
+
+  export type UserMusicInventoryUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    trackId?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserMusicInventoryUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    trackId?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserInventoryItemUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    item?: SpinCollectionItemUpdateOneRequiredWithoutOwnersNestedInput
+  }
+
+  export type UserInventoryItemUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemId?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserInventoryItemUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    itemId?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinRewardPendingUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    requestId?: StringFieldUpdateOperationsInput | string
+    source?: EnumSpinRewardSourceFieldUpdateOperationsInput | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusFieldUpdateOperationsInput | $Enums.SpinRewardPendingStatus
+    creditTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    withdrawTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    session?: SpinSessionUpdateOneWithoutPendingsNestedInput
+  }
+
+  export type SpinRewardPendingUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    requestId?: StringFieldUpdateOperationsInput | string
+    source?: EnumSpinRewardSourceFieldUpdateOperationsInput | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusFieldUpdateOperationsInput | $Enums.SpinRewardPendingStatus
+    creditTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    withdrawTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinRewardPendingUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    sessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    requestId?: StringFieldUpdateOperationsInput | string
+    source?: EnumSpinRewardSourceFieldUpdateOperationsInput | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusFieldUpdateOperationsInput | $Enums.SpinRewardPendingStatus
+    creditTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    withdrawTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BubbleHitUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bubbleId?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    taps?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    session?: SpinSessionUpdateOneRequiredWithoutBubbleHitsNestedInput
+  }
+
+  export type BubbleHitUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    bubbleId?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    taps?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BubbleHitUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    sessionId?: StringFieldUpdateOperationsInput | string
+    bubbleId?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    taps?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type PredictionCreateManyTournamentInput = {
     id?: string
     userId: string
@@ -172307,6 +188713,166 @@ export namespace Prisma {
     acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     resolvedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserMusicInventoryCreateManyTrackInput = {
+    id?: string
+    userId: string
+    equipped?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserMusicInventoryUpdateWithoutTrackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserProfileUpdateOneRequiredWithoutSpinMusicOwnedNestedInput
+  }
+
+  export type UserMusicInventoryUncheckedUpdateWithoutTrackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserMusicInventoryUncheckedUpdateManyWithoutTrackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserInventoryItemCreateManyItemInput = {
+    id?: string
+    userId: string
+    equipped?: boolean
+    createdAt?: Date | string
+  }
+
+  export type UserInventoryItemUpdateWithoutItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserProfileUpdateOneRequiredWithoutSpinInventoryNestedInput
+  }
+
+  export type UserInventoryItemUncheckedUpdateWithoutItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserInventoryItemUncheckedUpdateManyWithoutItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    equipped?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BubbleHitCreateManySessionInput = {
+    id?: string
+    userId: string
+    bubbleId: string
+    amountWei: string
+    asset: string
+    taps?: number
+    createdAt?: Date | string
+  }
+
+  export type SpinRewardPendingCreateManySessionInput = {
+    id?: string
+    userId: string
+    wallet: string
+    asset: string
+    amountWei: string
+    requestId: string
+    source?: $Enums.SpinRewardSource
+    status?: $Enums.SpinRewardPendingStatus
+    creditTxHash?: string | null
+    withdrawTxHash?: string | null
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BubbleHitUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bubbleId?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    taps?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserProfileUpdateOneRequiredWithoutBubbleHitsNestedInput
+  }
+
+  export type BubbleHitUncheckedUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bubbleId?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    taps?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BubbleHitUncheckedUpdateManyWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    bubbleId?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    taps?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinRewardPendingUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    requestId?: StringFieldUpdateOperationsInput | string
+    source?: EnumSpinRewardSourceFieldUpdateOperationsInput | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusFieldUpdateOperationsInput | $Enums.SpinRewardPendingStatus
+    creditTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    withdrawTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserProfileUpdateOneRequiredWithoutSpinRewardPendingsNestedInput
+  }
+
+  export type SpinRewardPendingUncheckedUpdateWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    requestId?: StringFieldUpdateOperationsInput | string
+    source?: EnumSpinRewardSourceFieldUpdateOperationsInput | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusFieldUpdateOperationsInput | $Enums.SpinRewardPendingStatus
+    creditTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    withdrawTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SpinRewardPendingUncheckedUpdateManyWithoutSessionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    requestId?: StringFieldUpdateOperationsInput | string
+    source?: EnumSpinRewardSourceFieldUpdateOperationsInput | $Enums.SpinRewardSource
+    status?: EnumSpinRewardPendingStatusFieldUpdateOperationsInput | $Enums.SpinRewardPendingStatus
+    creditTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    withdrawTxHash?: NullableStringFieldUpdateOperationsInput | string | null
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

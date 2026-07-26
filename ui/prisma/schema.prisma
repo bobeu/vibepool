@@ -68,6 +68,11 @@ model UserProfile {
   bannerDismissals       BannerDismissal[]
   campaignTargets        CampaignTarget[]
   skillBoostPayments     SkillBoostPayment[]
+  spinSessions           SpinSession[]
+  spinMusicOwned         UserMusicInventory[]
+  spinInventory          UserInventoryItem[]
+  spinRewardPendings     SpinRewardPending[]
+  bubbleHits             BubbleHit[]
 
   @@index([wallet])
   @@index([status])
@@ -2084,4 +2089,177 @@ model SchedulerMetric {
   recordedAt      DateTime @default(now()) @db.Timestamp
 
   @@index([jobType, recordedAt])
+}
+
+// ─── Spin Hunt MVP ───────────────────────────────────────────────────────────
+
+enum SpinMusicTier {
+  FREE
+  PREMIUM
+  GOLD
+}
+
+enum SpinItemType {
+  SPEED_SHIELDER
+  BUZZER
+  MUSIC
+  OTHER
+}
+
+enum SpinSessionStatus {
+  ACTIVE
+  FINISHED
+  CANCELLED
+}
+
+enum SpinRewardPendingStatus {
+  PENDING_SYNC
+  CREDITED_ONCHAIN
+  WITHDRAWN
+}
+
+enum SpinRewardSource {
+  BUBBLE
+  WHEEL
+}
+
+model SpinConfig {
+  id              String   @id @default(uuid()) @db.Uuid
+  key             String   @unique @db.VarChar(64) @default("default")
+  treasuryBps     Int      @default(7000)
+  entryFeeWei     String   @db.VarChar(78) @default("10000000000000000")
+  entryAsset      String   @db.VarChar(16) @default("USDm")
+  xpCostPerSpin   Int      @default(0)
+  spinDurationSec Int      @default(10)
+  maxBubbleCashWei String  @db.VarChar(78) @default("1000000000000000")
+  maxCashPerSpinWei String @db.VarChar(78) @default("50000000000000000")
+  baseWheelRpm    Int      @default(120)
+  metadata        Json?
+  updatedAt       DateTime @updatedAt @db.Timestamp
+  createdAt       DateTime @default(now()) @db.Timestamp
+}
+
+model SpinMusicTrack {
+  id            String        @id @default(uuid()) @db.Uuid
+  title         String        @db.VarChar(160)
+  artist        String?       @db.VarChar(120)
+  url           String        @db.Text
+  tier          SpinMusicTier @default(FREE)
+  priceWei      String        @db.VarChar(78) @default("0")
+  priceAsset    String        @db.VarChar(16) @default("USDm")
+  durationSec   Int           @default(15)
+  active        Boolean       @default(true)
+  createdAt     DateTime      @default(now()) @db.Timestamp
+  updatedAt     DateTime      @updatedAt @db.Timestamp
+
+  owners UserMusicInventory[]
+}
+
+model UserMusicInventory {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  trackId   String   @db.Uuid
+  equipped  Boolean  @default(false)
+  createdAt DateTime @default(now()) @db.Timestamp
+
+  user  UserProfile    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track SpinMusicTrack @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, trackId])
+  @@index([userId, equipped])
+}
+
+model SpinCollectionItem {
+  id         String       @id @default(uuid()) @db.Uuid
+  slug       String       @unique @db.VarChar(64)
+  name       String       @db.VarChar(120)
+  type       SpinItemType @default(OTHER)
+  tier       Int          @default(1)
+  priceWei   String       @db.VarChar(78) @default("0")
+  priceAsset String       @db.VarChar(16) @default("USDm")
+  effect     Json?
+  active     Boolean      @default(true)
+  createdAt  DateTime     @default(now()) @db.Timestamp
+  updatedAt  DateTime     @updatedAt @db.Timestamp
+
+  owners UserInventoryItem[]
+}
+
+model UserInventoryItem {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  itemId    String   @db.Uuid
+  equipped  Boolean  @default(false)
+  createdAt DateTime @default(now()) @db.Timestamp
+
+  user UserProfile        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item SpinCollectionItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemId])
+  @@index([userId, equipped])
+}
+
+model SpinSession {
+  id            String            @id @default(uuid()) @db.Uuid
+  userId        String            @db.Uuid
+  status        SpinSessionStatus @default(ACTIVE)
+  entryTxHash   String?           @db.VarChar(66)
+  entryAsset    String?           @db.VarChar(16)
+  serverSeed    String            @db.VarChar(64)
+  loadout       Json?
+  bubblePlan    Json?
+  cashEarnedWei String            @db.VarChar(78) @default("0")
+  cashAsset     String            @db.VarChar(16) @default("USDm")
+  wheelRewardId String?           @db.Uuid
+  startedAt     DateTime          @default(now()) @db.Timestamp
+  finishedAt    DateTime?         @db.Timestamp
+  expiresAt     DateTime          @db.Timestamp
+
+  user       UserProfile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bubbleHits BubbleHit[]
+  pendings   SpinRewardPending[]
+
+  @@index([userId, status])
+  @@index([status, expiresAt])
+}
+
+model BubbleHit {
+  id         String   @id @default(uuid()) @db.Uuid
+  sessionId  String   @db.Uuid
+  userId     String   @db.Uuid
+  bubbleId   String   @db.VarChar(64)
+  amountWei  String   @db.VarChar(78)
+  asset      String   @db.VarChar(16)
+  taps       Int      @default(1)
+  createdAt  DateTime @default(now()) @db.Timestamp
+
+  session SpinSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user    UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, bubbleId])
+  @@index([userId, createdAt])
+}
+
+model SpinRewardPending {
+  id             String                  @id @default(uuid()) @db.Uuid
+  userId         String                  @db.Uuid
+  wallet         String                  @db.VarChar(42)
+  sessionId      String?                 @db.Uuid
+  asset          String                  @db.VarChar(16)
+  amountWei      String                  @db.VarChar(78)
+  requestId      String                  @unique @db.VarChar(66)
+  source         SpinRewardSource        @default(BUBBLE)
+  status         SpinRewardPendingStatus @default(PENDING_SYNC)
+  creditTxHash   String?                 @db.VarChar(66)
+  withdrawTxHash String?                 @db.VarChar(66)
+  lastError      String?                 @db.Text
+  createdAt      DateTime                @default(now()) @db.Timestamp
+  updatedAt      DateTime                @updatedAt @db.Timestamp
+
+  user    UserProfile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  session SpinSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status])
+  @@index([status, createdAt])
+  @@index([wallet, asset, status])
 }

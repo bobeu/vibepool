@@ -5,82 +5,111 @@ import { zeroAddress } from "viem";
 
 dotconfig();
 
-/** USDm on Celo mainnet (same address historically labeled cUSD). */
-const USDM_MAINNET = "0x765DE816845861e75A25fCA122bb6898B8B1282a";
+const USDM = "0x765DE816845861e75A25fCA122bb6898B8B1282a";
+const USDC = "0xcebA9300f2b948710d2653dD7B07f33A8B32118C";
+const USDT = "0x48065fbbe25f71c9282ddf5e1cd6d6a887483d5e";
 
 const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deployments, getNamedAccounts, network } = hre;
   const { deploy, log, execute, get } = deployments;
-  const { deployer, usdmAddress } = await getNamedAccounts();
+  const { deployer } = await getNamedAccounts();
 
   if (network.name !== "hardhat" && network.config.chainId !== 42220) {
     throw new Error(`Refuse to deploy on ${network.name} — Celo mainnet (42220) only`);
   }
 
-  log("----------------------------------------------------");
-  log(`Network: ${network.name} chainId=${network.config.chainId}`);
+  const confirmations = hre.network.live ? 5 : 1;
+
   log("Deploying RewardTreasury...");
   const treasury = await deploy("RewardTreasury", {
     from: deployer,
     args: [zeroAddress],
     log: true,
-    waitConfirmations: hre.network.live ? 5 : 1,
+    waitConfirmations: confirmations,
   });
-  log(`RewardTreasury deployed at ${treasury.address}`);
 
-  log("----------------------------------------------------");
   log("Deploying ActivityRegistry...");
   const activity = await deploy("ActivityRegistry", {
     from: deployer,
     args: [],
     log: true,
-    waitConfirmations: hre.network.live ? 5 : 1,
+    waitConfirmations: confirmations,
   });
-  log(`ActivityRegistry deployed at ${activity.address}`);
 
-  log("----------------------------------------------------");
   log("Deploying SpinRewardManager...");
   const spin = await deploy("SpinRewardManager", {
     from: deployer,
     args: [],
     log: true,
-    waitConfirmations: hre.network.live ? 5 : 1,
+    waitConfirmations: confirmations,
   });
-  log(`SpinRewardManager deployed at ${spin.address}`);
 
-  log("----------------------------------------------------");
   log("Deploying PointsManager...");
   const points = await deploy("PointsManager", {
     from: deployer,
     args: [activity.address, spin.address],
     log: true,
-    waitConfirmations: hre.network.live ? 5 : 1,
+    waitConfirmations: confirmations,
   });
-  log(`PointsManager deployed at ${points.address}`);
 
-  // Enable USDm for MiniPay skill-fee deposits (mainnet / local mock skipped).
-  if (network.config.chainId === 42220) {
-    const usdm = (usdmAddress as string) || process.env.SUPPORTED_ASSET_USDM || USDM_MAINNET;
-    log(`Enabling USDm asset ${usdm} on RewardTreasury...`);
-    try {
-      await execute(
-        "RewardTreasury",
-        { from: deployer, log: true },
-        "enableAsset",
-        usdm,
-        "USDm",
-        18
-      );
-    } catch (err) {
-      log(`enableAsset skipped or already enabled: ${(err as Error).message}`);
+  log("Deploying SpinPrizeVault...");
+  const vault = await deploy("SpinPrizeVault", {
+    from: deployer,
+    args: [zeroAddress],
+    log: true,
+    waitConfirmations: confirmations,
+  });
+
+  const treasuryBps = Number(process.env.SPIN_TREASURY_BPS ?? 7000);
+  log("Deploying SpinEconomy...");
+  const economy = await deploy("SpinEconomy", {
+    from: deployer,
+    args: [zeroAddress, treasury.address, vault.address, treasuryBps],
+    log: true,
+    waitConfirmations: confirmations,
+  });
+
+  if (network.config.chainId === 42220 || network.name === "hardhat") {
+    const assets: Array<{ addr: string; symbol: string; decimals: number }> = [
+      { addr: process.env.SUPPORTED_ASSET_USDM || USDM, symbol: "USDm", decimals: 18 },
+      { addr: process.env.SUPPORTED_ASSET_USDC || USDC, symbol: "USDC", decimals: 6 },
+      { addr: process.env.SUPPORTED_ASSET_USDT || USDT, symbol: "USDT", decimals: 6 },
+    ];
+
+    for (const a of assets) {
+      for (const [name, enableArgs] of [
+        ["RewardTreasury", [a.addr, a.symbol, a.decimals]],
+        ["SpinPrizeVault", [a.addr, a.symbol, a.decimals]],
+        ["SpinEconomy", [a.addr, a.decimals]],
+      ] as const) {
+        try {
+          await execute(name, { from: deployer, log: true }, "enableAsset", ...enableArgs);
+        } catch (err) {
+          log(`${name}.enableAsset(${a.symbol}) skipped: ${(err as Error).message}`);
+        }
+      }
+    }
+
+    const dbManager = process.env.DB_MANAGER || process.env.BACKEND_SIGNER;
+    if (dbManager?.startsWith("0x")) {
+      try {
+        const role = await deployments.read("SpinPrizeVault", "DB_MANAGER_ROLE");
+        await execute(
+          "SpinPrizeVault",
+          { from: deployer, log: true },
+          "grantRole",
+          role,
+          dbManager
+        );
+      } catch (err) {
+        log(`grant DB_MANAGER_ROLE skipped: ${(err as Error).message}`);
+      }
     }
 
     const backendSigner = process.env.BACKEND_SIGNER;
-    if (backendSigner && backendSigner.startsWith("0x")) {
-      const treasuryDep = await get("RewardTreasury");
-      const rewardRole = await deployments.read("RewardTreasury", "REWARD_MANAGER_ROLE");
-      log(`Granting REWARD_MANAGER_ROLE to BACKEND_SIGNER ${backendSigner}`);
+    if (backendSigner?.startsWith("0x")) {
       try {
+        const rewardRole = await deployments.read("RewardTreasury", "REWARD_MANAGER_ROLE");
         await execute(
           "RewardTreasury",
           { from: deployer, log: true },
@@ -89,18 +118,20 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
           backendSigner
         );
       } catch (err) {
-        log(`grantRole skipped: ${(err as Error).message}`);
+        log(`grant REWARD_MANAGER_ROLE skipped: ${(err as Error).message}`);
       }
-      void treasuryDep;
     }
   }
 
-  log("----------------------------------------------------");
-  log("Vibepool foundation deploy complete (mainnet-ready).");
-  log(`RewardTreasury: ${treasury.address}`);
-  log(`ActivityRegistry: ${activity.address}`);
-  log(`SpinRewardManager: ${spin.address}`);
-  log(`PointsManager: ${points.address}`);
+  void get;
+  log("Deploy complete:", {
+    treasury: treasury.address,
+    activity: activity.address,
+    spin: spin.address,
+    points: points.address,
+    vault: vault.address,
+    economy: economy.address,
+  });
 };
 
 export default deploy;

@@ -13,6 +13,8 @@ const CONTRACTS_TO_SYNC = [
   "PointsManager",
   "ActivityRegistry",
   "SpinRewardManager",
+  "SpinPrizeVault",
+  "SpinEconomy",
 ];
 
 if (!fs.existsSync(FRONTEND_DIR)) {
@@ -86,11 +88,30 @@ function sync() {
     });
   }
 
-  // Keep ABIs from existing abis.json if no fresh deploy yet.
+  // Keep ABIs from existing abis.json / Hardhat artifacts if no fresh deploy yet.
   const existingAbisFile = path.join(FRONTEND_DIR, "abis.json");
-  if (Object.keys(abis).length === 0 && fs.existsSync(existingAbisFile)) {
-    Object.assign(abis, JSON.parse(fs.readFileSync(existingAbisFile, "utf8")));
-    console.log("  Reusing existing ABIs (no mainnet deployment folder yet).");
+  if (fs.existsSync(existingAbisFile)) {
+    const existing = JSON.parse(fs.readFileSync(existingAbisFile, "utf8"));
+    for (const name of CONTRACTS_TO_SYNC) {
+      if (!abis[name] && existing[name]) abis[name] = existing[name];
+    }
+    if (Object.keys(abis).length && syncedNetworks.length === 0) {
+      console.log("  Reusing existing ABIs (no mainnet deployment folder yet).");
+    }
+  }
+  for (const name of CONTRACTS_TO_SYNC) {
+    if (abis[name]) continue;
+    const artifactPath = path.join(
+      __dirname,
+      "artifacts",
+      "contracts",
+      `${name}.sol`,
+      `${name}.json`
+    );
+    if (fs.existsSync(artifactPath)) {
+      abis[name] = JSON.parse(fs.readFileSync(artifactPath, "utf8")).abi;
+      console.log(`  Extracted ABI for ${name} from Hardhat artifacts`);
+    }
   }
 
   fs.writeFileSync(

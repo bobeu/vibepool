@@ -1262,6 +1262,111 @@ exports.Prisma.SchedulerMetricScalarFieldEnum = {
   recordedAt: 'recordedAt'
 };
 
+exports.Prisma.SpinConfigScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  treasuryBps: 'treasuryBps',
+  entryFeeWei: 'entryFeeWei',
+  entryAsset: 'entryAsset',
+  xpCostPerSpin: 'xpCostPerSpin',
+  spinDurationSec: 'spinDurationSec',
+  maxBubbleCashWei: 'maxBubbleCashWei',
+  maxCashPerSpinWei: 'maxCashPerSpinWei',
+  baseWheelRpm: 'baseWheelRpm',
+  metadata: 'metadata',
+  updatedAt: 'updatedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SpinMusicTrackScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  artist: 'artist',
+  url: 'url',
+  tier: 'tier',
+  priceWei: 'priceWei',
+  priceAsset: 'priceAsset',
+  durationSec: 'durationSec',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserMusicInventoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  trackId: 'trackId',
+  equipped: 'equipped',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SpinCollectionItemScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  type: 'type',
+  tier: 'tier',
+  priceWei: 'priceWei',
+  priceAsset: 'priceAsset',
+  effect: 'effect',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserInventoryItemScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  itemId: 'itemId',
+  equipped: 'equipped',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SpinSessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  entryTxHash: 'entryTxHash',
+  entryAsset: 'entryAsset',
+  serverSeed: 'serverSeed',
+  loadout: 'loadout',
+  bubblePlan: 'bubblePlan',
+  cashEarnedWei: 'cashEarnedWei',
+  cashAsset: 'cashAsset',
+  wheelRewardId: 'wheelRewardId',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  expiresAt: 'expiresAt'
+};
+
+exports.Prisma.BubbleHitScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  userId: 'userId',
+  bubbleId: 'bubbleId',
+  amountWei: 'amountWei',
+  asset: 'asset',
+  taps: 'taps',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SpinRewardPendingScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  wallet: 'wallet',
+  sessionId: 'sessionId',
+  asset: 'asset',
+  amountWei: 'amountWei',
+  requestId: 'requestId',
+  source: 'source',
+  status: 'status',
+  creditTxHash: 'creditTxHash',
+  withdrawTxHash: 'withdrawTxHash',
+  lastError: 'lastError',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1740,6 +1845,36 @@ exports.HealthStatus = exports.$Enums.HealthStatus = {
   UNKNOWN: 'UNKNOWN'
 };
 
+exports.SpinMusicTier = exports.$Enums.SpinMusicTier = {
+  FREE: 'FREE',
+  PREMIUM: 'PREMIUM',
+  GOLD: 'GOLD'
+};
+
+exports.SpinItemType = exports.$Enums.SpinItemType = {
+  SPEED_SHIELDER: 'SPEED_SHIELDER',
+  BUZZER: 'BUZZER',
+  MUSIC: 'MUSIC',
+  OTHER: 'OTHER'
+};
+
+exports.SpinSessionStatus = exports.$Enums.SpinSessionStatus = {
+  ACTIVE: 'ACTIVE',
+  FINISHED: 'FINISHED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.SpinRewardSource = exports.$Enums.SpinRewardSource = {
+  BUBBLE: 'BUBBLE',
+  WHEEL: 'WHEEL'
+};
+
+exports.SpinRewardPendingStatus = exports.$Enums.SpinRewardPendingStatus = {
+  PENDING_SYNC: 'PENDING_SYNC',
+  CREDITED_ONCHAIN: 'CREDITED_ONCHAIN',
+  WITHDRAWN: 'WITHDRAWN'
+};
+
 exports.Prisma.ModelName = {
   UserProfile: 'UserProfile',
   Tournament: 'Tournament',
@@ -1836,7 +1971,15 @@ exports.Prisma.ModelName = {
   ExperimentResult: 'ExperimentResult',
   FeatureFlagVersion: 'FeatureFlagVersion',
   AdminPolicy: 'AdminPolicy',
-  SchedulerMetric: 'SchedulerMetric'
+  SchedulerMetric: 'SchedulerMetric',
+  SpinConfig: 'SpinConfig',
+  SpinMusicTrack: 'SpinMusicTrack',
+  UserMusicInventory: 'UserMusicInventory',
+  SpinCollectionItem: 'SpinCollectionItem',
+  UserInventoryItem: 'UserInventoryItem',
+  SpinSession: 'SpinSession',
+  BubbleHit: 'BubbleHit',
+  SpinRewardPending: 'SpinRewardPending'
 };
 
 /**
