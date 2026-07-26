@@ -1,13 +1,8 @@
 import { recoverMessageAddress } from "viem";
-import { PrismaClient } from "@prisma/client";
+import type { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
-let prismaInstance: PrismaClient | null = null;
-export function prisma(): PrismaClient {
-  if (!prismaInstance) {
-    prismaInstance = new PrismaClient();
-  }
-  return prismaInstance;
-}
+export { prisma, prismaClient } from "@/lib/prisma";
 
 export async function verifyWalletSignature(
   wallet: string,

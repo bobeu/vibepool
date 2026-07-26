@@ -8,7 +8,7 @@ datasource db {
 }
 
 model UserProfile {
-  id            String     @id @default(cuid()) @db.Uuid
+  id            String     @id @default(uuid()) @db.Uuid
   wallet        String     @unique @db.VarChar(42)
   username      String?    @db.VarChar(64)
   avatar        String?    @db.Text
@@ -74,7 +74,7 @@ model UserProfile {
 }
 
 model Tournament {
-  id             String           @id @default(cuid()) @db.Uuid
+  id             String           @id @default(uuid()) @db.Uuid
   name           String           @db.VarChar(120)
   startTime      DateTime         @db.Timestamp
   endTime        DateTime         @db.Timestamp
@@ -99,7 +99,7 @@ model Tournament {
 }
 
 model Prediction {
-  id              String           @id @default(cuid()) @db.Uuid
+  id              String           @id @default(uuid()) @db.Uuid
   tournamentId    String           @db.Uuid
   userId          String           @db.Uuid
   predictionValue Int
@@ -122,7 +122,7 @@ model Prediction {
 }
 
 model DailyMission {
-  id          String          @id @default(cuid()) @db.Uuid
+  id          String          @id @default(uuid()) @db.Uuid
   title       String          @db.VarChar(120)
   description String          @db.Text
   xpReward    Int
@@ -146,7 +146,7 @@ model DailyMission {
 }
 
 model UserMission {
-  id            String          @id @default(cuid()) @db.Uuid
+  id            String          @id @default(uuid()) @db.Uuid
   userId        String          @db.Uuid
   missionId     String          @db.Uuid
   category      MissionCategory @default(DAILY)
@@ -169,7 +169,7 @@ model UserMission {
 }
 
 model MissionReward {
-  id         String          @id @default(cuid()) @db.Uuid
+  id         String          @id @default(uuid()) @db.Uuid
   missionId  String          @db.Uuid
   rewardType RewardAssetType
   amount     Int
@@ -181,7 +181,7 @@ model MissionReward {
 }
 
 model SpinLedger {
-  id              String   @id @default(cuid()) @db.Uuid
+  id              String   @id @default(uuid()) @db.Uuid
   userId          String   @db.Uuid
   spinType        SpinType
   amount          Int
@@ -195,7 +195,7 @@ model SpinLedger {
 }
 
 model RewardLedger {
-  id                String   @id @default(cuid()) @db.Uuid
+  id                String   @id @default(uuid()) @db.Uuid
   userId            String   @db.Uuid
   reward            String   @db.VarChar(120)
   asset             String   @db.VarChar(42)
@@ -212,7 +212,7 @@ model RewardLedger {
 }
 
 model Activity {
-  id        String       @id @default(cuid()) @db.Uuid
+  id        String       @id @default(uuid()) @db.Uuid
   userId    String       @db.Uuid
   type      ActivityType
   metadata  Json?
@@ -224,7 +224,7 @@ model Activity {
 }
 
 model LeaderboardSnapshot {
-  id                 String   @id @default(cuid()) @db.Uuid
+  id                 String   @id @default(uuid()) @db.Uuid
   tournamentId       String?  @db.Uuid
   userId             String   @db.Uuid
   rank               Int
@@ -242,7 +242,7 @@ model LeaderboardSnapshot {
 }
 
 model Notification {
-  id             String               @id @default(cuid()) @db.Uuid
+  id             String               @id @default(uuid()) @db.Uuid
   userId         String               @db.Uuid
   type           NotificationType
   title          String               @db.VarChar(120)
@@ -265,14 +265,14 @@ model Notification {
 }
 
 model Settings {
-  id        String   @id @default(cuid()) @db.Uuid
+  id        String   @id @default(uuid()) @db.Uuid
   key       String   @unique @db.VarChar(120)
   value     String   @db.Text
   updatedAt DateTime @updatedAt @db.Timestamp
 }
 
 model GameExecution {
-  id            String         @id @default(cuid()) @db.Uuid
+  id            String         @id @default(uuid()) @db.Uuid
   tournamentId  String         @db.Uuid
   engineVersion String         @db.VarChar(64)
   status        GameExecStatus @default(PENDING)
@@ -287,7 +287,7 @@ model GameExecution {
 }
 
 model PendingReward {
-  id                String       @id @default(cuid()) @db.Uuid
+  id                String       @id @default(uuid()) @db.Uuid
   userId            String       @db.Uuid
   tournamentId      String?      @db.Uuid
   predictionId      String?      @db.Uuid
@@ -311,7 +311,7 @@ model PendingReward {
 }
 
 model AuditLog {
-  id            String   @id @default(cuid()) @db.Uuid
+  id            String   @id @default(uuid()) @db.Uuid
   actor         String?  @db.VarChar(42)
   action        String   @db.VarChar(120)
   entity        String?  @db.VarChar(120)
@@ -332,7 +332,7 @@ model AuditLog {
 }
 
 model Session {
-  id           String   @id @default(cuid()) @db.Uuid
+  id           String   @id @default(uuid()) @db.Uuid
   userId       String   @db.Uuid
   wallet       String   @db.VarChar(42)
   refreshToken String   @unique @db.VarChar(128)
@@ -350,7 +350,7 @@ model Session {
 }
 
 model RefreshToken {
-  id         String   @id @default(cuid()) @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   sessionId  String   @unique @db.Uuid
   token      String   @unique @db.VarChar(128)
   expiresAt  DateTime @db.Timestamp
@@ -364,7 +364,7 @@ model RefreshToken {
 }
 
 model PlayerStatistic {
-  id        String        @id @default(cuid()) @db.Uuid
+  id        String        @id @default(uuid()) @db.Uuid
   userId    String        @db.Uuid
   type      StatisticType
   value     Int           @default(0)
@@ -379,7 +379,7 @@ model PlayerStatistic {
 }
 
 model NotificationPreference {
-  id        String   @id @default(cuid()) @db.Uuid
+  id        String   @id @default(uuid()) @db.Uuid
   userId    String   @db.Uuid
   eventType String   @db.VarChar(64)
   enabled   Boolean  @default(true)
@@ -394,7 +394,7 @@ model NotificationPreference {
 }
 
 model Achievement {
-  id           String              @id @default(cuid()) @db.Uuid
+  id           String              @id @default(uuid()) @db.Uuid
   slug         String              @unique @db.VarChar(120)
   title        String              @db.VarChar(120)
   description  String              @db.Text
@@ -414,7 +414,7 @@ model Achievement {
 }
 
 model AchievementRule {
-  id            String        @id @default(cuid()) @db.Uuid
+  id            String        @id @default(uuid()) @db.Uuid
   achievementId String        @db.Uuid
   groupId       String?       @db.Uuid
   statType      StatisticType
@@ -431,7 +431,7 @@ model AchievementRule {
 }
 
 model AchievementRuleGroup {
-  id            String    @id @default(cuid()) @db.Uuid
+  id            String    @id @default(uuid()) @db.Uuid
   achievementId String    @db.Uuid
   logic         RuleLogic @default(AND)
   createdAt     DateTime  @default(now()) @db.Timestamp
@@ -443,7 +443,7 @@ model AchievementRuleGroup {
 }
 
 model UserAchievement {
-  id            String    @id @default(cuid()) @db.Uuid
+  id            String    @id @default(uuid()) @db.Uuid
   userId        String    @db.Uuid
   achievementId String    @db.Uuid
   progress      Int       @default(0)
@@ -462,7 +462,7 @@ model UserAchievement {
 }
 
 model Badge {
-  id        String    @id @default(cuid()) @db.Uuid
+  id        String    @id @default(uuid()) @db.Uuid
   slug      String    @unique @db.VarChar(120)
   name      String    @db.VarChar(120)
   tier      BadgeTier @default(BRONZE)
@@ -472,7 +472,7 @@ model Badge {
 }
 
 model Title {
-  id          String      @id @default(cuid()) @db.Uuid
+  id          String      @id @default(uuid()) @db.Uuid
   slug        String      @unique @db.VarChar(120)
   name        String      @db.VarChar(120)
   rarity      TitleRarity @default(COMMON)
@@ -482,7 +482,7 @@ model Title {
 }
 
 model AvatarFrame {
-  id        String      @id @default(cuid()) @db.Uuid
+  id        String      @id @default(uuid()) @db.Uuid
   slug      String      @unique @db.VarChar(120)
   name      String      @db.VarChar(120)
   rarity    TitleRarity @default(COMMON)
@@ -492,7 +492,7 @@ model AvatarFrame {
 }
 
 model PlayerIdentity {
-  id            String   @id @default(cuid()) @db.Uuid
+  id            String   @id @default(uuid()) @db.Uuid
   userId        String   @unique @db.Uuid
   displayName   String?  @db.VarChar(64)
   selectedTitle String?  @db.VarChar(120)
@@ -507,7 +507,7 @@ model PlayerIdentity {
 }
 
 model PlayerIdentityVersion {
-  id            String   @id @default(cuid()) @db.Uuid
+  id            String   @id @default(uuid()) @db.Uuid
   identityId    String   @db.Uuid
   userId        String   @db.Uuid
   version       Int
@@ -525,7 +525,7 @@ model PlayerIdentityVersion {
 }
 
 model ProgressSnapshot {
-  id            String   @id @default(cuid()) @db.Uuid
+  id            String   @id @default(uuid()) @db.Uuid
   userId        String   @db.Uuid
   snapshotType  String   @db.VarChar(64)
   level         Int      @default(0)
@@ -542,7 +542,7 @@ model ProgressSnapshot {
 }
 
 model UnlockAnimation {
-  id          String   @id @default(cuid()) @db.Uuid
+  id          String   @id @default(uuid()) @db.Uuid
   userId      String   @db.Uuid
   type        String   @db.VarChar(64)
   referenceId String?  @db.VarChar(42)
@@ -560,7 +560,7 @@ model UnlockAnimation {
 }
 
 model RateLimitEntry {
-  id          String   @id @default(cuid()) @db.Uuid
+  id          String   @id @default(uuid()) @db.Uuid
   identifier  String   @db.VarChar(120)
   endpoint    String   @db.VarChar(120)
   count       Int      @default(1)
@@ -574,7 +574,7 @@ model RateLimitEntry {
 }
 
 model DomainEvent {
-  id            String   @id @default(cuid()) @db.Uuid
+  id            String   @id @default(uuid()) @db.Uuid
   aggregateId   String   @db.VarChar(42)
   aggregateType String   @db.VarChar(64)
   eventType     String   @db.VarChar(120)
@@ -589,7 +589,7 @@ model DomainEvent {
 }
 
 model SpinReward {
-  id        String   @id @default(cuid()) @db.Uuid
+  id        String   @id @default(uuid()) @db.Uuid
   name      String   @db.VarChar(120)
   asset     String   @db.VarChar(42)
   amount    Int
@@ -604,7 +604,7 @@ model SpinReward {
 }
 
 model SpinHistory {
-  id              String   @id @default(cuid()) @db.Uuid
+  id              String   @id @default(uuid()) @db.Uuid
   userId          String   @db.Uuid
   spinRewardId    String?  @db.Uuid
   reward          String   @db.VarChar(120)
@@ -624,7 +624,7 @@ model SpinHistory {
 }
 
 model RewardClaim {
-  id              String       @id @default(cuid()) @db.Uuid
+  id              String       @id @default(uuid()) @db.Uuid
   userId          String       @db.Uuid
   reward          String       @db.VarChar(120)
   asset           String       @db.VarChar(42)
@@ -640,7 +640,7 @@ model RewardClaim {
 }
 
 model RewardQueue {
-  id          String         @id @default(cuid()) @db.Uuid
+  id          String         @id @default(uuid()) @db.Uuid
   userId      String         @db.Uuid
   reward      String         @db.VarChar(120)
   asset       String         @db.VarChar(42)
@@ -664,7 +664,7 @@ model RewardQueue {
 }
 
 model RewardSourceCatalog {
-  id        String   @id @default(cuid()) @db.Uuid
+  id        String   @id @default(uuid()) @db.Uuid
   name      String   @db.VarChar(64)
   active    Boolean  @default(true)
   createdAt DateTime @default(now()) @db.Timestamp
@@ -1141,7 +1141,7 @@ enum ModerationStatus {
 }
 
 model FriendRequest {
-  id          String              @id @default(cuid()) @db.Uuid
+  id          String              @id @default(uuid()) @db.Uuid
   senderId    String              @db.Uuid
   receiverId  String              @db.Uuid
   status      FriendRequestStatus @default(PENDING)
@@ -1159,7 +1159,7 @@ model FriendRequest {
 }
 
 model Friendship {
-  id        String   @id @default(cuid()) @db.Uuid
+  id        String   @id @default(uuid()) @db.Uuid
   userId    String   @db.Uuid
   friendId  String   @db.Uuid
   createdAt DateTime @default(now()) @db.Timestamp
@@ -1172,7 +1172,7 @@ model Friendship {
 }
 
 model Referral {
-  id            String              @id @default(cuid()) @db.Uuid
+  id            String              @id @default(uuid()) @db.Uuid
   referrerId    String              @db.Uuid
   referredId    String              @db.Uuid
   code          String              @db.VarChar(64)
@@ -1197,7 +1197,7 @@ model Referral {
 }
 
 model ReferralReward {
-  id         String            @id @default(cuid()) @db.Uuid
+  id         String            @id @default(uuid()) @db.Uuid
   referralId String            @db.Uuid
   milestone  ReferralMilestone
   rewardType String            @db.VarChar(32)
@@ -1213,7 +1213,7 @@ model ReferralReward {
 }
 
 model InviteCode {
-  id        String     @id @default(cuid()) @db.Uuid
+  id        String     @id @default(uuid()) @db.Uuid
   ownerId   String     @db.Uuid
   code      String     @db.VarChar(64)
   shortCode String?    @db.VarChar(8)
@@ -1232,7 +1232,7 @@ model InviteCode {
 }
 
 model CommunityPost {
-  id          String            @id @default(cuid()) @db.Uuid
+  id          String            @id @default(uuid()) @db.Uuid
   authorId    String            @db.Uuid
   type        CommunityPostType
   title       String            @db.VarChar(160)
@@ -1248,7 +1248,7 @@ model CommunityPost {
 }
 
 model FeedItem {
-  id            String       @id @default(cuid()) @db.Uuid
+  id            String       @id @default(uuid()) @db.Uuid
   userId        String       @db.Uuid
   actorId       String?      @db.Uuid
   type          FeedItemType
@@ -1270,7 +1270,7 @@ model FeedItem {
 }
 
 model Presence {
-  id         String         @id @default(cuid()) @db.Uuid
+  id         String         @id @default(uuid()) @db.Uuid
   userId     String         @db.Uuid
   status     PresenceStatus @default(OFFLINE)
   lastActive DateTime       @default(now()) @db.Timestamp
@@ -1284,7 +1284,7 @@ model Presence {
 }
 
 model PresenceSession {
-  id         String         @id @default(cuid()) @db.Uuid
+  id         String         @id @default(uuid()) @db.Uuid
   userId     String         @db.Uuid
   deviceId   String         @db.VarChar(64)
   deviceType String         @default("WEB") @db.VarChar(32)
@@ -1300,7 +1300,7 @@ model PresenceSession {
 }
 
 model ReferralFraudSignal {
-  id         String   @id @default(cuid()) @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   referralId String   @db.Uuid
   signalType String   @db.VarChar(64)
   score      Int      @default(0)
@@ -1313,7 +1313,7 @@ model ReferralFraudSignal {
 }
 
 model PlayerRelationship {
-  id        String           @id @default(cuid()) @db.Uuid
+  id        String           @id @default(uuid()) @db.Uuid
   userId    String           @db.Uuid
   relatedId String           @db.Uuid
   type      RelationshipType @default(BLOCKED)
@@ -1327,7 +1327,7 @@ model PlayerRelationship {
 }
 
 model SocialSettings {
-  id                 String     @id @default(cuid()) @db.Uuid
+  id                 String     @id @default(uuid()) @db.Uuid
   userId             String     @unique @db.Uuid
   profileVisibility  Visibility @default(PUBLIC)
   activityVisibility Visibility @default(FRIENDS)
@@ -1341,7 +1341,7 @@ model SocialSettings {
 }
 
 model Arena {
-  id           String   @id @default(cuid()) @db.Uuid
+  id           String   @id @default(uuid()) @db.Uuid
   name         String   @default("NEXORA Arena") @db.VarChar(120)
   seasonNumber Int      @default(1)
   active       Boolean  @default(true)
@@ -1355,7 +1355,7 @@ model Arena {
 }
 
 model ArenaMatch {
-  id          String           @id @default(cuid()) @db.Uuid
+  id          String           @id @default(uuid()) @db.Uuid
   arenaId     String?          @db.Uuid
   matchType   ArenaMatchType   @default(PREDICTION_DUEL)
   status      ArenaMatchStatus @default(WAITING)
@@ -1381,7 +1381,7 @@ model ArenaMatch {
 }
 
 model ArenaQueue {
-  id        String           @id @default(cuid()) @db.Uuid
+  id        String           @id @default(uuid()) @db.Uuid
   userId    String           @db.Uuid
   matchId   String?          @db.Uuid
   mode      ArenaQueueMode   @default(QUICK_MATCH)
@@ -1400,7 +1400,7 @@ model ArenaQueue {
 }
 
 model ArenaInvitation {
-  id         String   @id @default(cuid()) @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   matchId    String   @db.Uuid
   senderId   String   @db.Uuid
   receiverId String   @db.Uuid
@@ -1418,7 +1418,7 @@ model ArenaInvitation {
 }
 
 model MatchParticipant {
-  id             String        @id @default(cuid()) @db.Uuid
+  id             String        @id @default(uuid()) @db.Uuid
   matchId        String        @db.Uuid
   userId         String        @db.Uuid
   accepted       Boolean       @default(false)
@@ -1439,7 +1439,7 @@ model MatchParticipant {
 }
 
 model ArenaResult {
-  id        String    @id @default(cuid()) @db.Uuid
+  id        String    @id @default(uuid()) @db.Uuid
   matchId   String    @unique @db.Uuid
   winnerId  String?   @db.Uuid
   loserId   String?   @db.Uuid
@@ -1454,7 +1454,7 @@ model ArenaResult {
 }
 
 model ArenaReplay {
-  id                String   @id @default(cuid()) @db.Uuid
+  id                String   @id @default(uuid()) @db.Uuid
   matchId           String   @unique @db.Uuid
   timeline          Json
   statistics        Json?
@@ -1468,7 +1468,7 @@ model ArenaReplay {
 }
 
 model ArenaRating {
-  id              String   @id @default(cuid()) @db.Uuid
+  id              String   @id @default(uuid()) @db.Uuid
   userId          String   @db.Uuid
   skillRating     Int      @default(1000)
   ratingDeviation Float    @default(350)
@@ -1488,7 +1488,7 @@ model ArenaRating {
 }
 
 model ArenaSeasonStatistic {
-  id            String   @id @default(cuid()) @db.Uuid
+  id            String   @id @default(uuid()) @db.Uuid
   userId        String   @db.Uuid
   seasonNumber  Int
   wins          Int      @default(0)
@@ -1506,7 +1506,7 @@ model ArenaSeasonStatistic {
 }
 
 model ArenaPresence {
-  id        String              @id @default(cuid()) @db.Uuid
+  id        String              @id @default(uuid()) @db.Uuid
   userId    String              @unique @db.Uuid
   status    ArenaPresenceStatus @default(OFFLINE)
   matchId   String?             @db.VarChar(64)
@@ -1518,7 +1518,7 @@ model ArenaPresence {
 }
 
 model ArenaStateMachineDefinition {
-  id          String   @id @default(cuid()) @db.Uuid
+  id          String   @id @default(uuid()) @db.Uuid
   name        String   @unique @db.VarChar(64)
   version     Int      @default(1)
   states      Json
@@ -1529,7 +1529,7 @@ model ArenaStateMachineDefinition {
 }
 
 model ArenaAnalyticsMetric {
-  id         String   @id @default(cuid()) @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   metricType String   @db.VarChar(64)
   value      Float
   metadata   Json?
@@ -1539,7 +1539,7 @@ model ArenaAnalyticsMetric {
 }
 
 model Season {
-  id          String       @id @default(cuid()) @db.Uuid
+  id          String       @id @default(uuid()) @db.Uuid
   number      Int          @unique
   name        String       @db.VarChar(120)
   description String?      @db.Text
@@ -1563,7 +1563,7 @@ model Season {
 }
 
 model SeasonTier {
-  id           String @id @default(cuid()) @db.Uuid
+  id           String @id @default(uuid()) @db.Uuid
   seasonId     String @db.Uuid
   tierLevel    Int
   name         String @db.VarChar(64)
@@ -1577,7 +1577,7 @@ model SeasonTier {
 }
 
 model SeasonReward {
-  id          String  @id @default(cuid()) @db.Uuid
+  id          String  @id @default(uuid()) @db.Uuid
   seasonId    String  @db.Uuid
   tierLevel   Int
   rewardType  String  @db.VarChar(32)
@@ -1590,7 +1590,7 @@ model SeasonReward {
 }
 
 model SeasonMission {
-  id        String  @id @default(cuid()) @db.Uuid
+  id        String  @id @default(uuid()) @db.Uuid
   seasonId  String  @db.Uuid
   missionId String  @db.Uuid
   bonusXp   Int     @default(0)
@@ -1602,7 +1602,7 @@ model SeasonMission {
 }
 
 model SeasonLeaderboard {
-  id         String   @id @default(cuid()) @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   seasonId   String   @db.Uuid
   userId     String   @db.Uuid
   rank       Int
@@ -1616,7 +1616,7 @@ model SeasonLeaderboard {
 }
 
 model SeasonProgress {
-  id             String @id @default(cuid()) @db.Uuid
+  id             String @id @default(uuid()) @db.Uuid
   userId         String @db.Uuid
   seasonId       String @db.Uuid
   seasonXp       Int    @default(0)
@@ -1633,7 +1633,7 @@ model SeasonProgress {
 }
 
 model LiveEvent {
-  id          String          @id @default(cuid()) @db.Uuid
+  id          String          @id @default(uuid()) @db.Uuid
   seasonId    String?         @db.Uuid
   type        LiveEventType
   name        String          @db.VarChar(120)
@@ -1650,7 +1650,7 @@ model LiveEvent {
 }
 
 model FeatureFlag {
-  id               String            @id @default(cuid()) @db.Uuid
+  id               String            @id @default(uuid()) @db.Uuid
   key              String            @unique @db.VarChar(64)
   enabled          Boolean           @default(false)
   targetType       FeatureFlagTarget @default(GLOBAL)
@@ -1668,7 +1668,7 @@ model FeatureFlag {
 }
 
 model ContentBlock {
-  id        String           @id @default(cuid()) @db.Uuid
+  id        String           @id @default(uuid()) @db.Uuid
   type      ContentBlockType
   title     String           @db.VarChar(160)
   body      String           @db.Text
@@ -1690,7 +1690,7 @@ model ContentBlock {
 }
 
 model Banner {
-  id        String          @id @default(cuid()) @db.Uuid
+  id        String          @id @default(uuid()) @db.Uuid
   contentId String?         @db.Uuid
   title     String          @db.VarChar(160)
   subtitle  String?         @db.Text
@@ -1713,7 +1713,7 @@ model Banner {
 }
 
 model BannerDismissal {
-  id          String   @id @default(cuid()) @db.Uuid
+  id          String   @id @default(uuid()) @db.Uuid
   userId      String   @db.Uuid
   bannerId    String   @db.Uuid
   dismissedAt DateTime @default(now()) @db.Timestamp
@@ -1725,7 +1725,7 @@ model BannerDismissal {
 }
 
 model AnnouncementSchedule {
-  id          String    @id @default(cuid()) @db.Uuid
+  id          String    @id @default(uuid()) @db.Uuid
   title       String    @db.VarChar(160)
   body        String    @db.Text
   scheduledAt DateTime  @db.Timestamp
@@ -1737,7 +1737,7 @@ model AnnouncementSchedule {
 }
 
 model Campaign {
-  id          String         @id @default(cuid()) @db.Uuid
+  id          String         @id @default(uuid()) @db.Uuid
   seasonId    String?        @db.Uuid
   type        CampaignType
   name        String         @db.VarChar(120)
@@ -1758,7 +1758,7 @@ model Campaign {
 }
 
 model CampaignVersion {
-  id         String   @id @default(cuid()) @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   campaignId String   @db.Uuid
   version    Int
   snapshot   Json
@@ -1772,7 +1772,7 @@ model CampaignVersion {
 }
 
 model CampaignTarget {
-  id         String  @id @default(cuid()) @db.Uuid
+  id         String  @id @default(uuid()) @db.Uuid
   campaignId String  @db.Uuid
   userId     String? @db.Uuid
   segment    String? @db.VarChar(64)
@@ -1786,7 +1786,7 @@ model CampaignTarget {
 }
 
 model ScheduledJob {
-  id             String             @id @default(cuid()) @db.Uuid
+  id             String             @id @default(uuid()) @db.Uuid
   jobType        ScheduledJobType
   status         ScheduledJobStatus @default(PENDING)
   scheduledAt    DateTime           @db.Timestamp
@@ -1810,7 +1810,7 @@ model ScheduledJob {
 }
 
 model ScheduledJobDependency {
-  id             String @id @default(cuid()) @db.Uuid
+  id             String @id @default(uuid()) @db.Uuid
   jobId          String @db.Uuid
   dependsOnJobId String @db.Uuid
 
@@ -1821,7 +1821,7 @@ model ScheduledJobDependency {
 }
 
 model ModerationReport {
-  id           String           @id @default(cuid()) @db.Uuid
+  id           String           @id @default(uuid()) @db.Uuid
   reporterId   String?          @db.Uuid
   targetUserId String?          @db.Uuid
   targetPostId String?          @db.Uuid
@@ -1839,7 +1839,7 @@ model ModerationReport {
 }
 
 model AdminSession {
-  id                String    @id @default(cuid()) @db.Uuid
+  id                String    @id @default(uuid()) @db.Uuid
   wallet            String    @db.VarChar(42)
   role              AdminRole
   token             String    @unique @db.VarChar(128)
@@ -1857,7 +1857,7 @@ model AdminSession {
 }
 
 model AdminPermission {
-  id        String    @id @default(cuid()) @db.Uuid
+  id        String    @id @default(uuid()) @db.Uuid
   wallet    String    @unique @db.VarChar(42)
   role      AdminRole @default(READ_ONLY)
   active    Boolean   @default(true)
@@ -1888,7 +1888,7 @@ enum HealthStatus {
 }
 
 model MetricSeries {
-  id         String   @id @default(cuid()) @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   name       String   @db.VarChar(120)
   value      Float
   tags       Json?
@@ -1898,7 +1898,7 @@ model MetricSeries {
 }
 
 model TelemetryEvent {
-  id            String   @id @default(cuid()) @db.Uuid
+  id            String   @id @default(uuid()) @db.Uuid
   source        String   @db.VarChar(64)
   eventType     String   @db.VarChar(120)
   traceId       String?  @db.VarChar(64)
@@ -1915,7 +1915,7 @@ model TelemetryEvent {
 }
 
 model AlertRule {
-  id           String        @id @default(cuid()) @db.Uuid
+  id           String        @id @default(uuid()) @db.Uuid
   name         String        @db.VarChar(120)
   metricName   String        @db.VarChar(120)
   condition    String        @db.VarChar(32)
@@ -1931,7 +1931,7 @@ model AlertRule {
 }
 
 model AlertIncident {
-  id             String        @id @default(cuid()) @db.Uuid
+  id             String        @id @default(uuid()) @db.Uuid
   ruleId         String        @db.Uuid
   status         AlertStatus   @default(OPEN)
   severity       AlertSeverity
@@ -1948,7 +1948,7 @@ model AlertIncident {
 }
 
 model Insight {
-  id        String        @id @default(cuid()) @db.Uuid
+  id        String        @id @default(uuid()) @db.Uuid
   category  String        @db.VarChar(64)
   title     String        @db.VarChar(160)
   body      String        @db.Text
@@ -1961,7 +1961,7 @@ model Insight {
 }
 
 model DashboardSnapshot {
-  id         String   @id @default(cuid()) @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   snapshot   Json
   capturedAt DateTime @default(now()) @db.Timestamp
 
@@ -1969,7 +1969,7 @@ model DashboardSnapshot {
 }
 
 model SystemHealth {
-  id        String       @id @default(cuid()) @db.Uuid
+  id        String       @id @default(uuid()) @db.Uuid
   component String       @db.VarChar(64)
   status    HealthStatus @default(UNKNOWN)
   latencyMs Float?
@@ -1980,7 +1980,7 @@ model SystemHealth {
 }
 
 model ServiceDependency {
-  id        String  @id @default(cuid()) @db.Uuid
+  id        String  @id @default(uuid()) @db.Uuid
   service   String  @db.VarChar(64)
   dependsOn String  @db.VarChar(64)
   critical  Boolean @default(false)
@@ -1990,7 +1990,7 @@ model ServiceDependency {
 }
 
 model TraceSpan {
-  id           String   @id @default(cuid()) @db.Uuid
+  id           String   @id @default(uuid()) @db.Uuid
   traceId      String   @db.VarChar(64)
   spanId       String   @db.VarChar(64)
   parentSpanId String?  @db.VarChar(64)
@@ -2006,7 +2006,7 @@ model TraceSpan {
 }
 
 model AuditIntegrity {
-  id           String   @id @default(cuid()) @db.Uuid
+  id           String   @id @default(uuid()) @db.Uuid
   auditLogId   String   @unique @db.Uuid
   recordHash   String   @db.VarChar(64)
   previousHash String?  @db.VarChar(64)
@@ -2017,7 +2017,7 @@ model AuditIntegrity {
 }
 
 model ExperimentResult {
-  id         String   @id @default(cuid()) @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   flagKey    String   @db.VarChar(64)
   variant    String   @db.VarChar(16)
   metricName String   @db.VarChar(120)
@@ -2029,7 +2029,7 @@ model ExperimentResult {
 }
 
 model FeatureFlagVersion {
-  id         String   @id @default(cuid()) @db.Uuid
+  id         String   @id @default(uuid()) @db.Uuid
   flagKey    String   @db.VarChar(64)
   version    Int
   snapshot   Json
@@ -2042,7 +2042,7 @@ model FeatureFlagVersion {
 }
 
 model AdminPolicy {
-  id         String    @id @default(cuid()) @db.Uuid
+  id         String    @id @default(uuid()) @db.Uuid
   name       String    @db.VarChar(120)
   role       AdminRole
   permission String    @db.VarChar(64)
@@ -2054,7 +2054,7 @@ model AdminPolicy {
 }
 
 model SchedulerMetric {
-  id               String   @id @default(cuid()) @db.Uuid
+  id               String   @id @default(uuid()) @db.Uuid
   jobId            String?  @db.Uuid
   jobType          String   @db.VarChar(64)
   runtimeMs        Int

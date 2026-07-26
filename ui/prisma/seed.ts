@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prismaClient as prisma } from "../lib/prisma";
 
 async function main() {
   await prisma.settings.upsert({
@@ -36,9 +34,9 @@ async function main() {
 
   await prisma.seasonTier.createMany({
     data: [
-      { seasonId: season.id, tierLevel: 1, name: "Bronze", xpRequired: 0 },
-      { seasonId: season.id, tierLevel: 2, name: "Silver", xpRequired: 500 },
-      { seasonId: season.id, tierLevel: 3, name: "Gold", xpRequired: 1500 },
+      { seasonId: season.id, tierLevel: 1, name: "Bronze", xpRequired: 0, rewardType: "XP", rewardAmount: 0 },
+      { seasonId: season.id, tierLevel: 2, name: "Silver", xpRequired: 500, rewardType: "XP", rewardAmount: 100 },
+      { seasonId: season.id, tierLevel: 3, name: "Gold", xpRequired: 1500, rewardType: "XP", rewardAmount: 300 },
     ],
     skipDuplicates: true,
   });
@@ -51,6 +49,7 @@ async function main() {
     { key: "achievements", enabled: true, targetType: "GLOBAL" as const },
     { key: "community", enabled: true, targetType: "GLOBAL" as const },
     { key: "season", enabled: true, targetType: "GLOBAL" as const },
+    { key: "free_play", enabled: true, targetType: "GLOBAL" as const },
   ];
 
   for (const flag of flags) {
@@ -95,10 +94,10 @@ async function main() {
 
   const tournament = await prisma.tournament.create({
     data: {
-      name: "Sample Tournament",
+      name: "Daily CELO Prediction",
       startTime: new Date(),
       endTime: new Date(Date.now() + 24 * 60 * 60 * 1000),
-      status: "LOCKED",
+      status: "OPEN",
       rewardPool: 1000,
       asset: "0x0000000000000000000000000000000000000000",
       maxPlayers: 100,
@@ -137,7 +136,24 @@ async function main() {
     ],
   });
 
-  console.log("Seed completed", { season, tournament, missions });
+  // Seed spin reward catalog for the Lucky Drop wheel
+  const spinRewards = [
+    { name: "25 USDT", asset: "USDT", amount: 25, weight: 5, rarity: "RARE" },
+    { name: "500 XP", asset: "XP", amount: 500, weight: 25, rarity: "COMMON" },
+    { name: "10 USDC", asset: "USDC", amount: 10, weight: 8, rarity: "RARE" },
+    { name: "5 USDm", asset: "USDm", amount: 5, weight: 10, rarity: "UNCOMMON" },
+    { name: "100 XP", asset: "XP", amount: 100, weight: 40, rarity: "COMMON" },
+    { name: "0.5 CELO", asset: "CELO", amount: 1, weight: 12, rarity: "EPIC" },
+  ];
+
+  for (const reward of spinRewards) {
+    const existing = await prisma.spinReward.findFirst({ where: { name: reward.name } });
+    if (!existing) {
+      await prisma.spinReward.create({ data: { ...reward, active: true } });
+    }
+  }
+
+  console.log("Seed completed", { seasonId: season.id, tournamentId: tournament.id, missions });
 }
 
 main()

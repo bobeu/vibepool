@@ -12,6 +12,11 @@ build/
 .env
 .env.local
 .env.*.local
+.env.prisma.claim
+.env.prisma.*
+ui/.env
+ui/.env.local
+ui/.env.prisma.*
 
 # debug
 npm-debug.log*
