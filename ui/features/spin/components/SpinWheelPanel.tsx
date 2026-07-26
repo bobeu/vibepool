@@ -56,6 +56,8 @@ export function SpinWheelPanel({
         viewBox="0 0 320 320"
         className={cn("absolute inset-0", hunting && "animate-spin")}
         style={{
+          // Keep a stable transform origin so stopping hunt doesn't "jump" sideways.
+          transformOrigin: "50% 50%",
           transform: hunting ? undefined : `rotate(${rotation}deg)`,
           transition: hunting
             ? undefined

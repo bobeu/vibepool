@@ -174,7 +174,11 @@ export function SpinHuntHub() {
         loadout: body.loadout,
       });
     },
-    onError: (e: Error) => setError(e.message),
+    onError: (e: Error) => {
+      setHunting(false);
+      setSession(null);
+      setError(e.message);
+    },
   });
 
   const startPaid = useMutation({

@@ -15,8 +15,19 @@ export function apiError(error: unknown): Response {
 
 function sanitizeErrorMessage(raw: string): string {
   const trimmed = raw.trim();
+  if (trimmed.includes("too long for the column")) {
+    return "Invalid spin session data. Please retry.";
+  }
+  if (trimmed.includes("P1017") || /server has closed the connection/i.test(trimmed)) {
+    return "Database connection dropped. Please retry in a moment.";
+  }
   // Prisma / bundler dumps can be enormous — never echo them to clients or Next logs via Response.
-  if (trimmed.length > 280 || trimmed.includes("clientVersion") || trimmed.includes("#e;#t;#r")) {
+  if (
+    trimmed.length > 280 ||
+    trimmed.includes("clientVersion") ||
+    trimmed.includes("PrismaClientConstructorValidationError") ||
+    trimmed.includes("#e;#t;#r")
+  ) {
     return "Database request failed. Please retry in a moment.";
   }
   return trimmed || "Internal server error";

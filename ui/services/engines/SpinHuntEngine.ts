@@ -240,7 +240,8 @@ export class SpinHuntEngine implements IEngine {
     }
 
     const loadout = await collectionEngine.resolveLoadout(input.userId);
-    const serverSeed = toHex(randomBytes(32));
+    // 64 hex chars — fits SpinSession.serverSeed @db.VarChar(64) (0x-prefixed would be 66).
+    const serverSeed = randomBytes(32).toString("hex");
     const plan = this.buildBubblePlan(
       serverSeed,
       {
