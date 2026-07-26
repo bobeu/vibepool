@@ -48,7 +48,14 @@ export async function submitTreasuryPayout(input: {
   });
   const publicClient = createPublicClient({ chain: celo, transport: http(getRpcUrl()) });
 
-  const assetAddress = input.asset === "CELO" || input.asset === "USDM" ? USDM_CELO : (input.asset as `0x${string}`);
+  // Native CELO uses address(0) on RewardTreasury; USDm uses the mainnet token address.
+  const normalized = input.asset.toUpperCase();
+  const assetAddress =
+    normalized === "CELO"
+      ? ZERO_ADDRESS
+      : normalized === "USDM" || normalized === "USDC"
+        ? USDM_CELO
+        : (input.asset as `0x${string}`);
   const requestIdBytes =
     input.requestId.startsWith("0x") && input.requestId.length === 66
       ? (input.requestId as `0x${string}`)
