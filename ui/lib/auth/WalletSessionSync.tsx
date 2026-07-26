@@ -2,7 +2,7 @@
 
 import { useAccount, useSignMessage } from "wagmi";
 import { useEffect, useRef } from "react";
-import { clearTokens, getAccessToken, setTokens } from "@/lib/auth/client";
+import { clearTokens, getAccessToken, isFreePlaySession, setTokens } from "@/lib/auth/client";
 
 export function WalletSessionSync() {
   const { address, isConnected } = useAccount();
@@ -11,12 +11,17 @@ export function WalletSessionSync() {
 
   useEffect(() => {
     if (!isConnected || !address) {
-      clearTokens();
-      window.dispatchEvent(new Event("nexora:session"));
+      // Keep free-play guest sessions when no wallet is connected.
+      if (!isFreePlaySession()) {
+        clearTokens();
+        window.dispatchEvent(new Event("nexora:session"));
+      }
       return;
     }
 
-    if (getAccessToken() || syncing.current) return;
+    // Upgrade from free-play guest → real wallet when user connects.
+    if (getAccessToken() && !isFreePlaySession()) return;
+    if (syncing.current) return;
 
     syncing.current = true;
     (async () => {
@@ -32,6 +37,8 @@ export function WalletSessionSync() {
         });
         if (res.ok) {
           const data = await res.json();
+          // Clear guest flag when a real wallet session is established.
+          localStorage.removeItem("nexora_free_play");
           setTokens(data.accessToken, data.refreshToken);
           window.dispatchEvent(new Event("nexora:session"));
         }

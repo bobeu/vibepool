@@ -183,6 +183,9 @@ export default function ArenaPage() {
             Competitive Head-to-Head
           </h1>
           <p className="mt-2 text-muted-foreground">Season {data.season} · Skill-based prediction duels</p>
+          <p className="mt-2 text-[10px] font-black uppercase tracking-widest text-[#FBBF24]">
+            Quick Match pairs you with a practice bot — free, no stake
+          </p>
         </motion.div>
 
         <AnimatePresence mode="wait">

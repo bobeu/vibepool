@@ -21,7 +21,8 @@ import {
   ListChecks,
 } from "lucide-react";
 import { LevelProgress } from "@/components/ui/LevelProgress";
-import { authFetch } from "@/lib/auth/client";
+import { authFetch, isFreePlaySession, startFreePlaySession } from "@/lib/auth/client";
+import { useAuth } from "@/lib/auth/useAuth";
 import { cn } from "@/utils/format";
 
 // ─── Action tiles config ──────────────────────────────────────────────────────
@@ -86,7 +87,8 @@ const QUICK_LINKS = [
 
 export function HomeHub() {
   const router = useRouter();
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
+  const { session, isFreePlay, isLoading: authLoading } = useAuth();
 
   const { data: profile } = useQuery({
     queryKey: ["profile"],
@@ -96,6 +98,7 @@ export function HomeHub() {
       return res.json();
     },
     staleTime: 15_000,
+    enabled: Boolean(session),
   });
 
   const { data: spins } = useQuery({
@@ -106,6 +109,7 @@ export function HomeHub() {
       return res.json();
     },
     staleTime: 15_000,
+    enabled: Boolean(session),
   });
 
   const { data: leaderboard } = useQuery({
@@ -121,10 +125,56 @@ export function HomeHub() {
   const topPlayers: any[] = leaderboard?.leaderboard?.slice(0, 3) ?? [];
   const username =
     profile?.username ??
-    (address ? `${address.slice(0, 6)}…${address.slice(-4)}` : "Player");
+    (address ? `${address.slice(0, 6)}…${address.slice(-4)}` : isFreePlay ? "Guest Player" : "Player");
+
+  const startPractice = async (href: string) => {
+    if (!session) {
+      const ok = await startFreePlaySession();
+      if (!ok) return;
+    }
+    router.push(href);
+  };
 
   return (
     <div className="space-y-4">
+
+      {/* ── Free Play banner (MiniPay: try before funds) ── */}
+      {(isFreePlay || isFreePlaySession() || (!session && !isConnected && !authLoading)) && (
+        <div className="rounded-2xl border-4 border-black bg-[#FBBF24] text-black p-4 shadow-[4px_4px_0_rgba(0,0,0,1)] space-y-3">
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-widest text-black/60">Practice Mode</p>
+            <p className="font-black uppercase italic text-lg leading-tight">
+              Try free play — no funds needed
+            </p>
+            <p className="text-[11px] font-bold text-black/70 mt-1">
+              Predict, duel the practice bot, and spin Lucky Drop before connecting your wallet.
+            </p>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => startPractice("/prediction")}
+              className="py-2 rounded-xl bg-black text-primary text-[9px] font-black uppercase border-2 border-black"
+            >
+              Predict
+            </button>
+            <button
+              type="button"
+              onClick={() => startPractice("/arena")}
+              className="py-2 rounded-xl bg-black text-[#E91E8C] text-[9px] font-black uppercase border-2 border-black"
+            >
+              Arena
+            </button>
+            <button
+              type="button"
+              onClick={() => startPractice("/spin")}
+              className="py-2 rounded-xl bg-black text-[#62E2F8] text-[9px] font-black uppercase border-2 border-black"
+            >
+              Spin
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ── Hero Banner ── */}
       <div className="relative rounded-2xl overflow-hidden border-2 border-white/10 bg-gradient-to-br from-zinc-900 to-zinc-950">

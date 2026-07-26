@@ -56,11 +56,17 @@ export class PredictionService implements IPredictionService {
       data: { currentPlayers: { increment: 1 } },
     });
 
+    const isGuest = wallet.toLowerCase().startsWith("0xeeeeeeee");
     await prisma().activity.create({
       data: {
         userId,
         type: "PREDICTION",
-        metadata: { tournamentId: tournament.id, predictionId: prediction.id },
+        metadata: {
+          tournamentId: tournament.id,
+          predictionId: prediction.id,
+          freePlay: isGuest,
+          practice: isGuest,
+        },
       },
     });
 

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { startFreePlaySession } from "@/lib/auth/client";
 import { cn } from "@/utils/format";
 
 const GoogleIcon = () => (
@@ -33,10 +34,24 @@ interface OnboardingProps {
 
 export function Onboarding({ onComplete }: OnboardingProps) {
   const [slide, setSlide] = useState(0);
+  const [launching, setLaunching] = useState(false);
   const { isConnected, address } = useAccount();
 
   const handleNext = () => {
     if (slide < 2) setSlide((s) => s + 1);
+  };
+
+  const handleLaunchApp = async () => {
+    setLaunching(true);
+    try {
+      // Connected wallets sync via WalletSessionSync; guests get a free-play session.
+      if (!isConnected) {
+        await startFreePlaySession();
+      }
+      onComplete();
+    } finally {
+      setLaunching(false);
+    }
   };
 
   if (slide === 0) {
@@ -204,15 +219,16 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
         <button
           type="button"
-          onClick={onComplete}
+          onClick={handleLaunchApp}
+          disabled={launching}
           className={cn(
-            "w-full py-3.5 rounded-2xl text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all",
+            "w-full py-3.5 rounded-2xl text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all disabled:opacity-60",
             isConnected
               ? "bg-[#62E2F8] hover:bg-[#48d0e7]"
               : "bg-[#FBBF24] hover:bg-[#f5b40a]"
           )}
         >
-          Launch App
+          {launching ? "Starting…" : isConnected ? "Launch App" : "Try Free Play"}
         </button>
 
         {!isConnected && (

@@ -228,6 +228,9 @@ export default function SpinPage() {
         <div className="text-center mb-4">
           <h2 className="text-xl font-black uppercase italic">Lucky Drop</h2>
           <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">Spin. Win. Celebrate.</p>
+          <p className="text-[9px] font-black uppercase tracking-widest text-[#FBBF24] mt-1">
+            Free drops included — try before you commit funds
+          </p>
         </div>
 
         {/* Available drops bar */}

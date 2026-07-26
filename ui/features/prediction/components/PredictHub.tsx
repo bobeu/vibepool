@@ -14,12 +14,12 @@ import {
   Zap,
   CheckCircle,
 } from "lucide-react";
-import { authFetch } from "@/lib/auth/client";
+import { authFetch, startFreePlaySession } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
 import { cn } from "@/utils/format";
 
 export function PredictHub() {
-  const { session, isLoading: authLoading } = useAuth();
+  const { session, isLoading: authLoading, isFreePlay } = useAuth();
   const queryClient = useQueryClient();
   const [mode, setMode] = useState<"manual" | "ai">("manual");
 
@@ -75,14 +75,25 @@ export function PredictHub() {
 
   if (!session) {
     return (
-      <div className="space-y-4 text-center py-12">
+      <div className="space-y-4 text-center py-12 px-2">
         <div className="w-16 h-16 rounded-2xl bg-primary/20 border-4 border-primary mx-auto flex items-center justify-center shadow-[4px_4px_0_rgba(0,0,0,0.6)]">
           <Sparkles className="w-8 h-8 text-primary" strokeWidth={2.5} />
         </div>
         <div>
           <p className="font-black uppercase italic text-xl text-white">Volatility Predict</p>
-          <p className="text-sm text-muted-foreground mt-2">Connect your Celo wallet to join the prediction arena.</p>
+          <p className="text-sm text-muted-foreground mt-2">
+            Try a free practice round first — no funds required.
+          </p>
         </div>
+        <button
+          type="button"
+          onClick={async () => {
+            await startFreePlaySession();
+          }}
+          className="w-full max-w-xs mx-auto py-3.5 rounded-2xl bg-[#FBBF24] text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)]"
+        >
+          Start Free Play
+        </button>
       </div>
     );
   }
@@ -98,6 +109,13 @@ export function PredictHub() {
 
   return (
     <div className="space-y-4">
+      {isFreePlay && (
+        <div className="rounded-xl border-2 border-[#FBBF24]/50 bg-[#FBBF24]/10 px-3 py-2 text-center">
+          <p className="text-[10px] font-black uppercase tracking-widest text-[#FBBF24]">
+            Free Play · Practice round · No funds at risk
+          </p>
+        </div>
+      )}
 
       {/* ── Hero Image Banner ── */}
       <div className="relative rounded-2xl overflow-hidden border-4 border-black h-44 shadow-[4px_4px_0_rgba(0,0,0,1)]">

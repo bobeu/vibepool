@@ -7,11 +7,14 @@ interface Session {
   wallet: string;
   userId?: string;
   expiresAt: string;
+  isGuest?: boolean;
+  freePlay?: boolean;
 }
 
 interface AuthContextValue {
   session: Session | null;
   isLoading: boolean;
+  isFreePlay: boolean;
   refreshSession: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -19,6 +22,7 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue>({
   session: null,
   isLoading: true,
+  isFreePlay: false,
   refreshSession: async () => {},
   logout: async () => {},
 });
@@ -72,8 +76,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     window.dispatchEvent(new Event("nexora:session"));
   }, []);
 
+  const isFreePlay = Boolean(session?.freePlay || session?.isGuest);
+
   return (
-    <AuthContext.Provider value={{ session, isLoading, refreshSession, logout }}>
+    <AuthContext.Provider value={{ session, isLoading, isFreePlay, refreshSession, logout }}>
       {children}
     </AuthContext.Provider>
   );
