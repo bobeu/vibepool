@@ -6,8 +6,6 @@ import { useAccount } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { cn } from "@/utils/format";
 
-// ─── Custom Premium SVGs for Social Logos ─────────────────────────────────────
-
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -31,7 +29,6 @@ const XIcon = () => (
 
 interface OnboardingProps {
   onComplete: () => void;
-  embedded?: boolean;
 }
 
 export function Onboarding({ onComplete }: OnboardingProps) {
@@ -39,21 +36,18 @@ export function Onboarding({ onComplete }: OnboardingProps) {
   const { isConnected, address } = useAccount();
 
   const handleNext = () => {
-    if (slide < 2) {
-      setSlide((s) => s + 1);
-    }
+    if (slide < 2) setSlide((s) => s + 1);
   };
 
-  // Slide 1: Yellow - Prediction
   if (slide === 0) {
     return (
       <div className="absolute inset-0 z-[200] flex flex-col justify-between bg-[#FBBF24] p-6 text-black select-none">
-        {/* Top spacer / header */}
         <div className="flex justify-between items-center w-full">
           <span className="text-[10px] font-black tracking-widest uppercase bg-black text-white px-2 py-0.5 rounded border border-black">
             Slide 1/3
           </span>
           <button
+            type="button"
             onClick={() => setSlide(2)}
             className="text-xs font-black uppercase tracking-wide hover:underline"
           >
@@ -61,15 +55,11 @@ export function Onboarding({ onComplete }: OnboardingProps) {
           </button>
         </div>
 
-        {/* Content area */}
         <div className="flex-1 flex flex-col justify-center items-center my-4 space-y-6">
-          {/* Main artwork card with tilted sticker */}
           <div className="relative w-full max-w-[270px] aspect-[4/3]">
-            {/* Sticker */}
             <div className="absolute -top-4 -right-2 rotate-[12deg] bg-[#62E2F8] border-4 border-black text-black font-black px-3 py-1 text-xs uppercase shadow-[3px_3px_0_rgba(0,0,0,1)] rounded-xl z-20">
               UH OH!
             </div>
-            {/* Image card wrapper */}
             <div className="w-full h-full rounded-2xl border-4 border-black bg-white shadow-[6px_6px_0_rgba(0,0,0,1)] overflow-hidden relative">
               <Image
                 src="/prediction.png"
@@ -81,20 +71,19 @@ export function Onboarding({ onComplete }: OnboardingProps) {
             </div>
           </div>
 
-          {/* Texts */}
           <div className="text-center space-y-3 px-2 max-w-sm">
             <h1 className="font-black uppercase italic leading-none tracking-tight text-3xl">
-              WELCOME TO THE VIBEPOOL ARENA
+              WELCOME TO NEXORA
             </h1>
             <p className="text-xs font-bold leading-relaxed text-black/80">
-              Forecast CELO token price volatility and earn a share of the losing pool, integrated with dynamic yield from Aave protocol pools on Celo.
+              Forecast CELO token price volatility and earn rewards in skill-based prediction tournaments built for MiniPay.
             </p>
           </div>
         </div>
 
-        {/* Next Button */}
         <div className="w-full pb-4">
           <button
+            type="button"
             onClick={handleNext}
             className="w-full py-3.5 rounded-2xl bg-[#62E2F8] text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all hover:bg-[#48d0e7]"
           >
@@ -105,16 +94,15 @@ export function Onboarding({ onComplete }: OnboardingProps) {
     );
   }
 
-  // Slide 2: Cyan - Arena
   if (slide === 1) {
     return (
       <div className="absolute inset-0 z-[200] flex flex-col justify-between bg-[#62E2F8] p-6 text-black select-none">
-        {/* Top spacer / header */}
         <div className="flex justify-between items-center w-full">
           <span className="text-[10px] font-black tracking-widest uppercase bg-black text-white px-2 py-0.5 rounded border border-black">
             Slide 2/3
           </span>
           <button
+            type="button"
             onClick={() => setSlide(2)}
             className="text-xs font-black uppercase tracking-wide hover:underline"
           >
@@ -122,15 +110,11 @@ export function Onboarding({ onComplete }: OnboardingProps) {
           </button>
         </div>
 
-        {/* Content area */}
         <div className="flex-1 flex flex-col justify-center items-center my-4 space-y-6">
-          {/* Main artwork card with tilted sticker */}
           <div className="relative w-full max-w-[270px] aspect-[4/3]">
-            {/* Sticker */}
             <div className="absolute -top-4 -right-2 rotate-[12deg] bg-[#E91E8C] border-4 border-black text-white font-black px-3 py-1 text-xs uppercase shadow-[3px_3px_0_rgba(0,0,0,1)] rounded-xl z-20">
-              SO CLASSY!
+              LET&apos;S GO!
             </div>
-            {/* Image card wrapper */}
             <div className="w-full h-full rounded-2xl border-4 border-black bg-white shadow-[6px_6px_0_rgba(0,0,0,1)] overflow-hidden relative">
               <Image
                 src="/arena.png"
@@ -141,20 +125,19 @@ export function Onboarding({ onComplete }: OnboardingProps) {
             </div>
           </div>
 
-          {/* Texts */}
           <div className="text-center space-y-3 px-2 max-w-sm">
             <h1 className="font-black uppercase italic leading-none tracking-tight text-3xl">
-              FIND HELP AS YOU START YOUR NEW CAREER
+              COMPETE IN LIVE 1V1 DUELS
             </h1>
             <p className="text-xs font-bold leading-relaxed text-black/80">
-              Challenge players in live 1v1 duels. Outsmart your opponent — predict UP or DOWN and win big.
+              Challenge players in skill-based Arena matches. Outsmart your opponent — predict the move and win.
             </p>
           </div>
         </div>
 
-        {/* Next Button */}
         <div className="w-full pb-4">
           <button
+            type="button"
             onClick={handleNext}
             className="w-full py-3.5 rounded-2xl bg-white text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all hover:bg-zinc-100"
           >
@@ -165,153 +148,131 @@ export function Onboarding({ onComplete }: OnboardingProps) {
     );
   }
 
-  // Slide 3: White - Connect Wallet
+  // Slide 3: Connect (optional) + Launch App
   return (
     <div className="absolute inset-0 z-[200] flex flex-col justify-between bg-white p-6 text-black select-none">
-      {/* Top spacer */}
       <div className="flex justify-between items-center w-full">
         <span className="text-[10px] font-black tracking-widest uppercase bg-black text-white px-2 py-0.5 rounded border border-black">
           Slide 3/3
         </span>
-        {isConnected && (
-          <button
-            onClick={onComplete}
-            className="text-xs font-black uppercase tracking-wide hover:underline"
-          >
-            Close
-          </button>
-        )}
       </div>
 
-      {/* Content area */}
       <div className="flex-1 flex flex-col justify-center space-y-6 max-w-sm mx-auto w-full">
         <div className="text-center">
           <h1 className="font-black uppercase italic leading-none tracking-tight text-3xl mb-1">
-            HELLO AGAIN!
+            READY TO PLAY?
           </h1>
           <p className="text-[10px] font-black text-black/50 uppercase tracking-widest">
-            Ready to Prediction-to-Earn
+            Connect your wallet or jump straight in
           </p>
         </div>
 
-        {/* Fields */}
         <div className="space-y-4">
-          {/* Account Address Field */}
           <div className="space-y-1">
             <label className="text-[10px] font-black tracking-wider uppercase text-black">
               Celo Wallet Address
             </label>
             <div className="w-full border-4 border-black bg-white rounded-xl px-4 py-3 text-xs font-black text-black shadow-[3px_3px_0_rgba(0,0,0,1)] truncate select-all">
-              {isConnected && address ? address : "Not Connected — Connect wallet below"}
+              {isConnected && address ? address : "Not Connected — optional for free play"}
             </div>
           </div>
 
-          {/* Network Field */}
           <div className="space-y-1">
             <label className="text-[10px] font-black tracking-wider uppercase text-black">
               Active Network
             </label>
             <div className="w-full border-4 border-black bg-white rounded-xl px-4 py-3 text-xs font-black text-black shadow-[3px_3px_0_rgba(0,0,0,1)]">
-              Celo L2 (Aave Yield pools)
+              Celo (MiniPay ready)
             </div>
           </div>
         </div>
 
-        {/* Main Connect Wallet action */}
-        <div>
+        {!isConnected && (
           <ConnectButton.Custom>
-            {({
-              account,
-              chain,
-              openConnectModal,
-              mounted,
-            }: any) => {
-              const ready = mounted;
-              const connected = ready && account && chain;
+            {({ openConnectModal, mounted }: { openConnectModal: () => void; mounted: boolean }) => (
+              <button
+                onClick={openConnectModal}
+                type="button"
+                disabled={!mounted}
+                className="w-full py-3.5 rounded-2xl bg-[#62E2F8] text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all hover:bg-[#48d0e7] flex items-center justify-center gap-2 disabled:opacity-60"
+              >
+                Connect Wallet
+              </button>
+            )}
+          </ConnectButton.Custom>
+        )}
 
-              if (!connected) {
-                return (
+        <button
+          type="button"
+          onClick={onComplete}
+          className={cn(
+            "w-full py-3.5 rounded-2xl text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all",
+            isConnected
+              ? "bg-[#62E2F8] hover:bg-[#48d0e7]"
+              : "bg-[#FBBF24] hover:bg-[#f5b40a]"
+          )}
+        >
+          Launch App
+        </button>
+
+        {!isConnected && (
+          <>
+            <div className="relative flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-b-4 border-black" />
+              </div>
+              <span className="relative px-3 bg-white font-black text-xs uppercase text-black z-10">
+                OR
+              </span>
+            </div>
+
+            <div className="flex justify-center gap-4">
+              <ConnectButton.Custom>
+                {({ openConnectModal }: { openConnectModal: () => void }) => (
                   <button
-                    onClick={openConnectModal}
                     type="button"
-                    className="w-full py-3.5 rounded-2xl bg-[#62E2F8] text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all hover:bg-[#48d0e7] flex items-center justify-center gap-2"
+                    onClick={openConnectModal}
+                    className="w-14 h-14 bg-white border-4 border-black rounded-2xl flex items-center justify-center shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all"
+                    title="Login with Google"
                   >
-                    Connect Wallet
+                    <GoogleIcon />
                   </button>
-                );
-              }
+                )}
+              </ConnectButton.Custom>
 
-              return (
-                <button
-                  onClick={onComplete}
-                  type="button"
-                  className="w-full py-3.5 rounded-2xl bg-[#62E2F8] text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all hover:bg-[#48d0e7] flex items-center justify-center gap-2"
-                >
-                  Enter Game
-                </button>
-              );
-            }}
-          </ConnectButton.Custom>
-        </div>
+              <ConnectButton.Custom>
+                {({ openConnectModal }: { openConnectModal: () => void }) => (
+                  <button
+                    type="button"
+                    onClick={openConnectModal}
+                    className="w-14 h-14 bg-[#E91E8C] border-4 border-black rounded-2xl flex items-center justify-center shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all"
+                    title="Login with Apple"
+                  >
+                    <AppleIcon />
+                  </button>
+                )}
+              </ConnectButton.Custom>
 
-        {/* Divider */}
-        <div className="relative flex items-center justify-center">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-b-4 border-black"></div>
-          </div>
-          <span className="relative px-3 bg-white font-black text-xs uppercase text-black z-10">
-            OR
-          </span>
-        </div>
-
-        {/* Social login buttons */}
-        <div className="flex justify-center gap-4">
-          <ConnectButton.Custom>
-            {({ openConnectModal }: any) => (
-              <button
-                type="button"
-                onClick={openConnectModal}
-                className="w-14 h-14 bg-white border-4 border-black rounded-2xl flex items-center justify-center shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all"
-                title="Login with Google"
-              >
-                <GoogleIcon />
-              </button>
-            )}
-          </ConnectButton.Custom>
-
-          <ConnectButton.Custom>
-            {({ openConnectModal }: any) => (
-              <button
-                type="button"
-                onClick={openConnectModal}
-                className="w-14 h-14 bg-[#E91E8C] border-4 border-black rounded-2xl flex items-center justify-center shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all"
-                title="Login with Apple"
-              >
-                <AppleIcon />
-              </button>
-            )}
-          </ConnectButton.Custom>
-
-          <ConnectButton.Custom>
-            {({ openConnectModal }: any) => (
-              <button
-                type="button"
-                onClick={openConnectModal}
-                className="w-14 h-14 bg-[#FBBF24] border-4 border-black rounded-2xl flex items-center justify-center shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all"
-                title="Login with X"
-              >
-                <XIcon />
-              </button>
-            )}
-          </ConnectButton.Custom>
-        </div>
+              <ConnectButton.Custom>
+                {({ openConnectModal }: { openConnectModal: () => void }) => (
+                  <button
+                    type="button"
+                    onClick={openConnectModal}
+                    className="w-14 h-14 bg-[#FBBF24] border-4 border-black rounded-2xl flex items-center justify-center shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all"
+                    title="Login with X"
+                  >
+                    <XIcon />
+                  </button>
+                )}
+              </ConnectButton.Custom>
+            </div>
+          </>
+        )}
       </div>
 
-      {/* Footer */}
       <div className="w-full text-center pb-4">
         <p className="text-[10px] font-black text-black/70">
-          I don&apos;t have a wallet &nbsp;
-          <span className="underline cursor-pointer hover:text-black">Create Celo Wallet &gt;</span>
+          Try free play first — no funds required to explore
         </p>
       </div>
     </div>

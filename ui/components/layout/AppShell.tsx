@@ -54,14 +54,15 @@ interface AppShellProps {
 export function AppShell({ children, activeNav, spinLayout = false }: AppShellProps) {
   const pathname = usePathname();
   const { toastMessage, clearToast } = useUIStore();
-  const [onboardingDone, setOnboardingDone] = useState(true);
+  // Start false so onboarding gates the app until Launch App (or prior completion).
+  const [onboardingDone, setOnboardingDone] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [currentTime, setCurrentTime] = useState("9:41");
 
   useEffect(() => {
     setMounted(true);
-    const done = localStorage.getItem("vibepool_onboarding_done");
-    setOnboardingDone(!!done);
+    const done = localStorage.getItem("vibepool_onboarding_done") === "1";
+    setOnboardingDone(done);
   }, []);
 
   // Live clock for status bar
@@ -94,13 +95,14 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
 
   // ─── SHARED inner content ─────────────────────────────────────────────────
 
-  const innerContent = (
-    <>
-      {/* Onboarding overlay */}
-      {!onboardingDone && (
-        <Onboarding onComplete={handleOnboardingComplete} />
-      )}
+  const onboardingGate = (
+    <div className="relative flex-1 min-h-0 overflow-hidden">
+      <Onboarding onComplete={handleOnboardingComplete} />
+    </div>
+  );
 
+  const appContent = (
+    <>
       {/* Toast */}
       {toastMessage && (
         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[200] pointer-events-none w-[calc(100%-2rem)]">
@@ -148,6 +150,8 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
       <BottomDock pathname={pathname} activeNav={activeNav} />
     </>
   );
+
+  const innerContent = onboardingDone ? appContent : onboardingGate;
 
   return (
     <>

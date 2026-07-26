@@ -229,7 +229,7 @@ export default function ArenaPage() {
                 </GlassContainer>
               </div>
 
-              <SectionDivider title="Play" />
+              <SectionDivider label="Play" />
               <div className="grid gap-4 md:grid-cols-2">
                 <GlassContainer className="space-y-4 p-6">
                   <h2 className="text-xl font-semibold">Quick Match</h2>
@@ -279,7 +279,7 @@ export default function ArenaPage() {
 
               {data.friendsOnline.length > 0 && (
                 <>
-                  <SectionDivider title="Friends Online" />
+                  <SectionDivider label="Friends Online" />
                   <GlassContainer className="p-4">
                     <ul className="space-y-2">
                       {data.friendsOnline.map((f) => (
@@ -295,7 +295,7 @@ export default function ArenaPage() {
 
               {data.recentMatches.length > 0 && (
                 <>
-                  <SectionDivider title="Recent Matches" />
+                  <SectionDivider label="Recent Matches" />
                   <GlassContainer className="divide-y divide-white/5">
                     {data.recentMatches.map((m) => (
                       <div key={m.matchId} className="flex items-center justify-between p-4 text-sm">
@@ -324,7 +324,7 @@ export default function ArenaPage() {
                 />
                 <h2 className="text-2xl font-semibold">Searching for opponent...</h2>
                 <p className="text-muted-foreground">Status: {data.queue?.status ?? "SEARCHING"}</p>
-                <Button variant="destructive" onClick={() => cancelMutation.mutate()}>Cancel</Button>
+                <Button variant="outline" onClick={() => cancelMutation.mutate()}>Cancel</Button>
               </GlassContainer>
             </motion.div>
           )}
@@ -334,7 +334,7 @@ export default function ArenaPage() {
               <GlassContainer className="space-y-4 p-6">
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl font-semibold">Match · {matchData.status}</h2>
-                  <Button variant="ghost" size="sm" onClick={() => { setView("home"); setActiveMatchId(null); refetch(); }}>
+                  <Button variant="outline" size="sm" onClick={() => { setView("home"); setActiveMatchId(null); refetch(); }}>
                     Exit
                   </Button>
                 </div>

@@ -7,6 +7,21 @@ import { GlassContainer } from "@/components/hero/GlassContainer";
 import { SectionDivider } from "@/components/hero/SectionDivider";
 import { container, item } from "@/lib/motion/variants";
 
+type AchievementItem = {
+  id: string;
+  title: string;
+  description: string;
+  category?: string;
+  rarity: string;
+  unlocked: boolean;
+  progress: number;
+  target: number;
+};
+
+type AchievementsResponse = {
+  achievements: AchievementItem[];
+};
+
 const RARITY_COLORS: Record<string, string> = {
   COMMON: "text-muted-foreground border-border",
   RARE: "text-blue-400 border-blue-400/30",
@@ -30,12 +45,12 @@ const CATEGORY_LABELS: Record<string, string> = {
 export default function AchievementsPage() {
   const queryClient = useQueryClient();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error } = useQuery<AchievementsResponse>({
     queryKey: ["achievements"],
     queryFn: async () => {
       const res = await fetch("/api/achievements");
       if (!res.ok) throw new Error("Failed to fetch achievements");
-      return res.json();
+      return res.json() as Promise<AchievementsResponse>;
     },
     staleTime: 15_000,
   });
@@ -51,7 +66,8 @@ export default function AchievementsPage() {
     },
   });
 
-  const grouped = (data?.achievements || []).reduce<Record<string, typeof data.achievements>>((acc, achievement: any) => {
+  const achievementsList: AchievementItem[] = data?.achievements ?? [];
+  const grouped = achievementsList.reduce<Record<string, AchievementItem[]>>((acc, achievement) => {
     const category = achievement.category || "LIFETIME";
     if (!acc[category]) acc[category] = [];
     acc[category].push(achievement);
@@ -107,11 +123,11 @@ export default function AchievementsPage() {
           </GlassContainer>
         )}
 
-        {Object.entries(grouped).map(([category, achievements]: [string, any[]]) => (
+        {Object.entries(grouped).map(([category, achievements]) => (
           <motion.section key={category} variants={item} className="space-y-3">
             <SectionDivider label={CATEGORY_LABELS[category] || category} />
             <div className="grid gap-3">
-              {achievements.map((achievement: any) => (
+              {achievements.map((achievement) => (
                 <GlassContainer key={achievement.id} className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="space-y-1">
