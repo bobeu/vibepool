@@ -289,7 +289,7 @@ export function SpinHuntHub() {
       return;
     }
     if (isFreePlay) {
-      setError("No spins left — open Tester shop to get more (demo)");
+      setError("No spins left — tap Try again to refill");
       return;
     }
     startPaid.mutate();
@@ -438,9 +438,22 @@ export function SpinHuntHub() {
             {available > 0
               ? "Tap center Spin to start a free hunt"
               : isFreePlay
-                ? "No spins left — buy packs or Spin Capacity in the tester shop"
+                ? "No spins left — refill to keep testing"
                 : `No free spins — entry ${feeLabel} via SpinEconomy`}
           </p>
+
+          {isFreePlay && available <= 0 && (
+            <button
+              type="button"
+              onClick={() => refillSpins.mutate()}
+              disabled={refillSpins.isPending}
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border-4 border-black bg-[#FBBF24] py-3.5 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)]"
+            >
+              <RotateCcw className="h-4 w-4" strokeWidth={2.5} />
+              {refillSpins.isPending ? "Refilling…" : "Try again"}
+            </button>
+          )}
+
           <SpinLoadoutPanel />
         </>
       )}
