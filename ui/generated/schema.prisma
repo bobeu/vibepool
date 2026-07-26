@@ -68,6 +68,7 @@ model UserProfile {
   seasonProgress         SeasonProgress[]
   bannerDismissals       BannerDismissal[]
   campaignTargets        CampaignTarget[]
+  skillBoostPayments     SkillBoostPayment[]
 
   @@index([wallet])
   @@index([status])
@@ -1536,6 +1537,25 @@ model ArenaAnalyticsMetric {
   recordedAt DateTime @default(now()) @db.Timestamp
 
   @@index([metricType, recordedAt])
+}
+
+/// Flat micro-fee to treasury (not a wager). Unlocks XP multipliers / relevance / points growth.
+model SkillBoostPayment {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @db.Uuid
+  txHash    String    @unique @db.VarChar(66)
+  asset     String    @db.VarChar(16)
+  amountWei String    @db.VarChar(78)
+  purpose   String    @db.VarChar(32)
+  matchId   String?   @db.Uuid
+  expiresAt DateTime? @db.Timestamp
+  verified  Boolean   @default(false)
+  createdAt DateTime  @default(now()) @db.Timestamp
+
+  user UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, purpose, expiresAt])
+  @@index([userId, verified, createdAt])
 }
 
 model Season {

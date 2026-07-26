@@ -9,8 +9,10 @@ export const GET = async (req: NextRequest) => {
   return authenticatedHandler(req, async (wallet) => {
     try {
       const home = await arenaService.getHome(wallet);
-      const queue = await arenaService.getQueueStatus(wallet);
-      const live = await arenaService.getLiveMatches(10);
+      const [queue, live] = await Promise.all([
+        arenaService.getQueueStatus(wallet).catch(() => ({ status: "IDLE" })),
+        arenaService.getLiveMatches(10).catch(() => []),
+      ]);
       return jsonResponse({ ...home, queue, live });
     } catch (error) {
       return apiError(error);

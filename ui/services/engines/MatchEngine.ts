@@ -12,7 +12,11 @@ export class MatchEngine implements IMatchEngine {
   }
 
   private async resolveId(wallet: string): Promise<string | null> {
-    const user = await prisma().userProfile.findUnique({ where: { wallet }, select: { id: true } });
+    const normalized = wallet.toLowerCase();
+    const user = await prisma().userProfile.findUnique({
+      where: { wallet: normalized },
+      select: { id: true },
+    });
     return user?.id ?? null;
   }
 
@@ -157,18 +161,36 @@ export class MatchEngine implements IMatchEngine {
       throw new Error("Unauthorized");
     }
 
+    const revealPredictions =
+      match.status === "COMPLETED" || match.status === "FINISHED" || match.status === "SETTLING";
+
+    // Pulse band hint (unique skill framing) — never reveals the exact target while playing.
+    const pulseBand =
+      match.targetValue != null
+        ? {
+            low: Math.max(1, Math.floor(match.targetValue * 0.7)),
+            high: Math.ceil(match.targetValue * 1.3),
+          }
+        : null;
+
     return {
       id: match.id,
       status: match.status,
       matchType: match.matchType,
       mode: match.mode,
-      targetValue: match.status === "COMPLETED" || match.status === "FINISHED" ? match.targetValue : null,
+      targetValue: revealPredictions ? match.targetValue : null,
+      pulseBand: match.status === "PLAYING" || match.status === "COUNTDOWN" ? pulseBand : null,
       inviteCode: match.inviteCode,
       participants: match.participants.map((p) => ({
         wallet: p.user.wallet,
         username: p.user.username,
         accepted: p.accepted,
-        prediction: p.prediction,
+        prediction:
+          revealPredictions || p.userId === userId
+            ? p.prediction
+            : p.prediction != null
+              ? -1
+              : null,
         score: p.score,
         outcome: p.outcome,
         ratingBefore: p.ratingBefore,

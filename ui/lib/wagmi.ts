@@ -1,12 +1,13 @@
 import { http } from "wagmi";
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
-import { celo } from "wagmi/chains";
+import { celo, celoSepolia } from "wagmi/chains";
 
 export const isMiniPay = (): boolean => {
   if (typeof window === "undefined") return false;
   return !!(window as Window & { ethereum?: { isMiniPay?: boolean } }).ethereum?.isMiniPay;
 };
 
+/** MiniPay = Celo mainnet; skill-fee treasury currently lives on Sepolia unless overridden. */
 export const wagmiConfig = getDefaultConfig({
   appName: "Nexora",
   projectId:
@@ -15,13 +16,16 @@ export const wagmiConfig = getDefaultConfig({
   appDescription: "Skill-based competitive Web3 gaming on Celo",
   appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3001",
   appIcon: "/logo.png",
-  chains: [celo],
+  chains: [celo, celoSepolia],
   ssr: true,
   multiInjectedProviderDiscovery: true,
   pollingInterval: 10_000,
   syncConnectedChain: true,
   transports: {
-    [celo.id]: http(process.env.NEXT_PUBLIC_ALCHEMY_CELO_MAINNET_API),
+    [celo.id]: http(process.env.NEXT_PUBLIC_ALCHEMY_CELO_MAINNET_API || "https://forno.celo.org"),
+    [celoSepolia.id]: http(
+      process.env.NEXT_PUBLIC_CELO_SEPOLIA_RPC || "https://forno.celo-sepolia.celo-testnet.org"
+    ),
   },
 });
 

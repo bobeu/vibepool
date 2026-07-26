@@ -41,6 +41,7 @@ smartContracts/broadcast/
 .vercel
 PROMPTS.md
 ARCHIVED_PROMPTS.md
+REPORT.md
 
 # playwright
 ui/test-results/

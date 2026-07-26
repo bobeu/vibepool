@@ -30,7 +30,11 @@ export class MatchmakingEngine implements IMatchmakingEngine {
   }
 
   private async resolveId(wallet: string): Promise<string | null> {
-    const user = await prisma().userProfile.findUnique({ where: { wallet }, select: { id: true } });
+    const normalized = wallet.toLowerCase();
+    const user = await prisma().userProfile.findUnique({
+      where: { wallet: normalized },
+      select: { id: true },
+    });
     return user?.id ?? null;
   }
 
@@ -44,11 +48,35 @@ export class MatchmakingEngine implements IMatchmakingEngine {
     return rating.skillRating;
   }
 
-  private async assertNoActiveQueue(userId: string): Promise<void> {
+  /** Cancel stale SEARCHING rows; if already MATCHED with a live match, resume it. */
+  private async clearOrResumeQueue(userId: string): Promise<Record<string, unknown> | null> {
+    await this.expireStaleQueues();
+
     const active = await prisma().arenaQueue.findFirst({
       where: { userId, status: { in: ["SEARCHING", "MATCHED", "ACCEPTED"] } },
+      include: { match: true },
+      orderBy: { createdAt: "desc" },
     });
-    if (active) throw new Error("Already in queue");
+    if (!active) return null;
+
+    if (
+      active.matchId &&
+      active.match &&
+      ["WAITING", "ACCEPTED", "COUNTDOWN", "PLAYING"].includes(active.match.status)
+    ) {
+      return {
+        matchId: active.matchId,
+        status: active.match.status,
+        resumed: true,
+      };
+    }
+
+    // Stale queue row — free the player to join again.
+    await prisma().arenaQueue.updateMany({
+      where: { userId, status: { in: ["SEARCHING", "MATCHED", "ACCEPTED"] } },
+      data: { status: "CANCELLED" },
+    });
+    return null;
   }
 
   async joinQueue(
@@ -60,8 +88,8 @@ export class MatchmakingEngine implements IMatchmakingEngine {
     const userId = await this.resolveId(wallet);
     if (!userId) throw new Error("User not found");
 
-    await this.assertNoActiveQueue(userId);
-    await this.expireStaleQueues();
+    const resumed = await this.clearOrResumeQueue(userId);
+    if (resumed) return resumed;
 
     const rating = await this.getOrCreateRating(userId);
     const expiresAt = new Date(Date.now() + QUEUE_TIMEOUT_MS);
@@ -201,7 +229,11 @@ export class MatchmakingEngine implements IMatchmakingEngine {
     friendWallet: string,
     matchType: string
   ): Promise<Record<string, unknown>> {
-    const receiver = await prisma().userProfile.findUnique({ where: { wallet: friendWallet }, select: { id: true } });
+    const normalizedFriend = friendWallet.toLowerCase();
+    const receiver = await prisma().userProfile.findUnique({
+      where: { wallet: normalizedFriend },
+      select: { id: true },
+    });
     if (!receiver) throw new Error("Friend not found");
 
     const friendship = await prisma().friendship.findFirst({
@@ -215,6 +247,7 @@ export class MatchmakingEngine implements IMatchmakingEngine {
         matchType: matchType as any,
         mode: "FRIEND_CHALLENGE",
         status: "WAITING",
+        inviteCode: code,
         expiresAt: new Date(Date.now() + MATCH_ACCEPT_TIMEOUT_MS),
         participants: { create: [{ userId: senderId, accepted: true }] },
       },
@@ -345,12 +378,31 @@ export class MatchmakingEngine implements IMatchmakingEngine {
     const userId = await this.resolveId(wallet);
     if (!userId) throw new Error("User not found");
 
-    await this.assertNoActiveQueue(userId);
+    const resumed = await this.clearOrResumeQueue(userId);
+    if (resumed) return resumed;
 
-    const match = await prisma().arenaMatch.findFirst({
-      where: { inviteCode, status: "WAITING" },
+    const code = inviteCode.trim().toUpperCase();
+
+    let match = await prisma().arenaMatch.findFirst({
+      where: { inviteCode: code, status: "WAITING" },
       include: { participants: true },
     });
+
+    // Friend challenges also store code on ArenaInvitation — resolve either path.
+    if (!match) {
+      const invitation = await prisma().arenaInvitation.findFirst({
+        where: { code, accepted: false, expiresAt: { gt: new Date() } },
+        include: { match: { include: { participants: true } } },
+      });
+      if (invitation?.match?.status === "WAITING") {
+        match = invitation.match;
+        await prisma().arenaInvitation.update({
+          where: { id: invitation.id },
+          data: { accepted: true },
+        });
+      }
+    }
+
     if (!match) throw new Error("Invalid or expired invite");
     if (match.participants.length >= 2) throw new Error("Match is full");
     if (match.participants.some((p) => p.userId === userId)) throw new Error("Already in match");
@@ -360,7 +412,7 @@ export class MatchmakingEngine implements IMatchmakingEngine {
       data: {
         userId,
         matchId: match.id,
-        mode: "INVITE_CODE",
+        mode: match.mode === "FRIEND_CHALLENGE" ? "FRIEND_CHALLENGE" : "INVITE_CODE",
         matchType: match.matchType,
         status: "MATCHED",
         expiresAt: match.expiresAt,

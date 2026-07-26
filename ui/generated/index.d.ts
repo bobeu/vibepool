@@ -319,6 +319,11 @@ export type ArenaStateMachineDefinition = $Result.DefaultSelection<Prisma.$Arena
  */
 export type ArenaAnalyticsMetric = $Result.DefaultSelection<Prisma.$ArenaAnalyticsMetricPayload>
 /**
+ * Model SkillBoostPayment
+ * Flat micro-fee to treasury (not a wager). Unlocks XP multipliers / relevance / points growth.
+ */
+export type SkillBoostPayment = $Result.DefaultSelection<Prisma.$SkillBoostPaymentPayload>
+/**
  * Model Season
  * 
  */
@@ -2100,6 +2105,16 @@ export class PrismaClient<
   get arenaAnalyticsMetric(): Prisma.ArenaAnalyticsMetricDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.skillBoostPayment`: Exposes CRUD operations for the **SkillBoostPayment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SkillBoostPayments
+    * const skillBoostPayments = await prisma.skillBoostPayment.findMany()
+    * ```
+    */
+  get skillBoostPayment(): Prisma.SkillBoostPaymentDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.season`: Exposes CRUD operations for the **Season** model.
     * Example usage:
     * ```ts
@@ -2933,6 +2948,7 @@ export namespace Prisma {
     ArenaPresence: 'ArenaPresence',
     ArenaStateMachineDefinition: 'ArenaStateMachineDefinition',
     ArenaAnalyticsMetric: 'ArenaAnalyticsMetric',
+    SkillBoostPayment: 'SkillBoostPayment',
     Season: 'Season',
     SeasonTier: 'SeasonTier',
     SeasonReward: 'SeasonReward',
@@ -2982,7 +2998,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "userProfile" | "tournament" | "prediction" | "dailyMission" | "userMission" | "missionReward" | "spinLedger" | "rewardLedger" | "activity" | "leaderboardSnapshot" | "notification" | "settings" | "gameExecution" | "pendingReward" | "auditLog" | "session" | "refreshToken" | "playerStatistic" | "notificationPreference" | "achievement" | "achievementRule" | "achievementRuleGroup" | "userAchievement" | "badge" | "title" | "avatarFrame" | "playerIdentity" | "playerIdentityVersion" | "progressSnapshot" | "unlockAnimation" | "rateLimitEntry" | "domainEvent" | "spinReward" | "spinHistory" | "rewardClaim" | "rewardQueue" | "rewardSourceCatalog" | "friendRequest" | "friendship" | "referral" | "referralReward" | "inviteCode" | "communityPost" | "feedItem" | "presence" | "presenceSession" | "referralFraudSignal" | "playerRelationship" | "socialSettings" | "arena" | "arenaMatch" | "arenaQueue" | "arenaInvitation" | "matchParticipant" | "arenaResult" | "arenaReplay" | "arenaRating" | "arenaSeasonStatistic" | "arenaPresence" | "arenaStateMachineDefinition" | "arenaAnalyticsMetric" | "season" | "seasonTier" | "seasonReward" | "seasonMission" | "seasonLeaderboard" | "seasonProgress" | "liveEvent" | "featureFlag" | "contentBlock" | "banner" | "bannerDismissal" | "announcementSchedule" | "campaign" | "campaignVersion" | "campaignTarget" | "scheduledJob" | "scheduledJobDependency" | "moderationReport" | "adminSession" | "adminPermission" | "metricSeries" | "telemetryEvent" | "alertRule" | "alertIncident" | "insight" | "dashboardSnapshot" | "systemHealth" | "serviceDependency" | "traceSpan" | "auditIntegrity" | "experimentResult" | "featureFlagVersion" | "adminPolicy" | "schedulerMetric"
+      modelProps: "userProfile" | "tournament" | "prediction" | "dailyMission" | "userMission" | "missionReward" | "spinLedger" | "rewardLedger" | "activity" | "leaderboardSnapshot" | "notification" | "settings" | "gameExecution" | "pendingReward" | "auditLog" | "session" | "refreshToken" | "playerStatistic" | "notificationPreference" | "achievement" | "achievementRule" | "achievementRuleGroup" | "userAchievement" | "badge" | "title" | "avatarFrame" | "playerIdentity" | "playerIdentityVersion" | "progressSnapshot" | "unlockAnimation" | "rateLimitEntry" | "domainEvent" | "spinReward" | "spinHistory" | "rewardClaim" | "rewardQueue" | "rewardSourceCatalog" | "friendRequest" | "friendship" | "referral" | "referralReward" | "inviteCode" | "communityPost" | "feedItem" | "presence" | "presenceSession" | "referralFraudSignal" | "playerRelationship" | "socialSettings" | "arena" | "arenaMatch" | "arenaQueue" | "arenaInvitation" | "matchParticipant" | "arenaResult" | "arenaReplay" | "arenaRating" | "arenaSeasonStatistic" | "arenaPresence" | "arenaStateMachineDefinition" | "arenaAnalyticsMetric" | "skillBoostPayment" | "season" | "seasonTier" | "seasonReward" | "seasonMission" | "seasonLeaderboard" | "seasonProgress" | "liveEvent" | "featureFlag" | "contentBlock" | "banner" | "bannerDismissal" | "announcementSchedule" | "campaign" | "campaignVersion" | "campaignTarget" | "scheduledJob" | "scheduledJobDependency" | "moderationReport" | "adminSession" | "adminPermission" | "metricSeries" | "telemetryEvent" | "alertRule" | "alertIncident" | "insight" | "dashboardSnapshot" | "systemHealth" | "serviceDependency" | "traceSpan" | "auditIntegrity" | "experimentResult" | "featureFlagVersion" | "adminPolicy" | "schedulerMetric"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -7500,6 +7516,80 @@ export namespace Prisma {
           }
         }
       }
+      SkillBoostPayment: {
+        payload: Prisma.$SkillBoostPaymentPayload<ExtArgs>
+        fields: Prisma.SkillBoostPaymentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SkillBoostPaymentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillBoostPaymentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SkillBoostPaymentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillBoostPaymentPayload>
+          }
+          findFirst: {
+            args: Prisma.SkillBoostPaymentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillBoostPaymentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SkillBoostPaymentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillBoostPaymentPayload>
+          }
+          findMany: {
+            args: Prisma.SkillBoostPaymentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillBoostPaymentPayload>[]
+          }
+          create: {
+            args: Prisma.SkillBoostPaymentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillBoostPaymentPayload>
+          }
+          createMany: {
+            args: Prisma.SkillBoostPaymentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SkillBoostPaymentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillBoostPaymentPayload>[]
+          }
+          delete: {
+            args: Prisma.SkillBoostPaymentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillBoostPaymentPayload>
+          }
+          update: {
+            args: Prisma.SkillBoostPaymentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillBoostPaymentPayload>
+          }
+          deleteMany: {
+            args: Prisma.SkillBoostPaymentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SkillBoostPaymentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SkillBoostPaymentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillBoostPaymentPayload>[]
+          }
+          upsert: {
+            args: Prisma.SkillBoostPaymentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SkillBoostPaymentPayload>
+          }
+          aggregate: {
+            args: Prisma.SkillBoostPaymentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSkillBoostPayment>
+          }
+          groupBy: {
+            args: Prisma.SkillBoostPaymentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SkillBoostPaymentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SkillBoostPaymentCountArgs<ExtArgs>
+            result: $Utils.Optional<SkillBoostPaymentCountAggregateOutputType> | number
+          }
+        }
+      }
       Season: {
         payload: Prisma.$SeasonPayload<ExtArgs>
         fields: Prisma.SeasonFieldRefs
@@ -10185,6 +10275,7 @@ export namespace Prisma {
     arenaPresence?: ArenaPresenceOmit
     arenaStateMachineDefinition?: ArenaStateMachineDefinitionOmit
     arenaAnalyticsMetric?: ArenaAnalyticsMetricOmit
+    skillBoostPayment?: SkillBoostPaymentOmit
     season?: SeasonOmit
     seasonTier?: SeasonTierOmit
     seasonReward?: SeasonRewardOmit
@@ -10338,6 +10429,7 @@ export namespace Prisma {
     seasonProgress: number
     bannerDismissals: number
     campaignTargets: number
+    skillBoostPayments: number
   }
 
   export type UserProfileCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10380,6 +10472,7 @@ export namespace Prisma {
     seasonProgress?: boolean | UserProfileCountOutputTypeCountSeasonProgressArgs
     bannerDismissals?: boolean | UserProfileCountOutputTypeCountBannerDismissalsArgs
     campaignTargets?: boolean | UserProfileCountOutputTypeCountCampaignTargetsArgs
+    skillBoostPayments?: boolean | UserProfileCountOutputTypeCountSkillBoostPaymentsArgs
   }
 
   // Custom InputTypes
@@ -10664,6 +10757,13 @@ export namespace Prisma {
    */
   export type UserProfileCountOutputTypeCountCampaignTargetsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CampaignTargetWhereInput
+  }
+
+  /**
+   * UserProfileCountOutputType without action
+   */
+  export type UserProfileCountOutputTypeCountSkillBoostPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SkillBoostPaymentWhereInput
   }
 
 
@@ -11614,6 +11714,7 @@ export namespace Prisma {
     seasonProgress?: boolean | UserProfile$seasonProgressArgs<ExtArgs>
     bannerDismissals?: boolean | UserProfile$bannerDismissalsArgs<ExtArgs>
     campaignTargets?: boolean | UserProfile$campaignTargetsArgs<ExtArgs>
+    skillBoostPayments?: boolean | UserProfile$skillBoostPaymentsArgs<ExtArgs>
     _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["userProfile"]>
 
@@ -11718,6 +11819,7 @@ export namespace Prisma {
     seasonProgress?: boolean | UserProfile$seasonProgressArgs<ExtArgs>
     bannerDismissals?: boolean | UserProfile$bannerDismissalsArgs<ExtArgs>
     campaignTargets?: boolean | UserProfile$campaignTargetsArgs<ExtArgs>
+    skillBoostPayments?: boolean | UserProfile$skillBoostPaymentsArgs<ExtArgs>
     _count?: boolean | UserProfileCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserProfileIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -11768,6 +11870,7 @@ export namespace Prisma {
       seasonProgress: Prisma.$SeasonProgressPayload<ExtArgs>[]
       bannerDismissals: Prisma.$BannerDismissalPayload<ExtArgs>[]
       campaignTargets: Prisma.$CampaignTargetPayload<ExtArgs>[]
+      skillBoostPayments: Prisma.$SkillBoostPaymentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -12222,6 +12325,7 @@ export namespace Prisma {
     seasonProgress<T extends UserProfile$seasonProgressArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$seasonProgressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeasonProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bannerDismissals<T extends UserProfile$bannerDismissalsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$bannerDismissalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BannerDismissalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     campaignTargets<T extends UserProfile$campaignTargetsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$campaignTargetsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignTargetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    skillBoostPayments<T extends UserProfile$skillBoostPaymentsArgs<ExtArgs> = {}>(args?: Subset<T, UserProfile$skillBoostPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SkillBoostPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13650,6 +13754,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CampaignTargetScalarFieldEnum | CampaignTargetScalarFieldEnum[]
+  }
+
+  /**
+   * UserProfile.skillBoostPayments
+   */
+  export type UserProfile$skillBoostPaymentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SkillBoostPayment
+     */
+    select?: SkillBoostPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SkillBoostPayment
+     */
+    omit?: SkillBoostPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillBoostPaymentInclude<ExtArgs> | null
+    where?: SkillBoostPaymentWhereInput
+    orderBy?: SkillBoostPaymentOrderByWithRelationInput | SkillBoostPaymentOrderByWithRelationInput[]
+    cursor?: SkillBoostPaymentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SkillBoostPaymentScalarFieldEnum | SkillBoostPaymentScalarFieldEnum[]
   }
 
   /**
@@ -82036,6 +82164,1134 @@ export namespace Prisma {
 
 
   /**
+   * Model SkillBoostPayment
+   */
+
+  export type AggregateSkillBoostPayment = {
+    _count: SkillBoostPaymentCountAggregateOutputType | null
+    _min: SkillBoostPaymentMinAggregateOutputType | null
+    _max: SkillBoostPaymentMaxAggregateOutputType | null
+  }
+
+  export type SkillBoostPaymentMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    txHash: string | null
+    asset: string | null
+    amountWei: string | null
+    purpose: string | null
+    matchId: string | null
+    expiresAt: Date | null
+    verified: boolean | null
+    createdAt: Date | null
+  }
+
+  export type SkillBoostPaymentMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    txHash: string | null
+    asset: string | null
+    amountWei: string | null
+    purpose: string | null
+    matchId: string | null
+    expiresAt: Date | null
+    verified: boolean | null
+    createdAt: Date | null
+  }
+
+  export type SkillBoostPaymentCountAggregateOutputType = {
+    id: number
+    userId: number
+    txHash: number
+    asset: number
+    amountWei: number
+    purpose: number
+    matchId: number
+    expiresAt: number
+    verified: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SkillBoostPaymentMinAggregateInputType = {
+    id?: true
+    userId?: true
+    txHash?: true
+    asset?: true
+    amountWei?: true
+    purpose?: true
+    matchId?: true
+    expiresAt?: true
+    verified?: true
+    createdAt?: true
+  }
+
+  export type SkillBoostPaymentMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    txHash?: true
+    asset?: true
+    amountWei?: true
+    purpose?: true
+    matchId?: true
+    expiresAt?: true
+    verified?: true
+    createdAt?: true
+  }
+
+  export type SkillBoostPaymentCountAggregateInputType = {
+    id?: true
+    userId?: true
+    txHash?: true
+    asset?: true
+    amountWei?: true
+    purpose?: true
+    matchId?: true
+    expiresAt?: true
+    verified?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SkillBoostPaymentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SkillBoostPayment to aggregate.
+     */
+    where?: SkillBoostPaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SkillBoostPayments to fetch.
+     */
+    orderBy?: SkillBoostPaymentOrderByWithRelationInput | SkillBoostPaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SkillBoostPaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SkillBoostPayments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SkillBoostPayments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SkillBoostPayments
+    **/
+    _count?: true | SkillBoostPaymentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SkillBoostPaymentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SkillBoostPaymentMaxAggregateInputType
+  }
+
+  export type GetSkillBoostPaymentAggregateType<T extends SkillBoostPaymentAggregateArgs> = {
+        [P in keyof T & keyof AggregateSkillBoostPayment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSkillBoostPayment[P]>
+      : GetScalarType<T[P], AggregateSkillBoostPayment[P]>
+  }
+
+
+
+
+  export type SkillBoostPaymentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SkillBoostPaymentWhereInput
+    orderBy?: SkillBoostPaymentOrderByWithAggregationInput | SkillBoostPaymentOrderByWithAggregationInput[]
+    by: SkillBoostPaymentScalarFieldEnum[] | SkillBoostPaymentScalarFieldEnum
+    having?: SkillBoostPaymentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SkillBoostPaymentCountAggregateInputType | true
+    _min?: SkillBoostPaymentMinAggregateInputType
+    _max?: SkillBoostPaymentMaxAggregateInputType
+  }
+
+  export type SkillBoostPaymentGroupByOutputType = {
+    id: string
+    userId: string
+    txHash: string
+    asset: string
+    amountWei: string
+    purpose: string
+    matchId: string | null
+    expiresAt: Date | null
+    verified: boolean
+    createdAt: Date
+    _count: SkillBoostPaymentCountAggregateOutputType | null
+    _min: SkillBoostPaymentMinAggregateOutputType | null
+    _max: SkillBoostPaymentMaxAggregateOutputType | null
+  }
+
+  type GetSkillBoostPaymentGroupByPayload<T extends SkillBoostPaymentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SkillBoostPaymentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SkillBoostPaymentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SkillBoostPaymentGroupByOutputType[P]>
+            : GetScalarType<T[P], SkillBoostPaymentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SkillBoostPaymentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    txHash?: boolean
+    asset?: boolean
+    amountWei?: boolean
+    purpose?: boolean
+    matchId?: boolean
+    expiresAt?: boolean
+    verified?: boolean
+    createdAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["skillBoostPayment"]>
+
+  export type SkillBoostPaymentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    txHash?: boolean
+    asset?: boolean
+    amountWei?: boolean
+    purpose?: boolean
+    matchId?: boolean
+    expiresAt?: boolean
+    verified?: boolean
+    createdAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["skillBoostPayment"]>
+
+  export type SkillBoostPaymentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    txHash?: boolean
+    asset?: boolean
+    amountWei?: boolean
+    purpose?: boolean
+    matchId?: boolean
+    expiresAt?: boolean
+    verified?: boolean
+    createdAt?: boolean
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["skillBoostPayment"]>
+
+  export type SkillBoostPaymentSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    txHash?: boolean
+    asset?: boolean
+    amountWei?: boolean
+    purpose?: boolean
+    matchId?: boolean
+    expiresAt?: boolean
+    verified?: boolean
+    createdAt?: boolean
+  }
+
+  export type SkillBoostPaymentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "txHash" | "asset" | "amountWei" | "purpose" | "matchId" | "expiresAt" | "verified" | "createdAt", ExtArgs["result"]["skillBoostPayment"]>
+  export type SkillBoostPaymentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }
+  export type SkillBoostPaymentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }
+  export type SkillBoostPaymentIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $SkillBoostPaymentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SkillBoostPayment"
+    objects: {
+      user: Prisma.$UserProfilePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      txHash: string
+      asset: string
+      amountWei: string
+      purpose: string
+      matchId: string | null
+      expiresAt: Date | null
+      verified: boolean
+      createdAt: Date
+    }, ExtArgs["result"]["skillBoostPayment"]>
+    composites: {}
+  }
+
+  type SkillBoostPaymentGetPayload<S extends boolean | null | undefined | SkillBoostPaymentDefaultArgs> = $Result.GetResult<Prisma.$SkillBoostPaymentPayload, S>
+
+  type SkillBoostPaymentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SkillBoostPaymentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SkillBoostPaymentCountAggregateInputType | true
+    }
+
+  export interface SkillBoostPaymentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SkillBoostPayment'], meta: { name: 'SkillBoostPayment' } }
+    /**
+     * Find zero or one SkillBoostPayment that matches the filter.
+     * @param {SkillBoostPaymentFindUniqueArgs} args - Arguments to find a SkillBoostPayment
+     * @example
+     * // Get one SkillBoostPayment
+     * const skillBoostPayment = await prisma.skillBoostPayment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SkillBoostPaymentFindUniqueArgs>(args: SelectSubset<T, SkillBoostPaymentFindUniqueArgs<ExtArgs>>): Prisma__SkillBoostPaymentClient<$Result.GetResult<Prisma.$SkillBoostPaymentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SkillBoostPayment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SkillBoostPaymentFindUniqueOrThrowArgs} args - Arguments to find a SkillBoostPayment
+     * @example
+     * // Get one SkillBoostPayment
+     * const skillBoostPayment = await prisma.skillBoostPayment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SkillBoostPaymentFindUniqueOrThrowArgs>(args: SelectSubset<T, SkillBoostPaymentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SkillBoostPaymentClient<$Result.GetResult<Prisma.$SkillBoostPaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SkillBoostPayment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillBoostPaymentFindFirstArgs} args - Arguments to find a SkillBoostPayment
+     * @example
+     * // Get one SkillBoostPayment
+     * const skillBoostPayment = await prisma.skillBoostPayment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SkillBoostPaymentFindFirstArgs>(args?: SelectSubset<T, SkillBoostPaymentFindFirstArgs<ExtArgs>>): Prisma__SkillBoostPaymentClient<$Result.GetResult<Prisma.$SkillBoostPaymentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SkillBoostPayment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillBoostPaymentFindFirstOrThrowArgs} args - Arguments to find a SkillBoostPayment
+     * @example
+     * // Get one SkillBoostPayment
+     * const skillBoostPayment = await prisma.skillBoostPayment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SkillBoostPaymentFindFirstOrThrowArgs>(args?: SelectSubset<T, SkillBoostPaymentFindFirstOrThrowArgs<ExtArgs>>): Prisma__SkillBoostPaymentClient<$Result.GetResult<Prisma.$SkillBoostPaymentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SkillBoostPayments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillBoostPaymentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SkillBoostPayments
+     * const skillBoostPayments = await prisma.skillBoostPayment.findMany()
+     * 
+     * // Get first 10 SkillBoostPayments
+     * const skillBoostPayments = await prisma.skillBoostPayment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const skillBoostPaymentWithIdOnly = await prisma.skillBoostPayment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SkillBoostPaymentFindManyArgs>(args?: SelectSubset<T, SkillBoostPaymentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SkillBoostPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SkillBoostPayment.
+     * @param {SkillBoostPaymentCreateArgs} args - Arguments to create a SkillBoostPayment.
+     * @example
+     * // Create one SkillBoostPayment
+     * const SkillBoostPayment = await prisma.skillBoostPayment.create({
+     *   data: {
+     *     // ... data to create a SkillBoostPayment
+     *   }
+     * })
+     * 
+     */
+    create<T extends SkillBoostPaymentCreateArgs>(args: SelectSubset<T, SkillBoostPaymentCreateArgs<ExtArgs>>): Prisma__SkillBoostPaymentClient<$Result.GetResult<Prisma.$SkillBoostPaymentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SkillBoostPayments.
+     * @param {SkillBoostPaymentCreateManyArgs} args - Arguments to create many SkillBoostPayments.
+     * @example
+     * // Create many SkillBoostPayments
+     * const skillBoostPayment = await prisma.skillBoostPayment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SkillBoostPaymentCreateManyArgs>(args?: SelectSubset<T, SkillBoostPaymentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SkillBoostPayments and returns the data saved in the database.
+     * @param {SkillBoostPaymentCreateManyAndReturnArgs} args - Arguments to create many SkillBoostPayments.
+     * @example
+     * // Create many SkillBoostPayments
+     * const skillBoostPayment = await prisma.skillBoostPayment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SkillBoostPayments and only return the `id`
+     * const skillBoostPaymentWithIdOnly = await prisma.skillBoostPayment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SkillBoostPaymentCreateManyAndReturnArgs>(args?: SelectSubset<T, SkillBoostPaymentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SkillBoostPaymentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SkillBoostPayment.
+     * @param {SkillBoostPaymentDeleteArgs} args - Arguments to delete one SkillBoostPayment.
+     * @example
+     * // Delete one SkillBoostPayment
+     * const SkillBoostPayment = await prisma.skillBoostPayment.delete({
+     *   where: {
+     *     // ... filter to delete one SkillBoostPayment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SkillBoostPaymentDeleteArgs>(args: SelectSubset<T, SkillBoostPaymentDeleteArgs<ExtArgs>>): Prisma__SkillBoostPaymentClient<$Result.GetResult<Prisma.$SkillBoostPaymentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SkillBoostPayment.
+     * @param {SkillBoostPaymentUpdateArgs} args - Arguments to update one SkillBoostPayment.
+     * @example
+     * // Update one SkillBoostPayment
+     * const skillBoostPayment = await prisma.skillBoostPayment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SkillBoostPaymentUpdateArgs>(args: SelectSubset<T, SkillBoostPaymentUpdateArgs<ExtArgs>>): Prisma__SkillBoostPaymentClient<$Result.GetResult<Prisma.$SkillBoostPaymentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SkillBoostPayments.
+     * @param {SkillBoostPaymentDeleteManyArgs} args - Arguments to filter SkillBoostPayments to delete.
+     * @example
+     * // Delete a few SkillBoostPayments
+     * const { count } = await prisma.skillBoostPayment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SkillBoostPaymentDeleteManyArgs>(args?: SelectSubset<T, SkillBoostPaymentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SkillBoostPayments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillBoostPaymentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SkillBoostPayments
+     * const skillBoostPayment = await prisma.skillBoostPayment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SkillBoostPaymentUpdateManyArgs>(args: SelectSubset<T, SkillBoostPaymentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SkillBoostPayments and returns the data updated in the database.
+     * @param {SkillBoostPaymentUpdateManyAndReturnArgs} args - Arguments to update many SkillBoostPayments.
+     * @example
+     * // Update many SkillBoostPayments
+     * const skillBoostPayment = await prisma.skillBoostPayment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SkillBoostPayments and only return the `id`
+     * const skillBoostPaymentWithIdOnly = await prisma.skillBoostPayment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SkillBoostPaymentUpdateManyAndReturnArgs>(args: SelectSubset<T, SkillBoostPaymentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SkillBoostPaymentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SkillBoostPayment.
+     * @param {SkillBoostPaymentUpsertArgs} args - Arguments to update or create a SkillBoostPayment.
+     * @example
+     * // Update or create a SkillBoostPayment
+     * const skillBoostPayment = await prisma.skillBoostPayment.upsert({
+     *   create: {
+     *     // ... data to create a SkillBoostPayment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SkillBoostPayment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SkillBoostPaymentUpsertArgs>(args: SelectSubset<T, SkillBoostPaymentUpsertArgs<ExtArgs>>): Prisma__SkillBoostPaymentClient<$Result.GetResult<Prisma.$SkillBoostPaymentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SkillBoostPayments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillBoostPaymentCountArgs} args - Arguments to filter SkillBoostPayments to count.
+     * @example
+     * // Count the number of SkillBoostPayments
+     * const count = await prisma.skillBoostPayment.count({
+     *   where: {
+     *     // ... the filter for the SkillBoostPayments we want to count
+     *   }
+     * })
+    **/
+    count<T extends SkillBoostPaymentCountArgs>(
+      args?: Subset<T, SkillBoostPaymentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SkillBoostPaymentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SkillBoostPayment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillBoostPaymentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SkillBoostPaymentAggregateArgs>(args: Subset<T, SkillBoostPaymentAggregateArgs>): Prisma.PrismaPromise<GetSkillBoostPaymentAggregateType<T>>
+
+    /**
+     * Group by SkillBoostPayment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SkillBoostPaymentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SkillBoostPaymentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SkillBoostPaymentGroupByArgs['orderBy'] }
+        : { orderBy?: SkillBoostPaymentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SkillBoostPaymentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSkillBoostPaymentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SkillBoostPayment model
+   */
+  readonly fields: SkillBoostPaymentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SkillBoostPayment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SkillBoostPaymentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserProfileDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserProfileDefaultArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SkillBoostPayment model
+   */
+  interface SkillBoostPaymentFieldRefs {
+    readonly id: FieldRef<"SkillBoostPayment", 'String'>
+    readonly userId: FieldRef<"SkillBoostPayment", 'String'>
+    readonly txHash: FieldRef<"SkillBoostPayment", 'String'>
+    readonly asset: FieldRef<"SkillBoostPayment", 'String'>
+    readonly amountWei: FieldRef<"SkillBoostPayment", 'String'>
+    readonly purpose: FieldRef<"SkillBoostPayment", 'String'>
+    readonly matchId: FieldRef<"SkillBoostPayment", 'String'>
+    readonly expiresAt: FieldRef<"SkillBoostPayment", 'DateTime'>
+    readonly verified: FieldRef<"SkillBoostPayment", 'Boolean'>
+    readonly createdAt: FieldRef<"SkillBoostPayment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SkillBoostPayment findUnique
+   */
+  export type SkillBoostPaymentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SkillBoostPayment
+     */
+    select?: SkillBoostPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SkillBoostPayment
+     */
+    omit?: SkillBoostPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillBoostPaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which SkillBoostPayment to fetch.
+     */
+    where: SkillBoostPaymentWhereUniqueInput
+  }
+
+  /**
+   * SkillBoostPayment findUniqueOrThrow
+   */
+  export type SkillBoostPaymentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SkillBoostPayment
+     */
+    select?: SkillBoostPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SkillBoostPayment
+     */
+    omit?: SkillBoostPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillBoostPaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which SkillBoostPayment to fetch.
+     */
+    where: SkillBoostPaymentWhereUniqueInput
+  }
+
+  /**
+   * SkillBoostPayment findFirst
+   */
+  export type SkillBoostPaymentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SkillBoostPayment
+     */
+    select?: SkillBoostPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SkillBoostPayment
+     */
+    omit?: SkillBoostPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillBoostPaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which SkillBoostPayment to fetch.
+     */
+    where?: SkillBoostPaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SkillBoostPayments to fetch.
+     */
+    orderBy?: SkillBoostPaymentOrderByWithRelationInput | SkillBoostPaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SkillBoostPayments.
+     */
+    cursor?: SkillBoostPaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SkillBoostPayments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SkillBoostPayments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SkillBoostPayments.
+     */
+    distinct?: SkillBoostPaymentScalarFieldEnum | SkillBoostPaymentScalarFieldEnum[]
+  }
+
+  /**
+   * SkillBoostPayment findFirstOrThrow
+   */
+  export type SkillBoostPaymentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SkillBoostPayment
+     */
+    select?: SkillBoostPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SkillBoostPayment
+     */
+    omit?: SkillBoostPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillBoostPaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which SkillBoostPayment to fetch.
+     */
+    where?: SkillBoostPaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SkillBoostPayments to fetch.
+     */
+    orderBy?: SkillBoostPaymentOrderByWithRelationInput | SkillBoostPaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SkillBoostPayments.
+     */
+    cursor?: SkillBoostPaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SkillBoostPayments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SkillBoostPayments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SkillBoostPayments.
+     */
+    distinct?: SkillBoostPaymentScalarFieldEnum | SkillBoostPaymentScalarFieldEnum[]
+  }
+
+  /**
+   * SkillBoostPayment findMany
+   */
+  export type SkillBoostPaymentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SkillBoostPayment
+     */
+    select?: SkillBoostPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SkillBoostPayment
+     */
+    omit?: SkillBoostPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillBoostPaymentInclude<ExtArgs> | null
+    /**
+     * Filter, which SkillBoostPayments to fetch.
+     */
+    where?: SkillBoostPaymentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SkillBoostPayments to fetch.
+     */
+    orderBy?: SkillBoostPaymentOrderByWithRelationInput | SkillBoostPaymentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SkillBoostPayments.
+     */
+    cursor?: SkillBoostPaymentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SkillBoostPayments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SkillBoostPayments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SkillBoostPayments.
+     */
+    distinct?: SkillBoostPaymentScalarFieldEnum | SkillBoostPaymentScalarFieldEnum[]
+  }
+
+  /**
+   * SkillBoostPayment create
+   */
+  export type SkillBoostPaymentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SkillBoostPayment
+     */
+    select?: SkillBoostPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SkillBoostPayment
+     */
+    omit?: SkillBoostPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillBoostPaymentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SkillBoostPayment.
+     */
+    data: XOR<SkillBoostPaymentCreateInput, SkillBoostPaymentUncheckedCreateInput>
+  }
+
+  /**
+   * SkillBoostPayment createMany
+   */
+  export type SkillBoostPaymentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SkillBoostPayments.
+     */
+    data: SkillBoostPaymentCreateManyInput | SkillBoostPaymentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SkillBoostPayment createManyAndReturn
+   */
+  export type SkillBoostPaymentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SkillBoostPayment
+     */
+    select?: SkillBoostPaymentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SkillBoostPayment
+     */
+    omit?: SkillBoostPaymentOmit<ExtArgs> | null
+    /**
+     * The data used to create many SkillBoostPayments.
+     */
+    data: SkillBoostPaymentCreateManyInput | SkillBoostPaymentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillBoostPaymentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SkillBoostPayment update
+   */
+  export type SkillBoostPaymentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SkillBoostPayment
+     */
+    select?: SkillBoostPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SkillBoostPayment
+     */
+    omit?: SkillBoostPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillBoostPaymentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SkillBoostPayment.
+     */
+    data: XOR<SkillBoostPaymentUpdateInput, SkillBoostPaymentUncheckedUpdateInput>
+    /**
+     * Choose, which SkillBoostPayment to update.
+     */
+    where: SkillBoostPaymentWhereUniqueInput
+  }
+
+  /**
+   * SkillBoostPayment updateMany
+   */
+  export type SkillBoostPaymentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SkillBoostPayments.
+     */
+    data: XOR<SkillBoostPaymentUpdateManyMutationInput, SkillBoostPaymentUncheckedUpdateManyInput>
+    /**
+     * Filter which SkillBoostPayments to update
+     */
+    where?: SkillBoostPaymentWhereInput
+    /**
+     * Limit how many SkillBoostPayments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SkillBoostPayment updateManyAndReturn
+   */
+  export type SkillBoostPaymentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SkillBoostPayment
+     */
+    select?: SkillBoostPaymentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SkillBoostPayment
+     */
+    omit?: SkillBoostPaymentOmit<ExtArgs> | null
+    /**
+     * The data used to update SkillBoostPayments.
+     */
+    data: XOR<SkillBoostPaymentUpdateManyMutationInput, SkillBoostPaymentUncheckedUpdateManyInput>
+    /**
+     * Filter which SkillBoostPayments to update
+     */
+    where?: SkillBoostPaymentWhereInput
+    /**
+     * Limit how many SkillBoostPayments to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillBoostPaymentIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SkillBoostPayment upsert
+   */
+  export type SkillBoostPaymentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SkillBoostPayment
+     */
+    select?: SkillBoostPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SkillBoostPayment
+     */
+    omit?: SkillBoostPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillBoostPaymentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SkillBoostPayment to update in case it exists.
+     */
+    where: SkillBoostPaymentWhereUniqueInput
+    /**
+     * In case the SkillBoostPayment found by the `where` argument doesn't exist, create a new SkillBoostPayment with this data.
+     */
+    create: XOR<SkillBoostPaymentCreateInput, SkillBoostPaymentUncheckedCreateInput>
+    /**
+     * In case the SkillBoostPayment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SkillBoostPaymentUpdateInput, SkillBoostPaymentUncheckedUpdateInput>
+  }
+
+  /**
+   * SkillBoostPayment delete
+   */
+  export type SkillBoostPaymentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SkillBoostPayment
+     */
+    select?: SkillBoostPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SkillBoostPayment
+     */
+    omit?: SkillBoostPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillBoostPaymentInclude<ExtArgs> | null
+    /**
+     * Filter which SkillBoostPayment to delete.
+     */
+    where: SkillBoostPaymentWhereUniqueInput
+  }
+
+  /**
+   * SkillBoostPayment deleteMany
+   */
+  export type SkillBoostPaymentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SkillBoostPayments to delete
+     */
+    where?: SkillBoostPaymentWhereInput
+    /**
+     * Limit how many SkillBoostPayments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SkillBoostPayment without action
+   */
+  export type SkillBoostPaymentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SkillBoostPayment
+     */
+    select?: SkillBoostPaymentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SkillBoostPayment
+     */
+    omit?: SkillBoostPaymentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SkillBoostPaymentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Season
    */
 
@@ -120570,6 +121826,22 @@ export namespace Prisma {
   export type ArenaAnalyticsMetricScalarFieldEnum = (typeof ArenaAnalyticsMetricScalarFieldEnum)[keyof typeof ArenaAnalyticsMetricScalarFieldEnum]
 
 
+  export const SkillBoostPaymentScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    txHash: 'txHash',
+    asset: 'asset',
+    amountWei: 'amountWei',
+    purpose: 'purpose',
+    matchId: 'matchId',
+    expiresAt: 'expiresAt',
+    verified: 'verified',
+    createdAt: 'createdAt'
+  };
+
+  export type SkillBoostPaymentScalarFieldEnum = (typeof SkillBoostPaymentScalarFieldEnum)[keyof typeof SkillBoostPaymentScalarFieldEnum]
+
+
   export const SeasonScalarFieldEnum: {
     id: 'id',
     number: 'number',
@@ -121978,6 +123250,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressListRelationFilter
     bannerDismissals?: BannerDismissalListRelationFilter
     campaignTargets?: CampaignTargetListRelationFilter
+    skillBoostPayments?: SkillBoostPaymentListRelationFilter
   }
 
   export type UserProfileOrderByWithRelationInput = {
@@ -122039,6 +123312,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressOrderByRelationAggregateInput
     bannerDismissals?: BannerDismissalOrderByRelationAggregateInput
     campaignTargets?: CampaignTargetOrderByRelationAggregateInput
+    skillBoostPayments?: SkillBoostPaymentOrderByRelationAggregateInput
   }
 
   export type UserProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -122103,6 +123377,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressListRelationFilter
     bannerDismissals?: BannerDismissalListRelationFilter
     campaignTargets?: CampaignTargetListRelationFilter
+    skillBoostPayments?: SkillBoostPaymentListRelationFilter
   }, "id" | "wallet">
 
   export type UserProfileOrderByWithAggregationInput = {
@@ -126834,6 +128109,86 @@ export namespace Prisma {
     recordedAt?: DateTimeWithAggregatesFilter<"ArenaAnalyticsMetric"> | Date | string
   }
 
+  export type SkillBoostPaymentWhereInput = {
+    AND?: SkillBoostPaymentWhereInput | SkillBoostPaymentWhereInput[]
+    OR?: SkillBoostPaymentWhereInput[]
+    NOT?: SkillBoostPaymentWhereInput | SkillBoostPaymentWhereInput[]
+    id?: UuidFilter<"SkillBoostPayment"> | string
+    userId?: UuidFilter<"SkillBoostPayment"> | string
+    txHash?: StringFilter<"SkillBoostPayment"> | string
+    asset?: StringFilter<"SkillBoostPayment"> | string
+    amountWei?: StringFilter<"SkillBoostPayment"> | string
+    purpose?: StringFilter<"SkillBoostPayment"> | string
+    matchId?: UuidNullableFilter<"SkillBoostPayment"> | string | null
+    expiresAt?: DateTimeNullableFilter<"SkillBoostPayment"> | Date | string | null
+    verified?: BoolFilter<"SkillBoostPayment"> | boolean
+    createdAt?: DateTimeFilter<"SkillBoostPayment"> | Date | string
+    user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+  }
+
+  export type SkillBoostPaymentOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    txHash?: SortOrder
+    asset?: SortOrder
+    amountWei?: SortOrder
+    purpose?: SortOrder
+    matchId?: SortOrderInput | SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    verified?: SortOrder
+    createdAt?: SortOrder
+    user?: UserProfileOrderByWithRelationInput
+  }
+
+  export type SkillBoostPaymentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    txHash?: string
+    AND?: SkillBoostPaymentWhereInput | SkillBoostPaymentWhereInput[]
+    OR?: SkillBoostPaymentWhereInput[]
+    NOT?: SkillBoostPaymentWhereInput | SkillBoostPaymentWhereInput[]
+    userId?: UuidFilter<"SkillBoostPayment"> | string
+    asset?: StringFilter<"SkillBoostPayment"> | string
+    amountWei?: StringFilter<"SkillBoostPayment"> | string
+    purpose?: StringFilter<"SkillBoostPayment"> | string
+    matchId?: UuidNullableFilter<"SkillBoostPayment"> | string | null
+    expiresAt?: DateTimeNullableFilter<"SkillBoostPayment"> | Date | string | null
+    verified?: BoolFilter<"SkillBoostPayment"> | boolean
+    createdAt?: DateTimeFilter<"SkillBoostPayment"> | Date | string
+    user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
+  }, "id" | "txHash">
+
+  export type SkillBoostPaymentOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    txHash?: SortOrder
+    asset?: SortOrder
+    amountWei?: SortOrder
+    purpose?: SortOrder
+    matchId?: SortOrderInput | SortOrder
+    expiresAt?: SortOrderInput | SortOrder
+    verified?: SortOrder
+    createdAt?: SortOrder
+    _count?: SkillBoostPaymentCountOrderByAggregateInput
+    _max?: SkillBoostPaymentMaxOrderByAggregateInput
+    _min?: SkillBoostPaymentMinOrderByAggregateInput
+  }
+
+  export type SkillBoostPaymentScalarWhereWithAggregatesInput = {
+    AND?: SkillBoostPaymentScalarWhereWithAggregatesInput | SkillBoostPaymentScalarWhereWithAggregatesInput[]
+    OR?: SkillBoostPaymentScalarWhereWithAggregatesInput[]
+    NOT?: SkillBoostPaymentScalarWhereWithAggregatesInput | SkillBoostPaymentScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"SkillBoostPayment"> | string
+    userId?: UuidWithAggregatesFilter<"SkillBoostPayment"> | string
+    txHash?: StringWithAggregatesFilter<"SkillBoostPayment"> | string
+    asset?: StringWithAggregatesFilter<"SkillBoostPayment"> | string
+    amountWei?: StringWithAggregatesFilter<"SkillBoostPayment"> | string
+    purpose?: StringWithAggregatesFilter<"SkillBoostPayment"> | string
+    matchId?: UuidNullableWithAggregatesFilter<"SkillBoostPayment"> | string | null
+    expiresAt?: DateTimeNullableWithAggregatesFilter<"SkillBoostPayment"> | Date | string | null
+    verified?: BoolWithAggregatesFilter<"SkillBoostPayment"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"SkillBoostPayment"> | Date | string
+  }
+
   export type SeasonWhereInput = {
     AND?: SeasonWhereInput | SeasonWhereInput[]
     OR?: SeasonWhereInput[]
@@ -129357,6 +130712,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateInput = {
@@ -129418,6 +130774,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUpdateInput = {
@@ -129479,6 +130836,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateInput = {
@@ -129540,6 +130898,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateManyInput = {
@@ -134712,6 +136071,96 @@ export namespace Prisma {
     recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SkillBoostPaymentCreateInput = {
+    id?: string
+    txHash: string
+    asset: string
+    amountWei: string
+    purpose: string
+    matchId?: string | null
+    expiresAt?: Date | string | null
+    verified?: boolean
+    createdAt?: Date | string
+    user: UserProfileCreateNestedOneWithoutSkillBoostPaymentsInput
+  }
+
+  export type SkillBoostPaymentUncheckedCreateInput = {
+    id?: string
+    userId: string
+    txHash: string
+    asset: string
+    amountWei: string
+    purpose: string
+    matchId?: string | null
+    expiresAt?: Date | string | null
+    verified?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SkillBoostPaymentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    purpose?: StringFieldUpdateOperationsInput | string
+    matchId?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserProfileUpdateOneRequiredWithoutSkillBoostPaymentsNestedInput
+  }
+
+  export type SkillBoostPaymentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    purpose?: StringFieldUpdateOperationsInput | string
+    matchId?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SkillBoostPaymentCreateManyInput = {
+    id?: string
+    userId: string
+    txHash: string
+    asset: string
+    amountWei: string
+    purpose: string
+    matchId?: string | null
+    expiresAt?: Date | string | null
+    verified?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SkillBoostPaymentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    purpose?: StringFieldUpdateOperationsInput | string
+    matchId?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SkillBoostPaymentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    purpose?: StringFieldUpdateOperationsInput | string
+    matchId?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SeasonCreateInput = {
     id?: string
     number: number
@@ -137735,6 +139184,12 @@ export namespace Prisma {
     none?: CampaignTargetWhereInput
   }
 
+  export type SkillBoostPaymentListRelationFilter = {
+    every?: SkillBoostPaymentWhereInput
+    some?: SkillBoostPaymentWhereInput
+    none?: SkillBoostPaymentWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -137869,6 +139324,10 @@ export namespace Prisma {
   }
 
   export type CampaignTargetOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type SkillBoostPaymentOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -141616,6 +143075,45 @@ export namespace Prisma {
     value?: SortOrder
   }
 
+  export type SkillBoostPaymentCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    txHash?: SortOrder
+    asset?: SortOrder
+    amountWei?: SortOrder
+    purpose?: SortOrder
+    matchId?: SortOrder
+    expiresAt?: SortOrder
+    verified?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SkillBoostPaymentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    txHash?: SortOrder
+    asset?: SortOrder
+    amountWei?: SortOrder
+    purpose?: SortOrder
+    matchId?: SortOrder
+    expiresAt?: SortOrder
+    verified?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SkillBoostPaymentMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    txHash?: SortOrder
+    asset?: SortOrder
+    amountWei?: SortOrder
+    purpose?: SortOrder
+    matchId?: SortOrder
+    expiresAt?: SortOrder
+    verified?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type EnumSeasonStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.SeasonStatus | EnumSeasonStatusFieldRefInput<$PrismaModel>
     in?: $Enums.SeasonStatus[] | ListEnumSeasonStatusFieldRefInput<$PrismaModel>
@@ -143639,6 +145137,13 @@ export namespace Prisma {
     connect?: CampaignTargetWhereUniqueInput | CampaignTargetWhereUniqueInput[]
   }
 
+  export type SkillBoostPaymentCreateNestedManyWithoutUserInput = {
+    create?: XOR<SkillBoostPaymentCreateWithoutUserInput, SkillBoostPaymentUncheckedCreateWithoutUserInput> | SkillBoostPaymentCreateWithoutUserInput[] | SkillBoostPaymentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SkillBoostPaymentCreateOrConnectWithoutUserInput | SkillBoostPaymentCreateOrConnectWithoutUserInput[]
+    createMany?: SkillBoostPaymentCreateManyUserInputEnvelope
+    connect?: SkillBoostPaymentWhereUniqueInput | SkillBoostPaymentWhereUniqueInput[]
+  }
+
   export type PredictionUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<PredictionCreateWithoutUserInput, PredictionUncheckedCreateWithoutUserInput> | PredictionCreateWithoutUserInput[] | PredictionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PredictionCreateOrConnectWithoutUserInput | PredictionCreateOrConnectWithoutUserInput[]
@@ -143928,6 +145433,13 @@ export namespace Prisma {
     connectOrCreate?: CampaignTargetCreateOrConnectWithoutUserInput | CampaignTargetCreateOrConnectWithoutUserInput[]
     createMany?: CampaignTargetCreateManyUserInputEnvelope
     connect?: CampaignTargetWhereUniqueInput | CampaignTargetWhereUniqueInput[]
+  }
+
+  export type SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<SkillBoostPaymentCreateWithoutUserInput, SkillBoostPaymentUncheckedCreateWithoutUserInput> | SkillBoostPaymentCreateWithoutUserInput[] | SkillBoostPaymentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SkillBoostPaymentCreateOrConnectWithoutUserInput | SkillBoostPaymentCreateOrConnectWithoutUserInput[]
+    createMany?: SkillBoostPaymentCreateManyUserInputEnvelope
+    connect?: SkillBoostPaymentWhereUniqueInput | SkillBoostPaymentWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -144542,6 +146054,20 @@ export namespace Prisma {
     deleteMany?: CampaignTargetScalarWhereInput | CampaignTargetScalarWhereInput[]
   }
 
+  export type SkillBoostPaymentUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SkillBoostPaymentCreateWithoutUserInput, SkillBoostPaymentUncheckedCreateWithoutUserInput> | SkillBoostPaymentCreateWithoutUserInput[] | SkillBoostPaymentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SkillBoostPaymentCreateOrConnectWithoutUserInput | SkillBoostPaymentCreateOrConnectWithoutUserInput[]
+    upsert?: SkillBoostPaymentUpsertWithWhereUniqueWithoutUserInput | SkillBoostPaymentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SkillBoostPaymentCreateManyUserInputEnvelope
+    set?: SkillBoostPaymentWhereUniqueInput | SkillBoostPaymentWhereUniqueInput[]
+    disconnect?: SkillBoostPaymentWhereUniqueInput | SkillBoostPaymentWhereUniqueInput[]
+    delete?: SkillBoostPaymentWhereUniqueInput | SkillBoostPaymentWhereUniqueInput[]
+    connect?: SkillBoostPaymentWhereUniqueInput | SkillBoostPaymentWhereUniqueInput[]
+    update?: SkillBoostPaymentUpdateWithWhereUniqueWithoutUserInput | SkillBoostPaymentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SkillBoostPaymentUpdateManyWithWhereWithoutUserInput | SkillBoostPaymentUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SkillBoostPaymentScalarWhereInput | SkillBoostPaymentScalarWhereInput[]
+  }
+
   export type PredictionUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<PredictionCreateWithoutUserInput, PredictionUncheckedCreateWithoutUserInput> | PredictionCreateWithoutUserInput[] | PredictionUncheckedCreateWithoutUserInput[]
     connectOrCreate?: PredictionCreateOrConnectWithoutUserInput | PredictionCreateOrConnectWithoutUserInput[]
@@ -145116,6 +146642,20 @@ export namespace Prisma {
     update?: CampaignTargetUpdateWithWhereUniqueWithoutUserInput | CampaignTargetUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: CampaignTargetUpdateManyWithWhereWithoutUserInput | CampaignTargetUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: CampaignTargetScalarWhereInput | CampaignTargetScalarWhereInput[]
+  }
+
+  export type SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<SkillBoostPaymentCreateWithoutUserInput, SkillBoostPaymentUncheckedCreateWithoutUserInput> | SkillBoostPaymentCreateWithoutUserInput[] | SkillBoostPaymentUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: SkillBoostPaymentCreateOrConnectWithoutUserInput | SkillBoostPaymentCreateOrConnectWithoutUserInput[]
+    upsert?: SkillBoostPaymentUpsertWithWhereUniqueWithoutUserInput | SkillBoostPaymentUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: SkillBoostPaymentCreateManyUserInputEnvelope
+    set?: SkillBoostPaymentWhereUniqueInput | SkillBoostPaymentWhereUniqueInput[]
+    disconnect?: SkillBoostPaymentWhereUniqueInput | SkillBoostPaymentWhereUniqueInput[]
+    delete?: SkillBoostPaymentWhereUniqueInput | SkillBoostPaymentWhereUniqueInput[]
+    connect?: SkillBoostPaymentWhereUniqueInput | SkillBoostPaymentWhereUniqueInput[]
+    update?: SkillBoostPaymentUpdateWithWhereUniqueWithoutUserInput | SkillBoostPaymentUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: SkillBoostPaymentUpdateManyWithWhereWithoutUserInput | SkillBoostPaymentUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: SkillBoostPaymentScalarWhereInput | SkillBoostPaymentScalarWhereInput[]
   }
 
   export type PredictionCreateNestedManyWithoutTournamentInput = {
@@ -146986,6 +148526,20 @@ export namespace Prisma {
     upsert?: UserProfileUpsertWithoutArenaPresenceInput
     connect?: UserProfileWhereUniqueInput
     update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutArenaPresenceInput, UserProfileUpdateWithoutArenaPresenceInput>, UserProfileUncheckedUpdateWithoutArenaPresenceInput>
+  }
+
+  export type UserProfileCreateNestedOneWithoutSkillBoostPaymentsInput = {
+    create?: XOR<UserProfileCreateWithoutSkillBoostPaymentsInput, UserProfileUncheckedCreateWithoutSkillBoostPaymentsInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutSkillBoostPaymentsInput
+    connect?: UserProfileWhereUniqueInput
+  }
+
+  export type UserProfileUpdateOneRequiredWithoutSkillBoostPaymentsNestedInput = {
+    create?: XOR<UserProfileCreateWithoutSkillBoostPaymentsInput, UserProfileUncheckedCreateWithoutSkillBoostPaymentsInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutSkillBoostPaymentsInput
+    upsert?: UserProfileUpsertWithoutSkillBoostPaymentsInput
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutSkillBoostPaymentsInput, UserProfileUpdateWithoutSkillBoostPaymentsInput>, UserProfileUncheckedUpdateWithoutSkillBoostPaymentsInput>
   }
 
   export type SeasonTierCreateNestedManyWithoutSeasonInput = {
@@ -150380,6 +151934,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type SkillBoostPaymentCreateWithoutUserInput = {
+    id?: string
+    txHash: string
+    asset: string
+    amountWei: string
+    purpose: string
+    matchId?: string | null
+    expiresAt?: Date | string | null
+    verified?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SkillBoostPaymentUncheckedCreateWithoutUserInput = {
+    id?: string
+    txHash: string
+    asset: string
+    amountWei: string
+    purpose: string
+    matchId?: string | null
+    expiresAt?: Date | string | null
+    verified?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SkillBoostPaymentCreateOrConnectWithoutUserInput = {
+    where: SkillBoostPaymentWhereUniqueInput
+    create: XOR<SkillBoostPaymentCreateWithoutUserInput, SkillBoostPaymentUncheckedCreateWithoutUserInput>
+  }
+
+  export type SkillBoostPaymentCreateManyUserInputEnvelope = {
+    data: SkillBoostPaymentCreateManyUserInput | SkillBoostPaymentCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PredictionUpsertWithWhereUniqueWithoutUserInput = {
     where: PredictionWhereUniqueInput
     update: XOR<PredictionUpdateWithoutUserInput, PredictionUncheckedUpdateWithoutUserInput>
@@ -151601,6 +153189,38 @@ export namespace Prisma {
     metadata?: JsonNullableFilter<"CampaignTarget">
   }
 
+  export type SkillBoostPaymentUpsertWithWhereUniqueWithoutUserInput = {
+    where: SkillBoostPaymentWhereUniqueInput
+    update: XOR<SkillBoostPaymentUpdateWithoutUserInput, SkillBoostPaymentUncheckedUpdateWithoutUserInput>
+    create: XOR<SkillBoostPaymentCreateWithoutUserInput, SkillBoostPaymentUncheckedCreateWithoutUserInput>
+  }
+
+  export type SkillBoostPaymentUpdateWithWhereUniqueWithoutUserInput = {
+    where: SkillBoostPaymentWhereUniqueInput
+    data: XOR<SkillBoostPaymentUpdateWithoutUserInput, SkillBoostPaymentUncheckedUpdateWithoutUserInput>
+  }
+
+  export type SkillBoostPaymentUpdateManyWithWhereWithoutUserInput = {
+    where: SkillBoostPaymentScalarWhereInput
+    data: XOR<SkillBoostPaymentUpdateManyMutationInput, SkillBoostPaymentUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type SkillBoostPaymentScalarWhereInput = {
+    AND?: SkillBoostPaymentScalarWhereInput | SkillBoostPaymentScalarWhereInput[]
+    OR?: SkillBoostPaymentScalarWhereInput[]
+    NOT?: SkillBoostPaymentScalarWhereInput | SkillBoostPaymentScalarWhereInput[]
+    id?: UuidFilter<"SkillBoostPayment"> | string
+    userId?: UuidFilter<"SkillBoostPayment"> | string
+    txHash?: StringFilter<"SkillBoostPayment"> | string
+    asset?: StringFilter<"SkillBoostPayment"> | string
+    amountWei?: StringFilter<"SkillBoostPayment"> | string
+    purpose?: StringFilter<"SkillBoostPayment"> | string
+    matchId?: UuidNullableFilter<"SkillBoostPayment"> | string | null
+    expiresAt?: DateTimeNullableFilter<"SkillBoostPayment"> | Date | string | null
+    verified?: BoolFilter<"SkillBoostPayment"> | boolean
+    createdAt?: DateTimeFilter<"SkillBoostPayment"> | Date | string
+  }
+
   export type PredictionCreateWithoutTournamentInput = {
     id?: string
     predictionValue: number
@@ -151928,6 +153548,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutPredictionsInput = {
@@ -151988,6 +153609,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutPredictionsInput = {
@@ -152115,6 +153737,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutPredictionsInput = {
@@ -152175,6 +153798,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserMissionCreateWithoutMissionInput = {
@@ -152344,6 +153968,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutUserMissionsInput = {
@@ -152404,6 +154029,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutUserMissionsInput = {
@@ -152523,6 +154149,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutUserMissionsInput = {
@@ -152583,6 +154210,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type DailyMissionUpsertWithoutUserMissionsInput = {
@@ -152784,6 +154412,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutSpinLedgersInput = {
@@ -152844,6 +154473,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutSpinLedgersInput = {
@@ -152920,6 +154550,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutSpinLedgersInput = {
@@ -152980,6 +154611,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutRewardLedgersInput = {
@@ -153040,6 +154672,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutRewardLedgersInput = {
@@ -153100,6 +154733,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutRewardLedgersInput = {
@@ -153176,6 +154810,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutRewardLedgersInput = {
@@ -153236,6 +154871,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutActivitiesInput = {
@@ -153296,6 +154932,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutActivitiesInput = {
@@ -153356,6 +154993,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutActivitiesInput = {
@@ -153432,6 +155070,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutActivitiesInput = {
@@ -153492,6 +155131,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutLeaderboardSnapshotsInput = {
@@ -153552,6 +155192,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutLeaderboardSnapshotsInput = {
@@ -153612,6 +155253,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutLeaderboardSnapshotsInput = {
@@ -153733,6 +155375,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutLeaderboardSnapshotsInput = {
@@ -153793,6 +155436,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TournamentUpsertWithoutLeaderboardSnapshotsInput = {
@@ -153904,6 +155548,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNotificationsInput = {
@@ -153964,6 +155609,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNotificationsInput = {
@@ -154040,6 +155686,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNotificationsInput = {
@@ -154100,6 +155747,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TournamentCreateWithoutExecutionsInput = {
@@ -154256,6 +155904,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutPendingRewardsInput = {
@@ -154316,6 +155965,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutPendingRewardsInput = {
@@ -154437,6 +156087,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutPendingRewardsInput = {
@@ -154497,6 +156148,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type TournamentUpsertWithoutPendingRewardsInput = {
@@ -154608,6 +156260,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutSessionsInput = {
@@ -154668,6 +156321,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutSessionsInput = {
@@ -154767,6 +156421,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutSessionsInput = {
@@ -154827,6 +156482,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type RefreshTokenUpsertWithoutSessionInput = {
@@ -154984,6 +156640,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutPlayerStatsInput = {
@@ -155044,6 +156701,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutPlayerStatsInput = {
@@ -155120,6 +156778,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutPlayerStatsInput = {
@@ -155180,6 +156839,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutNotificationPrefsInput = {
@@ -155240,6 +156900,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutNotificationPrefsInput = {
@@ -155300,6 +156961,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutNotificationPrefsInput = {
@@ -155376,6 +157038,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutNotificationPrefsInput = {
@@ -155436,6 +157099,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AchievementRuleCreateWithoutAchievementInput = {
@@ -155922,6 +157586,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutUserAchievementsInput = {
@@ -155982,6 +157647,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutUserAchievementsInput = {
@@ -156099,6 +157765,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutUserAchievementsInput = {
@@ -156159,6 +157826,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AchievementUpsertWithoutUserAchievementsInput = {
@@ -156266,6 +157934,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutPlayerIdentityInput = {
@@ -156326,6 +157995,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutPlayerIdentityInput = {
@@ -156438,6 +158108,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutPlayerIdentityInput = {
@@ -156498,6 +158169,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PlayerIdentityVersionUpsertWithWhereUniqueWithoutIdentityInput = {
@@ -156655,6 +158327,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutProgressSnapshotsInput = {
@@ -156715,6 +158388,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutProgressSnapshotsInput = {
@@ -156791,6 +158465,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutProgressSnapshotsInput = {
@@ -156851,6 +158526,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutUnlockAnimationsInput = {
@@ -156911,6 +158587,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutUnlockAnimationsInput = {
@@ -156971,6 +158648,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutUnlockAnimationsInput = {
@@ -157047,6 +158725,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutUnlockAnimationsInput = {
@@ -157107,6 +158786,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SpinHistoryCreateWithoutSpinRewardInput = {
@@ -157221,6 +158901,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutSpinHistoriesInput = {
@@ -157281,6 +158962,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutSpinHistoriesInput = {
@@ -157388,6 +159070,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutSpinHistoriesInput = {
@@ -157448,6 +159131,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SpinRewardUpsertWithoutSpinHistoriesInput = {
@@ -157545,6 +159229,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutRewardClaimsInput = {
@@ -157605,6 +159290,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutRewardClaimsInput = {
@@ -157681,6 +159367,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutRewardClaimsInput = {
@@ -157741,6 +159428,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutFriendRequestsSentInput = {
@@ -157801,6 +159489,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutFriendRequestsSentInput = {
@@ -157861,6 +159550,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutFriendRequestsSentInput = {
@@ -157926,6 +159616,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutFriendRequestsReceivedInput = {
@@ -157986,6 +159677,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutFriendRequestsReceivedInput = {
@@ -158062,6 +159754,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutFriendRequestsSentInput = {
@@ -158122,6 +159815,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUpsertWithoutFriendRequestsReceivedInput = {
@@ -158193,6 +159887,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutFriendRequestsReceivedInput = {
@@ -158253,6 +159948,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutFriendsAsUserInput = {
@@ -158313,6 +160009,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutFriendsAsUserInput = {
@@ -158373,6 +160070,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutFriendsAsUserInput = {
@@ -158438,6 +160136,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutFriendsAsFriendInput = {
@@ -158498,6 +160197,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutFriendsAsFriendInput = {
@@ -158574,6 +160274,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutFriendsAsUserInput = {
@@ -158634,6 +160335,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUpsertWithoutFriendsAsFriendInput = {
@@ -158705,6 +160407,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutFriendsAsFriendInput = {
@@ -158765,6 +160468,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutReferralsMadeInput = {
@@ -158825,6 +160529,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutReferralsMadeInput = {
@@ -158885,6 +160590,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutReferralsMadeInput = {
@@ -158950,6 +160656,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutReferralsReceivedInput = {
@@ -159010,6 +160717,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutReferralsReceivedInput = {
@@ -159142,6 +160850,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutReferralsMadeInput = {
@@ -159202,6 +160911,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUpsertWithoutReferralsReceivedInput = {
@@ -159273,6 +160983,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutReferralsReceivedInput = {
@@ -159333,6 +161044,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ReferralRewardUpsertWithWhereUniqueWithoutReferralInput = {
@@ -159531,6 +161243,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutInviteCodesInput = {
@@ -159591,6 +161304,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutInviteCodesInput = {
@@ -159667,6 +161381,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutInviteCodesInput = {
@@ -159727,6 +161442,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutCommunityPostsInput = {
@@ -159787,6 +161503,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutCommunityPostsInput = {
@@ -159847,6 +161564,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutCommunityPostsInput = {
@@ -159923,6 +161641,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutCommunityPostsInput = {
@@ -159983,6 +161702,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutFeedItemsOwnedInput = {
@@ -160043,6 +161763,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutFeedItemsOwnedInput = {
@@ -160103,6 +161824,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutFeedItemsOwnedInput = {
@@ -160168,6 +161890,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutFeedItemsActedInput = {
@@ -160228,6 +161951,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutFeedItemsActedInput = {
@@ -160304,6 +162028,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutFeedItemsOwnedInput = {
@@ -160364,6 +162089,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUpsertWithoutFeedItemsActedInput = {
@@ -160435,6 +162161,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutFeedItemsActedInput = {
@@ -160495,6 +162222,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutPresencesInput = {
@@ -160555,6 +162283,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutPresencesInput = {
@@ -160615,6 +162344,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutPresencesInput = {
@@ -160691,6 +162421,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutPresencesInput = {
@@ -160751,6 +162482,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutPresenceSessionsInput = {
@@ -160811,6 +162543,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutPresenceSessionsInput = {
@@ -160871,6 +162604,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutPresenceSessionsInput = {
@@ -160947,6 +162681,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutPresenceSessionsInput = {
@@ -161007,6 +162742,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ReferralCreateWithoutFraudSignalsInput = {
@@ -161147,6 +162883,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutRelationshipsInitiatedInput = {
@@ -161207,6 +162944,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutRelationshipsInitiatedInput = {
@@ -161272,6 +163010,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutRelationshipsTargetedInput = {
@@ -161332,6 +163071,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutRelationshipsTargetedInput = {
@@ -161408,6 +163148,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutRelationshipsInitiatedInput = {
@@ -161468,6 +163209,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUpsertWithoutRelationshipsTargetedInput = {
@@ -161539,6 +163281,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutRelationshipsTargetedInput = {
@@ -161599,6 +163342,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutSocialSettingsInput = {
@@ -161659,6 +163403,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutSocialSettingsInput = {
@@ -161719,6 +163464,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutSocialSettingsInput = {
@@ -161795,6 +163541,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutSocialSettingsInput = {
@@ -161855,6 +163602,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ArenaMatchCreateWithoutArenaInput = {
@@ -162330,6 +164078,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutArenaQueueEntriesInput = {
@@ -162390,6 +164139,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutArenaQueueEntriesInput = {
@@ -162511,6 +164261,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutArenaQueueEntriesInput = {
@@ -162571,6 +164322,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ArenaMatchUpsertWithoutQueueEntriesInput = {
@@ -162727,6 +164479,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutArenaInvitationsSentInput = {
@@ -162787,6 +164540,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutArenaInvitationsSentInput = {
@@ -162852,6 +164606,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutArenaInvitationsRecvInput = {
@@ -162912,6 +164667,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutArenaInvitationsRecvInput = {
@@ -163039,6 +164795,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutArenaInvitationsSentInput = {
@@ -163099,6 +164856,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUpsertWithoutArenaInvitationsRecvInput = {
@@ -163170,6 +164928,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutArenaInvitationsRecvInput = {
@@ -163230,6 +164989,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ArenaMatchCreateWithoutParticipantsInput = {
@@ -163335,6 +165095,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutMatchParticipantsInput = {
@@ -163395,6 +165156,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutMatchParticipantsInput = {
@@ -163522,6 +165284,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutMatchParticipantsInput = {
@@ -163582,6 +165345,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ArenaMatchCreateWithoutResultInput = {
@@ -163834,6 +165598,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutArenaRatingsInput = {
@@ -163894,6 +165659,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutArenaRatingsInput = {
@@ -163970,6 +165736,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutArenaRatingsInput = {
@@ -164030,6 +165797,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutArenaSeasonStatsInput = {
@@ -164090,6 +165858,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutArenaSeasonStatsInput = {
@@ -164150,6 +165919,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutArenaSeasonStatsInput = {
@@ -164226,6 +165996,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutArenaSeasonStatsInput = {
@@ -164286,6 +166057,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileCreateWithoutArenaPresenceInput = {
@@ -164346,6 +166118,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutArenaPresenceInput = {
@@ -164406,6 +166179,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutArenaPresenceInput = {
@@ -164482,6 +166256,7 @@ export namespace Prisma {
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutArenaPresenceInput = {
@@ -164538,6 +166313,267 @@ export namespace Prisma {
     matchParticipants?: MatchParticipantUncheckedUpdateManyWithoutUserNestedInput
     arenaInvitationsSent?: ArenaInvitationUncheckedUpdateManyWithoutSenderNestedInput
     arenaInvitationsRecv?: ArenaInvitationUncheckedUpdateManyWithoutReceiverNestedInput
+    arenaSeasonStats?: ArenaSeasonStatisticUncheckedUpdateManyWithoutUserNestedInput
+    seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
+    bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
+    campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileCreateWithoutSkillBoostPaymentsInput = {
+    id?: string
+    wallet: string
+    username?: string | null
+    avatar?: string | null
+    xp?: number
+    points?: number
+    spins?: number
+    level?: number
+    currentRank?: number | null
+    lastLogin?: Date | string | null
+    totalActivity?: number
+    currentStreak?: number
+    longestStreak?: number
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    predictions?: PredictionCreateNestedManyWithoutUserInput
+    userMissions?: UserMissionCreateNestedManyWithoutUserInput
+    spinLedgers?: SpinLedgerCreateNestedManyWithoutUserInput
+    rewardLedgers?: RewardLedgerCreateNestedManyWithoutUserInput
+    activities?: ActivityCreateNestedManyWithoutUserInput
+    leaderboardSnapshots?: LeaderboardSnapshotCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    pendingRewards?: PendingRewardCreateNestedManyWithoutUserInput
+    spinHistories?: SpinHistoryCreateNestedManyWithoutUserInput
+    rewardClaims?: RewardClaimCreateNestedManyWithoutUserInput
+    playerStats?: PlayerStatisticCreateNestedManyWithoutUserInput
+    notificationPrefs?: NotificationPreferenceCreateNestedManyWithoutUserInput
+    playerIdentity?: PlayerIdentityCreateNestedOneWithoutUserInput
+    userAchievements?: UserAchievementCreateNestedManyWithoutUserInput
+    progressSnapshots?: ProgressSnapshotCreateNestedManyWithoutUserInput
+    unlockAnimations?: UnlockAnimationCreateNestedManyWithoutUserInput
+    friendRequestsSent?: FriendRequestCreateNestedManyWithoutSenderInput
+    friendRequestsReceived?: FriendRequestCreateNestedManyWithoutReceiverInput
+    friendsAsUser?: FriendshipCreateNestedManyWithoutUserInput
+    friendsAsFriend?: FriendshipCreateNestedManyWithoutFriendInput
+    referralsMade?: ReferralCreateNestedManyWithoutReferrerInput
+    referralsReceived?: ReferralCreateNestedManyWithoutReferredInput
+    inviteCodes?: InviteCodeCreateNestedManyWithoutOwnerInput
+    communityPosts?: CommunityPostCreateNestedManyWithoutAuthorInput
+    feedItemsOwned?: FeedItemCreateNestedManyWithoutUserInput
+    feedItemsActed?: FeedItemCreateNestedManyWithoutActorInput
+    presences?: PresenceCreateNestedManyWithoutUserInput
+    presenceSessions?: PresenceSessionCreateNestedManyWithoutUserInput
+    relationshipsInitiated?: PlayerRelationshipCreateNestedManyWithoutInitiatorInput
+    relationshipsTargeted?: PlayerRelationshipCreateNestedManyWithoutTargetInput
+    socialSettings?: SocialSettingsCreateNestedOneWithoutUserInput
+    arenaRatings?: ArenaRatingCreateNestedManyWithoutUserInput
+    arenaQueueEntries?: ArenaQueueCreateNestedManyWithoutUserInput
+    matchParticipants?: MatchParticipantCreateNestedManyWithoutUserInput
+    arenaInvitationsSent?: ArenaInvitationCreateNestedManyWithoutSenderInput
+    arenaInvitationsRecv?: ArenaInvitationCreateNestedManyWithoutReceiverInput
+    arenaPresence?: ArenaPresenceCreateNestedOneWithoutUserInput
+    arenaSeasonStats?: ArenaSeasonStatisticCreateNestedManyWithoutUserInput
+    seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
+    bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
+    campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileUncheckedCreateWithoutSkillBoostPaymentsInput = {
+    id?: string
+    wallet: string
+    username?: string | null
+    avatar?: string | null
+    xp?: number
+    points?: number
+    spins?: number
+    level?: number
+    currentRank?: number | null
+    lastLogin?: Date | string | null
+    totalActivity?: number
+    currentStreak?: number
+    longestStreak?: number
+    status?: $Enums.UserStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    predictions?: PredictionUncheckedCreateNestedManyWithoutUserInput
+    userMissions?: UserMissionUncheckedCreateNestedManyWithoutUserInput
+    spinLedgers?: SpinLedgerUncheckedCreateNestedManyWithoutUserInput
+    rewardLedgers?: RewardLedgerUncheckedCreateNestedManyWithoutUserInput
+    activities?: ActivityUncheckedCreateNestedManyWithoutUserInput
+    leaderboardSnapshots?: LeaderboardSnapshotUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    pendingRewards?: PendingRewardUncheckedCreateNestedManyWithoutUserInput
+    spinHistories?: SpinHistoryUncheckedCreateNestedManyWithoutUserInput
+    rewardClaims?: RewardClaimUncheckedCreateNestedManyWithoutUserInput
+    playerStats?: PlayerStatisticUncheckedCreateNestedManyWithoutUserInput
+    notificationPrefs?: NotificationPreferenceUncheckedCreateNestedManyWithoutUserInput
+    playerIdentity?: PlayerIdentityUncheckedCreateNestedOneWithoutUserInput
+    userAchievements?: UserAchievementUncheckedCreateNestedManyWithoutUserInput
+    progressSnapshots?: ProgressSnapshotUncheckedCreateNestedManyWithoutUserInput
+    unlockAnimations?: UnlockAnimationUncheckedCreateNestedManyWithoutUserInput
+    friendRequestsSent?: FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+    friendRequestsReceived?: FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+    friendsAsUser?: FriendshipUncheckedCreateNestedManyWithoutUserInput
+    friendsAsFriend?: FriendshipUncheckedCreateNestedManyWithoutFriendInput
+    referralsMade?: ReferralUncheckedCreateNestedManyWithoutReferrerInput
+    referralsReceived?: ReferralUncheckedCreateNestedManyWithoutReferredInput
+    inviteCodes?: InviteCodeUncheckedCreateNestedManyWithoutOwnerInput
+    communityPosts?: CommunityPostUncheckedCreateNestedManyWithoutAuthorInput
+    feedItemsOwned?: FeedItemUncheckedCreateNestedManyWithoutUserInput
+    feedItemsActed?: FeedItemUncheckedCreateNestedManyWithoutActorInput
+    presences?: PresenceUncheckedCreateNestedManyWithoutUserInput
+    presenceSessions?: PresenceSessionUncheckedCreateNestedManyWithoutUserInput
+    relationshipsInitiated?: PlayerRelationshipUncheckedCreateNestedManyWithoutInitiatorInput
+    relationshipsTargeted?: PlayerRelationshipUncheckedCreateNestedManyWithoutTargetInput
+    socialSettings?: SocialSettingsUncheckedCreateNestedOneWithoutUserInput
+    arenaRatings?: ArenaRatingUncheckedCreateNestedManyWithoutUserInput
+    arenaQueueEntries?: ArenaQueueUncheckedCreateNestedManyWithoutUserInput
+    matchParticipants?: MatchParticipantUncheckedCreateNestedManyWithoutUserInput
+    arenaInvitationsSent?: ArenaInvitationUncheckedCreateNestedManyWithoutSenderInput
+    arenaInvitationsRecv?: ArenaInvitationUncheckedCreateNestedManyWithoutReceiverInput
+    arenaPresence?: ArenaPresenceUncheckedCreateNestedOneWithoutUserInput
+    arenaSeasonStats?: ArenaSeasonStatisticUncheckedCreateNestedManyWithoutUserInput
+    seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
+    bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
+    campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserProfileCreateOrConnectWithoutSkillBoostPaymentsInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutSkillBoostPaymentsInput, UserProfileUncheckedCreateWithoutSkillBoostPaymentsInput>
+  }
+
+  export type UserProfileUpsertWithoutSkillBoostPaymentsInput = {
+    update: XOR<UserProfileUpdateWithoutSkillBoostPaymentsInput, UserProfileUncheckedUpdateWithoutSkillBoostPaymentsInput>
+    create: XOR<UserProfileCreateWithoutSkillBoostPaymentsInput, UserProfileUncheckedCreateWithoutSkillBoostPaymentsInput>
+    where?: UserProfileWhereInput
+  }
+
+  export type UserProfileUpdateToOneWithWhereWithoutSkillBoostPaymentsInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutSkillBoostPaymentsInput, UserProfileUncheckedUpdateWithoutSkillBoostPaymentsInput>
+  }
+
+  export type UserProfileUpdateWithoutSkillBoostPaymentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    xp?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    spins?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    currentRank?: NullableIntFieldUpdateOperationsInput | number | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalActivity?: IntFieldUpdateOperationsInput | number
+    currentStreak?: IntFieldUpdateOperationsInput | number
+    longestStreak?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    predictions?: PredictionUpdateManyWithoutUserNestedInput
+    userMissions?: UserMissionUpdateManyWithoutUserNestedInput
+    spinLedgers?: SpinLedgerUpdateManyWithoutUserNestedInput
+    rewardLedgers?: RewardLedgerUpdateManyWithoutUserNestedInput
+    activities?: ActivityUpdateManyWithoutUserNestedInput
+    leaderboardSnapshots?: LeaderboardSnapshotUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    pendingRewards?: PendingRewardUpdateManyWithoutUserNestedInput
+    spinHistories?: SpinHistoryUpdateManyWithoutUserNestedInput
+    rewardClaims?: RewardClaimUpdateManyWithoutUserNestedInput
+    playerStats?: PlayerStatisticUpdateManyWithoutUserNestedInput
+    notificationPrefs?: NotificationPreferenceUpdateManyWithoutUserNestedInput
+    playerIdentity?: PlayerIdentityUpdateOneWithoutUserNestedInput
+    userAchievements?: UserAchievementUpdateManyWithoutUserNestedInput
+    progressSnapshots?: ProgressSnapshotUpdateManyWithoutUserNestedInput
+    unlockAnimations?: UnlockAnimationUpdateManyWithoutUserNestedInput
+    friendRequestsSent?: FriendRequestUpdateManyWithoutSenderNestedInput
+    friendRequestsReceived?: FriendRequestUpdateManyWithoutReceiverNestedInput
+    friendsAsUser?: FriendshipUpdateManyWithoutUserNestedInput
+    friendsAsFriend?: FriendshipUpdateManyWithoutFriendNestedInput
+    referralsMade?: ReferralUpdateManyWithoutReferrerNestedInput
+    referralsReceived?: ReferralUpdateManyWithoutReferredNestedInput
+    inviteCodes?: InviteCodeUpdateManyWithoutOwnerNestedInput
+    communityPosts?: CommunityPostUpdateManyWithoutAuthorNestedInput
+    feedItemsOwned?: FeedItemUpdateManyWithoutUserNestedInput
+    feedItemsActed?: FeedItemUpdateManyWithoutActorNestedInput
+    presences?: PresenceUpdateManyWithoutUserNestedInput
+    presenceSessions?: PresenceSessionUpdateManyWithoutUserNestedInput
+    relationshipsInitiated?: PlayerRelationshipUpdateManyWithoutInitiatorNestedInput
+    relationshipsTargeted?: PlayerRelationshipUpdateManyWithoutTargetNestedInput
+    socialSettings?: SocialSettingsUpdateOneWithoutUserNestedInput
+    arenaRatings?: ArenaRatingUpdateManyWithoutUserNestedInput
+    arenaQueueEntries?: ArenaQueueUpdateManyWithoutUserNestedInput
+    matchParticipants?: MatchParticipantUpdateManyWithoutUserNestedInput
+    arenaInvitationsSent?: ArenaInvitationUpdateManyWithoutSenderNestedInput
+    arenaInvitationsRecv?: ArenaInvitationUpdateManyWithoutReceiverNestedInput
+    arenaPresence?: ArenaPresenceUpdateOneWithoutUserNestedInput
+    arenaSeasonStats?: ArenaSeasonStatisticUpdateManyWithoutUserNestedInput
+    seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
+    bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
+    campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserProfileUncheckedUpdateWithoutSkillBoostPaymentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    wallet?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    xp?: IntFieldUpdateOperationsInput | number
+    points?: IntFieldUpdateOperationsInput | number
+    spins?: IntFieldUpdateOperationsInput | number
+    level?: IntFieldUpdateOperationsInput | number
+    currentRank?: NullableIntFieldUpdateOperationsInput | number | null
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    totalActivity?: IntFieldUpdateOperationsInput | number
+    currentStreak?: IntFieldUpdateOperationsInput | number
+    longestStreak?: IntFieldUpdateOperationsInput | number
+    status?: EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    predictions?: PredictionUncheckedUpdateManyWithoutUserNestedInput
+    userMissions?: UserMissionUncheckedUpdateManyWithoutUserNestedInput
+    spinLedgers?: SpinLedgerUncheckedUpdateManyWithoutUserNestedInput
+    rewardLedgers?: RewardLedgerUncheckedUpdateManyWithoutUserNestedInput
+    activities?: ActivityUncheckedUpdateManyWithoutUserNestedInput
+    leaderboardSnapshots?: LeaderboardSnapshotUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    pendingRewards?: PendingRewardUncheckedUpdateManyWithoutUserNestedInput
+    spinHistories?: SpinHistoryUncheckedUpdateManyWithoutUserNestedInput
+    rewardClaims?: RewardClaimUncheckedUpdateManyWithoutUserNestedInput
+    playerStats?: PlayerStatisticUncheckedUpdateManyWithoutUserNestedInput
+    notificationPrefs?: NotificationPreferenceUncheckedUpdateManyWithoutUserNestedInput
+    playerIdentity?: PlayerIdentityUncheckedUpdateOneWithoutUserNestedInput
+    userAchievements?: UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+    progressSnapshots?: ProgressSnapshotUncheckedUpdateManyWithoutUserNestedInput
+    unlockAnimations?: UnlockAnimationUncheckedUpdateManyWithoutUserNestedInput
+    friendRequestsSent?: FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+    friendRequestsReceived?: FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+    friendsAsUser?: FriendshipUncheckedUpdateManyWithoutUserNestedInput
+    friendsAsFriend?: FriendshipUncheckedUpdateManyWithoutFriendNestedInput
+    referralsMade?: ReferralUncheckedUpdateManyWithoutReferrerNestedInput
+    referralsReceived?: ReferralUncheckedUpdateManyWithoutReferredNestedInput
+    inviteCodes?: InviteCodeUncheckedUpdateManyWithoutOwnerNestedInput
+    communityPosts?: CommunityPostUncheckedUpdateManyWithoutAuthorNestedInput
+    feedItemsOwned?: FeedItemUncheckedUpdateManyWithoutUserNestedInput
+    feedItemsActed?: FeedItemUncheckedUpdateManyWithoutActorNestedInput
+    presences?: PresenceUncheckedUpdateManyWithoutUserNestedInput
+    presenceSessions?: PresenceSessionUncheckedUpdateManyWithoutUserNestedInput
+    relationshipsInitiated?: PlayerRelationshipUncheckedUpdateManyWithoutInitiatorNestedInput
+    relationshipsTargeted?: PlayerRelationshipUncheckedUpdateManyWithoutTargetNestedInput
+    socialSettings?: SocialSettingsUncheckedUpdateOneWithoutUserNestedInput
+    arenaRatings?: ArenaRatingUncheckedUpdateManyWithoutUserNestedInput
+    arenaQueueEntries?: ArenaQueueUncheckedUpdateManyWithoutUserNestedInput
+    matchParticipants?: MatchParticipantUncheckedUpdateManyWithoutUserNestedInput
+    arenaInvitationsSent?: ArenaInvitationUncheckedUpdateManyWithoutSenderNestedInput
+    arenaInvitationsRecv?: ArenaInvitationUncheckedUpdateManyWithoutReceiverNestedInput
+    arenaPresence?: ArenaPresenceUncheckedUpdateOneWithoutUserNestedInput
     arenaSeasonStats?: ArenaSeasonStatisticUncheckedUpdateManyWithoutUserNestedInput
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
@@ -165390,6 +167426,7 @@ export namespace Prisma {
     arenaSeasonStats?: ArenaSeasonStatisticCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutSeasonProgressInput = {
@@ -165450,6 +167487,7 @@ export namespace Prisma {
     arenaSeasonStats?: ArenaSeasonStatisticUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutSeasonProgressInput = {
@@ -165571,6 +167609,7 @@ export namespace Prisma {
     arenaSeasonStats?: ArenaSeasonStatisticUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutSeasonProgressInput = {
@@ -165631,6 +167670,7 @@ export namespace Prisma {
     arenaSeasonStats?: ArenaSeasonStatisticUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type SeasonUpsertWithoutProgressInput = {
@@ -165876,6 +167916,7 @@ export namespace Prisma {
     arenaSeasonStats?: ArenaSeasonStatisticCreateNestedManyWithoutUserInput
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutBannerDismissalsInput = {
@@ -165936,6 +167977,7 @@ export namespace Prisma {
     arenaSeasonStats?: ArenaSeasonStatisticUncheckedCreateNestedManyWithoutUserInput
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     campaignTargets?: CampaignTargetUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutBannerDismissalsInput = {
@@ -166055,6 +168097,7 @@ export namespace Prisma {
     arenaSeasonStats?: ArenaSeasonStatisticUpdateManyWithoutUserNestedInput
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutBannerDismissalsInput = {
@@ -166115,6 +168158,7 @@ export namespace Prisma {
     arenaSeasonStats?: ArenaSeasonStatisticUncheckedUpdateManyWithoutUserNestedInput
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     campaignTargets?: CampaignTargetUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type BannerUpsertWithoutDismissalsInput = {
@@ -166531,6 +168575,7 @@ export namespace Prisma {
     arenaSeasonStats?: ArenaSeasonStatisticCreateNestedManyWithoutUserInput
     seasonProgress?: SeasonProgressCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileUncheckedCreateWithoutCampaignTargetsInput = {
@@ -166591,6 +168636,7 @@ export namespace Prisma {
     arenaSeasonStats?: ArenaSeasonStatisticUncheckedCreateNestedManyWithoutUserInput
     seasonProgress?: SeasonProgressUncheckedCreateNestedManyWithoutUserInput
     bannerDismissals?: BannerDismissalUncheckedCreateNestedManyWithoutUserInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserProfileCreateOrConnectWithoutCampaignTargetsInput = {
@@ -166710,6 +168756,7 @@ export namespace Prisma {
     arenaSeasonStats?: ArenaSeasonStatisticUpdateManyWithoutUserNestedInput
     seasonProgress?: SeasonProgressUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUpdateManyWithoutUserNestedInput
   }
 
   export type UserProfileUncheckedUpdateWithoutCampaignTargetsInput = {
@@ -166770,6 +168817,7 @@ export namespace Prisma {
     arenaSeasonStats?: ArenaSeasonStatisticUncheckedUpdateManyWithoutUserNestedInput
     seasonProgress?: SeasonProgressUncheckedUpdateManyWithoutUserNestedInput
     bannerDismissals?: BannerDismissalUncheckedUpdateManyWithoutUserNestedInput
+    skillBoostPayments?: SkillBoostPaymentUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ScheduledJobDependencyCreateWithoutJobInput = {
@@ -167599,6 +169647,18 @@ export namespace Prisma {
     campaignId: string
     segment?: string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type SkillBoostPaymentCreateManyUserInput = {
+    id?: string
+    txHash: string
+    asset: string
+    amountWei: string
+    purpose: string
+    matchId?: string | null
+    expiresAt?: Date | string | null
+    verified?: boolean
+    createdAt?: Date | string
   }
 
   export type PredictionUpdateWithoutUserInput = {
@@ -168911,6 +170971,42 @@ export namespace Prisma {
     campaignId?: StringFieldUpdateOperationsInput | string
     segment?: NullableStringFieldUpdateOperationsInput | string | null
     metadata?: NullableJsonNullValueInput | InputJsonValue
+  }
+
+  export type SkillBoostPaymentUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    purpose?: StringFieldUpdateOperationsInput | string
+    matchId?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SkillBoostPaymentUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    purpose?: StringFieldUpdateOperationsInput | string
+    matchId?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SkillBoostPaymentUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    txHash?: StringFieldUpdateOperationsInput | string
+    asset?: StringFieldUpdateOperationsInput | string
+    amountWei?: StringFieldUpdateOperationsInput | string
+    purpose?: StringFieldUpdateOperationsInput | string
+    matchId?: NullableStringFieldUpdateOperationsInput | string | null
+    expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    verified?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PredictionCreateManyTournamentInput = {

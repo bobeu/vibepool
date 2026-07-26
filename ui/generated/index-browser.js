@@ -866,6 +866,19 @@ exports.Prisma.ArenaAnalyticsMetricScalarFieldEnum = {
   recordedAt: 'recordedAt'
 };
 
+exports.Prisma.SkillBoostPaymentScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  txHash: 'txHash',
+  asset: 'asset',
+  amountWei: 'amountWei',
+  purpose: 'purpose',
+  matchId: 'matchId',
+  expiresAt: 'expiresAt',
+  verified: 'verified',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SeasonScalarFieldEnum = {
   id: 'id',
   number: 'number',
@@ -1789,6 +1802,7 @@ exports.Prisma.ModelName = {
   ArenaPresence: 'ArenaPresence',
   ArenaStateMachineDefinition: 'ArenaStateMachineDefinition',
   ArenaAnalyticsMetric: 'ArenaAnalyticsMetric',
+  SkillBoostPayment: 'SkillBoostPayment',
   Season: 'Season',
   SeasonTier: 'SeasonTier',
   SeasonReward: 'SeasonReward',

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -24,6 +24,7 @@ import { WalletConnect } from "@/components/layout/WalletConnect";
 import { cn } from "@/utils/format";
 import { useUIStore } from "@/store/uiStore";
 import { UnlockAnimationToast } from "@/components/social/UnlockAnimationToast";
+import { NavigationProgress } from "@/components/layout/NavigationProgress";
 import { Onboarding } from "@/components/common/Onboarding";
 import type { NavKey } from "@/types";
 
@@ -139,6 +140,10 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
 
       {/* Unlock animation */}
       <UnlockAnimationToast />
+
+      <Suspense fallback={null}>
+        <NavigationProgress />
+      </Suspense>
 
       {/* Page content */}
       <main className="flex-1 overflow-y-auto no-scrollbar min-h-0 px-4 py-4 pb-28 relative z-10">

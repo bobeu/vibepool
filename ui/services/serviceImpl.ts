@@ -355,18 +355,15 @@ eventBus.subscribe("ArenaMatchCompleted", async (payload) => {
 
 eventBus.subscribe("ArenaRewardEligible", async (payload) => {
   const userId = payload.userId as string;
-  const xp = payload.xp as number;
-  if (xp > 0) {
+  const xp = (payload.xp as number) ?? 0;
+  const points = (payload.points as number) ?? 0;
+  if (xp > 0 || points > 0) {
     await prisma().userProfile.update({
       where: { id: userId },
-      data: { xp: { increment: xp } },
-    });
-  }
-  const points = payload.points as number;
-  if (points > 0) {
-    await prisma().userProfile.update({
-      where: { id: userId },
-      data: { points: { increment: points } },
+      data: {
+        ...(xp > 0 ? { xp: { increment: xp } } : {}),
+        ...(points > 0 ? { points: { increment: points } } : {}),
+      },
     });
   }
 });

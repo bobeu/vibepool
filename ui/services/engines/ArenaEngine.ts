@@ -12,7 +12,11 @@ export class ArenaEngine implements IArenaEngine {
   }
 
   private async resolveId(wallet: string): Promise<string | null> {
-    const user = await prisma().userProfile.findUnique({ where: { wallet }, select: { id: true } });
+    const normalized = wallet.toLowerCase();
+    const user = await prisma().userProfile.findUnique({
+      where: { wallet: normalized },
+      select: { id: true },
+    });
     return user?.id ?? null;
   }
 
@@ -21,15 +25,18 @@ export class ArenaEngine implements IArenaEngine {
     if (!userId) throw new Error("User not found");
 
     const seasonNumber = await getActiveSeasonNumber();
-    const [rating, seasonStats, recentMatches, friendsOnline, activeArena] = await Promise.all([
-      this.getRating(wallet),
-      prisma().arenaSeasonStatistic.findUnique({
-        where: { userId_seasonNumber: { userId, seasonNumber } },
-      }),
-      this.getHistory(wallet, 5),
-      this.getFriendsInArena(wallet),
-      prisma().arenaPresence.findUnique({ where: { userId } }),
-    ]);
+    const { skillBoostEngine } = await import("./SkillBoostEngine");
+    const [rating, seasonStats, recentMatches, friendsOnline, activeArena, boostStatus] =
+      await Promise.all([
+        this.getRating(wallet),
+        prisma().arenaSeasonStatistic.findUnique({
+          where: { userId_seasonNumber: { userId, seasonNumber } },
+        }),
+        this.getHistory(wallet, 5),
+        this.getFriendsInArena(wallet),
+        prisma().arenaPresence.findUnique({ where: { userId } }),
+        skillBoostEngine.getStatus(wallet),
+      ]);
 
     return {
       name: "NEXORA Arena",
@@ -39,6 +46,7 @@ export class ArenaEngine implements IArenaEngine {
       recentMatches,
       friendsOnline,
       arenaPresence: activeArena?.status ?? "OFFLINE",
+      skillBoost: boostStatus,
     };
   }
 

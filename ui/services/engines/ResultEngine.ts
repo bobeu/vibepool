@@ -10,9 +10,16 @@ import {
   DEFAULT_RATING,
   leagueForRating,
 } from "@/lib/arena/constants";
+import {
+  PERFECT_HIT_BONUS_XP,
+  PERFECT_HIT_THRESHOLD,
+  STREAK_XP_BONUS_CAP,
+  STREAK_XP_BONUS_PER,
+} from "@/lib/arena/skillBoost";
 import { eventBus } from "./EventBus";
 import { RatingStrategyRegistry } from "./rating/RatingStrategyRegistry";
 import { getActiveSeasonNumber } from "./SeasonEngine";
+import { skillBoostEngine } from "./SkillBoostEngine";
 import type { IResultEngine } from "./interfaces";
 import type { RatingSnapshot } from "./rating/IRatingStrategy";
 
@@ -119,7 +126,12 @@ export class ResultEngine implements IResultEngine {
     await prisma().arenaMatch.update({ where: { id: matchId }, data: { status: settlingStatus } });
 
     const ratingUpdates = await this.updateRatings(matchId, scored, isDraw, winner?.userId, loser?.userId);
-    await this.settleRewards(matchId, scored, isDraw, winner?.userId);
+    await this.settleRewards(
+      matchId,
+      scored.map((s) => ({ userId: s.userId, prediction: s.prediction, score: s.score })),
+      isDraw,
+      winner?.userId
+    );
 
     const completedStatus = this.transitionStatus(settlingStatus, "SETTLE");
     await prisma().arenaMatch.update({ where: { id: matchId }, data: { status: completedStatus } });
@@ -237,13 +249,43 @@ export class ResultEngine implements IResultEngine {
 
   private async settleRewards(
     matchId: string,
-    participants: Array<{ userId: string }>,
+    participants: Array<{ userId: string; prediction?: number | null; score?: number | null }>,
     isDraw: boolean,
     winnerId?: string
   ): Promise<void> {
+    const match = await prisma().arenaMatch.findUnique({
+      where: { id: matchId },
+      select: { targetValue: true },
+    });
+    const target = match?.targetValue ?? 0;
+
     for (const p of participants) {
       const won = !isDraw && p.userId === winnerId;
-      const xp = won ? ARENA_XP_WIN : ARENA_XP_LOSS;
+      let xp = won ? ARENA_XP_WIN : ARENA_XP_LOSS;
+      let points = won ? ARENA_POINTS_WIN : 0;
+
+      const multipliers = await skillBoostEngine.getActiveMultipliers(p.userId);
+      await skillBoostEngine.attachBoostToMatch(p.userId, matchId, multipliers.consumeBoostIds);
+
+      const rating = await prisma().arenaRating.findFirst({
+        where: { userId: p.userId },
+        orderBy: { seasonNumber: "desc" },
+        select: { currentStreak: true },
+      });
+      const streak = rating?.currentStreak ?? 0;
+      if (won && streak > 1) {
+        xp += Math.min(STREAK_XP_BONUS_CAP, (streak - 1) * STREAK_XP_BONUS_PER);
+      }
+
+      const pctOff =
+        target > 0 && p.prediction != null
+          ? (Math.abs(p.prediction - target) / target) * 100
+          : 100;
+      const perfectHit = pctOff <= PERFECT_HIT_THRESHOLD;
+      if (perfectHit) xp += PERFECT_HIT_BONUS_XP;
+
+      xp = Math.round(xp * multipliers.xpMultiplier);
+      points = Math.round(points * multipliers.pointsMultiplier);
 
       eventBus.publish({
         event: "ArenaRewardEligible",
@@ -252,14 +294,24 @@ export class ResultEngine implements IResultEngine {
         aggregateType: "ArenaMatch",
         won,
         xp,
-        points: won ? ARENA_POINTS_WIN : 0,
+        points,
+        perfectHit,
+        boostApplied: multipliers.xpMultiplier > 1 || multipliers.pointsMultiplier > 1,
+        stayRelevant: multipliers.stayRelevant,
       });
 
       await prisma().activity.create({
         data: {
           userId: p.userId,
           type: "SOCIAL",
-          metadata: { kind: "ARENA_MATCH", matchId, won, isDraw },
+          metadata: {
+            kind: "ARENA_MATCH",
+            matchId,
+            won,
+            isDraw,
+            perfectHit,
+            xpMultiplier: multipliers.xpMultiplier,
+          },
         },
       });
 
@@ -274,6 +326,13 @@ export class ResultEngine implements IResultEngine {
           where: { userId_type: { userId: p.userId, type: "ARENA_WINS" } },
           update: { value: { increment: 1 } },
           create: { userId: p.userId, type: "ARENA_WINS", value: 1 },
+        });
+      }
+      if (perfectHit) {
+        await prisma().playerStatistic.upsert({
+          where: { userId_type: { userId: p.userId, type: "ARENA_PERFECT_HITS" } },
+          update: { value: { increment: 1 } },
+          create: { userId: p.userId, type: "ARENA_PERFECT_HITS", value: 1 },
         });
       }
     }

@@ -26,7 +26,10 @@ export function UnlockAnimationToast() {
       return res.json();
     },
     enabled: canFetch,
-    refetchInterval: canFetch ? 15_000 : false,
+    // Soft poll — unlock toasts are not time-critical; avoid hammering /api/animations.
+    refetchInterval: canFetch ? 60_000 : false,
+    refetchIntervalInBackground: false,
+    staleTime: 45_000,
     retry: false,
   });
 
