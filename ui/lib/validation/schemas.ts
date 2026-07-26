@@ -5,10 +5,14 @@ export const walletSchema = z.object({
 });
 
 export const predictionSchema = z.object({
-  tournamentId: z.string().uuid(),
-  predictionValue: z.number().int().positive(),
+  tournamentId: z.string().uuid().optional(),
+  // Accept price floats or ints; API normalizes to positive int micros.
+  predictionValue: z.number().finite().optional(),
   higher: z.boolean().optional(),
-});
+}).refine(
+  (data) => data.predictionValue != null || typeof data.higher === "boolean",
+  { message: "predictionValue or higher is required" }
+);
 
 export const missionSchema = z.object({
   missionId: z.string().uuid(),

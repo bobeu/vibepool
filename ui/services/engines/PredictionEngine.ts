@@ -36,6 +36,7 @@ export class PredictionEngine implements IPredictionEngine {
   validatePredictionData(prediction: Record<string, unknown>): boolean {
     return (
       typeof prediction.predictionValue === "number" &&
+      Number.isFinite(prediction.predictionValue) &&
       prediction.predictionValue > 0
     );
   }

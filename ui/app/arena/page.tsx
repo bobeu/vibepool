@@ -10,6 +10,7 @@ import { GlassContainer } from "@/components/hero/GlassContainer";
 import { SectionDivider } from "@/components/hero/SectionDivider";
 import { Button } from "@/components/ui/button";
 import { BrutalCard } from "@/components/ui/BrutalCard";
+import { authFetch } from "@/lib/auth/client";
 import { container, item } from "@/lib/motion/variants";
 
 type ArenaHome = {
@@ -33,7 +34,7 @@ export default function ArenaPage() {
   const { data: arenaFlag } = useQuery({
     queryKey: ["feature-flag", "arena"],
     queryFn: async () => {
-      const res = await fetch("/api/feature-flags?key=arena");
+      const res = await authFetch("/api/feature-flags?key=arena");
       if (!res.ok) return { enabled: true };
       return res.json() as Promise<{ enabled: boolean }>;
     },
@@ -43,7 +44,7 @@ export default function ArenaPage() {
   const { data, isLoading, error, refetch } = useQuery<ArenaHome>({
     queryKey: ["arena"],
     queryFn: async () => {
-      const res = await fetch("/api/arena");
+      const res = await authFetch("/api/arena");
       if (!res.ok) throw new Error("Failed to load arena");
       return res.json();
     },
@@ -54,7 +55,7 @@ export default function ArenaPage() {
     queryKey: ["arena-match", activeMatchId],
     enabled: Boolean(activeMatchId),
     queryFn: async () => {
-      const res = await fetch(`/api/arena/match?id=${activeMatchId}`);
+      const res = await authFetch(`/api/arena/match?id=${activeMatchId}`);
       if (!res.ok) throw new Error("Failed to load match");
       return res.json();
     },
@@ -63,9 +64,8 @@ export default function ArenaPage() {
 
   const queueMutation = useMutation({
     mutationFn: async (mode: string) => {
-      const res = await fetch("/api/arena/queue", {
+      const res = await authFetch("/api/arena/queue", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mode, matchType: "PREDICTION_DUEL" }),
       });
       if (!res.ok) throw new Error("Queue failed");
@@ -84,9 +84,8 @@ export default function ArenaPage() {
 
   const acceptMutation = useMutation({
     mutationFn: async (matchId: string) => {
-      const res = await fetch("/api/arena/accept", {
+      const res = await authFetch("/api/arena/accept", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ matchId }),
       });
       if (!res.ok) throw new Error("Accept failed");
@@ -97,9 +96,8 @@ export default function ArenaPage() {
 
   const predictMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/api/arena/match", {
+      const res = await authFetch("/api/arena/match", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ matchId: activeMatchId, prediction: Number(prediction) }),
       });
       if (!res.ok) throw new Error("Submit failed");
@@ -117,7 +115,7 @@ export default function ArenaPage() {
 
   const cancelMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/api/arena/cancel", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
+      const res = await authFetch("/api/arena/cancel", { method: "POST", body: "{}" });
       if (!res.ok) throw new Error("Cancel failed");
       return res.json();
     },
@@ -130,9 +128,8 @@ export default function ArenaPage() {
 
   const inviteMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/api/arena/invite", {
+      const res = await authFetch("/api/arena/invite", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
           friendWallet ? { friendWallet } : inviteCode ? { inviteCode } : { mode: "PRIVATE_MATCH" }
         ),

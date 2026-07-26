@@ -47,6 +47,31 @@ export class WheelEngine implements IWheelEngine {
       },
     });
 
+    // Apply off-chain rewards immediately (XP / points). Token prizes stay claimable records.
+    const asset = selected.asset.toUpperCase();
+    if (asset === "XP" && selected.amount > 0) {
+      await prisma().userProfile.update({
+        where: { id: userId },
+        data: { xp: { increment: selected.amount } },
+      });
+    } else if ((asset === "POINTS" || asset === "POINT") && selected.amount > 0) {
+      await prisma().userProfile.update({
+        where: { id: userId },
+        data: { points: { increment: selected.amount } },
+      });
+    } else if (selected.amount > 0) {
+      await prisma().pendingReward.create({
+        data: {
+          userId,
+          reward: selected.name,
+          amount: selected.amount,
+          asset: selected.asset,
+          reason: "SPIN_PRIZE",
+          status: "PENDING",
+        },
+      });
+    }
+
     eventBus.publish({
       event: "SpinCompleted",
       userId,

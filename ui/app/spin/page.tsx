@@ -3,6 +3,7 @@
 import React, { useState, useRef, useCallback } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AppShell } from "@/components/layout/AppShell";
+import { authFetch } from "@/lib/auth/client";
 import { cn } from "@/utils/format";
 import { Clock, X, Ticket } from "lucide-react";
 
@@ -123,7 +124,7 @@ export default function SpinPage() {
   const { data: spins, isLoading } = useQuery({
     queryKey: ["spins"],
     queryFn: async () => {
-      const res = await fetch("/api/spins");
+      const res = await authFetch("/api/spins");
       if (!res.ok) throw new Error("Failed to fetch spins");
       return res.json();
     },
@@ -133,7 +134,7 @@ export default function SpinPage() {
   const { data: history } = useQuery({
     queryKey: ["spin-history"],
     queryFn: async () => {
-      const res = await fetch("/api/spin/history");
+      const res = await authFetch("/api/spin/history");
       if (!res.ok) return { history: [] };
       return res.json();
     },
@@ -142,9 +143,8 @@ export default function SpinPage() {
 
   const spinMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/api/spins", {
+      const res = await authFetch("/api/spins", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "start" }),
       });
       if (!res.ok) throw new Error("Failed to spin");

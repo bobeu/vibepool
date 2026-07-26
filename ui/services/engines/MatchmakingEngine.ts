@@ -97,7 +97,75 @@ export class MatchmakingEngine implements IMatchmakingEngine {
     const paired = await this.tryPair(queue.id, userId, matchType, rating);
     if (paired) return paired;
 
+    // Solo MiniPay / local play: pair with a practice bot so Quick Match never stalls.
+    if (mode === "QUICK_MATCH") {
+      const botPaired = await this.pairWithPracticeBot(queue.id, userId, matchType, rating);
+      if (botPaired) return botPaired;
+    }
+
     return { queueId: queue.id, status: "SEARCHING", expiresAt };
+  }
+
+  private async ensurePracticeBot(): Promise<string> {
+    const wallet = "0x00000000000000000000000000000000000000b0";
+    const bot = await prisma().userProfile.upsert({
+      where: { wallet },
+      update: {},
+      create: {
+        wallet,
+        username: "Practice Bot",
+        xp: 0,
+        points: 0,
+        spins: 0,
+        level: 1,
+        status: "ACTIVE",
+      },
+    });
+    await this.getOrCreateRating(bot.id);
+    return bot.id;
+  }
+
+  private async pairWithPracticeBot(
+    queueId: string,
+    userId: string,
+    matchType: string,
+    rating: number
+  ): Promise<Record<string, unknown> | null> {
+    const botId = await this.ensurePracticeBot();
+    if (botId === userId) return null;
+
+    const targetValue = Math.floor(Math.random() * 9000) + 1000;
+    const match = await prisma().arenaMatch.create({
+      data: {
+        matchType: matchType as any,
+        mode: "QUICK_MATCH",
+        status: "WAITING",
+        targetValue,
+        expiresAt: new Date(Date.now() + MATCH_ACCEPT_TIMEOUT_MS),
+        participants: {
+          create: [
+            { userId: botId, accepted: true },
+            { userId, accepted: false },
+          ],
+        },
+      },
+    });
+
+    await prisma().arenaQueue.update({
+      where: { id: queueId },
+      data: { status: "MATCHED", matchId: match.id },
+    });
+
+    eventBus.publish({
+      event: "ArenaMatchFound",
+      aggregateId: match.id,
+      aggregateType: "ArenaMatch",
+      playerIds: [userId, botId],
+      practice: true,
+    });
+
+    logger.info("Paired with practice bot", { matchId: match.id, userId, rating });
+    return { matchId: match.id, status: "WAITING", practice: true };
   }
 
   private async createPrivateMatch(userId: string, mode: string, matchType: string): Promise<Record<string, unknown>> {

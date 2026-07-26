@@ -21,42 +21,65 @@ export const POST = async (req: NextRequest) => {
       return apiError(new Error("Auth message expired"));
     }
 
-    const valid = await verifyWalletSignature(wallet, signature, message);
+    const normalizedWallet = wallet.toLowerCase();
+
+    const valid = await verifyWalletSignature(normalizedWallet, signature, message);
     if (!valid) {
       return apiError(new Error("Invalid signature"));
     }
 
-    const existing = await prisma().userProfile.findUnique({ where: { wallet } });
+    const existing = await prisma().userProfile.findUnique({ where: { wallet: normalizedWallet } });
     const isNewUser = !existing;
 
-    await prisma().userProfile.upsert({
-      where: { wallet },
+    const user = await prisma().userProfile.upsert({
+      where: { wallet: normalizedWallet },
       update: { lastLogin: new Date(), totalActivity: { increment: 1 } },
-      create: { wallet, xp: 0, points: 0, spins: 0, level: 0, totalActivity: 0, status: "ACTIVE" },
+      // Welcome pack: 3 free spins so MiniPay users can try Lucky Drop immediately.
+      create: {
+        wallet: normalizedWallet,
+        xp: 0,
+        points: 0,
+        spins: 3,
+        level: 0,
+        totalActivity: 0,
+        status: "ACTIVE",
+      },
     });
+
+    if (isNewUser) {
+      await prisma().spinLedger.create({
+        data: {
+          userId: user.id,
+          spinType: "DAILY",
+          amount: 3,
+          reason: "WELCOME_SPINS",
+        },
+      });
+    } else {
+      // One free daily spin for returning players.
+      const { SpinEngine } = await import("@/services/engines/SpinEngine");
+      await new SpinEngine().ensureDailyFreeSpin(user.id);
+    }
 
     if (isNewUser && refCode) {
       const { InviteService } = await import("@/services/serviceImpl");
       const inviteService = new InviteService();
       try {
-        await inviteService.redeem(refCode, wallet);
+        await inviteService.redeem(refCode, normalizedWallet);
       } catch {
         // Invalid or self-referral codes are ignored at login.
       }
     }
 
-    const { accessToken, refreshToken } = await createSession(prisma(), wallet);
+    const { accessToken, refreshToken } = await createSession(prisma(), normalizedWallet);
 
-    const user = await prisma().userProfile.findUnique({ where: { wallet }, select: { id: true } });
-    if (user) {
-      const { trackBetaEvent } = await import("@/lib/telemetry/betaEvents");
-      if (isNewUser) await trackBetaEvent(user.id, "onboarding_complete");
-    }
+    const { trackBetaEvent } = await import("@/lib/telemetry/betaEvents");
+    if (isNewUser) await trackBetaEvent(user.id, "onboarding_complete");
 
     return jsonResponse({
       accessToken,
       refreshToken,
-      wallet,
+      wallet: normalizedWallet,
       expiresIn: 15 * 60,
     }, 201);
   } catch (error) {

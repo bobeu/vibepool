@@ -21,6 +21,7 @@ import {
   ListChecks,
 } from "lucide-react";
 import { LevelProgress } from "@/components/ui/LevelProgress";
+import { authFetch } from "@/lib/auth/client";
 import { cn } from "@/utils/format";
 
 // ─── Action tiles config ──────────────────────────────────────────────────────
@@ -90,7 +91,7 @@ export function HomeHub() {
   const { data: profile } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      const res = await fetch("/api/profile");
+      const res = await authFetch("/api/profile");
       if (!res.ok) return null;
       return res.json();
     },
@@ -100,7 +101,7 @@ export function HomeHub() {
   const { data: spins } = useQuery({
     queryKey: ["spins"],
     queryFn: async () => {
-      const res = await fetch("/api/spins");
+      const res = await authFetch("/api/spins");
       if (!res.ok) return { available: 0 };
       return res.json();
     },
@@ -110,7 +111,7 @@ export function HomeHub() {
   const { data: leaderboard } = useQuery({
     queryKey: ["leaderboard"],
     queryFn: async () => {
-      const res = await fetch("/api/leaderboard");
+      const res = await authFetch("/api/leaderboard");
       if (!res.ok) return { leaderboard: [] };
       return res.json();
     },

@@ -28,7 +28,21 @@ export const POST = async (req: NextRequest) => {
     try {
       const body = await request.json();
       const parsed = predictionSchema.parse(body);
-      const result = await predictionService.submitPrediction(wallet, parsed);
+      const { toPredictionValue } = await import("@/lib/prediction/normalize");
+      const tournament = await new TournamentService().getCurrentTournament();
+      const startPrice = Number((tournament as { startPrice?: number } | null)?.startPrice ?? 0.07);
+      const predictionValue = toPredictionValue(parsed.predictionValue ?? 0, {
+        higher: parsed.higher,
+        startPrice,
+      });
+      if (predictionValue <= 0) {
+        throw new Error("Invalid prediction value");
+      }
+      const result = await predictionService.submitPrediction(wallet, {
+        tournamentId: parsed.tournamentId ?? tournament?.id,
+        predictionValue,
+        higher: parsed.higher,
+      });
       return jsonResponse(result, 201);
     } catch (error) {
       return apiError(error);

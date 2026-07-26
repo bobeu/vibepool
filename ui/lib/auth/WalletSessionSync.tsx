@@ -28,7 +28,7 @@ export function WalletSessionSync() {
         const res = await fetch("/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ wallet: address, signature, message, timestamp }),
+          body: JSON.stringify({ wallet, signature, message, timestamp }),
         });
         if (res.ok) {
           const data = await res.json();

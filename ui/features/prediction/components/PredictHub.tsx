@@ -33,19 +33,25 @@ export function PredictHub() {
     enabled: Boolean(session),
   });
 
+  const tournament = data?.tournament;
+
   const submitMutation = useMutation({
-    mutationFn: async (predictionValue: number) => {
+    mutationFn: async (payload: { predictionValue?: number; higher?: boolean }) => {
       const res = await authFetch("/api/predictions", {
         method: "POST",
-        body: JSON.stringify({ predictionValue }),
+        body: JSON.stringify({
+          tournamentId: tournament?.id,
+          ...payload,
+        }),
       });
-      if (!res.ok) throw new Error("Failed to submit prediction");
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error || "Failed to submit prediction");
+      }
       return res.json();
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["predictions"] }),
   });
-
-  const tournament = data?.tournament;
   const submitted = Boolean(data?.userPrediction);
   const higherPool = Number(tournament?.higherPool ?? 0.34);
   const lowerPool  = Number(tournament?.lowerPool  ?? 0.32);
@@ -221,28 +227,31 @@ export function PredictHub() {
             e.preventDefault();
             const form = e.currentTarget;
             const value = Number((form.elements.namedItem("value") as HTMLInputElement).value);
-            if (!Number.isNaN(value)) submitMutation.mutate(value);
+            if (!Number.isNaN(value) && value > 0) {
+              submitMutation.mutate({ predictionValue: value });
+            }
           }}
         >
           <div className="space-y-1">
             <label className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">
-              Your Price Prediction
+              Your Price Prediction (CELO)
             </label>
             <input
               name="value"
               type="number"
               step="any"
+              min="0"
               required
               placeholder="e.g. 0.075"
               className="w-full rounded-2xl bg-zinc-900 border-4 border-black px-4 py-3 text-sm font-black text-white placeholder:text-white/30 shadow-[3px_3px_0_rgba(0,0,0,0.6)] focus:outline-none focus:border-primary transition-colors"
             />
           </div>
 
-          {/* Higher / Lower buttons */}
+          {/* Higher / Lower buttons — skill direction vs round start */}
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
-              onClick={() => submitMutation.mutate(1)}
+              onClick={() => submitMutation.mutate({ higher: true })}
               disabled={submitMutation.isPending}
               className="flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-[#FBBF24] text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all hover:bg-yellow-300 disabled:opacity-40"
             >
@@ -251,7 +260,7 @@ export function PredictHub() {
             </button>
             <button
               type="button"
-              onClick={() => submitMutation.mutate(0)}
+              onClick={() => submitMutation.mutate({ higher: false })}
               disabled={submitMutation.isPending}
               className="flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-white text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all hover:bg-zinc-100 disabled:opacity-40"
             >

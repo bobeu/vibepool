@@ -64,6 +64,25 @@ export class SpinEngine implements ISpinEngine {
     return true;
   }
 
+  /** Grant one DAILY free spin if the user has not received one today. */
+  async ensureDailyFreeSpin(userId: string): Promise<boolean> {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const already = await prisma().spinLedger.findFirst({
+      where: {
+        userId,
+        spinType: "DAILY",
+        amount: { gt: 0 },
+        createdAt: { gte: today },
+      },
+    });
+    if (already) return false;
+
+    await this.grantSpin(userId, "DAILY", "DAILY_FREE_SPIN");
+    return true;
+  }
+
   async getSpinBalance(userId: string): Promise<{ available: number; daily: number; lifetime: number }> {
     const profile = await prisma().userProfile.findUnique({
       where: { id: userId },

@@ -108,8 +108,26 @@ export class MatchEngine implements IMatchEngine {
       prediction,
     });
 
-    const participants = await prisma().matchParticipant.findMany({ where: { matchId } });
-    const allSubmitted = participants.length >= 2 && participants.every((p) => p.prediction != null);
+    // Auto-submit for practice bot so solo Quick Match can finalize.
+    const BOT_WALLET = "0x00000000000000000000000000000000000000b0";
+    const participants = await prisma().matchParticipant.findMany({
+      where: { matchId },
+      include: { user: { select: { wallet: true } } },
+    });
+    const bot = participants.find((p) => p.user.wallet === BOT_WALLET && p.prediction == null);
+    if (bot) {
+      const botPrediction = Math.max(
+        1,
+        Math.round(prediction * (0.85 + Math.random() * 0.3))
+      );
+      await prisma().matchParticipant.update({
+        where: { matchId_userId: { matchId, userId: bot.userId } },
+        data: { prediction: botPrediction },
+      });
+    }
+
+    const refreshed = await prisma().matchParticipant.findMany({ where: { matchId } });
+    const allSubmitted = refreshed.length >= 2 && refreshed.every((p) => p.prediction != null);
 
     if (allSubmitted) {
       const { ResultEngine } = await import("./ResultEngine");
