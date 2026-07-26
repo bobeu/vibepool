@@ -1,3 +1,6 @@
+/** Spins restored by free-play “Try again” refill. */
+export const FREEPLAY_REFILL_SPINS = 5;
+
 /** Mock catalog prices shown to free-play testers (not charged on-chain). */
 export const FREEPLAY_SPIN_PACKS = [
   { id: "pack3", spins: 3, label: "+3 Spins", mockPrice: "0.01 USDm" },

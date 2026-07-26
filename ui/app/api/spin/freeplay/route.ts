@@ -3,7 +3,8 @@ import { authenticatedHandler } from "@/lib/auth/middleware";
 import { resolveUserId } from "@/lib/auth/resolveUser";
 import { isGuestWallet } from "@/lib/auth/guest";
 import { jsonResponse, apiError } from "@/lib/api/responses";
-import { spinPackById, FREEPLAY_SPIN_PACKS } from "@/lib/spin/freePlay";
+import { spinPackById, FREEPLAY_SPIN_PACKS, FREEPLAY_REFILL_SPINS } from "@/lib/spin/freePlay";
+import { prisma } from "@/lib/auth/session";
 import { SpinEngine } from "@/services/engines/SpinEngine";
 import { musicEngine } from "@/services/engines/MusicEngine";
 import { collectionEngine } from "@/services/engines/CollectionEngine";
@@ -43,6 +44,35 @@ export const POST = async (req: NextRequest) => {
           mockPrice: pack.mockPrice,
           balance,
           message: `Added ${pack.spins} spins (demo)`,
+        });
+      }
+
+      if (action === "refillSpins") {
+        const profile = await prisma().userProfile.findUnique({ where: { id: userId } });
+        if (!profile) throw new Error("User not found");
+        const target = FREEPLAY_REFILL_SPINS;
+        const need = Math.max(0, target - profile.spins);
+        if (need > 0) {
+          await prisma().userProfile.update({
+            where: { id: userId },
+            data: { spins: target },
+          });
+          await prisma().spinLedger.create({
+            data: {
+              userId,
+              spinType: "EVENT",
+              amount: need,
+              reason: "FREEPLAY_TRY_AGAIN_REFILL",
+            },
+          });
+        }
+        const balance = await spinEngine.getSpinBalance(userId);
+        return jsonResponse({
+          success: true,
+          mock: true,
+          refilled: need,
+          balance,
+          message: need > 0 ? `Spins refilled to ${target}` : "Spins already full",
         });
       }
 

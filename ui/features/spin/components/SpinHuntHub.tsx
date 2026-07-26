@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowDownToLine, Ticket, X, Zap } from "lucide-react";
+import { ArrowDownToLine, RotateCcw, Ticket, X, Zap } from "lucide-react";
 import { formatUnits } from "viem";
 import { authFetch } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
@@ -246,13 +246,33 @@ export function SpinHuntHub() {
     onError: (e: Error) => setError(e.message),
   });
 
+  const refillSpins = useMutation({
+    mutationFn: async () => {
+      const res = await authFetch("/api/spin/freeplay", {
+        method: "POST",
+        body: JSON.stringify({ action: "refillSpins" }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || "Could not refill spins");
+      return body;
+    },
+    onSuccess: (body) => {
+      setError(null);
+      showToast(body.message || "Spins refilled");
+      queryClient.invalidateQueries({ queryKey: ["spin-hunt-config"] });
+      queryClient.invalidateQueries({ queryKey: ["spins"] });
+    },
+    onError: (e: Error) => setError(e.message),
+  });
+
   const busy =
     hunting ||
     finishing ||
     startTicket.isPending ||
     startPaid.isPending ||
     paying ||
-    withdrawMutation.isPending;
+    withdrawMutation.isPending ||
+    refillSpins.isPending;
 
   const spinLabel = useMemo(() => {
     if (finishing) return "…";
