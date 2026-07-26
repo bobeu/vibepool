@@ -11,7 +11,7 @@ Pre-deploy, deploy, and post-deploy validation. No CI/CD yaml in repo — run ma
 - [ ] Branch merged to `main` (or release tag created)
 - [ ] [BETA_CONFIGURATION.md](./BETA_CONFIGURATION.md) flags reviewed — settlement **off** for week 1
 - [ ] No secrets in git (`.env` local only)
-- [ ] `addresses.json` matches target chain (Sepolia `11142220`)
+- [ ] `addresses.json` / env addresses match Celo mainnet (`42220`) after `bun run deploy-mainnet` + `bun run sync`
 
 ### Automated gate
 
