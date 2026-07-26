@@ -96,6 +96,13 @@ export interface ISpinEngine extends IEngine {
   getSpinBalance(userId: string): Promise<{ available: number; daily: number; lifetime: number }>;
 }
 
+export interface ISpinHuntEngine extends IEngine {
+  getPublicConfig(): Promise<Record<string, unknown>>;
+  startSession(input: Record<string, unknown>): Promise<Record<string, unknown>>;
+  recordHit(input: Record<string, unknown>): Promise<Record<string, unknown>>;
+  finishSession(input: Record<string, unknown>): Promise<Record<string, unknown>>;
+}
+
 export interface IWheelEngine extends IEngine {
   generateSpin(userId: string, randomProvider: IRandomProvider): Promise<Record<string, unknown>>;
   generateReward(spinId: string, randomProvider: IRandomProvider): Promise<Record<string, unknown>>;
