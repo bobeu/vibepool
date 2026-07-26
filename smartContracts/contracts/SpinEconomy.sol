@@ -5,13 +5,14 @@ import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol"
 import { ReentrancyGuard } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import { Pausable } from "@openzeppelin/contracts/utils/Pausable.sol";
 import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import { IERC20Permit } from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol";
 import { SharedErrors } from "./SharedErrors.sol";
-import { TransferHelper } from "./libraries/TransferHelper.sol";
 import { ISpinEconomy } from "./interfaces/ISpinEconomy.sol";
 import { IRewardTreasury } from "./interfaces/IRewardTreasury.sol";
 
 /// @title SpinEconomy
 /// @notice Contract-only entry fees and item purchases; splits to treasury + SpinPrizeVault.
+/// @dev ERC20 users can call *WithPermit (OpenZeppelin IERC20Permit / EIP-2612) for a single tx.
 contract SpinEconomy is ISpinEconomy, AccessControl, ReentrancyGuard, Pausable {
     using SafeERC20 for IERC20;
 
@@ -99,6 +100,49 @@ contract SpinEconomy is ISpinEconomy, AccessControl, ReentrancyGuard, Pausable {
         (uint256 toTreasury, uint256 toVault) = _split(amount);
         _forward(asset, toTreasury, toVault);
         emit ItemPurchased(msg.sender, itemId, asset, amount, toTreasury, toVault);
+    }
+
+    /// @inheritdoc ISpinEconomy
+    function payEntryWithPermit(
+        address asset,
+        uint256 amount,
+        bytes32 sessionRef,
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external whenNotPaused nonReentrant onlyEnabledAsset(asset) {
+        if (asset == nativeAsset) revert SharedErrors.InvalidInput();
+        if (amount == 0) revert SharedErrors.InvalidAmount();
+        _permit(asset, amount, deadline, v, r, s);
+        amount = _intake(asset, amount);
+        (uint256 toTreasury, uint256 toVault) = _split(amount);
+        _forward(asset, toTreasury, toVault);
+        emit EntryPaid(msg.sender, asset, amount, toTreasury, toVault, sessionRef);
+    }
+
+    /// @inheritdoc ISpinEconomy
+    function purchaseItemWithPermit(
+        bytes32 itemId,
+        address asset,
+        uint256 amount,
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external whenNotPaused nonReentrant onlyEnabledAsset(asset) {
+        if (itemId == bytes32(0)) revert SharedErrors.InvalidInput();
+        if (asset == nativeAsset) revert SharedErrors.InvalidInput();
+        if (amount == 0) revert SharedErrors.InvalidAmount();
+        _permit(asset, amount, deadline, v, r, s);
+        amount = _intake(asset, amount);
+        (uint256 toTreasury, uint256 toVault) = _split(amount);
+        _forward(asset, toTreasury, toVault);
+        emit ItemPurchased(msg.sender, itemId, asset, amount, toTreasury, toVault);
+    }
+
+    function _permit(address asset, uint256 amount, uint256 deadline, uint8 v, bytes32 r, bytes32 s) private {
+        IERC20Permit(asset).permit(msg.sender, address(this), amount, deadline, v, r, s);
     }
 
     function _intake(address asset, uint256 amount) private returns (uint256) {

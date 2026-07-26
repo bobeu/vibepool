@@ -28,5 +28,27 @@ interface ISpinEconomy {
 
     function purchaseItem(bytes32 itemId, address asset, uint256 amount) external payable;
 
+    /// @notice EIP-2612: signature + pull in one user transaction (no prior approve tx).
+    function payEntryWithPermit(
+        address asset,
+        uint256 amount,
+        bytes32 sessionRef,
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external;
+
+    /// @notice EIP-2612: signature + pull in one user transaction (no prior approve tx).
+    function purchaseItemWithPermit(
+        bytes32 itemId,
+        address asset,
+        uint256 amount,
+        uint256 deadline,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) external;
+
     function treasuryBps() external view returns (uint16);
 }

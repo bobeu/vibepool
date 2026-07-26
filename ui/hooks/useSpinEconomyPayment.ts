@@ -8,6 +8,7 @@ import {
   useWriteContract,
   useSendTransaction,
   useWaitForTransactionReceipt,
+  useWalletClient,
 } from "wagmi";
 import { encodeFunctionData, erc20Abi, type Hash, keccak256, stringToBytes } from "viem";
 import { celo } from "wagmi/chains";
@@ -22,6 +23,11 @@ import {
   type SpinPayAsset,
 } from "@/lib/spin/economy";
 import { isMiniPay } from "@/lib/wagmi";
+import {
+  readAllowance,
+  shouldUsePermit,
+  signErc20Permit,
+} from "@/lib/tokens/erc20Permit";
 
 function resolveEconomy(): `0x${string}` {
   const addr = getSpinEconomyAddress();
@@ -40,6 +46,7 @@ export function useSpinEconomyPayment() {
   const { switchChainAsync } = useSwitchChain();
   const { writeContractAsync } = useWriteContract();
   const { sendTransactionAsync } = useSendTransaction();
+  const { data: walletClient } = useWalletClient();
   const [pendingHash, setPendingHash] = useState<Hash | undefined>();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,6 +60,76 @@ export function useSpinEconomyPayment() {
     if (chainId === celo.id) return;
     await switchChainAsync({ chainId: celo.id });
   }, [chainId, switchChainAsync]);
+
+  /** ERC20 spend: prefer EIP-2612 permit (1 tx), else reuse allowance, else approve+call. */
+  const spendErc20 = useCallback(
+    async (opts: {
+      economy: `0x${string}`;
+      abi: unknown;
+      token: `0x${string}`;
+      amount: bigint;
+      withPermitFn: "payEntryWithPermit" | "purchaseItemWithPermit";
+      permitArgs: readonly unknown[];
+      plainFn: "payEntry" | "purchaseItem";
+      plainArgs: readonly unknown[];
+    }): Promise<Hash> => {
+      const owner = address as `0x${string}`;
+      const assetSym = opts.token; // only used for permit probe via caller
+
+      // 1) Existing allowance → single spend tx
+      const allowance = await readAllowance(opts.token, owner, opts.economy);
+      if (allowance >= opts.amount) {
+        return writeContractAsync({
+          address: opts.economy,
+          abi: opts.abi as never,
+          functionName: opts.plainFn,
+          args: opts.plainArgs as never,
+          chainId: targetChainId,
+        });
+      }
+
+      // 2) EIP-2612 permit + pull in one tx (OpenZeppelin IERC20Permit)
+      if (walletClient) {
+        try {
+          const permit = await signErc20Permit({
+            walletClient,
+            owner,
+            token: opts.token,
+            spender: opts.economy,
+            value: opts.amount,
+            chainId: targetChainId,
+          });
+          return await writeContractAsync({
+            address: opts.economy,
+            abi: opts.abi as never,
+            functionName: opts.withPermitFn,
+            args: [...opts.permitArgs, permit.deadline, permit.v, permit.r, permit.s] as never,
+            chainId: targetChainId,
+          });
+        } catch {
+          // Token may lack permit (common for USDm/USDT) — fall through to approve
+          void assetSym;
+        }
+      }
+
+      // 3) Classic approve + spend (2 txs)
+      await writeContractAsync({
+        address: opts.token,
+        abi: erc20Abi,
+        functionName: "approve",
+        args: [opts.economy, opts.amount],
+        chainId: targetChainId,
+      });
+      return writeContractAsync({
+        address: opts.economy,
+        abi: opts.abi as never,
+        functionName: opts.plainFn,
+        args: opts.plainArgs as never,
+        chainId: targetChainId,
+      });
+    },
+    [address, targetChainId, walletClient, writeContractAsync]
+  );
 
   const payEntry = useCallback(
     async (opts?: { asset?: SpinPayAsset; amountWei?: bigint; sessionRef?: `0x${string}` }) => {
@@ -71,7 +148,7 @@ export function useSpinEconomyPayment() {
         const asset = opts?.asset ?? preferredAsset;
         const amount = opts?.amountWei ?? defaultEntryFee(asset);
         const sessionRef = opts?.sessionRef ?? createSessionRef();
-        const token = assetAddress(asset);
+        const token = assetAddress(asset) as `0x${string}`;
         let hash: Hash;
 
         if (asset === "CELO") {
@@ -87,20 +164,38 @@ export function useSpinEconomyPayment() {
             chainId: targetChainId,
           });
         } else {
-          await writeContractAsync({
-            address: token as `0x${string}`,
-            abi: erc20Abi,
-            functionName: "approve",
-            args: [economy, amount],
-            chainId: targetChainId,
-          });
-          hash = await writeContractAsync({
-            address: economy,
-            abi,
-            functionName: "payEntry",
-            args: [token, amount, sessionRef],
-            chainId: targetChainId,
-          });
+          // Optional: skip permit attempt when we know asset has no EIP-2612
+          const tryPermit = await shouldUsePermit(asset);
+          if (!tryPermit) {
+            const allowance = await readAllowance(token, address, economy);
+            if (allowance < amount) {
+              await writeContractAsync({
+                address: token,
+                abi: erc20Abi,
+                functionName: "approve",
+                args: [economy, amount],
+                chainId: targetChainId,
+              });
+            }
+            hash = await writeContractAsync({
+              address: economy,
+              abi,
+              functionName: "payEntry",
+              args: [token, amount, sessionRef],
+              chainId: targetChainId,
+            });
+          } else {
+            hash = await spendErc20({
+              economy,
+              abi,
+              token,
+              amount,
+              withPermitFn: "payEntryWithPermit",
+              permitArgs: [token, amount, sessionRef],
+              plainFn: "payEntry",
+              plainArgs: [token, amount, sessionRef],
+            });
+          }
         }
 
         setPendingHash(hash);
@@ -119,6 +214,7 @@ export function useSpinEconomyPayment() {
       isConnected,
       preferredAsset,
       sendTransactionAsync,
+      spendErc20,
       targetChainId,
       writeContractAsync,
     ]
@@ -143,7 +239,7 @@ export function useSpinEconomyPayment() {
 
         const asset = opts.asset ?? preferredAsset;
         const amount = opts.amountWei;
-        const token = assetAddress(asset);
+        const token = assetAddress(asset) as `0x${string}`;
         let hash: Hash;
 
         if (asset === "CELO") {
@@ -159,20 +255,37 @@ export function useSpinEconomyPayment() {
             chainId: targetChainId,
           });
         } else {
-          await writeContractAsync({
-            address: token as `0x${string}`,
-            abi: erc20Abi,
-            functionName: "approve",
-            args: [economy, amount],
-            chainId: targetChainId,
-          });
-          hash = await writeContractAsync({
-            address: economy,
-            abi,
-            functionName: "purchaseItem",
-            args: [opts.itemId, token, amount],
-            chainId: targetChainId,
-          });
+          const tryPermit = await shouldUsePermit(asset);
+          if (!tryPermit) {
+            const allowance = await readAllowance(token, address, economy);
+            if (allowance < amount) {
+              await writeContractAsync({
+                address: token,
+                abi: erc20Abi,
+                functionName: "approve",
+                args: [economy, amount],
+                chainId: targetChainId,
+              });
+            }
+            hash = await writeContractAsync({
+              address: economy,
+              abi,
+              functionName: "purchaseItem",
+              args: [opts.itemId, token, amount],
+              chainId: targetChainId,
+            });
+          } else {
+            hash = await spendErc20({
+              economy,
+              abi,
+              token,
+              amount,
+              withPermitFn: "purchaseItemWithPermit",
+              permitArgs: [opts.itemId, token, amount],
+              plainFn: "purchaseItem",
+              plainArgs: [opts.itemId, token, amount],
+            });
+          }
         }
 
         setPendingHash(hash);
@@ -191,6 +304,7 @@ export function useSpinEconomyPayment() {
       isConnected,
       preferredAsset,
       sendTransactionAsync,
+      spendErc20,
       targetChainId,
       writeContractAsync,
     ]
