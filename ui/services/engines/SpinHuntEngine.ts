@@ -16,6 +16,7 @@ import { SecureRandomProvider } from "./SecureRandomProvider";
 import { eventBus } from "./EventBus";
 
 import type { PublicBubble } from "@/lib/spin/types";
+import { collectionEngine, type SpinLoadout } from "./CollectionEngine";
 
 type InternalBubble = PublicBubble & {
   amountWei: string;
@@ -85,12 +86,16 @@ export class SpinHuntEngine implements IEngine {
     };
   }
 
-  private buildBubblePlan(serverSeed: string, cfg: {
-    spinDurationSec: number;
-    maxBubbleCashWei: string;
-    maxCashPerSpinWei: string;
-    entryAsset: string;
-  }): BubblePlan {
+  private buildBubblePlan(
+    serverSeed: string,
+    cfg: {
+      spinDurationSec: number;
+      maxBubbleCashWei: string;
+      maxCashPerSpinWei: string;
+      entryAsset: string;
+    },
+    loadout: SpinLoadout
+  ): BubblePlan {
     const durationMs = Math.max(6, cfg.spinDurationSec) * 1000;
     const rng = mulberry32(Math.floor(hashSeed(serverSeed) * 1e9));
     const cashAsset = isSpinPayAsset(cfg.entryAsset) ? cfg.entryAsset : "USDm";
@@ -103,7 +108,8 @@ export class SpinHuntEngine implements IEngine {
     for (let i = 0; i < count; i++) {
       const spawnAtMs = Math.floor(rng() * (durationMs - 1200));
       const lifetimeMs = 900 + Math.floor(rng() * 1400);
-      const tapsRequired = rng() > 0.75 ? 2 : 1;
+      const baseTaps = rng() > 0.75 ? 2 : 1;
+      const tapsRequired = Math.max(1, baseTaps - loadout.buzzerTapBonus);
       // Micro cash — small share of max bubble, capped by remaining spin budget
       let amount = maxBubble > 0n ? (maxBubble * BigInt(10 + Math.floor(rng() * 90))) / 100n : 0n;
       if (amount > maxSpin - allocated) amount = maxSpin > allocated ? maxSpin - allocated : 0n;
@@ -152,6 +158,13 @@ export class SpinHuntEngine implements IEngine {
     });
     if (active) {
       const plan = active.bubblePlan as BubblePlan;
+      const loadout = (active.loadout as SpinLoadout | null) ?? {
+        rpmMultiplier: 1,
+        buzzerTapBonus: 0,
+        musicTrackId: null,
+        musicUrl: null,
+        itemSlugs: [],
+      };
       return {
         sessionId: active.id,
         status: active.status,
@@ -159,7 +172,8 @@ export class SpinHuntEngine implements IEngine {
         cashAsset: active.cashAsset,
         startedAt: active.startedAt.toISOString(),
         expiresAt: active.expiresAt.toISOString(),
-        rpm: cfg.baseWheelRpm,
+        rpm: Math.round(cfg.baseWheelRpm * (loadout.rpmMultiplier || 1)),
+        loadout,
         plan: this.publicPlan(plan),
         resumed: true,
       };
@@ -223,15 +237,21 @@ export class SpinHuntEngine implements IEngine {
       entryAsset = verified.asset;
     }
 
+    const loadout = await collectionEngine.resolveLoadout(input.userId);
     const serverSeed = toHex(randomBytes(32));
-    const plan = this.buildBubblePlan(serverSeed, {
-      spinDurationSec: cfg.spinDurationSec,
-      maxBubbleCashWei: cfg.maxBubbleCashWei,
-      maxCashPerSpinWei: cfg.maxCashPerSpinWei,
-      entryAsset: entryAsset || cfg.entryAsset,
-    });
+    const plan = this.buildBubblePlan(
+      serverSeed,
+      {
+        spinDurationSec: cfg.spinDurationSec,
+        maxBubbleCashWei: cfg.maxBubbleCashWei,
+        maxCashPerSpinWei: cfg.maxCashPerSpinWei,
+        entryAsset: entryAsset || cfg.entryAsset,
+      },
+      loadout
+    );
     const startedAt = new Date();
     const expiresAt = new Date(startedAt.getTime() + plan.durationMs + 5_000);
+    const rpm = Math.round(cfg.baseWheelRpm * loadout.rpmMultiplier);
 
     const session = await prisma().spinSession.create({
       data: {
@@ -240,6 +260,7 @@ export class SpinHuntEngine implements IEngine {
         entryTxHash,
         entryAsset,
         serverSeed,
+        loadout: loadout as object,
         bubblePlan: JSON.parse(JSON.stringify(plan)),
         cashEarnedWei: "0",
         cashAsset: isSpinPayAsset(cfg.entryAsset) ? cfg.entryAsset : "USDm",
@@ -258,7 +279,8 @@ export class SpinHuntEngine implements IEngine {
       cashAsset: session.cashAsset,
       startedAt: session.startedAt.toISOString(),
       expiresAt: session.expiresAt.toISOString(),
-      rpm: cfg.baseWheelRpm,
+      rpm,
+      loadout,
       plan: this.publicPlan(plan),
       resumed: false,
     };

@@ -10,6 +10,7 @@ import { assetDecimals } from "@/lib/tokens/celoAssets";
 import { isSpinPayAsset } from "@/lib/spin/economy";
 import type { HuntSession, PublicBubble } from "@/features/spin/types";
 import { BubbleArena } from "./BubbleArena";
+import { SpinLoadoutPanel } from "./SpinLoadoutPanel";
 import { SEGMENTS, SLICE_DEG, TOTAL, SpinWheelPanel } from "./SpinWheelPanel";
 
 function formatCash(amountWei: string, asset: string) {
@@ -154,6 +155,7 @@ export function SpinHuntHub() {
         expiresAt: body.expiresAt,
         rpm: body.rpm,
         plan: body.plan,
+        loadout: body.loadout,
       });
     },
     onError: (e: Error) => setError(e.message),
@@ -185,6 +187,7 @@ export function SpinHuntHub() {
         expiresAt: body.expiresAt,
         rpm: body.rpm,
         plan: body.plan,
+        loadout: body.loadout,
       });
     },
     onError: (e: Error) => setError(e.message),
@@ -311,23 +314,31 @@ export function SpinHuntHub() {
       </div>
 
       {hunting && session && (
-        <BubbleArena
-          bubbles={session.plan.bubbles}
-          startedAtMs={new Date(session.startedAt).getTime()}
-          durationMs={session.plan.durationMs}
-          disabled={hitMutation.isPending}
-          onBurst={(bubble, taps, elapsedMs) =>
-            hitMutation.mutate({ bubble, taps, elapsedMs })
-          }
-        />
+        <>
+          {session.loadout?.musicUrl ? (
+            <audio src={session.loadout.musicUrl} autoPlay loop preload="auto" className="hidden" />
+          ) : null}
+          <BubbleArena
+            bubbles={session.plan.bubbles}
+            startedAtMs={new Date(session.startedAt).getTime()}
+            durationMs={session.plan.durationMs}
+            disabled={hitMutation.isPending}
+            onBurst={(bubble, taps, elapsedMs) =>
+              hitMutation.mutate({ bubble, taps, elapsedMs })
+            }
+          />
+        </>
       )}
 
       {!hunting && (
-        <p className="mt-3 text-center text-[10px] font-bold text-muted-foreground">
-          {available > 0
-            ? "Tap center Spin to start a free hunt"
-            : `No free spins — entry ${feeLabel} via SpinEconomy`}
-        </p>
+        <>
+          <p className="mt-3 text-center text-[10px] font-bold text-muted-foreground">
+            {available > 0
+              ? "Tap center Spin to start a free hunt"
+              : `No free spins — entry ${feeLabel} via SpinEconomy`}
+          </p>
+          <SpinLoadoutPanel />
+        </>
       )}
 
       {error && (

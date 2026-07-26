@@ -124,8 +124,81 @@ export function useSpinEconomyPayment() {
     ]
   );
 
+  const purchaseItem = useCallback(
+    async (opts: {
+      itemId: `0x${string}`;
+      asset?: SpinPayAsset;
+      amountWei: bigint;
+    }) => {
+      setError(null);
+      setBusy(true);
+      try {
+        if (!isConnected || !address) throw new Error("Connect wallet to purchase");
+        await ensureChain();
+        const economy = resolveEconomy();
+        const abi = CONTRACTS.SpinEconomy?.abi;
+        if (!abi?.length) {
+          throw new Error("SpinEconomy ABI missing — run smartContracts sync after compile");
+        }
+
+        const asset = opts.asset ?? preferredAsset;
+        const amount = opts.amountWei;
+        const token = assetAddress(asset);
+        let hash: Hash;
+
+        if (asset === "CELO") {
+          const data = encodeFunctionData({
+            abi,
+            functionName: "purchaseItem",
+            args: [opts.itemId, token, amount],
+          });
+          hash = await sendTransactionAsync({
+            to: economy,
+            value: amount,
+            data,
+            chainId: targetChainId,
+          });
+        } else {
+          await writeContractAsync({
+            address: token as `0x${string}`,
+            abi: erc20Abi,
+            functionName: "approve",
+            args: [economy, amount],
+            chainId: targetChainId,
+          });
+          hash = await writeContractAsync({
+            address: economy,
+            abi,
+            functionName: "purchaseItem",
+            args: [opts.itemId, token, amount],
+            chainId: targetChainId,
+          });
+        }
+
+        setPendingHash(hash);
+        return { hash, asset, amountWei: amount.toString(), itemId: opts.itemId };
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "Purchase failed";
+        setError(msg);
+        throw e;
+      } finally {
+        setBusy(false);
+      }
+    },
+    [
+      address,
+      ensureChain,
+      isConnected,
+      preferredAsset,
+      sendTransactionAsync,
+      targetChainId,
+      writeContractAsync,
+    ]
+  );
+
   return {
     payEntry,
+    purchaseItem,
     createSessionRef,
     busy: busy || receipt.isLoading,
     error,

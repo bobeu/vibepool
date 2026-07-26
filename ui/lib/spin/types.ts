@@ -12,6 +12,14 @@ export type HuntPlan = {
   bubbles: PublicBubble[];
 };
 
+export type HuntLoadout = {
+  rpmMultiplier: number;
+  buzzerTapBonus: number;
+  musicTrackId: string | null;
+  musicUrl: string | null;
+  itemSlugs: string[];
+};
+
 export type HuntSession = {
   sessionId: string;
   cashEarnedWei: string;
@@ -20,4 +28,5 @@ export type HuntSession = {
   expiresAt: string;
   rpm: number;
   plan: HuntPlan;
+  loadout?: HuntLoadout;
 };
