@@ -7,6 +7,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { LevelProgress } from "@/components/ui/LevelProgress";
 import { GlassContainer } from "@/components/hero/GlassContainer";
 import { SectionDivider } from "@/components/hero/SectionDivider";
+import { authFetch } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
 import { container, item } from "@/lib/motion/variants";
 
@@ -22,76 +23,82 @@ export default function ProfilePage() {
   const { data: profile, isLoading: profileLoading } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
-      const res = await fetch("/api/profile");
+      const res = await authFetch("/api/profile");
       if (!res.ok) throw new Error("Failed to fetch profile");
       return res.json();
     },
     staleTime: 15_000,
     enabled: !!session,
+    retry: false,
   });
 
   const { data: identity, isLoading: identityLoading } = useQuery({
     queryKey: ["profile", "identity"],
     queryFn: async () => {
-      const res = await fetch("/api/profile/identity");
+      const res = await authFetch("/api/profile/identity");
       if (!res.ok) throw new Error("Failed to fetch identity");
       return res.json();
     },
     staleTime: 15_000,
     enabled: !!session,
+    retry: false,
   });
 
   const { data: achievements, isLoading: achievementsLoading } = useQuery({
     queryKey: ["achievements"],
     queryFn: async () => {
-      const res = await fetch("/api/achievements");
+      const res = await authFetch("/api/achievements");
       if (!res.ok) throw new Error("Failed to fetch achievements");
       return res.json();
     },
     staleTime: 15_000,
     enabled: !!session,
+    retry: false,
   });
 
   const { data: timeline, isLoading: timelineLoading } = useQuery({
     queryKey: ["profile", "timeline"],
     queryFn: async () => {
-      const res = await fetch("/api/profile/timeline");
+      const res = await authFetch("/api/profile/timeline");
       if (!res.ok) throw new Error("Failed to fetch timeline");
       return res.json();
     },
     staleTime: 15_000,
     enabled: !!session,
+    retry: false,
   });
 
   const { data: titles } = useQuery({
     queryKey: ["profile", "titles"],
     queryFn: async () => {
-      const res = await fetch("/api/profile/title");
+      const res = await authFetch("/api/profile/title");
       if (!res.ok) throw new Error("Failed to fetch titles");
       return res.json();
     },
     staleTime: 15_000,
     enabled: !!session,
+    retry: false,
   });
 
   const { data: badges } = useQuery({
     queryKey: ["profile", "badges"],
     queryFn: async () => {
-      const res = await fetch("/api/profile/badge");
+      const res = await authFetch("/api/profile/badge");
       if (!res.ok) throw new Error("Failed to fetch badges");
       return res.json();
     },
     staleTime: 15_000,
     enabled: !!session,
+    retry: false,
   });
 
   const { data: social } = useQuery({
     queryKey: ["profile", "social"],
     queryFn: async () => {
       const [friendsRes, referralsRes, feedRes] = await Promise.all([
-        fetch("/api/friends"),
-        fetch("/api/referrals"),
-        fetch("/api/feed"),
+        authFetch("/api/friends"),
+        authFetch("/api/referrals"),
+        authFetch("/api/feed"),
       ]);
       const friends = friendsRes.ok ? await friendsRes.json() : { friends: [] };
       const referrals = referralsRes.ok ? await referralsRes.json() : { total: 0, successful: 0 };
@@ -105,24 +112,25 @@ export default function ProfilePage() {
     },
     staleTime: 15_000,
     enabled: !!session,
+    retry: false,
   });
 
   const { data: socialSettings } = useQuery({
     queryKey: ["social-settings"],
     queryFn: async () => {
-      const res = await fetch("/api/social/settings");
+      const res = await authFetch("/api/social/settings");
       if (!res.ok) throw new Error("Failed to fetch social settings");
       return res.json();
     },
     staleTime: 15_000,
     enabled: !!session,
+    retry: false,
   });
 
   const updateSettingsMutation = useMutation({
     mutationFn: async (patch: Record<string, unknown>) => {
-      const res = await fetch("/api/social/settings", {
+      const res = await authFetch("/api/social/settings", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(patch),
       });
       if (!res.ok) throw new Error("Failed to update settings");
@@ -132,7 +140,7 @@ export default function ProfilePage() {
   });
   const evaluateMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/api/achievements", { method: "POST" });
+      const res = await authFetch("/api/achievements", { method: "POST" });
       if (!res.ok) throw new Error("Failed to evaluate achievements");
       return res.json();
     },
@@ -306,7 +314,7 @@ export default function ProfilePage() {
           {social?.activity?.length > 0 && (
             <GlassContainer className="p-4 space-y-2">
               <p className="text-xs text-muted-foreground uppercase tracking-wider">Recent Activity</p>
-              {social.activity.map((a: any) => (
+              {social?.activity.map((a: any) => (
                 <div key={a.id} className="flex items-center justify-between rounded-xl border border-border/40 bg-muted/30 p-3">
                   <p className="font-bold text-sm">{a.title}</p>
                   <span className="text-[10px] text-muted-foreground uppercase">{a.type}</span>

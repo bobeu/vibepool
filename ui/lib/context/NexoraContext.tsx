@@ -1,0 +1,111 @@
+"use client";
+
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { useAccount, useConfig, useReadContracts } from "wagmi";
+import { CONTRACTS } from "@/lib/contracts";
+import { ZERO_ADDRESS, STALE_TIME_MS } from "@/config/constants";
+import type { Address, AppChainData, PredictionChainData, NexoraContextValue } from "@/types";
+import { usePublicChainData } from "@/hooks/usePublicChainData";
+
+const NexoraContext = createContext<NexoraContextValue | undefined>(undefined);
+
+const EMPTY_PREDICTION: PredictionChainData = {
+  roundId: 0n,
+  higherPool: 0n,
+  lowerPool: 0n,
+  startPrice: 0n,
+  endPrice: null,
+  isRoundActive: false,
+};
+
+export function NexoraProvider({ children }: { children: React.ReactNode }) {
+  const { address, isConnected } = useAccount();
+  const config = useConfig();
+  const [chainData, setChainData] = useState<AppChainData | null>(null);
+
+  const predictionAddr = CONTRACTS?.PredictionManager?.address ?? ZERO_ADDRESS;
+  const predictionAbi = CONTRACTS?.PredictionManager?.abi;
+
+  const { data: contractsData, refetch: refreshChainData } = useReadContracts({
+    config,
+    account: address,
+    contracts: [
+      {
+        address: predictionAddr,
+        abi: predictionAbi,
+        functionName: "getRoundData",
+        args: [],
+      },
+      {
+        address: predictionAddr,
+        abi: predictionAbi,
+        functionName: "owner",
+        args: [],
+      },
+    ],
+    allowFailure: true,
+    query: {
+      enabled: !!address && !!isConnected && Array.isArray(predictionAbi) && predictionAbi.length > 0,
+      refetchOnReconnect: true,
+      refetchInterval: STALE_TIME_MS * 2,
+      staleTime: STALE_TIME_MS,
+    },
+  });
+
+  useEffect(() => {
+    if (!isConnected || !address || !contractsData) return;
+
+    const roundResult = contractsData[0];
+    const ownerResult = contractsData[1];
+
+    if (roundResult?.status === "success" && roundResult.result !== undefined) {
+      setChainData({
+        prediction: roundResult.result as PredictionChainData,
+        owner:
+          ownerResult?.status === "success"
+            ? (ownerResult.result as Address)
+            : ZERO_ADDRESS,
+      });
+    }
+  }, [contractsData, isConnected, address]);
+
+  const handlePublicData = useCallback((data: AppChainData) => {
+    setChainData(data);
+  }, []);
+
+  usePublicChainData({
+    isConnected: !!isConnected,
+    address,
+    predictionAddress: predictionAddr,
+    predictionAbi: predictionAbi ?? [],
+    onData: handlePublicData,
+  });
+
+  const value: NexoraContextValue = {
+    isConnected: !!isConnected,
+    address,
+    chainData: chainData ?? {
+      owner: ZERO_ADDRESS,
+      prediction: EMPTY_PREDICTION,
+    },
+    isLoading: isConnected && !chainData,
+    refreshChainData: () => {
+      void refreshChainData();
+    },
+  };
+
+  return (
+    <NexoraContext.Provider value={value}>{children}</NexoraContext.Provider>
+  );
+}
+
+export function useNexora() {
+  const ctx = useContext(NexoraContext);
+  if (!ctx) {
+    throw new Error("useNexora must be used within NexoraProvider");
+  }
+  return ctx;
+}
+
+/** @deprecated Use useNexora */
+export const useVibepool = useNexora;

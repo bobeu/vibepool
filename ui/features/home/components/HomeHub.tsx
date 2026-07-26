@@ -182,7 +182,7 @@ export function HomeHub() {
         <div className="absolute inset-0 z-0">
           <Image
             src="/hero.png"
-            alt="Vibepool Hero"
+            alt="Nexora Hero"
             fill
             className="object-cover opacity-30"
             priority
@@ -234,7 +234,7 @@ export function HomeHub() {
                 </p>
               </div>
               {profile ? (
-                <LevelProgress xp={profile.xp} level={profile.level} />
+                <LevelProgress xp={profile.xp ?? 0} level={profile.level ?? 1} />
               ) : (
                 <div className="h-2 bg-white/10 rounded-full border border-white/10">
                   <div className="h-full w-[70%] bg-primary rounded-full" />

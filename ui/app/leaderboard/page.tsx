@@ -185,7 +185,7 @@ export default function LeaderboardPage() {
           </div>
           <div className="absolute bottom-3 left-4 right-4">
             <p className="font-black uppercase italic text-white text-xl leading-tight drop-shadow-[2px_2px_0_#000]">
-              Vibepool<br />Championship
+              Nexora<br />Championship
             </p>
             <p className="text-[10px] text-white/80 font-bold mt-0.5">
               Predict. Spin. Dominate the Arena.

@@ -9,7 +9,8 @@ export async function authenticatedHandler(
   const session = await getSessionFromRequest(req);
 
   if (!session) {
-    logger.warn("Unauthenticated access attempt", { path: req.nextUrl.pathname });
+    // Expected during guest→wallet races and pre-login UI; keep logs quiet in development.
+    logger.debug("Unauthenticated access attempt", { path: req.nextUrl.pathname });
     return NextResponse.json({ error: "Unauthorized", code: "UNAUTHORIZED" }, { status: 401 });
   }
 

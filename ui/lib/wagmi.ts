@@ -8,7 +8,7 @@ export const isMiniPay = (): boolean => {
 };
 
 export const wagmiConfig = getDefaultConfig({
-  appName: "Vibepool",
+  appName: "Nexora",
   projectId:
     process.env.NEXT_PUBLIC_WALLETCONNECT_ID ??
     "444e8c9b1c9d0a1e5f2b2c3d4e5f6a7",

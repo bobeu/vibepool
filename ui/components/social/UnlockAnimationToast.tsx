@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
+import { authFetch, getAccessToken } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
 
 const PRIORITY_STYLES: Record<string, string> = {
@@ -15,23 +16,24 @@ const PRIORITY_STYLES: Record<string, string> = {
 export function UnlockAnimationToast() {
   const { session } = useAuth();
   const [current, setCurrent] = useState<any | null>(null);
+  const canFetch = Boolean(session && getAccessToken());
 
   const { data } = useQuery({
     queryKey: ["animations"],
     queryFn: async () => {
-      const res = await fetch("/api/animations");
+      const res = await authFetch("/api/animations");
       if (!res.ok) return { animations: [] };
       return res.json();
     },
-    enabled: !!session,
-    refetchInterval: 15_000,
+    enabled: canFetch,
+    refetchInterval: canFetch ? 15_000 : false,
+    retry: false,
   });
 
   const markViewed = useMutation({
     mutationFn: async (animationId: string) => {
-      await fetch("/api/animations", {
+      await authFetch("/api/animations", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ animationId }),
       });
     },

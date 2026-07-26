@@ -1,13 +1,19 @@
 "use client";
 
 interface LevelProgressProps {
-  xp: number;
-  level: number;
+  xp?: number | null;
+  level?: number | null;
   xpPerLevel?: number;
 }
 
-export function LevelProgress({ xp, level, xpPerLevel = 1000 }: LevelProgressProps) {
-  const nextLevelXp = (level + 1) * xpPerLevel;
+export function LevelProgress({
+  xp: xpProp,
+  level: levelProp,
+  xpPerLevel = 1000,
+}: LevelProgressProps) {
+  const xp = Number.isFinite(Number(xpProp)) ? Number(xpProp) : 0;
+  const level = Number.isFinite(Number(levelProp)) ? Number(levelProp) : 0;
+  const nextLevelXp = Math.max((level + 1) * xpPerLevel, xpPerLevel);
   const progress = Math.min((xp / nextLevelXp) * 100, 100);
 
   return (

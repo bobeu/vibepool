@@ -149,7 +149,7 @@ export default function ArenaPage() {
   if (isLoading) {
     return (
       <AppShell activeNav="arena">
-        <div className="flex min-h-[50vh] items-center justify-center text-muted-foreground">Loading Vibepool Arena...</div>
+        <div className="flex min-h-[50vh] items-center justify-center text-muted-foreground">Loading Nexora Arena...</div>
       </AppShell>
     );
   }
@@ -167,7 +167,7 @@ export default function ArenaPage() {
       <AppShell activeNav="arena">
         <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center px-4">
           <h2 className="text-xl font-bold">Arena temporarily unavailable</h2>
-          <p className="text-sm text-muted-foreground max-w-md">Vibepool Arena is currently disabled for maintenance or a staged rollout. Check the Event Center for updates.</p>
+          <p className="text-sm text-muted-foreground max-w-md">Nexora Arena is currently disabled for maintenance or a staged rollout. Check the Event Center for updates.</p>
           <Link href="/events" className="text-primary font-semibold text-sm">Go to Event Center</Link>
         </div>
       </AppShell>
@@ -178,7 +178,7 @@ export default function ArenaPage() {
     <AppShell activeNav="arena">
       <motion.div variants={container} initial="hidden" animate="show" className="mx-auto max-w-5xl space-y-8 px-4 py-8">
         <motion.div variants={item} className="text-center">
-          <p className="text-sm uppercase tracking-[0.3em] text-cyan-300/80">Vibepool Arena</p>
+          <p className="text-sm uppercase tracking-[0.3em] text-cyan-300/80">Nexora Arena</p>
           <h1 className="mt-2 text-4xl font-bold bg-gradient-to-r from-cyan-200 to-violet-300 bg-clip-text text-transparent">
             Competitive Head-to-Head
           </h1>
@@ -196,13 +196,13 @@ export default function ArenaPage() {
                 <div className="relative h-48 w-full border-b-[3px] border-black bg-black">
                   <Image
                     src="/arena.png"
-                    alt="Vibepool Arena"
+                    alt="Nexora Arena"
                     fill
                     className="object-cover opacity-90 animate-fade-in"
                   />
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
                     <p className="brutal-heading text-white text-xl drop-shadow-[2px_2px_0_#000]">
-                      Vibepool Arena
+                      Nexora Arena
                     </p>
                     <p className="text-[10px] font-bold text-white/95 mt-1 max-w-xs drop-shadow-[1px_1px_0_#000]">
                       Engage in real-time volatility duels and earn glory

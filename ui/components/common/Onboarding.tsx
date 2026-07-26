@@ -56,7 +56,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
   if (slide === 0) {
     return (
-      <div className="absolute inset-0 z-[200] flex flex-col justify-between bg-[#FBBF24] p-6 text-black select-none">
+      <div className="absolute inset-0 z-[200] flex flex-col justify-between bg-[#FBBF24] p-6 text-black select-none overflow-y-auto">
         <div className="flex justify-between items-center w-full">
           <span className="text-[10px] font-black tracking-widest uppercase bg-black text-white px-2 py-0.5 rounded border border-black">
             Slide 1/3
@@ -111,7 +111,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
   if (slide === 1) {
     return (
-      <div className="absolute inset-0 z-[200] flex flex-col justify-between bg-[#62E2F8] p-6 text-black select-none">
+      <div className="absolute inset-0 z-[200] flex flex-col justify-between bg-[#62E2F8] p-6 text-black select-none overflow-y-auto">
         <div className="flex justify-between items-center w-full">
           <span className="text-[10px] font-black tracking-widest uppercase bg-black text-white px-2 py-0.5 rounded border border-black">
             Slide 2/3
@@ -165,7 +165,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
   // Slide 3: Connect (optional) + Launch App
   return (
-    <div className="absolute inset-0 z-[200] flex flex-col justify-between bg-white p-6 text-black select-none">
+    <div className="absolute inset-0 z-[200] flex flex-col justify-between bg-white p-6 text-black select-none overflow-y-auto">
       <div className="flex justify-between items-center w-full">
         <span className="text-[10px] font-black tracking-widest uppercase bg-black text-white px-2 py-0.5 rounded border border-black">
           Slide 3/3

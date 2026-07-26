@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { wagmiConfig } from '@/lib/wagmi';
-import { VibepoolProvider } from '@/lib/context/VibepoolContext';
+import { NexoraProvider } from '@/lib/context/NexoraContext';
 import { AuthProvider } from '@/lib/auth/useAuth';
 import { WalletSessionSync } from '@/lib/auth/WalletSessionSync';
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
@@ -36,7 +36,21 @@ const rainbowKitDarkTheme = darkTheme({
 export function Providers({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: (failureCount, error) => {
+              const msg = String((error as Error)?.message ?? error);
+              if (msg.includes("401") || msg.includes("Unauthorized")) return false;
+              return failureCount < 1;
+            },
+            refetchOnWindowFocus: false,
+          },
+        },
+      })
+  );
 
   useEffect(() => {
     // Force dark mode always — no light mode
@@ -61,12 +75,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
             initialChain={celo}
             theme={rainbowKitDarkTheme}
           >
-            <VibepoolProvider>
+            <NexoraProvider>
               <AuthProvider>
                 <WalletSessionSync />
                 {children}
               </AuthProvider>
-            </VibepoolProvider>
+            </NexoraProvider>
           </RainbowKitProvider>
         </ThemeContext.Provider>
       </QueryClientProvider>

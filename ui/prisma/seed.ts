@@ -111,7 +111,7 @@ async function main() {
     data: [
       {
         title: "Daily Login",
-        description: "Log in to Vibepool today",
+        description: "Log in to Nexora today",
         xpReward: 50,
         pointReward: 20,
         spinReward: 1,

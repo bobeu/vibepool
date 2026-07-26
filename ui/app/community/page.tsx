@@ -39,7 +39,7 @@ export default function CommunityPage() {
           <SectionDivider label="Community Spotlight" />
           <GlassContainer className="p-5 text-center space-y-2">
             <p className="text-lg font-black uppercase tracking-tight text-gradient bg-gradient-to-r from-primary to-accent-purple bg-clip-text text-transparent">
-              Vibepool Champions
+              Nexora Champions
             </p>
             <p className="text-xs text-muted-foreground">
               The arena never sleeps. Climb the ranks, unlock legendary badges, and become a community legend.

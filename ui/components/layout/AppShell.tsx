@@ -56,13 +56,17 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
   const { toastMessage, clearToast } = useUIStore();
   // Start false so onboarding gates the app until Launch App (or prior completion).
   const [onboardingDone, setOnboardingDone] = useState(false);
+  const [onboardingChecked, setOnboardingChecked] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [currentTime, setCurrentTime] = useState("9:41");
 
   useEffect(() => {
     setMounted(true);
-    const done = localStorage.getItem("vibepool_onboarding_done") === "1";
+    // New brand key — clear legacy vibepool flag so onboarding shows after rebrand.
+    localStorage.removeItem("vibepool_onboarding_done");
+    const done = localStorage.getItem("nexora_onboarding_done") === "1";
     setOnboardingDone(done);
+    setOnboardingChecked(true);
   }, []);
 
   // Live clock for status bar
@@ -86,20 +90,15 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
     return () => clearTimeout(t);
   }, [toastMessage, clearToast]);
 
-  if (!mounted) return null;
+  if (!mounted || !onboardingChecked) return null;
 
   const handleOnboardingComplete = () => {
-    localStorage.setItem("vibepool_onboarding_done", "1");
+    localStorage.removeItem("vibepool_onboarding_done");
+    localStorage.setItem("nexora_onboarding_done", "1");
     setOnboardingDone(true);
   };
 
   // ─── SHARED inner content ─────────────────────────────────────────────────
-
-  const onboardingGate = (
-    <div className="relative flex-1 min-h-0 overflow-hidden">
-      <Onboarding onComplete={handleOnboardingComplete} />
-    </div>
-  );
 
   const appContent = (
     <>
@@ -116,10 +115,10 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
       <header className="flex items-center justify-between px-4 py-2.5 border-b border-white/10 bg-card/80 backdrop-blur-sm shrink-0 select-none z-30 relative">
         <Link href="/" className="flex items-center gap-2 active:scale-95 transition-transform">
           <div className="relative w-8 h-8 overflow-hidden bg-primary border-2 border-black rounded-xl flex-shrink-0 shadow-[2px_2px_0_rgba(0,0,0,0.8)]">
-            <Image src="/logo.png" alt="Vibepool" fill className="object-cover" />
+            <Image src="/logo.png" alt="Nexora" fill className="object-cover" />
           </div>
           <span className="font-black uppercase tracking-tight italic text-sm leading-none">
-            Vibe<span className="text-primary">pool</span>
+            Nex<span className="text-primary">ora</span>
           </span>
         </Link>
 
@@ -151,7 +150,18 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
     </>
   );
 
-  const innerContent = onboardingDone ? appContent : onboardingGate;
+  const innerContent = appContent;
+
+  // Full-screen onboarding gate (covers mobile + desktop chrome)
+  if (!onboardingDone) {
+    return (
+      <div className="fixed inset-0 z-[9999] bg-background">
+        <div className="relative h-full w-full max-w-[410px] mx-auto overflow-hidden">
+          <Onboarding onComplete={handleOnboardingComplete} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -181,10 +191,10 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
         {/* Floating desktop label */}
         <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 flex items-center gap-3">
           <div className="relative w-8 h-8 overflow-hidden bg-primary border-2 border-black rounded-xl flex-shrink-0">
-            <Image src="/logo.png" alt="Vibepool" fill className="object-cover" />
+            <Image src="/logo.png" alt="Nexora" fill className="object-cover" />
           </div>
           <span className="font-black uppercase tracking-tight italic text-lg text-white">
-            Vibe<span className="text-primary">pool</span>
+            Nex<span className="text-primary">ora</span>
           </span>
         </div>
 

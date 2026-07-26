@@ -76,13 +76,16 @@ export interface AppChainData {
   prediction: PredictionChainData;
 }
 
-export interface VibepoolContextValue {
+export interface NexoraContextValue {
   isConnected: boolean;
   address: Address | undefined;
   chainData: AppChainData | null;
   isLoading: boolean;
   refreshChainData: () => void;
 }
+
+/** @deprecated Use NexoraContextValue */
+export type VibepoolContextValue = NexoraContextValue;
 
 export interface ApiErrorResponse {
   error: string;

@@ -5,9 +5,9 @@ import '@/styles/globals.css';
 import { Providers } from './providers';
 
 export const metadata: Metadata = {
-    title: 'Vibepool - Yield-Backed Price Volatility Prediction Game on Celo',
+    title: 'Nexora - Yield-Backed Price Volatility Prediction Game on Celo',
     description: 'Predict CELO token price volatility and earn a share of the losing pool, integrated with dynamic yield from Aave protocol pools on Celo.',
-    keywords: ['crypto', 'volatility', 'prediction market', 'Celo', 'MiniPay', 'Aave', 'yield', 'Vibepool'],
+    keywords: ['crypto', 'volatility', 'prediction market', 'Celo', 'MiniPay', 'Aave', 'yield', 'Nexora'],
     icons: {
         icon: '/logo.png',
     },
