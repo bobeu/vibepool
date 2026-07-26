@@ -1,13 +1,14 @@
-# Vibepool 2.0 — Smart Contract Foundation
+# Nexora — Smart Contract Foundation
 
-Hardhat-based smart contract suite for Vibepool 2.0 on Celo.
+Hardhat + Foundry suite for Nexora on **Celo mainnet (42220)** only.
 
 ## Contracts
 
-- `RewardTreasury.sol` — Central vault for reward funds (CELO + ERC20)
+- `RewardTreasury.sol` — Central vault (native CELO + ERC20). Enable **USDm** after deploy for MiniPay skill fees.
 - `PointsManager.sol` — On-chain player profile, XP, points, spins
-- `ActivityRegistry.sol` — Minimal activity history with streak tracking
+- `ActivityRegistry.sol` — Activity history with streak tracking
 - `SpinRewardManager.sol` — Spin ticket accounting and reward recording
+- `MockERC20.sol` — Local/test asset only
 
 ## Libraries
 
@@ -18,22 +19,37 @@ Hardhat-based smart contract suite for Vibepool 2.0 on Celo.
 ## Getting Started
 
 ```bash
-npm install
+bun install
 cp .env.example .env
-npx hardhat compile
-npx hardhat test
+bun run compile
+bun run test
 ```
 
-## Deployment
+## Mainnet deployment (you run this)
 
 ```bash
-npx hardhat deploy --network celo
-node scripts/sync-data.js
+# Hardhat
+bun run deploy-mainnet
+bun run sync
+
+# Or Foundry
+forge script script/DeployVibepool.s.sol:DeployVibepool --rpc-url celo --broadcast --verify
 ```
+
+After deploy, `sync-data.js` writes addresses/ABIs into `ui/lib/contracts/`.
+
+**Post-deploy checklist**
+
+1. Confirm `RewardTreasury` has USDm enabled (`0x765DE816845861e75A25fCA122bb6898B8B1282a`)
+2. Grant `REWARD_MANAGER_ROLE` to backend signer
+3. Set `NEXT_PUBLIC_*_ADDRESS` in the UI env
+4. Fund treasury with CELO / USDm for reward payouts when settlement is enabled
 
 ## Testing
 
 ```bash
-npx hardhat test
-REPORT_GAS=true npx hardhat test
+bun run test
+bun run forge:test
 ```
+
+Tests use Hardhat local network + MockERC20 labeled **USDm** (not a testnet).

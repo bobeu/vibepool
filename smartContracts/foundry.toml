@@ -24,8 +24,6 @@ fail_on_revert = false
 
 [rpc_endpoints]
 celo = "https://forno.celo.org"
-celoSepolia = "https://forno.celo-sepolia.celo-testnet.org"
 
 [etherscan]
 celo = { key = "${CELOSCAN_API_KEY}" }
-celoSepolia = { key = "${CELOSCAN_API_KEY}" }
