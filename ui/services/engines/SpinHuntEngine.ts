@@ -16,6 +16,8 @@ import { SecureRandomProvider } from "./SecureRandomProvider";
 import { eventBus } from "./EventBus";
 
 import type { PublicBubble } from "@/lib/spin/types";
+import { isGuestWallet } from "@/lib/auth/guest";
+import { MOCK_CREDIT_TX } from "@/lib/spin/freePlay";
 import { collectionEngine, type SpinLoadout } from "./CollectionEngine";
 
 type InternalBubble = PublicBubble & {
@@ -394,6 +396,18 @@ export class SpinHuntEngine implements IEngine {
       return pending;
     }
 
+    // Free-play guests: mock credit only — never broadcast a real vault tx.
+    if (isGuestWallet(input.wallet)) {
+      return prisma().spinRewardPending.update({
+        where: { id: pending.id },
+        data: {
+          status: "CREDITED_ONCHAIN",
+          creditTxHash: MOCK_CREDIT_TX,
+          lastError: null,
+        },
+      });
+    }
+
     const credited = await creditSpinReward({
       wallet: input.wallet,
       asset: input.asset,
@@ -412,6 +426,81 @@ export class SpinHuntEngine implements IEngine {
       where: { id: pending.id },
       data: { lastError: credited.error },
     });
+  }
+
+  /** Aggregated mock/real claimable rows still open for withdraw UI. */
+  async getClaimableSummary(wallet: string, userId: string) {
+    const rows = await prisma().spinRewardPending.findMany({
+      where: {
+        userId,
+        status: { in: ["PENDING_SYNC", "CREDITED_ONCHAIN"] },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    const byAsset: Record<string, { amountWei: string; canWithdraw: boolean }> = {};
+    for (const row of rows) {
+      const prev = BigInt(byAsset[row.asset]?.amountWei ?? "0");
+      byAsset[row.asset] = {
+        amountWei: (prev + BigInt(row.amountWei)).toString(),
+        // Free-play: always show withdraw when owed. Real wallets still need vault liquidity (Phase 3).
+        canWithdraw: isGuestWallet(wallet) ? true : true,
+      };
+    }
+
+    const totalWei = rows.reduce((sum, r) => sum + BigInt(r.amountWei), 0n);
+    return {
+      freePlay: isGuestWallet(wallet),
+      rows: rows.map((r) => ({
+        id: r.id,
+        asset: r.asset,
+        amountWei: r.amountWei,
+        status: r.status,
+        source: r.source,
+      })),
+      byAsset,
+      totalWei: totalWei.toString(),
+      canWithdraw: totalWei > 0n && isGuestWallet(wallet),
+    };
+  }
+
+  /** Free-play only: clear claimable rows and notify — no chain transfer. */
+  async mockWithdraw(wallet: string, userId: string) {
+    if (!isGuestWallet(wallet)) {
+      throw new Error("Mock withdraw is only available in free play");
+    }
+
+    const rows = await prisma().spinRewardPending.findMany({
+      where: {
+        userId,
+        status: { in: ["PENDING_SYNC", "CREDITED_ONCHAIN"] },
+      },
+    });
+
+    if (rows.length === 0) {
+      return { success: false, message: "Nothing to withdraw" };
+    }
+
+    await prisma().spinRewardPending.deleteMany({
+      where: { id: { in: rows.map((r) => r.id) } },
+    });
+
+    const { NotificationEngine } = await import("./NotificationEngine");
+    const notifications = new NotificationEngine();
+    await notifications.send(
+      userId,
+      "REWARD",
+      "Successful withdraw",
+      "Your free-play rewards were withdrawn successfully. (Demo — no funds sent.)",
+      "HIGH"
+    );
+
+    return {
+      success: true,
+      message: "Successful withdraw",
+      cleared: rows.length,
+      mock: true,
+    };
   }
 
   async finishSession(input: {

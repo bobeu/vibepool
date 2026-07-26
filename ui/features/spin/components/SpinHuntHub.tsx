@@ -2,10 +2,12 @@
 
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Ticket, X, Zap } from "lucide-react";
+import { ArrowDownToLine, Ticket, X, Zap } from "lucide-react";
 import { formatUnits } from "viem";
 import { authFetch } from "@/lib/auth/client";
+import { useAuth } from "@/lib/auth/useAuth";
 import { useSpinEconomyPayment } from "@/hooks/useSpinEconomyPayment";
+import { useUIStore } from "@/store/uiStore";
 import { assetDecimals } from "@/lib/tokens/celoAssets";
 import { isSpinPayAsset } from "@/lib/spin/economy";
 import type { HuntSession, PublicBubble } from "@/features/spin/types";
@@ -26,6 +28,8 @@ function formatCash(amountWei: string, asset: string) {
 
 export function SpinHuntHub() {
   const queryClient = useQueryClient();
+  const { isFreePlay } = useAuth();
+  const showToast = useUIStore((s) => s.showToast);
   const { payEntry, busy: paying, preferredAsset, feeLabel, isConnected } =
     useSpinEconomyPayment();
 
@@ -61,7 +65,18 @@ export function SpinHuntHub() {
     staleTime: 10_000,
   });
 
+  const { data: walletSummary } = useQuery({
+    queryKey: ["spin-wallet"],
+    queryFn: async () => {
+      const res = await authFetch("/api/spin/wallet");
+      if (!res.ok) return { canWithdraw: false, totalWei: "0" };
+      return res.json();
+    },
+    staleTime: 5_000,
+  });
+
   const available = Number(data?.balance?.available ?? 0);
+  const canMockWithdraw = Boolean(isFreePlay && walletSummary?.canWithdraw);
   const rpm = session?.rpm ?? data?.config?.baseWheelRpm ?? 120;
 
   const clearHuntTimer = () => {
@@ -102,6 +117,7 @@ export function SpinHuntHub() {
           queryClient.invalidateQueries({ queryKey: ["spin-hunt-config"] });
           queryClient.invalidateQueries({ queryKey: ["spin-history"] });
           queryClient.invalidateQueries({ queryKey: ["spins"] });
+          queryClient.invalidateQueries({ queryKey: ["spin-wallet"] });
         }, 3200);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Finish failed");
@@ -215,7 +231,28 @@ export function SpinHuntHub() {
     },
   });
 
-  const busy = hunting || finishing || startTicket.isPending || startPaid.isPending || paying;
+  const withdrawMutation = useMutation({
+    mutationFn: async () => {
+      const res = await authFetch("/api/spin/withdraw", { method: "POST" });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || "Withdraw failed");
+      return body;
+    },
+    onSuccess: (body) => {
+      showToast(body.message || "Successful withdraw");
+      setCashEarnedWei("0");
+      queryClient.invalidateQueries({ queryKey: ["spin-wallet"] });
+    },
+    onError: (e: Error) => setError(e.message),
+  });
+
+  const busy =
+    hunting ||
+    finishing ||
+    startTicket.isPending ||
+    startPaid.isPending ||
+    paying ||
+    withdrawMutation.isPending;
 
   const spinLabel = useMemo(() => {
     if (finishing) return "…";
@@ -229,9 +266,13 @@ export function SpinHuntHub() {
     setError(null);
     if (available > 0) {
       startTicket.mutate();
-    } else {
-      startPaid.mutate();
+      return;
     }
+    if (isFreePlay) {
+      setError("No spins left — open Tester shop to get more (demo)");
+      return;
+    }
+    startPaid.mutate();
   };
 
   if (isLoading) {
@@ -264,6 +305,20 @@ export function SpinHuntHub() {
             <p className="mb-5 text-[11px] font-bold text-white/70">
               Bubbles: {formatCash(cashEarnedWei, cashAsset)}
             </p>
+            {isFreePlay && BigInt(cashEarnedWei || "0") > 0n && (
+              <button
+                type="button"
+                onClick={() => {
+                  setShowReward(false);
+                  withdrawMutation.mutate();
+                }}
+                disabled={withdrawMutation.isPending}
+                className="mb-2 flex w-full items-center justify-center gap-2 rounded-2xl border-4 border-black bg-[#FBBF24] py-3.5 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)]"
+              >
+                <ArrowDownToLine className="h-4 w-4" strokeWidth={2.5} />
+                Withdraw (demo)
+              </button>
+            )}
             <button
               type="button"
               onClick={() => setShowReward(false)}
@@ -282,6 +337,14 @@ export function SpinHuntHub() {
         </p>
       </div>
 
+      {isFreePlay && (
+        <div className="mb-3 rounded-xl border-2 border-[#FBBF24]/50 bg-[#FBBF24]/10 px-3 py-2 text-center">
+          <p className="text-[10px] font-black uppercase tracking-widest text-[#FBBF24]">
+            Free Play · Mock shop & withdraw · No funds at risk
+          </p>
+        </div>
+      )}
+
       <div className="mb-4 flex items-center justify-between rounded-2xl border-2 border-white/10 bg-zinc-900/80 p-3 shadow-[0_2px_10px_rgba(0,0,0,0.3)]">
         <div className="flex items-center gap-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-primary/40 bg-primary/20">
@@ -292,12 +355,31 @@ export function SpinHuntHub() {
             <p className="text-base font-black tabular-nums">{available} Available</p>
           </div>
         </div>
-        <div className="text-right">
-          <p className="text-[9px] font-black uppercase text-white/50">Hunt cash</p>
-          <p className="flex items-center justify-end gap-1 text-sm font-black text-primary">
-            <Zap className="h-3.5 w-3.5" strokeWidth={2.5} />
-            {formatCash(cashEarnedWei, cashAsset)}
-          </p>
+        <div className="flex items-center gap-2">
+          <div className="text-right">
+            <p className="text-[9px] font-black uppercase text-white/50">
+              {isFreePlay ? "Demo claimable" : "Hunt cash"}
+            </p>
+            <p className="flex items-center justify-end gap-1 text-sm font-black text-primary">
+              <Zap className="h-3.5 w-3.5" strokeWidth={2.5} />
+              {formatCash(
+                isFreePlay ? String(walletSummary?.totalWei ?? cashEarnedWei) : cashEarnedWei,
+                cashAsset
+              )}
+            </p>
+          </div>
+          {canMockWithdraw && (
+            <button
+              type="button"
+              onClick={() => withdrawMutation.mutate()}
+              disabled={withdrawMutation.isPending}
+              className="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-black bg-primary text-black shadow-[2px_2px_0_rgba(0,0,0,1)]"
+              aria-label="Withdraw"
+              title="Successful withdraw (demo)"
+            >
+              <ArrowDownToLine className="h-4 w-4" strokeWidth={2.5} />
+            </button>
+          )}
         </div>
       </div>
 
@@ -335,7 +417,9 @@ export function SpinHuntHub() {
           <p className="mt-3 text-center text-[10px] font-bold text-muted-foreground">
             {available > 0
               ? "Tap center Spin to start a free hunt"
-              : `No free spins — entry ${feeLabel} via SpinEconomy`}
+              : isFreePlay
+                ? "No spins left — buy packs or Spin Capacity in the tester shop"
+                : `No free spins — entry ${feeLabel} via SpinEconomy`}
           </p>
           <SpinLoadoutPanel />
         </>

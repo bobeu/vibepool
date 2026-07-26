@@ -3,16 +3,27 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatUnits } from "viem";
-import { Music2, Shield, Zap } from "lucide-react";
+import { Music2, Shield, Ticket, Zap } from "lucide-react";
 import { authFetch } from "@/lib/auth/client";
+import { useAuth } from "@/lib/auth/useAuth";
 import { useSpinEconomyPayment } from "@/hooks/useSpinEconomyPayment";
+import { useUIStore } from "@/store/uiStore";
 import { isSpinPayAsset } from "@/lib/spin/economy";
 import { assetDecimals } from "@/lib/tokens/celoAssets";
+import { FREEPLAY_SPIN_PACKS } from "@/lib/spin/freePlay";
 import { cn } from "@/utils/format";
 
-type Tab = "music" | "collections";
+type Tab = "music" | "collections" | "spins";
 
-function priceLabel(priceWei: string, asset: string) {
+function priceLabel(priceWei: string, asset: string, freePlay: boolean) {
+  if (freePlay && priceWei !== "0") {
+    if (!isSpinPayAsset(asset)) return `Demo · ${priceWei} ${asset}`;
+    try {
+      return `Demo · ${formatUnits(BigInt(priceWei), assetDecimals(asset))} ${asset}`;
+    } catch {
+      return `Demo · ${priceWei}`;
+    }
+  }
   if (priceWei === "0") return "Free";
   if (!isSpinPayAsset(asset)) return `${priceWei} ${asset}`;
   try {
@@ -23,10 +34,12 @@ function priceLabel(priceWei: string, asset: string) {
 }
 
 export function SpinLoadoutPanel() {
-  const [tab, setTab] = useState<Tab>("music");
-  const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState<Tab>("collections");
+  const [open, setOpen] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const queryClient = useQueryClient();
+  const { isFreePlay } = useAuth();
+  const showToast = useUIStore((s) => s.showToast);
   const { purchaseItem, busy, preferredAsset, isConnected } = useSpinEconomyPayment();
 
   const musicQuery = useQuery({
@@ -52,6 +65,9 @@ export function SpinLoadoutPanel() {
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: ["spin-music"] });
     queryClient.invalidateQueries({ queryKey: ["spin-collections"] });
+    queryClient.invalidateQueries({ queryKey: ["spin-hunt-config"] });
+    queryClient.invalidateQueries({ queryKey: ["spins"] });
+    queryClient.invalidateQueries({ queryKey: ["spin-wallet"] });
   };
 
   const equipMusic = useMutation({
@@ -78,11 +94,20 @@ export function SpinLoadoutPanel() {
       tier: string;
     }) => {
       setError(null);
-      if (track.owned || track.tier === "FREE" || track.priceWei === "0") {
-        const res = await authFetch("/api/spin/music", {
-          method: "POST",
-          body: JSON.stringify({ action: "purchase", trackId: track.id }),
-        });
+      if (isFreePlay || track.owned || track.tier === "FREE" || track.priceWei === "0") {
+        const res = await authFetch(
+          isFreePlay && track.tier !== "FREE" && track.priceWei !== "0"
+            ? "/api/spin/freeplay"
+            : "/api/spin/music",
+          {
+            method: "POST",
+            body: JSON.stringify(
+              isFreePlay && track.tier !== "FREE" && track.priceWei !== "0"
+                ? { action: "purchaseMusic", trackId: track.id }
+                : { action: "purchase", trackId: track.id }
+            ),
+          }
+        );
         const body = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(body.error || "Claim failed");
         return body;
@@ -102,7 +127,10 @@ export function SpinLoadoutPanel() {
       if (!res.ok) throw new Error(body.error || "Purchase verify failed");
       return body;
     },
-    onSuccess: invalidate,
+    onSuccess: (body) => {
+      invalidate();
+      if (body?.mock) showToast("Demo purchase complete — no funds spent");
+    },
     onError: (e: Error) => setError(e.message),
   });
 
@@ -123,17 +151,25 @@ export function SpinLoadoutPanel() {
   const buyItem = useMutation({
     mutationFn: async (item: {
       id: string;
+      name: string;
       priceWei: string;
       priceAsset: string;
       itemId: `0x${string}`;
       owned: boolean;
     }) => {
       setError(null);
-      if (item.owned || item.priceWei === "0") {
-        const res = await authFetch("/api/spin/collections", {
-          method: "POST",
-          body: JSON.stringify({ action: "purchase", itemId: item.id, free: true }),
-        });
+      if (isFreePlay || item.owned || item.priceWei === "0") {
+        const res = await authFetch(
+          isFreePlay && item.priceWei !== "0" ? "/api/spin/freeplay" : "/api/spin/collections",
+          {
+            method: "POST",
+            body: JSON.stringify(
+              isFreePlay && item.priceWei !== "0"
+                ? { action: "purchaseItem", itemId: item.id }
+                : { action: "purchase", itemId: item.id, free: true }
+            ),
+          }
+        );
         const body = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(body.error || "Claim failed");
         return body;
@@ -153,9 +189,35 @@ export function SpinLoadoutPanel() {
       if (!res.ok) throw new Error(body.error || "Purchase verify failed");
       return body;
     },
-    onSuccess: invalidate,
+    onSuccess: (body) => {
+      invalidate();
+      if (body?.grantedSpins) {
+        showToast(`+${body.grantedSpins} spins added (demo)`);
+      } else if (body?.mock) {
+        showToast("Demo purchase complete — no funds spent");
+      }
+    },
     onError: (e: Error) => setError(e.message),
   });
+
+  const buySpins = useMutation({
+    mutationFn: async (packId: string) => {
+      const res = await authFetch("/api/spin/freeplay", {
+        method: "POST",
+        body: JSON.stringify({ action: "buySpins", packId }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || "Failed to add spins");
+      return body;
+    },
+    onSuccess: (body) => {
+      invalidate();
+      showToast(body.message || "Spins added (demo)");
+    },
+    onError: (e: Error) => setError(e.message),
+  });
+
+  const tabs: Tab[] = isFreePlay ? ["collections", "spins", "music"] : ["music", "collections"];
 
   return (
     <div className="mt-3">
@@ -166,15 +228,21 @@ export function SpinLoadoutPanel() {
       >
         <span className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest">
           <Music2 className="h-3.5 w-3.5 text-primary" />
-          Music & Collections
+          {isFreePlay ? "Tester shop · mock prices" : "Music & Collections"}
         </span>
         <span className="text-[10px] font-bold text-muted-foreground">{open ? "Hide" : "Open"}</span>
       </button>
 
       {open && (
         <div className="mt-2 rounded-xl border border-white/10 bg-zinc-900/90 p-2.5">
-          <div className="mb-2 grid grid-cols-2 gap-1">
-            {(["music", "collections"] as Tab[]).map((t) => (
+          {isFreePlay && (
+            <p className="mb-2 text-center text-[9px] font-bold uppercase tracking-widest text-[#FBBF24]">
+              Free play — buys are simulated, no wallet txs
+            </p>
+          )}
+
+          <div className={cn("mb-2 grid gap-1", tabs.length === 3 ? "grid-cols-3" : "grid-cols-2")}>
+            {tabs.map((t) => (
               <button
                 key={t}
                 type="button"
@@ -190,6 +258,33 @@ export function SpinLoadoutPanel() {
           </div>
 
           {error && <p className="mb-2 text-[10px] font-bold text-red-400">{error}</p>}
+
+          {tab === "spins" && isFreePlay && (
+            <div className="space-y-1.5">
+              {FREEPLAY_SPIN_PACKS.map((pack) => (
+                <div
+                  key={pack.id}
+                  className="flex items-center justify-between gap-2 rounded-lg border border-white/10 px-2 py-2"
+                >
+                  <div className="flex items-center gap-2">
+                    <Ticket className="h-3.5 w-3.5 text-primary" />
+                    <div>
+                      <p className="text-[11px] font-black">{pack.label}</p>
+                      <p className="text-[9px] text-muted-foreground">Demo · {pack.mockPrice}</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    disabled={buySpins.isPending}
+                    onClick={() => buySpins.mutate(pack.id)}
+                    className="rounded-md bg-primary px-2 py-1 text-[9px] font-black uppercase text-black"
+                  >
+                    Get
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
           {tab === "music" && (
             <div className="space-y-1.5">
@@ -211,7 +306,7 @@ export function SpinLoadoutPanel() {
                     <div>
                       <p className="text-[11px] font-black">{track.title}</p>
                       <p className="text-[9px] text-muted-foreground">
-                        {track.tier} · {priceLabel(track.priceWei, track.priceAsset)}
+                        {track.tier} · {priceLabel(track.priceWei, track.priceAsset, isFreePlay)}
                       </p>
                     </div>
                     <div className="flex gap-1">
@@ -264,13 +359,16 @@ export function SpinLoadoutPanel() {
                     <div className="flex items-center gap-2">
                       {item.type === "SPEED_SHIELDER" ? (
                         <Shield className="h-3.5 w-3.5 text-amber-300" />
+                      ) : item.type === "OTHER" ? (
+                        <Ticket className="h-3.5 w-3.5 text-[#FBBF24]" />
                       ) : (
                         <Zap className="h-3.5 w-3.5 text-primary" />
                       )}
                       <div>
                         <p className="text-[11px] font-black">{item.name}</p>
                         <p className="text-[9px] text-muted-foreground">
-                          {item.type.replace("_", " ")} · {priceLabel(item.priceWei, item.priceAsset)}
+                          {item.type.replace("_", " ")} ·{" "}
+                          {priceLabel(item.priceWei, item.priceAsset, isFreePlay)}
                         </p>
                       </div>
                     </div>
@@ -284,6 +382,10 @@ export function SpinLoadoutPanel() {
                         >
                           Buy
                         </button>
+                      ) : item.type === "OTHER" ? (
+                        <span className="rounded-md bg-white/10 px-2 py-1 text-[9px] font-black uppercase text-white/50">
+                          Owned
+                        </span>
                       ) : (
                         <button
                           type="button"

@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { authenticatedHandler } from "@/lib/auth/middleware";
 import { resolveUserId } from "@/lib/auth/resolveUser";
+import { isGuestWallet } from "@/lib/auth/guest";
 import { jsonResponse, apiError } from "@/lib/api/responses";
 import { collectionEngine } from "@/services/engines/CollectionEngine";
 
@@ -37,7 +38,7 @@ export const POST = async (req: NextRequest) => {
         return jsonResponse(result);
       }
 
-      if (!body.txHash && body.free !== true) {
+      if (!body.txHash && body.free !== true && !isGuestWallet(wallet)) {
         throw new Error("txHash required for purchase");
       }
 

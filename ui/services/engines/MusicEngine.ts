@@ -1,6 +1,7 @@
 import { keccak256, stringToBytes } from "viem";
 import { prisma } from "@/lib/auth/session";
 import { verifySpinPurchase } from "@/lib/blockchain/verifySpinPurchase";
+import { isGuestWallet } from "@/lib/auth/guest";
 import { isSpinPayAsset, type SpinPayAsset } from "@/lib/spin/economy";
 import type { IEngine } from "./interfaces";
 
@@ -88,13 +89,18 @@ export class MusicEngine implements IEngine {
     const track = await prisma().spinMusicTrack.findUnique({ where: { id: input.trackId } });
     if (!track || !track.active) throw new Error("Track not found");
 
-    if (track.tier === "FREE" || track.priceWei === "0") {
+    if (track.tier === "FREE" || track.priceWei === "0" || isGuestWallet(input.wallet)) {
       await prisma().userMusicInventory.upsert({
         where: { userId_trackId: { userId: input.userId, trackId: track.id } },
         create: { userId: input.userId, trackId: track.id, equipped: false },
         update: {},
       });
-      return { success: true, trackId: track.id, free: true };
+      return {
+        success: true,
+        trackId: track.id,
+        free: track.tier === "FREE" || track.priceWei === "0",
+        mock: isGuestWallet(input.wallet),
+      };
     }
 
     if (!input.txHash) throw new Error("Purchase requires on-chain txHash");
