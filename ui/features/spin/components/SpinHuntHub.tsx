@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowDownToLine, RotateCcw, Ticket, X, Zap } from "lucide-react";
 import { formatUnits } from "viem";
@@ -10,7 +10,7 @@ import { useSpinEconomyPayment } from "@/hooks/useSpinEconomyPayment";
 import { useUIStore } from "@/store/uiStore";
 import { assetDecimals } from "@/lib/tokens/celoAssets";
 import { isSpinPayAsset } from "@/lib/spin/economy";
-import type { HuntSession, PublicBubble } from "@/features/spin/types";
+import type { HuntLoadout, HuntSession, PublicBubble } from "@/lib/spin/types";
 import { BubbleArena } from "./BubbleArena";
 import { SpinLoadoutPanel } from "./SpinLoadoutPanel";
 import { SEGMENTS, SLICE_DEG, TOTAL, SpinWheelPanel } from "./SpinWheelPanel";
@@ -42,6 +42,8 @@ export function SpinHuntHub() {
   const [reward, setReward] = useState<string | null>(null);
   const [showReward, setShowReward] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [pendingStartMode, setPendingStartMode] = useState<"ticket" | "paid" | null>(null);
+  const [showBuzzerInfo, setShowBuzzerInfo] = useState(false);
   const prevRotation = useRef(0);
   const huntTimer = useRef<number | null>(null);
 
@@ -55,11 +57,11 @@ export function SpinHuntHub() {
     staleTime: 15_000,
   });
 
-  const { data: history } = useQuery({
-    queryKey: ["spin-history"],
+  const { data: loadoutSummary } = useQuery({
+    queryKey: ["spin-collections"],
     queryFn: async () => {
-      const res = await authFetch("/api/spin/history");
-      if (!res.ok) return { history: [] };
+      const res = await authFetch("/api/spin/collections");
+      if (!res.ok) return { loadout: null };
       return res.json();
     },
     staleTime: 10_000,
@@ -77,7 +79,21 @@ export function SpinHuntHub() {
 
   const available = Number(data?.balance?.available ?? 0);
   const canMockWithdraw = Boolean(isFreePlay && walletSummary?.canWithdraw);
-  const rpm = session?.rpm ?? data?.config?.baseWheelRpm ?? 120;
+  const rpm = session?.rpm ?? data?.config?.baseWheelRpm ?? 100;
+  const activeLoadout = (session?.loadout ?? loadoutSummary?.loadout ?? null) as HuntLoadout | null;
+  const hasSpeedBuzzer = Boolean(
+    activeLoadout?.itemSlugs?.some(
+      (slug) => slug.includes("buzzer") || slug.includes("speed-shielder")
+    )
+  );
+  const speedSummary =
+    activeLoadout?.rpmMultiplier && activeLoadout.rpmMultiplier < 1
+      ? `Wheel control boosted · ${Math.round((1 - activeLoadout.rpmMultiplier) * 100)}% calmer`
+      : "Wheel starts hot at 100 RPM";
+  const buzzerSummary =
+    activeLoadout?.buzzerTapBonus && activeLoadout.buzzerTapBonus > 0
+      ? `Quick Buzzer active · up to ${activeLoadout.buzzerTapBonus} tap saved on tougher bubbles`
+      : "No buzzer equipped · tougher bubbles still need full taps";
 
   const clearHuntTimer = () => {
     if (huntTimer.current) {
@@ -98,11 +114,13 @@ export function SpinHuntHub() {
         });
         const body = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(body.error || "Failed to finish hunt");
+        const finalCashWei = String(body?.cashEarnedWei ?? active.cashEarnedWei ?? "0");
+        const finalAsset = String(body?.cashAsset ?? active.cashAsset ?? "USDm");
+        setCashEarnedWei(finalCashWei);
+        setCashAsset(finalAsset);
 
-        const rewardLabel =
-          body?.wheel?.reward ?? body?.wheel?.prize ?? SEGMENTS[Math.floor(Math.random() * TOTAL)].label;
-        const segIdx = SEGMENTS.findIndex((s) => s.label === rewardLabel);
-        const targetIdx = segIdx >= 0 ? segIdx : Math.floor(Math.random() * TOTAL);
+        const rewardLabel = formatCash(finalCashWei, finalAsset);
+        const targetIdx = Math.floor(Math.random() * TOTAL);
         const targetAngle = 360 - (targetIdx * SLICE_DEG + SLICE_DEG / 2);
         const newRotation =
           prevRotation.current + 1800 + targetAngle - (prevRotation.current % 360);
@@ -114,8 +132,10 @@ export function SpinHuntHub() {
           setShowReward(true);
           setSession(null);
           setFinishing(false);
+          setPendingStartMode(null);
+          setShowBuzzerInfo(false);
           queryClient.invalidateQueries({ queryKey: ["spin-hunt-config"] });
-          queryClient.invalidateQueries({ queryKey: ["spin-history"] });
+          queryClient.invalidateQueries({ queryKey: ["spin-collections"] });
           queryClient.invalidateQueries({ queryKey: ["spins"] });
           queryClient.invalidateQueries({ queryKey: ["spin-wallet"] });
         }, 3200);
@@ -133,6 +153,8 @@ export function SpinHuntHub() {
       setCashEarnedWei(payload.cashEarnedWei || "0");
       setCashAsset(payload.cashAsset || "USDm");
       setHunting(true);
+      setPendingStartMode(null);
+      setShowBuzzerInfo(false);
       setShowReward(false);
       setReward(null);
       setError(null);
@@ -280,23 +302,44 @@ export function SpinHuntHub() {
 
   const spinLabel = useMemo(() => {
     if (finishing) return "…";
-    if (hunting) return "Hunt";
+    if (hunting) return "Burst";
     if (startTicket.isPending || startPaid.isPending || paying) return "…";
     return "Spin";
   }, [finishing, hunting, paying, startPaid.isPending, startTicket.isPending]);
+
+  useEffect(() => {
+    if (pendingStartMode || session || showReward) {
+      const previous = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = previous;
+      };
+    }
+    return undefined;
+  }, [pendingStartMode, session, showReward]);
+
+  const launchPendingStart = () => {
+    if (pendingStartMode === "ticket") {
+      startTicket.mutate();
+      return;
+    }
+    if (pendingStartMode === "paid") {
+      startPaid.mutate();
+    }
+  };
 
   const handleSpin = () => {
     if (busy) return;
     setError(null);
     if (available > 0) {
-      startTicket.mutate();
+      setPendingStartMode("ticket");
       return;
     }
     if (isFreePlay) {
       setError("No spins left — tap Try again to refill");
       return;
     }
-    startPaid.mutate();
+    setPendingStartMode("paid");
   };
 
   if (isLoading) {
@@ -310,6 +353,62 @@ export function SpinHuntHub() {
 
   return (
     <div>
+      {pendingStartMode && (
+        <div className="fixed inset-0 z-[105] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-[28px] border-4 border-primary bg-zinc-950 p-6 text-center shadow-[0_0_48px_rgba(98,226,248,0.25)]">
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-primary/80">
+              Spin Hunt ready
+            </p>
+            <h3 className="mt-2 text-2xl font-black uppercase italic text-white">
+              Apply speed buzzers
+            </h3>
+            <p className="mt-3 text-sm font-bold text-white/70">
+              {hasSpeedBuzzer
+                ? "Your equipped speed helpers can calm the wheel and make tougher bubbles easier to crack."
+                : "You can equip a Speed Shielder or Quick Buzzer from the store before the next round."}
+            </p>
+
+            {showBuzzerInfo ? (
+              <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-left">
+                <p className="text-[11px] font-black uppercase tracking-widest text-primary">
+                  What it does
+                </p>
+                <p className="mt-2 text-sm font-bold text-white/80">{speedSummary}</p>
+                <p className="mt-1 text-sm font-bold text-white/65">{buzzerSummary}</p>
+              </div>
+            ) : null}
+
+            <div className="mt-5 flex flex-col gap-3">
+              <button
+                type="button"
+                onClick={() => setShowBuzzerInfo((value) => !value)}
+                className="w-full rounded-2xl border-4 border-black bg-[#FBBF24] py-3 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)]"
+              >
+                Apply speed buzzers
+              </button>
+              <button
+                type="button"
+                onClick={launchPendingStart}
+                disabled={startTicket.isPending || startPaid.isPending || paying}
+                className="w-full rounded-2xl border-4 border-black bg-primary py-3 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-white/50"
+              >
+                Start hunt
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPendingStartMode(null);
+                  setShowBuzzerInfo(false);
+                }}
+                className="text-xs font-black uppercase tracking-widest text-white/55"
+              >
+                Back
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showReward && reward && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4">
           <div className="relative w-full max-w-xs rounded-3xl border-4 border-primary bg-zinc-900 p-8 text-center shadow-[0_0_40px_rgba(98,226,248,0.35),6px_6px_0_rgba(0,0,0,1)]">
@@ -327,7 +426,7 @@ export function SpinHuntHub() {
               {reward}
             </p>
             <p className="mb-5 text-[11px] font-bold text-white/70">
-              Bubbles: {formatCash(cashEarnedWei, cashAsset)}
+              Round total banked from burst bubbles
             </p>
             {isFreePlay && BigInt(cashEarnedWei || "0") > 0n && (
               <button
@@ -419,21 +518,78 @@ export function SpinHuntHub() {
         />
       </div>
 
-      {hunting && session && (
-        <>
+      {session && (hunting || finishing) && (
+        <div className="fixed inset-0 z-[95] bg-black/80 backdrop-blur-sm">
           {session.loadout?.musicUrl ? (
             <audio src={session.loadout.musicUrl} autoPlay loop preload="auto" className="hidden" />
           ) : null}
-          <BubbleArena
-            bubbles={session.plan.bubbles}
-            startedAtMs={new Date(session.startedAt).getTime()}
-            durationMs={session.plan.durationMs}
-            disabled={hitMutation.isPending}
-            onBurst={(bubble, taps, elapsedMs) =>
-              hitMutation.mutate({ bubble, taps, elapsedMs })
-            }
-          />
-        </>
+          <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
+            <BubbleArena
+              bubbles={session.plan.bubbles}
+              startedAtMs={new Date(session.startedAt).getTime()}
+              durationMs={session.plan.durationMs}
+              disabled={hitMutation.isPending || finishing}
+              onBurst={(bubble, taps, elapsedMs) =>
+                hitMutation.mutateAsync({ bubble, taps, elapsedMs })
+              }
+            />
+
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-20 px-4 py-4">
+              <div className="mx-auto flex w-full max-w-5xl items-start justify-between gap-3">
+                <div className="rounded-2xl border border-white/10 bg-zinc-950/80 px-4 py-3">
+                  <p className="text-[10px] font-black uppercase tracking-[0.28em] text-primary/80">
+                    Bubble mode
+                  </p>
+                  <p className="mt-1 text-sm font-black uppercase text-white">
+                    {finishing ? "Counting your burst total…" : "Background locked · burst from center"}
+                  </p>
+                </div>
+                <div className="pointer-events-auto flex flex-col items-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowBuzzerInfo((value) => !value)}
+                    className="rounded-full border border-white/15 bg-zinc-950/85 px-4 py-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary"
+                  >
+                    Apply speed buzzers
+                  </button>
+                  <div className="rounded-2xl border border-white/10 bg-zinc-950/80 px-4 py-3 text-right">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-white/55">
+                      Bursting now
+                    </p>
+                    <p className="text-lg font-black text-primary">
+                      {formatCash(cashEarnedWei, cashAsset)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {showBuzzerInfo && (
+              <div className="pointer-events-none absolute inset-x-4 top-24 z-30 mx-auto max-w-md rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-primary/80">
+                  Speed buzzer info
+                </p>
+                <p className="mt-2 text-sm font-bold text-white/80">{speedSummary}</p>
+                <p className="mt-1 text-sm font-bold text-white/65">{buzzerSummary}</p>
+              </div>
+            )}
+
+            <div className="pointer-events-none relative z-10 flex flex-col items-center">
+              <div className="mb-[-4px] h-0 w-0 border-l-[10px] border-r-[10px] border-b-[22px] border-l-transparent border-r-transparent border-b-yellow-400" />
+              <SpinWheelPanel
+                rotation={rotation}
+                hunting={hunting}
+                rpm={rpm}
+                spinDisabled
+                spinLabel={spinLabel}
+                onSpin={() => undefined}
+              />
+              <p className="mt-4 rounded-full border border-white/10 bg-zinc-950/75 px-4 py-2 text-[10px] font-black uppercase tracking-[0.28em] text-white/65">
+                {finishing ? "Locking round…" : "Pop bubbles before they escape"}
+              </p>
+            </div>
+          </div>
+        </div>
       )}
 
       {!hunting && (
@@ -464,29 +620,6 @@ export function SpinHuntHub() {
 
       {error && (
         <p className="mt-2 text-center text-[11px] font-bold text-red-400">{error}</p>
-      )}
-
-      {(history?.history?.length ?? 0) > 0 && (
-        <section className="mt-4">
-          <p className="mb-1.5 text-[9px] font-black uppercase tracking-widest text-muted-foreground">
-            Recent drops
-          </p>
-          <div className="divide-y divide-white/5 rounded-xl border border-white/10 bg-zinc-900/80">
-            {history.history.slice(0, 5).map((entry: { reward?: string; prize?: string; createdAt?: string }, i: number) => (
-              <div key={i} className="flex items-center justify-between px-2.5 py-2">
-                <div>
-                  <p className="text-[10px] font-black">{entry.reward ?? entry.prize ?? "Reward"}</p>
-                  <p className="text-[9px] text-muted-foreground">
-                    {entry.createdAt ? new Date(entry.createdAt).toLocaleDateString() : "—"}
-                  </p>
-                </div>
-                <span className="rounded-full bg-primary/20 px-1.5 py-0.5 text-[9px] font-black uppercase text-primary">
-                  Won
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
       )}
     </div>
   );

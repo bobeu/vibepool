@@ -121997,6 +121997,7 @@ export namespace Prisma {
     entryAsset: string | null
     xpCostPerSpin: number | null
     spinDurationSec: number | null
+    minBubbleCashWei: string | null
     maxBubbleCashWei: string | null
     maxCashPerSpinWei: string | null
     baseWheelRpm: number | null
@@ -122012,6 +122013,7 @@ export namespace Prisma {
     entryAsset: string | null
     xpCostPerSpin: number | null
     spinDurationSec: number | null
+    minBubbleCashWei: string | null
     maxBubbleCashWei: string | null
     maxCashPerSpinWei: string | null
     baseWheelRpm: number | null
@@ -122027,6 +122029,7 @@ export namespace Prisma {
     entryAsset: number
     xpCostPerSpin: number
     spinDurationSec: number
+    minBubbleCashWei: number
     maxBubbleCashWei: number
     maxCashPerSpinWei: number
     baseWheelRpm: number
@@ -122059,6 +122062,7 @@ export namespace Prisma {
     entryAsset?: true
     xpCostPerSpin?: true
     spinDurationSec?: true
+    minBubbleCashWei?: true
     maxBubbleCashWei?: true
     maxCashPerSpinWei?: true
     baseWheelRpm?: true
@@ -122074,6 +122078,7 @@ export namespace Prisma {
     entryAsset?: true
     xpCostPerSpin?: true
     spinDurationSec?: true
+    minBubbleCashWei?: true
     maxBubbleCashWei?: true
     maxCashPerSpinWei?: true
     baseWheelRpm?: true
@@ -122089,6 +122094,7 @@ export namespace Prisma {
     entryAsset?: true
     xpCostPerSpin?: true
     spinDurationSec?: true
+    minBubbleCashWei?: true
     maxBubbleCashWei?: true
     maxCashPerSpinWei?: true
     baseWheelRpm?: true
@@ -122192,6 +122198,7 @@ export namespace Prisma {
     entryAsset: string
     xpCostPerSpin: number
     spinDurationSec: number
+    minBubbleCashWei: string
     maxBubbleCashWei: string
     maxCashPerSpinWei: string
     baseWheelRpm: number
@@ -122227,6 +122234,7 @@ export namespace Prisma {
     entryAsset?: boolean
     xpCostPerSpin?: boolean
     spinDurationSec?: boolean
+    minBubbleCashWei?: boolean
     maxBubbleCashWei?: boolean
     maxCashPerSpinWei?: boolean
     baseWheelRpm?: boolean
@@ -122243,6 +122251,7 @@ export namespace Prisma {
     entryAsset?: boolean
     xpCostPerSpin?: boolean
     spinDurationSec?: boolean
+    minBubbleCashWei?: boolean
     maxBubbleCashWei?: boolean
     maxCashPerSpinWei?: boolean
     baseWheelRpm?: boolean
@@ -122259,6 +122268,7 @@ export namespace Prisma {
     entryAsset?: boolean
     xpCostPerSpin?: boolean
     spinDurationSec?: boolean
+    minBubbleCashWei?: boolean
     maxBubbleCashWei?: boolean
     maxCashPerSpinWei?: boolean
     baseWheelRpm?: boolean
@@ -122275,6 +122285,7 @@ export namespace Prisma {
     entryAsset?: boolean
     xpCostPerSpin?: boolean
     spinDurationSec?: boolean
+    minBubbleCashWei?: boolean
     maxBubbleCashWei?: boolean
     maxCashPerSpinWei?: boolean
     baseWheelRpm?: boolean
@@ -122283,7 +122294,7 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type SpinConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "treasuryBps" | "entryFeeWei" | "entryAsset" | "xpCostPerSpin" | "spinDurationSec" | "maxBubbleCashWei" | "maxCashPerSpinWei" | "baseWheelRpm" | "metadata" | "updatedAt" | "createdAt", ExtArgs["result"]["spinConfig"]>
+  export type SpinConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "treasuryBps" | "entryFeeWei" | "entryAsset" | "xpCostPerSpin" | "spinDurationSec" | "minBubbleCashWei" | "maxBubbleCashWei" | "maxCashPerSpinWei" | "baseWheelRpm" | "metadata" | "updatedAt" | "createdAt", ExtArgs["result"]["spinConfig"]>
 
   export type $SpinConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SpinConfig"
@@ -122296,6 +122307,7 @@ export namespace Prisma {
       entryAsset: string
       xpCostPerSpin: number
       spinDurationSec: number
+      minBubbleCashWei: string
       maxBubbleCashWei: string
       maxCashPerSpinWei: string
       baseWheelRpm: number
@@ -122732,6 +122744,7 @@ export namespace Prisma {
     readonly entryAsset: FieldRef<"SpinConfig", 'String'>
     readonly xpCostPerSpin: FieldRef<"SpinConfig", 'Int'>
     readonly spinDurationSec: FieldRef<"SpinConfig", 'Int'>
+    readonly minBubbleCashWei: FieldRef<"SpinConfig", 'String'>
     readonly maxBubbleCashWei: FieldRef<"SpinConfig", 'String'>
     readonly maxCashPerSpinWei: FieldRef<"SpinConfig", 'String'>
     readonly baseWheelRpm: FieldRef<"SpinConfig", 'Int'>
@@ -132654,6 +132667,7 @@ export namespace Prisma {
     entryAsset: 'entryAsset',
     xpCostPerSpin: 'xpCostPerSpin',
     spinDurationSec: 'spinDurationSec',
+    minBubbleCashWei: 'minBubbleCashWei',
     maxBubbleCashWei: 'maxBubbleCashWei',
     maxCashPerSpinWei: 'maxCashPerSpinWei',
     baseWheelRpm: 'baseWheelRpm',
@@ -141197,6 +141211,7 @@ export namespace Prisma {
     entryAsset?: StringFilter<"SpinConfig"> | string
     xpCostPerSpin?: IntFilter<"SpinConfig"> | number
     spinDurationSec?: IntFilter<"SpinConfig"> | number
+    minBubbleCashWei?: StringFilter<"SpinConfig"> | string
     maxBubbleCashWei?: StringFilter<"SpinConfig"> | string
     maxCashPerSpinWei?: StringFilter<"SpinConfig"> | string
     baseWheelRpm?: IntFilter<"SpinConfig"> | number
@@ -141213,6 +141228,7 @@ export namespace Prisma {
     entryAsset?: SortOrder
     xpCostPerSpin?: SortOrder
     spinDurationSec?: SortOrder
+    minBubbleCashWei?: SortOrder
     maxBubbleCashWei?: SortOrder
     maxCashPerSpinWei?: SortOrder
     baseWheelRpm?: SortOrder
@@ -141232,6 +141248,7 @@ export namespace Prisma {
     entryAsset?: StringFilter<"SpinConfig"> | string
     xpCostPerSpin?: IntFilter<"SpinConfig"> | number
     spinDurationSec?: IntFilter<"SpinConfig"> | number
+    minBubbleCashWei?: StringFilter<"SpinConfig"> | string
     maxBubbleCashWei?: StringFilter<"SpinConfig"> | string
     maxCashPerSpinWei?: StringFilter<"SpinConfig"> | string
     baseWheelRpm?: IntFilter<"SpinConfig"> | number
@@ -141248,6 +141265,7 @@ export namespace Prisma {
     entryAsset?: SortOrder
     xpCostPerSpin?: SortOrder
     spinDurationSec?: SortOrder
+    minBubbleCashWei?: SortOrder
     maxBubbleCashWei?: SortOrder
     maxCashPerSpinWei?: SortOrder
     baseWheelRpm?: SortOrder
@@ -141272,6 +141290,7 @@ export namespace Prisma {
     entryAsset?: StringWithAggregatesFilter<"SpinConfig"> | string
     xpCostPerSpin?: IntWithAggregatesFilter<"SpinConfig"> | number
     spinDurationSec?: IntWithAggregatesFilter<"SpinConfig"> | number
+    minBubbleCashWei?: StringWithAggregatesFilter<"SpinConfig"> | string
     maxBubbleCashWei?: StringWithAggregatesFilter<"SpinConfig"> | string
     maxCashPerSpinWei?: StringWithAggregatesFilter<"SpinConfig"> | string
     baseWheelRpm?: IntWithAggregatesFilter<"SpinConfig"> | number
@@ -150110,6 +150129,7 @@ export namespace Prisma {
     entryAsset?: string
     xpCostPerSpin?: number
     spinDurationSec?: number
+    minBubbleCashWei?: string
     maxBubbleCashWei?: string
     maxCashPerSpinWei?: string
     baseWheelRpm?: number
@@ -150126,6 +150146,7 @@ export namespace Prisma {
     entryAsset?: string
     xpCostPerSpin?: number
     spinDurationSec?: number
+    minBubbleCashWei?: string
     maxBubbleCashWei?: string
     maxCashPerSpinWei?: string
     baseWheelRpm?: number
@@ -150142,6 +150163,7 @@ export namespace Prisma {
     entryAsset?: StringFieldUpdateOperationsInput | string
     xpCostPerSpin?: IntFieldUpdateOperationsInput | number
     spinDurationSec?: IntFieldUpdateOperationsInput | number
+    minBubbleCashWei?: StringFieldUpdateOperationsInput | string
     maxBubbleCashWei?: StringFieldUpdateOperationsInput | string
     maxCashPerSpinWei?: StringFieldUpdateOperationsInput | string
     baseWheelRpm?: IntFieldUpdateOperationsInput | number
@@ -150158,6 +150180,7 @@ export namespace Prisma {
     entryAsset?: StringFieldUpdateOperationsInput | string
     xpCostPerSpin?: IntFieldUpdateOperationsInput | number
     spinDurationSec?: IntFieldUpdateOperationsInput | number
+    minBubbleCashWei?: StringFieldUpdateOperationsInput | string
     maxBubbleCashWei?: StringFieldUpdateOperationsInput | string
     maxCashPerSpinWei?: StringFieldUpdateOperationsInput | string
     baseWheelRpm?: IntFieldUpdateOperationsInput | number
@@ -150174,6 +150197,7 @@ export namespace Prisma {
     entryAsset?: string
     xpCostPerSpin?: number
     spinDurationSec?: number
+    minBubbleCashWei?: string
     maxBubbleCashWei?: string
     maxCashPerSpinWei?: string
     baseWheelRpm?: number
@@ -150190,6 +150214,7 @@ export namespace Prisma {
     entryAsset?: StringFieldUpdateOperationsInput | string
     xpCostPerSpin?: IntFieldUpdateOperationsInput | number
     spinDurationSec?: IntFieldUpdateOperationsInput | number
+    minBubbleCashWei?: StringFieldUpdateOperationsInput | string
     maxBubbleCashWei?: StringFieldUpdateOperationsInput | string
     maxCashPerSpinWei?: StringFieldUpdateOperationsInput | string
     baseWheelRpm?: IntFieldUpdateOperationsInput | number
@@ -150206,6 +150231,7 @@ export namespace Prisma {
     entryAsset?: StringFieldUpdateOperationsInput | string
     xpCostPerSpin?: IntFieldUpdateOperationsInput | number
     spinDurationSec?: IntFieldUpdateOperationsInput | number
+    minBubbleCashWei?: StringFieldUpdateOperationsInput | string
     maxBubbleCashWei?: StringFieldUpdateOperationsInput | string
     maxCashPerSpinWei?: StringFieldUpdateOperationsInput | string
     baseWheelRpm?: IntFieldUpdateOperationsInput | number
@@ -156870,6 +156896,7 @@ export namespace Prisma {
     entryAsset?: SortOrder
     xpCostPerSpin?: SortOrder
     spinDurationSec?: SortOrder
+    minBubbleCashWei?: SortOrder
     maxBubbleCashWei?: SortOrder
     maxCashPerSpinWei?: SortOrder
     baseWheelRpm?: SortOrder
@@ -156893,6 +156920,7 @@ export namespace Prisma {
     entryAsset?: SortOrder
     xpCostPerSpin?: SortOrder
     spinDurationSec?: SortOrder
+    minBubbleCashWei?: SortOrder
     maxBubbleCashWei?: SortOrder
     maxCashPerSpinWei?: SortOrder
     baseWheelRpm?: SortOrder
@@ -156908,6 +156936,7 @@ export namespace Prisma {
     entryAsset?: SortOrder
     xpCostPerSpin?: SortOrder
     spinDurationSec?: SortOrder
+    minBubbleCashWei?: SortOrder
     maxBubbleCashWei?: SortOrder
     maxCashPerSpinWei?: SortOrder
     baseWheelRpm?: SortOrder

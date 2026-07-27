@@ -7,18 +7,18 @@ import { verifySpinEntry } from "@/lib/blockchain/verifySpinEntry";
 import {
   defaultEntryFee,
   isSpinPayAsset,
-  type SpinPayAsset,
 } from "@/lib/spin/economy";
 import type { IEngine } from "./interfaces";
-import { WheelEngine } from "./WheelEngine";
 import { SpinEngine } from "./SpinEngine";
-import { SecureRandomProvider } from "./SecureRandomProvider";
 import { eventBus } from "./EventBus";
 
 import type { PublicBubble } from "@/lib/spin/types";
 import { isGuestWallet } from "@/lib/auth/guest";
 import { MOCK_CREDIT_TX } from "@/lib/spin/freePlay";
 import { collectionEngine, type SpinLoadout } from "./CollectionEngine";
+
+const FREE_PLAY_MIN_BUBBLE_WEI = 10_000_000_000_000n; // 0.00001
+const FREE_PLAY_MAX_BUBBLE_WEI = 9_000_000_000_000_000n; // 0.009
 
 type InternalBubble = PublicBubble & {
   amountWei: string;
@@ -53,7 +53,6 @@ function requestIdFor(parts: string): `0x${string}` {
 export class SpinHuntEngine implements IEngine {
   name = "SpinHuntEngine";
   private spinEngine = new SpinEngine();
-  private wheelEngine = new WheelEngine();
 
   async execute(input: Record<string, unknown>): Promise<Record<string, unknown>> {
     return input;
@@ -77,6 +76,7 @@ export class SpinHuntEngine implements IEngine {
       xpCostPerSpin: cfg.xpCostPerSpin,
       spinDurationSec: cfg.spinDurationSec,
       baseWheelRpm: cfg.baseWheelRpm,
+      minBubbleCashWei: cfg.minBubbleCashWei,
       maxBubbleCashWei: cfg.maxBubbleCashWei,
       maxCashPerSpinWei: cfg.maxCashPerSpinWei,
       defaultEntryFees: {
@@ -92,16 +92,21 @@ export class SpinHuntEngine implements IEngine {
     serverSeed: string,
     cfg: {
       spinDurationSec: number;
+      minBubbleCashWei: string;
       maxBubbleCashWei: string;
       maxCashPerSpinWei: string;
       entryAsset: string;
     },
-    loadout: SpinLoadout
+    loadout: SpinLoadout,
+    freePlay: boolean
   ): BubblePlan {
     const durationMs = Math.max(6, cfg.spinDurationSec) * 1000;
     const rng = mulberry32(Math.floor(hashSeed(serverSeed) * 1e9));
     const cashAsset = isSpinPayAsset(cfg.entryAsset) ? cfg.entryAsset : "USDm";
-    const maxBubble = BigInt(cfg.maxBubbleCashWei || "0");
+    const configuredMin = BigInt(cfg.minBubbleCashWei || "0");
+    const configuredMax = BigInt(cfg.maxBubbleCashWei || "0");
+    const minBubble = freePlay ? FREE_PLAY_MIN_BUBBLE_WEI : configuredMin;
+    const maxBubble = freePlay ? FREE_PLAY_MAX_BUBBLE_WEI : configuredMax;
     const maxSpin = BigInt(cfg.maxCashPerSpinWei || "0");
     const count = 8 + Math.floor(rng() * 5); // 8–12 bubbles
     const bubbles: InternalBubble[] = [];
@@ -112,8 +117,13 @@ export class SpinHuntEngine implements IEngine {
       const lifetimeMs = 900 + Math.floor(rng() * 1400);
       const baseTaps = rng() > 0.75 ? 2 : 1;
       const tapsRequired = Math.max(1, baseTaps - loadout.buzzerTapBonus);
-      // Micro cash — small share of max bubble, capped by remaining spin budget
-      let amount = maxBubble > 0n ? (maxBubble * BigInt(10 + Math.floor(rng() * 90))) / 100n : 0n;
+      const lower = minBubble <= maxBubble ? minBubble : maxBubble;
+      const upper = maxBubble >= minBubble ? maxBubble : minBubble;
+      const spread = upper - lower;
+      let amount =
+        upper > 0n
+          ? lower + (spread * BigInt(Math.floor(rng() * 10_000))) / 9_999n
+          : 0n;
       if (amount > maxSpin - allocated) amount = maxSpin > allocated ? maxSpin - allocated : 0n;
       allocated += amount;
 
@@ -246,11 +256,13 @@ export class SpinHuntEngine implements IEngine {
       serverSeed,
       {
         spinDurationSec: cfg.spinDurationSec,
+        minBubbleCashWei: cfg.minBubbleCashWei,
         maxBubbleCashWei: cfg.maxBubbleCashWei,
         maxCashPerSpinWei: cfg.maxCashPerSpinWei,
         entryAsset: entryAsset || cfg.entryAsset,
       },
-      loadout
+      loadout,
+      isGuestWallet(input.wallet)
     );
     const startedAt = new Date();
     const expiresAt = new Date(startedAt.getTime() + plan.durationMs + 5_000);
@@ -518,14 +530,12 @@ export class SpinHuntEngine implements IEngine {
     }
     if (session.status !== "ACTIVE") throw new Error("Session is not active");
 
-    const wheel = await this.wheelEngine.generateSpin(input.userId, new SecureRandomProvider());
-
     await prisma().spinSession.update({
       where: { id: session.id },
       data: {
         status: "FINISHED",
         finishedAt: new Date(),
-        wheelRewardId: typeof wheel.spinId === "string" ? wheel.spinId : null,
+        wheelRewardId: null,
       },
     });
 
@@ -544,41 +554,12 @@ export class SpinHuntEngine implements IEngine {
       });
     }
 
-    // Token wheel prizes buffer into vault credit when asset is a pay asset
-    let wheelPending = null;
-    const rawAsset = String(wheel.asset ?? "");
-    const normalizedWheel: SpinPayAsset | null =
-      rawAsset === "USDm" || rawAsset.toUpperCase() === "USDM" || rawAsset.toUpperCase() === "CUSD"
-        ? "USDm"
-        : rawAsset.toUpperCase() === "CELO"
-          ? "CELO"
-          : rawAsset.toUpperCase() === "USDC"
-            ? "USDC"
-            : rawAsset.toUpperCase() === "USDT"
-              ? "USDT"
-              : null;
-
-    if (normalizedWheel && Number(wheel.amount) > 0) {
-      const { parseUnits } = await import("viem");
-      const { assetDecimals } = await import("@/lib/tokens/celoAssets");
-      const amountWei = parseUnits(String(wheel.amount), assetDecimals(normalizedWheel));
-      wheelPending = await this.enqueueCredit({
-        userId: input.userId,
-        wallet: input.wallet,
-        sessionId: session.id,
-        asset: normalizedWheel,
-        amountWei,
-        source: "WHEEL",
-        suffix: String(wheel.spinId ?? "wheel"),
-      });
-    }
-
     eventBus.publish({
       event: "SpinHuntFinished",
       userId: input.userId,
       sessionId: session.id,
       cashEarnedWei: session.cashEarnedWei,
-      wheel,
+      wheel: null,
     });
 
     return {
@@ -586,13 +567,11 @@ export class SpinHuntEngine implements IEngine {
       sessionId: session.id,
       cashEarnedWei: session.cashEarnedWei,
       cashAsset: session.cashAsset,
-      wheel,
+      wheel: null,
       bubbleCredit: bubblePending
         ? { status: bubblePending.status, requestId: bubblePending.requestId, txHash: bubblePending.creditTxHash }
         : null,
-      wheelCredit: wheelPending
-        ? { status: wheelPending.status, requestId: wheelPending.requestId, txHash: wheelPending.creditTxHash }
-        : null,
+      wheelCredit: null,
     };
   }
 }

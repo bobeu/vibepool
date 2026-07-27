@@ -1270,6 +1270,7 @@ exports.Prisma.SpinConfigScalarFieldEnum = {
   entryAsset: 'entryAsset',
   xpCostPerSpin: 'xpCostPerSpin',
   spinDurationSec: 'spinDurationSec',
+  minBubbleCashWei: 'minBubbleCashWei',
   maxBubbleCashWei: 'maxBubbleCashWei',
   maxCashPerSpinWei: 'maxCashPerSpinWei',
   baseWheelRpm: 'baseWheelRpm',

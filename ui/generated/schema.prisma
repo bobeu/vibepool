@@ -2132,9 +2132,10 @@ model SpinConfig {
   entryAsset        String   @default("USDm") @db.VarChar(16)
   xpCostPerSpin     Int      @default(0)
   spinDurationSec   Int      @default(10)
+  minBubbleCashWei  String   @default("10000000000000") @db.VarChar(78)
   maxBubbleCashWei  String   @default("1000000000000000") @db.VarChar(78)
   maxCashPerSpinWei String   @default("50000000000000000") @db.VarChar(78)
-  baseWheelRpm      Int      @default(120)
+  baseWheelRpm      Int      @default(100)
   metadata          Json?
   updatedAt         DateTime @updatedAt @db.Timestamp
   createdAt         DateTime @default(now()) @db.Timestamp
