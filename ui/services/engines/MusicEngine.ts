@@ -17,39 +17,75 @@ export class MusicEngine implements IEngine {
   }
 
   async ensureSeedCatalog() {
-    const count = await prisma().spinMusicTrack.count();
-    if (count > 0) return;
-    await prisma().spinMusicTrack.createMany({
-      data: [
-        {
-          title: "Pulse Soft",
-          artist: "Nexora",
-          url: "/audio/spin/pulse-soft.mp3",
-          tier: "FREE",
-          priceWei: "0",
-          priceAsset: "USDm",
-          durationSec: 20,
-        },
-        {
-          title: "Arena Glow",
-          artist: "Nexora",
-          url: "/audio/spin/arena-glow.mp3",
-          tier: "PREMIUM",
-          priceWei: "10000000000000000",
-          priceAsset: "USDm",
-          durationSec: 24,
-        },
-        {
-          title: "Gold Rush Beat",
-          artist: "Nexora",
-          url: "/audio/spin/gold-rush.mp3",
-          tier: "GOLD",
-          priceWei: "50000000000000000",
-          priceAsset: "USDm",
-          durationSec: 28,
-        },
-      ],
-    });
+    const catalog = [
+      {
+        title: "Pulse Soft",
+        artist: "Nexora",
+        url: "/audio/spin/pulse-soft.wav",
+        tier: "FREE" as const,
+        priceWei: "0",
+        priceAsset: "USDm",
+        durationSec: 12,
+      },
+      {
+        title: "Arena Glow",
+        artist: "Nexora",
+        url: "/audio/spin/arena-glow.wav",
+        tier: "PREMIUM" as const,
+        priceWei: "10000000000000000",
+        priceAsset: "USDm",
+        durationSec: 12,
+      },
+      {
+        title: "Gold Rush Beat",
+        artist: "Nexora",
+        url: "/audio/spin/gold-rush.wav",
+        tier: "GOLD" as const,
+        priceWei: "50000000000000000",
+        priceAsset: "USDm",
+        durationSec: 12,
+      },
+      {
+        title: "Night Circuit",
+        artist: "Nexora",
+        url: "/audio/spin/night-circuit.wav",
+        tier: "FREE" as const,
+        priceWei: "0",
+        priceAsset: "USDm",
+        durationSec: 12,
+      },
+      {
+        title: "Spin Fever",
+        artist: "Nexora",
+        url: "/audio/spin/spin-fever.wav",
+        tier: "PREMIUM" as const,
+        priceWei: "15000000000000000",
+        priceAsset: "USDm",
+        durationSec: 12,
+      },
+    ];
+
+    for (const track of catalog) {
+      const existing = await prisma().spinMusicTrack.findFirst({
+        where: { title: track.title },
+      });
+      if (existing) {
+        // Keep catalog URLs pointed at self-hosted loops (repairs older broken seeds).
+        if (existing.url !== track.url || existing.artist !== track.artist) {
+          await prisma().spinMusicTrack.update({
+            where: { id: existing.id },
+            data: {
+              url: track.url,
+              artist: track.artist,
+              durationSec: track.durationSec,
+              active: true,
+            },
+          });
+        }
+        continue;
+      }
+      await prisma().spinMusicTrack.create({ data: track });
+    }
   }
 
   async listCatalog(userId: string) {

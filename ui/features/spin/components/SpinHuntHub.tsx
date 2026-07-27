@@ -10,6 +10,7 @@ import { useSpinEconomyPayment } from "@/hooks/useSpinEconomyPayment";
 import { useUIStore } from "@/store/uiStore";
 import { assetDecimals } from "@/lib/tokens/celoAssets";
 import { isSpinPayAsset } from "@/lib/spin/economy";
+import { unlockSpinAudio } from "@/lib/audio/spinSounds";
 import type { HuntLoadout, HuntSession, PublicBubble } from "@/lib/spin/types";
 import { BubbleArena } from "./BubbleArena";
 import { SpinLoadoutPanel } from "./SpinLoadoutPanel";
@@ -149,6 +150,7 @@ export function SpinHuntHub() {
 
   const beginSession = useCallback(
     (payload: HuntSession) => {
+      void unlockSpinAudio();
       setSession(payload);
       setCashEarnedWei(payload.cashEarnedWei || "0");
       setCashAsset(payload.cashAsset || "USDm");
@@ -330,6 +332,7 @@ export function SpinHuntHub() {
 
   const handleSpin = () => {
     if (busy) return;
+    void unlockSpinAudio();
     setError(null);
     if (available > 0) {
       setPendingStartMode("ticket");
@@ -524,24 +527,41 @@ export function SpinHuntHub() {
             <audio src={session.loadout.musicUrl} autoPlay loop preload="auto" className="hidden" />
           ) : null}
           <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
+            {/* Wheel sits under the bubble layer so bursts stay clickable. */}
+            <div className="pointer-events-none relative z-10 flex flex-col items-center">
+              <div className="mb-[-4px] h-0 w-0 border-l-[10px] border-r-[10px] border-b-[22px] border-l-transparent border-r-transparent border-b-yellow-400" />
+              <SpinWheelPanel
+                rotation={rotation}
+                hunting={hunting}
+                rpm={rpm}
+                spinDisabled
+                spinLabel={spinLabel}
+                onSpin={() => undefined}
+              />
+              <p className="mt-4 rounded-full border border-white/10 bg-zinc-950/75 px-4 py-2 text-[10px] font-black uppercase tracking-[0.28em] text-white/65">
+                {finishing ? "Locking round…" : "Pop bubbles before they escape"}
+              </p>
+            </div>
+
             <BubbleArena
               bubbles={session.plan.bubbles}
               startedAtMs={new Date(session.startedAt).getTime()}
               durationMs={session.plan.durationMs}
-              disabled={hitMutation.isPending || finishing}
+              emitOffsetY={-42}
+              disabled={finishing}
               onBurst={(bubble, taps, elapsedMs) =>
                 hitMutation.mutateAsync({ bubble, taps, elapsedMs })
               }
             />
 
-            <div className="pointer-events-none absolute inset-x-0 top-0 z-20 px-4 py-4">
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-[80] px-4 py-4">
               <div className="mx-auto flex w-full max-w-5xl items-start justify-between gap-3">
                 <div className="rounded-2xl border border-white/10 bg-zinc-950/80 px-4 py-3">
                   <p className="text-[10px] font-black uppercase tracking-[0.28em] text-primary/80">
                     Bubble mode
                   </p>
                   <p className="mt-1 text-sm font-black uppercase text-white">
-                    {finishing ? "Counting your burst total…" : "Background locked · burst from center"}
+                    {finishing ? "Counting your burst total…" : "Bubbles emit from Spin · tap to burst"}
                   </p>
                 </div>
                 <div className="pointer-events-auto flex flex-col items-end gap-2">
@@ -565,7 +585,7 @@ export function SpinHuntHub() {
             </div>
 
             {showBuzzerInfo && (
-              <div className="pointer-events-none absolute inset-x-4 top-24 z-30 mx-auto max-w-md rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+              <div className="pointer-events-none absolute inset-x-4 top-24 z-[85] mx-auto max-w-md rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
                 <p className="text-[10px] font-black uppercase tracking-[0.28em] text-primary/80">
                   Speed buzzer info
                 </p>
@@ -573,21 +593,6 @@ export function SpinHuntHub() {
                 <p className="mt-1 text-sm font-bold text-white/65">{buzzerSummary}</p>
               </div>
             )}
-
-            <div className="pointer-events-none relative z-10 flex flex-col items-center">
-              <div className="mb-[-4px] h-0 w-0 border-l-[10px] border-r-[10px] border-b-[22px] border-l-transparent border-r-transparent border-b-yellow-400" />
-              <SpinWheelPanel
-                rotation={rotation}
-                hunting={hunting}
-                rpm={rpm}
-                spinDisabled
-                spinLabel={spinLabel}
-                onSpin={() => undefined}
-              />
-              <p className="mt-4 rounded-full border border-white/10 bg-zinc-950/75 px-4 py-2 text-[10px] font-black uppercase tracking-[0.28em] text-white/65">
-                {finishing ? "Locking round…" : "Pop bubbles before they escape"}
-              </p>
-            </div>
           </div>
         </div>
       )}
