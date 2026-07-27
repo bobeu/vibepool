@@ -25,11 +25,11 @@ import { isMiniPay } from "@/lib/wagmi";
 import { authFetch } from "@/lib/auth/client";
 
 function resolveTreasury(): `0x${string}` {
-  const env = getTreasuryAddress();
-  if (env !== ZERO_ADDRESS) return env;
-  const fromRegistry = CONTRACTS.RewardTreasury?.address;
-  if (fromRegistry && fromRegistry !== ZERO_ADDRESS) return fromRegistry as `0x${string}`;
-  throw new Error("Treasury address not configured — set NEXT_PUBLIC_REWARD_TREASURY_ADDRESS after mainnet deploy");
+  const addr = getTreasuryAddress();
+  if (addr === ZERO_ADDRESS) {
+    throw new Error("Treasury address not configured — run smartContracts sync after mainnet deploy");
+  }
+  return addr as `0x${string}`;
 }
 
 export function useSkillBoostPayment() {

@@ -1,6 +1,6 @@
 /**
  * Contract registry — Celo mainnet (42220) only.
- * Addresses: env overrides win; else addresses.json after `bun run sync` in smartContracts.
+ * Source of truth: addresses.json + abis.json from `bun run sync` in smartContracts.
  */
 
 import addresses from "./addresses.json";
@@ -25,31 +25,19 @@ function mainnetAddress(map: NetworkMap | undefined): Address {
   return ZERO_ADDRESS;
 }
 
-function envOr(map: NetworkMap | undefined, envKey: string): Address {
-  const fromEnv = process.env[envKey]?.trim();
-  if (fromEnv && fromEnv.startsWith("0x") && fromEnv.length === 42) {
-    return fromEnv as Address;
-  }
-  return mainnetAddress(map);
-}
-
-function contract(
-  name: ContractKey,
-  envKey: string
-): { address: Address; abi: unknown } | null {
-  const map = addresses[name] as NetworkMap | undefined;
+function contract(name: ContractKey): { address: Address; abi: unknown } | null {
   const abi = abis[name as keyof typeof abis];
   if (!abi) return null;
-  const address = envOr(map, envKey);
+  const address = mainnetAddress(addresses[name] as NetworkMap | undefined);
   return { address, abi };
 }
 
-const rewardTreasury = contract("RewardTreasury", "NEXT_PUBLIC_REWARD_TREASURY_ADDRESS");
-const pointsManager = contract("PointsManager", "NEXT_PUBLIC_POINTS_MANAGER_ADDRESS");
-const activityRegistry = contract("ActivityRegistry", "NEXT_PUBLIC_ACTIVITY_REGISTRY_ADDRESS");
-const spinRewardManager = contract("SpinRewardManager", "NEXT_PUBLIC_SPIN_REWARD_MANAGER_ADDRESS");
-const spinPrizeVault = contract("SpinPrizeVault", "NEXT_PUBLIC_SPIN_PRIZE_VAULT_ADDRESS");
-const spinEconomy = contract("SpinEconomy", "NEXT_PUBLIC_SPIN_ECONOMY_ADDRESS");
+const rewardTreasury = contract("RewardTreasury");
+const pointsManager = contract("PointsManager");
+const activityRegistry = contract("ActivityRegistry");
+const spinRewardManager = contract("SpinRewardManager");
+const spinPrizeVault = contract("SpinPrizeVault");
+const spinEconomy = contract("SpinEconomy");
 
 export const CONTRACTS = {
   ...(rewardTreasury ? { RewardTreasury: rewardTreasury } : {}),
@@ -62,8 +50,13 @@ export const CONTRACTS = {
 
 export type ContractName = keyof typeof CONTRACTS;
 
-/** True when a contract address is configured (env or synced mainnet deploy). */
+/** True when a synced mainnet address is present in addresses.json. */
 export function isContractConfigured(name: ContractName): boolean {
   const c = CONTRACTS[name];
   return Boolean(c?.address && c.address !== ZERO_ADDRESS);
+}
+
+/** Address from the synced registry, or zero if missing. */
+export function getContractAddress(name: ContractKey): Address {
+  return mainnetAddress(addresses[name] as NetworkMap | undefined);
 }

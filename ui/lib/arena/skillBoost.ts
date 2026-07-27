@@ -1,6 +1,7 @@
 import { parseEther } from "viem";
 import { celo } from "viem/chains";
 import { USDM_CELO, ZERO_ADDRESS, type Address } from "@/config/constants";
+import { CONTRACTS } from "@/lib/contracts";
 
 /** Skill boost purposes — flat fees to treasury, never a wager/prize stake. */
 export type SkillBoostPurpose = "ARENA_BOOST" | "STAY_RELEVANT" | "POINTS_GROWTH";
@@ -30,10 +31,8 @@ export const STREAK_XP_BONUS_PER = 5;
 export const STREAK_XP_BONUS_CAP = 40;
 
 export function getTreasuryAddress(): Address {
-  const fromEnv = process.env.NEXT_PUBLIC_REWARD_TREASURY_ADDRESS?.trim();
-  if (fromEnv && fromEnv.startsWith("0x") && fromEnv.length === 42) {
-    return fromEnv as Address;
-  }
+  const fromRegistry = CONTRACTS.RewardTreasury?.address;
+  if (fromRegistry && fromRegistry !== ZERO_ADDRESS) return fromRegistry as Address;
   return ZERO_ADDRESS;
 }
 

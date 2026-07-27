@@ -2,6 +2,7 @@ import { createPublicClient, http, type PublicClient } from "viem";
 import { celo } from "wagmi/chains";
 import { prisma } from "@/lib/auth/session";
 import { logger } from "@/lib/logging";
+import { CONTRACTS, isContractConfigured } from "@/lib/contracts";
 import type { IBlockchainService } from "./interfaces";
 
 type EventHandler = (event: Record<string, unknown>) => Promise<void>;
@@ -21,9 +22,13 @@ export class BlockchainSyncService implements IBlockchainService {
 
   async readProfile(wallet: string): Promise<Record<string, unknown> | null> {
     try {
+      if (!isContractConfigured("PointsManager")) {
+        logger.warn("PointsManager not configured in addresses.json");
+        return null;
+      }
       const pointsManager = await this.client.getContract({
-        address: process.env.NEXT_PUBLIC_POINTS_MANAGER_ADDRESS as `0x${string}`,
-        abi: this.getPointsManagerAbi(),
+        address: CONTRACTS.PointsManager.address as `0x${string}`,
+        abi: (CONTRACTS.PointsManager.abi ?? this.getPointsManagerAbi()) as never,
         functionName: "profile",
         args: [wallet],
       });
@@ -45,9 +50,13 @@ export class BlockchainSyncService implements IBlockchainService {
 
   async readTreasury(): Promise<Record<string, unknown> | null> {
     try {
+      if (!isContractConfigured("RewardTreasury")) {
+        logger.warn("RewardTreasury not configured in addresses.json");
+        return null;
+      }
       const treasury = await this.client.getContract({
-        address: process.env.NEXT_PUBLIC_REWARD_TREASURY_ADDRESS as `0x${string}`,
-        abi: this.getRewardTreasuryAbi(),
+        address: CONTRACTS.RewardTreasury.address as `0x${string}`,
+        abi: (CONTRACTS.RewardTreasury.abi ?? this.getRewardTreasuryAbi()) as never,
         functionName: "treasuryBalance",
       });
 
@@ -101,15 +110,15 @@ export class BlockchainSyncService implements IBlockchainService {
     logger.info("Syncing local cache from blockchain");
 
     try {
-      const pointsManagerAddress = process.env.NEXT_PUBLIC_POINTS_MANAGER_ADDRESS as `0x${string}`;
-      if (!pointsManagerAddress) {
-        logger.warn("PointsManager address not configured");
+      if (!isContractConfigured("PointsManager")) {
+        logger.warn("PointsManager address not configured in addresses.json");
         return;
       }
+      const pointsManagerAddress = CONTRACTS.PointsManager.address as `0x${string}`;
 
       const logs = await this.client.getContractEvents({
         address: pointsManagerAddress,
-        abi: this.getPointsManagerAbi(),
+        abi: (CONTRACTS.PointsManager.abi ?? this.getPointsManagerAbi()) as never,
         eventName: "XPGranted",
         fromBlock: "earliest",
       });
@@ -150,22 +159,30 @@ export class BlockchainSyncService implements IBlockchainService {
   }
 
   private async subscribeToEvents(): Promise<void> {
-    const pointsManagerAddress = process.env.NEXT_PUBLIC_POINTS_MANAGER_ADDRESS as `0x${string}`;
-    const rewardTreasuryAddress = process.env.NEXT_PUBLIC_REWARD_TREASURY_ADDRESS as `0x${string}`;
-    const activityRegistryAddress = process.env.NEXT_PUBLIC_ACTIVITY_REGISTRY_ADDRESS as `0x${string}`;
-    const spinRewardManagerAddress = process.env.NEXT_PUBLIC_SPIN_REWARD_MANAGER_ADDRESS as `0x${string}`;
+    const pointsManagerAddress = isContractConfigured("PointsManager")
+      ? (CONTRACTS.PointsManager.address as `0x${string}`)
+      : undefined;
+    const rewardTreasuryAddress = isContractConfigured("RewardTreasury")
+      ? (CONTRACTS.RewardTreasury.address as `0x${string}`)
+      : undefined;
+    const activityRegistryAddress = isContractConfigured("ActivityRegistry")
+      ? (CONTRACTS.ActivityRegistry.address as `0x${string}`)
+      : undefined;
+    const spinRewardManagerAddress = isContractConfigured("SpinRewardManager")
+      ? (CONTRACTS.SpinRewardManager.address as `0x${string}`)
+      : undefined;
 
     if (pointsManagerAddress) {
       await this.client.watchContractEvent({
         address: pointsManagerAddress,
-        abi: this.getPointsManagerAbi(),
+        abi: (CONTRACTS.PointsManager.abi ?? this.getPointsManagerAbi()) as never,
         eventName: "XPGranted",
         onLogs: (logs) => this.handleXPGranted(logs[0]),
       });
 
       await this.client.watchContractEvent({
         address: pointsManagerAddress,
-        abi: this.getPointsManagerAbi(),
+        abi: (CONTRACTS.PointsManager.abi ?? this.getPointsManagerAbi()) as never,
         eventName: "PointsGranted",
         onLogs: (logs) => this.handlePointsGranted(logs[0]),
       });
@@ -174,7 +191,7 @@ export class BlockchainSyncService implements IBlockchainService {
     if (rewardTreasuryAddress) {
       await this.client.watchContractEvent({
         address: rewardTreasuryAddress,
-        abi: this.getRewardTreasuryAbi(),
+        abi: (CONTRACTS.RewardTreasury.abi ?? this.getRewardTreasuryAbi()) as never,
         eventName: "RewardPaid",
         onLogs: (logs) => this.handleRewardPaid(logs[0]),
       });
@@ -183,7 +200,7 @@ export class BlockchainSyncService implements IBlockchainService {
     if (activityRegistryAddress) {
       await this.client.watchContractEvent({
         address: activityRegistryAddress,
-        abi: this.getActivityRegistryAbi(),
+        abi: (CONTRACTS.ActivityRegistry.abi ?? this.getActivityRegistryAbi()) as never,
         eventName: "ActivityRecorded",
         onLogs: (logs) => this.handleActivityRecorded(logs[0]),
       });
@@ -192,7 +209,7 @@ export class BlockchainSyncService implements IBlockchainService {
     if (spinRewardManagerAddress) {
       await this.client.watchContractEvent({
         address: spinRewardManagerAddress,
-        abi: this.getSpinRewardManagerAbi(),
+        abi: (CONTRACTS.SpinRewardManager.abi ?? this.getSpinRewardManagerAbi()) as never,
         eventName: "SpinGranted",
         onLogs: (logs) => this.handleSpinGranted(logs[0]),
       });

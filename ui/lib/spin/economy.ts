@@ -17,20 +17,12 @@ export const DEFAULT_ENTRY_FEES: Record<SpinPayAsset, bigint> = {
 };
 
 export function getSpinEconomyAddress(): Address {
-  const fromEnv = process.env.NEXT_PUBLIC_SPIN_ECONOMY_ADDRESS?.trim();
-  if (fromEnv && fromEnv.startsWith("0x") && fromEnv.length === 42) {
-    return fromEnv as Address;
-  }
   const fromRegistry = CONTRACTS.SpinEconomy?.address;
   if (fromRegistry && fromRegistry !== ZERO_ADDRESS) return fromRegistry as Address;
   return ZERO_ADDRESS;
 }
 
 export function getSpinPrizeVaultAddress(): Address {
-  const fromEnv = process.env.NEXT_PUBLIC_SPIN_PRIZE_VAULT_ADDRESS?.trim();
-  if (fromEnv && fromEnv.startsWith("0x") && fromEnv.length === 42) {
-    return fromEnv as Address;
-  }
   const fromRegistry = CONTRACTS.SpinPrizeVault?.address;
   if (fromRegistry && fromRegistry !== ZERO_ADDRESS) return fromRegistry as Address;
   return ZERO_ADDRESS;

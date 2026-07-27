@@ -1,8 +1,20 @@
 {
-  "RewardTreasury": {},
-  "PointsManager": {},
-  "ActivityRegistry": {},
-  "SpinRewardManager": {},
-  "SpinPrizeVault": {},
-  "SpinEconomy": {}
+  "RewardTreasury": {
+    "42220": "0xfA450562Ac524137d85074078C53424DA7a26081"
+  },
+  "PointsManager": {
+    "42220": "0x6237Cec72c087D40509dE426642d52b770D3cEA3"
+  },
+  "ActivityRegistry": {
+    "42220": "0xC79535196E94AAde5615fc83130fCB583Fa22939"
+  },
+  "SpinRewardManager": {
+    "42220": "0x682E972Be1c8aE92BB75cd084fb70c98DB25edcB"
+  },
+  "SpinPrizeVault": {
+    "42220": "0x499Dfcab3A3993316C5aF4530B95aC8d09402345"
+  },
+  "SpinEconomy": {
+    "42220": "0xf5740A36F8fB14fC1291D473ab6ee90138fe6A8A"
+  }
 }

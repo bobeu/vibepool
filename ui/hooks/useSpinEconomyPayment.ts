@@ -32,7 +32,7 @@ import {
 function resolveEconomy(): `0x${string}` {
   const addr = getSpinEconomyAddress();
   if (addr !== ZERO_ADDRESS) return addr;
-  throw new Error("SpinEconomy not configured — set NEXT_PUBLIC_SPIN_ECONOMY_ADDRESS after mainnet deploy");
+  throw new Error("SpinEconomy not configured — run smartContracts sync after mainnet deploy");
 }
 
 /** Random sessionRef for payEntry → start Session linkage. */
