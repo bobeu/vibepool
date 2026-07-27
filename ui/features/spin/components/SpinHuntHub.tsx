@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowDownToLine, RotateCcw, Ticket, X, Zap } from "lucide-react";
+import { ArrowDownToLine, RotateCcw, Shield, Ticket, X, Zap } from "lucide-react";
 import { formatUnits } from "viem";
 import { authFetch } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
@@ -14,7 +14,18 @@ import { unlockSpinAudio } from "@/lib/audio/spinSounds";
 import type { HuntLoadout, HuntSession, PublicBubble } from "@/lib/spin/types";
 import { BubbleArena } from "./BubbleArena";
 import { SpinLoadoutPanel } from "./SpinLoadoutPanel";
-import { SEGMENTS, SLICE_DEG, TOTAL, SpinWheelPanel } from "./SpinWheelPanel";
+import { SLICE_DEG, TOTAL, SpinWheelPanel } from "./SpinWheelPanel";
+
+type CatalogItem = {
+  id: string;
+  name: string;
+  type: string;
+  priceWei: string;
+  priceAsset: string;
+  itemId: `0x${string}`;
+  owned: boolean;
+  quantity?: number;
+};
 
 function formatCash(amountWei: string, asset: string) {
   try {
@@ -31,8 +42,14 @@ export function SpinHuntHub() {
   const queryClient = useQueryClient();
   const { isFreePlay } = useAuth();
   const showToast = useUIStore((s) => s.showToast);
-  const { payEntry, busy: paying, preferredAsset, feeLabel, isConnected } =
-    useSpinEconomyPayment();
+  const {
+    payEntry,
+    purchaseItem,
+    busy: paying,
+    preferredAsset,
+    feeLabel,
+    isConnected,
+  } = useSpinEconomyPayment();
 
   const [session, setSession] = useState<HuntSession | null>(null);
   const [hunting, setHunting] = useState(false);
@@ -44,7 +61,7 @@ export function SpinHuntHub() {
   const [showReward, setShowReward] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pendingStartMode, setPendingStartMode] = useState<"ticket" | "paid" | null>(null);
-  const [showBuzzerInfo, setShowBuzzerInfo] = useState(false);
+  const [applyInfo, setApplyInfo] = useState<"SPEED_SHIELDER" | "BUZZER" | null>(null);
   const prevRotation = useRef(0);
   const huntTimer = useRef<number | null>(null);
 
@@ -62,7 +79,7 @@ export function SpinHuntHub() {
     queryKey: ["spin-collections"],
     queryFn: async () => {
       const res = await authFetch("/api/spin/collections");
-      if (!res.ok) return { loadout: null };
+      if (!res.ok) return { loadout: null, items: [] };
       return res.json();
     },
     staleTime: 10_000,
@@ -80,21 +97,15 @@ export function SpinHuntHub() {
 
   const available = Number(data?.balance?.available ?? 0);
   const canMockWithdraw = Boolean(isFreePlay && walletSummary?.canWithdraw);
-  const rpm = session?.rpm ?? data?.config?.baseWheelRpm ?? 100;
+  const catalogItems = (loadoutSummary?.items ?? []) as CatalogItem[];
+  const speedShielderItem = catalogItems.find((item) => item.type === "SPEED_SHIELDER");
+  const quickBuzzerItem = catalogItems.find((item) => item.type === "BUZZER");
+  const rpm =
+    session?.rpm ??
+    loadoutSummary?.loadout?.wheelRpm ??
+    data?.config?.baseWheelRpm ??
+    100;
   const activeLoadout = (session?.loadout ?? loadoutSummary?.loadout ?? null) as HuntLoadout | null;
-  const hasSpeedBuzzer = Boolean(
-    activeLoadout?.itemSlugs?.some(
-      (slug) => slug.includes("buzzer") || slug.includes("speed-shielder")
-    )
-  );
-  const speedSummary =
-    activeLoadout?.rpmMultiplier && activeLoadout.rpmMultiplier < 1
-      ? `Wheel control boosted · ${Math.round((1 - activeLoadout.rpmMultiplier) * 100)}% calmer`
-      : "Wheel starts hot at 100 RPM";
-  const buzzerSummary =
-    activeLoadout?.buzzerTapBonus && activeLoadout.buzzerTapBonus > 0
-      ? `Quick Buzzer active · up to ${activeLoadout.buzzerTapBonus} tap saved on tougher bubbles`
-      : "No buzzer equipped · tougher bubbles still need full taps";
 
   const clearHuntTimer = () => {
     if (huntTimer.current) {
@@ -134,7 +145,7 @@ export function SpinHuntHub() {
           setSession(null);
           setFinishing(false);
           setPendingStartMode(null);
-          setShowBuzzerInfo(false);
+          setApplyInfo(null);
           queryClient.invalidateQueries({ queryKey: ["spin-hunt-config"] });
           queryClient.invalidateQueries({ queryKey: ["spin-collections"] });
           queryClient.invalidateQueries({ queryKey: ["spins"] });
@@ -156,7 +167,7 @@ export function SpinHuntHub() {
       setCashAsset(payload.cashAsset || "USDm");
       setHunting(true);
       setPendingStartMode(null);
-      setShowBuzzerInfo(false);
+      setApplyInfo(null);
       setShowReward(false);
       setReward(null);
       setError(null);
@@ -251,11 +262,87 @@ export function SpinHuntHub() {
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(body.error || "Hit rejected");
+      if (body.success === false) {
+        throw new Error(body.error || body.message || "Hit rejected");
+      }
       return body;
     },
     onSuccess: (body) => {
       if (body.cashEarnedWei) setCashEarnedWei(body.cashEarnedWei);
       if (body.cashAsset) setCashAsset(body.cashAsset);
+    },
+    onError: (e: Error) => {
+      setError(e.message);
+      showToast(e.message);
+    },
+  });
+
+  const applyBoostMutation = useMutation({
+    mutationFn: async (type: "SPEED_SHIELDER" | "BUZZER") => {
+      const item = type === "SPEED_SHIELDER" ? speedShielderItem : quickBuzzerItem;
+      if (!item) throw new Error(type === "SPEED_SHIELDER" ? "Speed Shielder not found" : "Quick Buzzer not found");
+
+      if (isFreePlay || item.priceWei === "0") {
+        const res = await authFetch(
+          isFreePlay && item.priceWei !== "0" ? "/api/spin/freeplay" : "/api/spin/collections",
+          {
+            method: "POST",
+            body: JSON.stringify(
+              isFreePlay && item.priceWei !== "0"
+                ? { action: "purchaseItem", itemId: item.id }
+                : { action: "purchase", itemId: item.id, free: true }
+            ),
+          }
+        );
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(body.error || "Apply failed");
+        return { type, body };
+      }
+
+      if (!isConnected) throw new Error("Connect wallet to buy");
+      const asset = isSpinPayAsset(item.priceAsset) ? item.priceAsset : preferredAsset;
+      const paid = await purchaseItem({
+        itemId: item.itemId,
+        asset,
+        amountWei: BigInt(item.priceWei),
+      });
+      const res = await authFetch("/api/spin/collections", {
+        method: "POST",
+        body: JSON.stringify({ action: "purchase", itemId: item.id, txHash: paid.hash }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || "Purchase verify failed");
+      return { type, body };
+    },
+    onSuccess: ({ type, body }) => {
+      setApplyInfo(type);
+      setError(null);
+      const nextRpm =
+        body?.loadout?.wheelRpm ??
+        loadoutSummary?.loadout?.wheelRpm ??
+        data?.config?.baseWheelRpm ??
+        100;
+      if (session && body?.loadout) {
+        setSession((prev) =>
+          prev
+            ? {
+                ...prev,
+                rpm: typeof body.loadout.wheelRpm === "number" ? body.loadout.wheelRpm : prev.rpm,
+                loadout: body.loadout,
+              }
+            : prev
+        );
+      }
+      showToast(
+        type === "SPEED_SHIELDER"
+          ? `Speed Shielder applied · ${nextRpm} RPM`
+          : `Quick Buzzer applied · wheel ${nextRpm} RPM`
+      );
+      queryClient.invalidateQueries({ queryKey: ["spin-collections"] });
+    },
+    onError: (e: Error) => {
+      setError(e.message);
+      showToast(e.message);
     },
   });
 
@@ -300,7 +387,8 @@ export function SpinHuntHub() {
     startPaid.isPending ||
     paying ||
     withdrawMutation.isPending ||
-    refillSpins.isPending;
+    refillSpins.isPending ||
+    applyBoostMutation.isPending;
 
   const spinLabel = useMemo(() => {
     if (finishing) return "…";
@@ -331,7 +419,7 @@ export function SpinHuntHub() {
   };
 
   const handleSpin = () => {
-    if (busy) return;
+    if (busy || pendingStartMode) return;
     void unlockSpinAudio();
     setError(null);
     if (available > 0) {
@@ -344,6 +432,57 @@ export function SpinHuntHub() {
     }
     setPendingStartMode("paid");
   };
+
+  const boostActions = (
+    <div className="grid grid-cols-2 gap-2">
+      <button
+        type="button"
+        disabled={!speedShielderItem || applyBoostMutation.isPending || paying}
+        onClick={() => applyBoostMutation.mutate("SPEED_SHIELDER")}
+        className="rounded-2xl border-4 border-black bg-[#FBBF24] px-2 py-3 text-[10px] font-black uppercase leading-tight text-black shadow-[4px_4px_0_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-white/50"
+      >
+        <span className="mb-1 flex items-center justify-center gap-1">
+          <Shield className="h-3.5 w-3.5" strokeWidth={2.5} />
+        </span>
+        Apply Speed Shielder
+      </button>
+      <button
+        type="button"
+        disabled={!quickBuzzerItem || applyBoostMutation.isPending || paying}
+        onClick={() => applyBoostMutation.mutate("BUZZER")}
+        className="rounded-2xl border-4 border-black bg-primary px-2 py-3 text-[10px] font-black uppercase leading-tight text-black shadow-[4px_4px_0_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-white/50"
+      >
+        <span className="mb-1 flex items-center justify-center gap-1">
+          <Zap className="h-3.5 w-3.5" strokeWidth={2.5} />
+        </span>
+        Apply Quick Buzzer
+      </button>
+    </div>
+  );
+
+  const applyInfoBlurb =
+    applyInfo === "SPEED_SHIELDER" ? (
+      <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 p-3 text-left">
+        <p className="text-[10px] font-black uppercase tracking-widest text-primary">Speed Shielder</p>
+        <p className="mt-1 text-sm font-bold text-white/80">
+          Slows the wheel by 2 RPM per stack. Stack more for a calmer hunt.
+        </p>
+        <p className="mt-1 text-[11px] font-bold text-white/55">
+          Qty {activeLoadout?.speedShielderQty ?? 0} · live {rpm} RPM
+        </p>
+      </div>
+    ) : applyInfo === "BUZZER" ? (
+      <div className="mt-3 rounded-2xl border border-white/10 bg-white/5 p-3 text-left">
+        <p className="text-[10px] font-black uppercase tracking-widest text-primary">Quick Buzzer</p>
+        <p className="mt-1 text-sm font-bold text-white/80">
+          Reduces taps needed on tough bubbles — each stack saves a tap.
+        </p>
+        <p className="mt-1 text-[11px] font-bold text-white/55">
+          Bonus {activeLoadout?.buzzerTapBonus ?? 0} tap
+          {(activeLoadout?.buzzerTapBonus ?? 0) === 1 ? "" : "s"}
+        </p>
+      </div>
+    ) : null;
 
   if (isLoading) {
     return (
@@ -362,33 +501,18 @@ export function SpinHuntHub() {
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-primary/80">
               Spin Hunt ready
             </p>
+            <p className="mt-2 text-3xl font-black tabular-nums text-primary">{rpm} RPM</p>
             <h3 className="mt-2 text-2xl font-black uppercase italic text-white">
-              Apply speed buzzers
+              Boost your wheel
             </h3>
             <p className="mt-3 text-sm font-bold text-white/70">
-              {hasSpeedBuzzer
-                ? "Your equipped speed helpers can calm the wheel and make tougher bubbles easier to crack."
-                : "You can equip a Speed Shielder or Quick Buzzer from the store before the next round."}
+              Apply a Speed Shielder to calm RPM, or a Quick Buzzer to crack tough bubbles faster.
             </p>
 
-            {showBuzzerInfo ? (
-              <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4 text-left">
-                <p className="text-[11px] font-black uppercase tracking-widest text-primary">
-                  What it does
-                </p>
-                <p className="mt-2 text-sm font-bold text-white/80">{speedSummary}</p>
-                <p className="mt-1 text-sm font-bold text-white/65">{buzzerSummary}</p>
-              </div>
-            ) : null}
+            {applyInfoBlurb}
 
             <div className="mt-5 flex flex-col gap-3">
-              <button
-                type="button"
-                onClick={() => setShowBuzzerInfo((value) => !value)}
-                className="w-full rounded-2xl border-4 border-black bg-[#FBBF24] py-3 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)]"
-              >
-                Apply speed buzzers
-              </button>
+              {boostActions}
               <button
                 type="button"
                 onClick={launchPendingStart}
@@ -401,7 +525,7 @@ export function SpinHuntHub() {
                 type="button"
                 onClick={() => {
                   setPendingStartMode(null);
-                  setShowBuzzerInfo(false);
+                  setApplyInfo(null);
                 }}
                 className="text-xs font-black uppercase tracking-widest text-white/55"
               >
@@ -510,12 +634,17 @@ export function SpinHuntHub() {
       </div>
 
       <div className="mb-2 flex flex-col items-center">
-        <div className="mb-[-4px] z-10 h-0 w-0 border-l-[10px] border-r-[10px] border-b-[22px] border-l-transparent border-r-transparent border-b-yellow-400" />
+        <div className="relative mb-1 flex w-full max-w-[280px] items-end justify-center">
+          <p className="absolute left-0 bottom-1 text-sm font-black tabular-nums text-primary">
+            {rpm} RPM
+          </p>
+          <div className="mb-[-4px] z-10 h-0 w-0 border-l-[10px] border-r-[10px] border-b-[22px] border-l-transparent border-r-transparent border-b-yellow-400" />
+        </div>
         <SpinWheelPanel
           rotation={rotation}
           hunting={hunting}
           rpm={rpm}
-          spinDisabled={busy}
+          spinDisabled={busy || !!pendingStartMode}
           spinLabel={spinLabel}
           onSpin={handleSpin}
         />
@@ -529,7 +658,12 @@ export function SpinHuntHub() {
           <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
             {/* Wheel sits under the bubble layer so bursts stay clickable. */}
             <div className="pointer-events-none relative z-10 flex flex-col items-center">
-              <div className="mb-[-4px] h-0 w-0 border-l-[10px] border-r-[10px] border-b-[22px] border-l-transparent border-r-transparent border-b-yellow-400" />
+              <div className="relative mb-1 flex w-full min-w-[240px] items-end justify-center">
+                <p className="absolute left-0 bottom-1 text-sm font-black tabular-nums text-primary">
+                  {rpm} RPM
+                </p>
+                <div className="mb-[-4px] h-0 w-0 border-l-[10px] border-r-[10px] border-b-[22px] border-l-transparent border-r-transparent border-b-yellow-400" />
+              </div>
               <SpinWheelPanel
                 rotation={rotation}
                 hunting={hunting}
@@ -563,15 +697,10 @@ export function SpinHuntHub() {
                   <p className="mt-1 text-sm font-black uppercase text-white">
                     {finishing ? "Counting your burst total…" : "Bubbles emit from Spin · tap to burst"}
                   </p>
+                  <p className="mt-2 text-lg font-black tabular-nums text-primary">{rpm} RPM</p>
                 </div>
-                <div className="pointer-events-auto flex flex-col items-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowBuzzerInfo((value) => !value)}
-                    className="rounded-full border border-white/15 bg-zinc-950/85 px-4 py-2 text-[10px] font-black uppercase tracking-[0.25em] text-primary"
-                  >
-                    Apply speed buzzers
-                  </button>
+                <div className="pointer-events-auto flex max-w-[220px] flex-col items-end gap-2">
+                  {boostActions}
                   <div className="rounded-2xl border border-white/10 bg-zinc-950/80 px-4 py-3 text-right">
                     <p className="text-[10px] font-black uppercase tracking-widest text-white/55">
                       Bursting now
@@ -584,15 +713,11 @@ export function SpinHuntHub() {
               </div>
             </div>
 
-            {showBuzzerInfo && (
-              <div className="pointer-events-none absolute inset-x-4 top-24 z-[85] mx-auto max-w-md rounded-3xl border border-white/10 bg-zinc-950/90 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
-                <p className="text-[10px] font-black uppercase tracking-[0.28em] text-primary/80">
-                  Speed buzzer info
-                </p>
-                <p className="mt-2 text-sm font-bold text-white/80">{speedSummary}</p>
-                <p className="mt-1 text-sm font-bold text-white/65">{buzzerSummary}</p>
+            {applyInfoBlurb ? (
+              <div className="pointer-events-none absolute inset-x-4 top-28 z-[85] mx-auto max-w-md">
+                {applyInfoBlurb}
               </div>
-            )}
+            ) : null}
           </div>
         </div>
       )}

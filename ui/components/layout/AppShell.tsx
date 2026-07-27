@@ -3,7 +3,7 @@
 import React, { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Home,
   Swords,
@@ -27,6 +27,8 @@ import { UnlockAnimationToast } from "@/components/social/UnlockAnimationToast";
 import { NavigationProgress } from "@/components/layout/NavigationProgress";
 import { Onboarding } from "@/components/common/Onboarding";
 import type { NavKey } from "@/types";
+
+const ONBOARDING_HIDE_KEY = "nexora_onboarding_hide";
 
 // ─── Icon Maps ────────────────────────────────────────────────────────────────
 
@@ -54,19 +56,21 @@ interface AppShellProps {
 
 export function AppShell({ children, activeNav, spinLayout = false }: AppShellProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const { toastMessage, clearToast } = useUIStore();
-  // Start false so onboarding gates the app until Launch App (or prior completion).
-  const [onboardingDone, setOnboardingDone] = useState(false);
+  // Hide flag persists across refreshes; dismissed is session-only (Start game).
+  const [onboardingHidden, setOnboardingHidden] = useState(false);
+  const [onboardingDismissed, setOnboardingDismissed] = useState(false);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [currentTime, setCurrentTime] = useState("9:41");
 
   useEffect(() => {
     setMounted(true);
-    // New brand key — clear legacy vibepool flag so onboarding shows after rebrand.
+    // Clear legacy permanent-done gates so onboarding can show on refresh.
+    localStorage.removeItem("nexora_onboarding_done");
     localStorage.removeItem("vibepool_onboarding_done");
-    const done = localStorage.getItem("nexora_onboarding_done") === "1";
-    setOnboardingDone(done);
+    setOnboardingHidden(localStorage.getItem(ONBOARDING_HIDE_KEY) === "true");
     setOnboardingChecked(true);
   }, []);
 
@@ -93,10 +97,25 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
 
   if (!mounted || !onboardingChecked) return null;
 
+  const showOnboarding = !onboardingHidden && !onboardingDismissed;
+
   const handleOnboardingComplete = () => {
-    localStorage.removeItem("vibepool_onboarding_done");
-    localStorage.setItem("nexora_onboarding_done", "1");
-    setOnboardingDone(true);
+    setOnboardingDismissed(true);
+    router.push("/spin");
+  };
+
+  const handleGuideToggle = () => {
+    if (showOnboarding || !onboardingHidden) {
+      // Currently visible (or would be) — hide permanently until user reopens guide
+      localStorage.setItem(ONBOARDING_HIDE_KEY, "true");
+      setOnboardingHidden(true);
+      setOnboardingDismissed(true);
+    } else {
+      // Hidden — show guide again
+      localStorage.setItem(ONBOARDING_HIDE_KEY, "false");
+      setOnboardingHidden(false);
+      setOnboardingDismissed(false);
+    }
   };
 
   // ─── SHARED inner content ─────────────────────────────────────────────────
@@ -157,19 +176,30 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
 
   const innerContent = appContent;
 
-  // Full-screen onboarding gate (covers mobile + desktop chrome)
-  if (!onboardingDone) {
-    return (
-      <div className="fixed inset-0 z-[9999] bg-background">
-        <div className="relative h-full w-full max-w-[410px] mx-auto overflow-hidden">
-          <Onboarding onComplete={handleOnboardingComplete} />
-        </div>
-      </div>
-    );
-  }
+  const guideLabel = showOnboarding || !onboardingHidden ? "Hide guide" : "Show guide";
 
   return (
     <>
+      {/* Full-screen onboarding (session dismiss or hide flag) */}
+      {showOnboarding && (
+        <div className="fixed inset-0 z-[9999] bg-background">
+          <div className="relative h-full w-full max-w-[410px] mx-auto overflow-hidden">
+            <Onboarding onComplete={handleOnboardingComplete} />
+          </div>
+        </div>
+      )}
+
+      {/* Floating guide toggle — above dock */}
+      <button
+        type="button"
+        onClick={handleGuideToggle}
+        aria-label={guideLabel}
+        title={guideLabel}
+        className="fixed bottom-24 right-4 z-[10000] flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-black bg-[#FBBF24] text-black shadow-[3px_3px_0_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all md:bottom-[7.5rem]"
+      >
+        <BookOpen className="w-5 h-5" strokeWidth={2.5} />
+      </button>
+
       {/* ── MOBILE: full screen ── */}
       <div className="md:hidden flex flex-col min-h-screen bg-background text-foreground relative overflow-hidden">
         {/* Background texture */}
@@ -255,7 +285,7 @@ function BottomDock({
   activeNav: NavKey;
 }) {
   return (
-    <nav className="absolute bottom-4 left-3 right-3 z-40 shrink-0">
+    <nav className="fixed bottom-4 inset-x-3 z-40 max-w-[410px] mx-auto shrink-0">
       <div className="bg-zinc-950/95 border-2 border-white/10 rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.7)] backdrop-blur-sm px-2 py-1">
         <ul className="flex justify-around">
           {MOBILE_NAV_ITEMS.map((item) => {

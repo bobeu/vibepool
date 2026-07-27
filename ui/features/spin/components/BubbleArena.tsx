@@ -21,6 +21,7 @@ type Props = {
   /** Pixels above the arena center — top edge of the Spin hub button (~42). */
   emitOffsetY?: number;
   onBurst: (bubble: PublicBubble, taps: number, elapsedMs: number) => Promise<BurstResult | void>;
+  onBurstError?: (message: string, bubble: PublicBubble) => void;
 };
 
 type Flyout = {
@@ -48,6 +49,7 @@ export function BubbleArena({
   disabled,
   emitOffsetY = -42,
   onBurst,
+  onBurstError,
 }: Props) {
   const [now, setNow] = useState(() => Date.now());
   const [taps, setTaps] = useState<Record<string, number>>({});
@@ -141,8 +143,23 @@ export function BubbleArena({
                       setFlyouts((prev) => prev.filter((entry) => entry.id !== flyoutId));
                     }, 1100);
                   })
-                  .catch(() => {
+                  .catch((err: unknown) => {
+                    // Rollback optimistic burst so the player can retry.
+                    setBurstIds((prev) => {
+                      const nextIds = new Set(prev);
+                      nextIds.delete(b.id);
+                      return nextIds;
+                    });
+                    setTaps((prev) => {
+                      const copy = { ...prev };
+                      const restored = Math.max(0, (copy[b.id] ?? next) - 1);
+                      if (restored <= 0) delete copy[b.id];
+                      else copy[b.id] = restored;
+                      return copy;
+                    });
                     setFlyouts((prev) => prev.filter((entry) => entry.id !== flyoutId));
+                    const message = err instanceof Error ? err.message : "Burst failed";
+                    onBurstError?.(message, b);
                   });
               }}
               className={cn(

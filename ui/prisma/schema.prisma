@@ -2135,6 +2135,13 @@ model SpinConfig {
   maxBubbleCashWei String  @db.VarChar(78) @default("1000000000000000")
   maxCashPerSpinWei String @db.VarChar(78) @default("50000000000000000")
   baseWheelRpm    Int      @default(100)
+  /// First Speed Shielder purchase price (USDm wei). Default 0.002 USDm.
+  speedShielderBasePriceWei String @db.VarChar(78) @default("2000000000000000")
+  /// First Quick Buzzer purchase price (USDm wei). Default 0.002 USDm.
+  quickBuzzerBasePriceWei String @db.VarChar(78) @default("2000000000000000")
+  /// Each owned Speed Shielder reduces wheel RPM by this amount.
+  rpmReductionPerShielder Int @default(2)
+  minWheelRpm     Int      @default(40)
   metadata        Json?
   updatedAt       DateTime @updatedAt @db.Timestamp
   createdAt       DateTime @default(now()) @db.Timestamp
@@ -2190,6 +2197,7 @@ model UserInventoryItem {
   id        String   @id @default(uuid()) @db.Uuid
   userId    String   @db.Uuid
   itemId    String   @db.Uuid
+  quantity  Int      @default(1)
   equipped  Boolean  @default(false)
   createdAt DateTime @default(now()) @db.Timestamp
 

@@ -7,6 +7,7 @@ import { verifySpinEntry } from "@/lib/blockchain/verifySpinEntry";
 import {
   defaultEntryFee,
   isSpinPayAsset,
+  type SpinPayAsset,
 } from "@/lib/spin/economy";
 import type { IEngine } from "./interfaces";
 import { SpinEngine } from "./SpinEngine";
@@ -76,6 +77,10 @@ export class SpinHuntEngine implements IEngine {
       xpCostPerSpin: cfg.xpCostPerSpin,
       spinDurationSec: cfg.spinDurationSec,
       baseWheelRpm: cfg.baseWheelRpm,
+      minWheelRpm: cfg.minWheelRpm,
+      rpmReductionPerShielder: cfg.rpmReductionPerShielder,
+      speedShielderBasePriceWei: cfg.speedShielderBasePriceWei,
+      quickBuzzerBasePriceWei: cfg.quickBuzzerBasePriceWei,
       minBubbleCashWei: cfg.minBubbleCashWei,
       maxBubbleCashWei: cfg.maxBubbleCashWei,
       maxCashPerSpinWei: cfg.maxCashPerSpinWei,
@@ -172,10 +177,15 @@ export class SpinHuntEngine implements IEngine {
       const plan = active.bubblePlan as BubblePlan;
       const loadout = (active.loadout as SpinLoadout | null) ?? {
         rpmMultiplier: 1,
+        wheelRpm: cfg.baseWheelRpm,
+        speedShielderQty: 0,
+        quickBuzzerQty: 0,
         buzzerTapBonus: 0,
         musicTrackId: null,
         musicUrl: null,
         itemSlugs: [],
+        nextShielderPriceWei: cfg.speedShielderBasePriceWei,
+        nextBuzzerPriceWei: cfg.quickBuzzerBasePriceWei,
       };
       return {
         sessionId: active.id,
@@ -184,7 +194,7 @@ export class SpinHuntEngine implements IEngine {
         cashAsset: active.cashAsset,
         startedAt: active.startedAt.toISOString(),
         expiresAt: active.expiresAt.toISOString(),
-        rpm: Math.round(cfg.baseWheelRpm * (loadout.rpmMultiplier || 1)),
+        rpm: loadout.wheelRpm || Math.round(cfg.baseWheelRpm * (loadout.rpmMultiplier || 1)),
         loadout,
         plan: this.publicPlan(plan),
         resumed: true,
@@ -266,7 +276,7 @@ export class SpinHuntEngine implements IEngine {
     );
     const startedAt = new Date();
     const expiresAt = new Date(startedAt.getTime() + plan.durationMs + 5_000);
-    const rpm = Math.round(cfg.baseWheelRpm * loadout.rpmMultiplier);
+    const rpm = loadout.wheelRpm || Math.round(cfg.baseWheelRpm * loadout.rpmMultiplier);
 
     const session = await prisma().spinSession.create({
       data: {
@@ -330,15 +340,15 @@ export class SpinHuntEngine implements IEngine {
         ? input.clientElapsedMs
         : Date.now() - session.startedAt.getTime();
 
-    // Allow small clock skew
-    if (elapsed + 400 < bubble.spawnAtMs) throw new Error("Bubble not spawned yet");
-    if (elapsed - 600 > bubble.spawnAtMs + bubble.lifetimeMs) {
+    // Allow generous clock skew — bubbles move fast and network latency is common
+    if (elapsed + 1200 < bubble.spawnAtMs) throw new Error("Bubble not spawned yet");
+    if (elapsed - 1500 > bubble.spawnAtMs + bubble.lifetimeMs) {
       throw new Error("Bubble expired");
     }
 
     const taps = Math.max(1, input.taps ?? 1);
     if (taps < bubble.tapsRequired) {
-      return { success: false, code: "MORE_TAPS", tapsRequired: bubble.tapsRequired, taps };
+      throw new Error(`Need ${bubble.tapsRequired} taps`);
     }
 
     try {

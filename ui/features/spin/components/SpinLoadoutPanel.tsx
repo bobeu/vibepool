@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatUnits } from "viem";
-import { Music2, Shield, Ticket, Zap } from "lucide-react";
+import { Images, Music2, Pause, Play, Shield, Ticket, Zap } from "lucide-react";
 import { authFetch } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
 import { useSpinEconomyPayment } from "@/hooks/useSpinEconomyPayment";
@@ -13,7 +13,31 @@ import { assetDecimals } from "@/lib/tokens/celoAssets";
 import { FREEPLAY_SPIN_PACKS } from "@/lib/spin/freePlay";
 import { cn } from "@/utils/format";
 
-type Tab = "music" | "collections" | "spins";
+type Tab = "music" | "collections" | "spins" | "gallery";
+
+type MusicTrack = {
+  id: string;
+  title: string;
+  url?: string;
+  tier: string;
+  priceWei: string;
+  priceAsset: string;
+  itemId: `0x${string}`;
+  owned: boolean;
+  equipped: boolean;
+};
+
+type CollectionItem = {
+  id: string;
+  name: string;
+  type: string;
+  priceWei: string;
+  priceAsset: string;
+  itemId: `0x${string}`;
+  owned: boolean;
+  equipped: boolean;
+  quantity?: number;
+};
 
 function priceLabel(priceWei: string, asset: string, freePlay: boolean) {
   if (freePlay && priceWei !== "0") {
@@ -37,6 +61,8 @@ export function SpinLoadoutPanel() {
   const [tab, setTab] = useState<Tab>("collections");
   const [open, setOpen] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [playingTrackId, setPlayingTrackId] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const queryClient = useQueryClient();
   const { isFreePlay } = useAuth();
   const showToast = useUIStore((s) => s.showToast);
@@ -62,6 +88,38 @@ export function SpinLoadoutPanel() {
     enabled: open,
   });
 
+  useEffect(() => {
+    return () => {
+      audioRef.current?.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  const stopPreview = () => {
+    audioRef.current?.pause();
+    if (audioRef.current) audioRef.current.currentTime = 0;
+    setPlayingTrackId(null);
+  };
+
+  const togglePreview = (track: MusicTrack) => {
+    if (!track.url) return;
+    if (playingTrackId === track.id) {
+      stopPreview();
+      return;
+    }
+    if (!audioRef.current) {
+      audioRef.current = new Audio();
+      audioRef.current.addEventListener("ended", () => setPlayingTrackId(null));
+    }
+    const audio = audioRef.current;
+    audio.pause();
+    audio.src = track.url;
+    void audio.play().then(
+      () => setPlayingTrackId(track.id),
+      () => setPlayingTrackId(null)
+    );
+  };
+
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: ["spin-music"] });
     queryClient.invalidateQueries({ queryKey: ["spin-collections"] });
@@ -85,14 +143,7 @@ export function SpinLoadoutPanel() {
   });
 
   const buyMusic = useMutation({
-    mutationFn: async (track: {
-      id: string;
-      priceWei: string;
-      priceAsset: string;
-      itemId: `0x${string}`;
-      owned: boolean;
-      tier: string;
-    }) => {
+    mutationFn: async (track: MusicTrack) => {
       setError(null);
       if (isFreePlay || track.owned || track.tier === "FREE" || track.priceWei === "0") {
         const res = await authFetch(
@@ -149,14 +200,7 @@ export function SpinLoadoutPanel() {
   });
 
   const buyItem = useMutation({
-    mutationFn: async (item: {
-      id: string;
-      name: string;
-      priceWei: string;
-      priceAsset: string;
-      itemId: `0x${string}`;
-      owned: boolean;
-    }) => {
+    mutationFn: async (item: CollectionItem) => {
       setError(null);
       if (isFreePlay || item.owned || item.priceWei === "0") {
         const res = await authFetch(
@@ -217,7 +261,14 @@ export function SpinLoadoutPanel() {
     onError: (e: Error) => setError(e.message),
   });
 
-  const tabs: Tab[] = isFreePlay ? ["collections", "spins", "music"] : ["music", "collections"];
+  const tracks = (musicQuery.data?.tracks ?? []) as MusicTrack[];
+  const items = (collectionsQuery.data?.items ?? []) as CollectionItem[];
+  const ownedTracks = tracks.filter((t) => t.owned);
+  const ownedItems = items.filter((i) => i.owned);
+
+  const tabs: Tab[] = isFreePlay
+    ? ["collections", "spins", "music", "gallery"]
+    : ["music", "collections", "gallery"];
 
   return (
     <div className="mt-3">
@@ -241,7 +292,12 @@ export function SpinLoadoutPanel() {
             </p>
           )}
 
-          <div className={cn("mb-2 grid gap-1", tabs.length === 3 ? "grid-cols-3" : "grid-cols-2")}>
+          <div
+            className={cn(
+              "mb-2 grid gap-1",
+              tabs.length === 4 ? "grid-cols-4" : tabs.length === 3 ? "grid-cols-3" : "grid-cols-2"
+            )}
+          >
             {tabs.map((t) => (
               <button
                 key={t}
@@ -288,121 +344,234 @@ export function SpinLoadoutPanel() {
 
           {tab === "music" && (
             <div className="space-y-1.5">
-              {(musicQuery.data?.tracks ?? []).map(
-                (track: {
-                  id: string;
-                  title: string;
-                  tier: string;
-                  priceWei: string;
-                  priceAsset: string;
-                  itemId: `0x${string}`;
-                  owned: boolean;
-                  equipped: boolean;
-                }) => (
-                  <div
-                    key={track.id}
-                    className="flex items-center justify-between gap-2 rounded-lg border border-white/10 px-2 py-2"
-                  >
-                    <div>
-                      <p className="text-[11px] font-black">{track.title}</p>
-                      <p className="text-[9px] text-muted-foreground">
-                        {track.tier} · {priceLabel(track.priceWei, track.priceAsset, isFreePlay)}
-                      </p>
-                    </div>
-                    <div className="flex gap-1">
-                      {!track.owned ? (
-                        <button
-                          type="button"
-                          disabled={busy || buyMusic.isPending}
-                          onClick={() => buyMusic.mutate(track)}
-                          className="rounded-md bg-primary px-2 py-1 text-[9px] font-black uppercase text-black"
-                        >
-                          Buy
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          disabled={track.equipped || equipMusic.isPending}
-                          onClick={() => equipMusic.mutate(track.id)}
-                          className={cn(
-                            "rounded-md px-2 py-1 text-[9px] font-black uppercase",
-                            track.equipped ? "bg-white/10 text-white/50" : "bg-white/15 text-white"
-                          )}
-                        >
-                          {track.equipped ? "On" : "Equip"}
-                        </button>
-                      )}
-                    </div>
+              {tracks.map((track) => (
+                <div
+                  key={track.id}
+                  className="flex items-center justify-between gap-2 rounded-lg border border-white/10 px-2 py-2"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-[11px] font-black">{track.title}</p>
+                    <p className="text-[9px] text-muted-foreground">
+                      {track.tier} · {priceLabel(track.priceWei, track.priceAsset, isFreePlay)}
+                    </p>
                   </div>
-                )
-              )}
+                  <div className="flex shrink-0 gap-1">
+                    {track.url ? (
+                      <button
+                        type="button"
+                        onClick={() => togglePreview(track)}
+                        className="flex h-7 w-7 items-center justify-center rounded-md bg-white/10 text-white"
+                        aria-label={playingTrackId === track.id ? "Pause" : "Play"}
+                      >
+                        {playingTrackId === track.id ? (
+                          <Pause className="h-3 w-3" strokeWidth={2.5} />
+                        ) : (
+                          <Play className="h-3 w-3" strokeWidth={2.5} />
+                        )}
+                      </button>
+                    ) : null}
+                    {!track.owned ? (
+                      <button
+                        type="button"
+                        disabled={busy || buyMusic.isPending}
+                        onClick={() => buyMusic.mutate(track)}
+                        className="rounded-md bg-primary px-2 py-1 text-[9px] font-black uppercase text-black"
+                      >
+                        Buy
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={track.equipped || equipMusic.isPending}
+                        onClick={() => equipMusic.mutate(track.id)}
+                        className={cn(
+                          "rounded-md px-2 py-1 text-[9px] font-black uppercase",
+                          track.equipped ? "bg-white/10 text-white/50" : "bg-white/15 text-white"
+                        )}
+                      >
+                        {track.equipped ? "On" : "Equip"}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           )}
 
           {tab === "collections" && (
             <div className="space-y-1.5">
-              {(collectionsQuery.data?.items ?? []).map(
-                (item: {
-                  id: string;
-                  name: string;
-                  type: string;
-                  priceWei: string;
-                  priceAsset: string;
-                  itemId: `0x${string}`;
-                  owned: boolean;
-                  equipped: boolean;
-                }) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center justify-between gap-2 rounded-lg border border-white/10 px-2 py-2"
-                  >
-                    <div className="flex items-center gap-2">
-                      {item.type === "SPEED_SHIELDER" ? (
-                        <Shield className="h-3.5 w-3.5 text-amber-300" />
-                      ) : item.type === "OTHER" ? (
-                        <Ticket className="h-3.5 w-3.5 text-[#FBBF24]" />
-                      ) : (
-                        <Zap className="h-3.5 w-3.5 text-primary" />
-                      )}
-                      <div>
-                        <p className="text-[11px] font-black">{item.name}</p>
-                        <p className="text-[9px] text-muted-foreground">
-                          {item.type.replace("_", " ")} ·{" "}
-                          {priceLabel(item.priceWei, item.priceAsset, isFreePlay)}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex gap-1">
-                      {!item.owned ? (
-                        <button
-                          type="button"
-                          disabled={busy || buyItem.isPending}
-                          onClick={() => buyItem.mutate(item)}
-                          className="rounded-md bg-primary px-2 py-1 text-[9px] font-black uppercase text-black"
-                        >
-                          Buy
-                        </button>
-                      ) : item.type === "OTHER" ? (
-                        <span className="rounded-md bg-white/10 px-2 py-1 text-[9px] font-black uppercase text-white/50">
-                          Owned
-                        </span>
-                      ) : (
-                        <button
-                          type="button"
-                          disabled={item.equipped || equipItem.isPending}
-                          onClick={() => equipItem.mutate(item.id)}
-                          className={cn(
-                            "rounded-md px-2 py-1 text-[9px] font-black uppercase",
-                            item.equipped ? "bg-white/10 text-white/50" : "bg-white/15 text-white"
-                          )}
-                        >
-                          {item.equipped ? "On" : "Equip"}
-                        </button>
-                      )}
+              {items.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between gap-2 rounded-lg border border-white/10 px-2 py-2"
+                >
+                  <div className="flex items-center gap-2">
+                    {item.type === "SPEED_SHIELDER" ? (
+                      <Shield className="h-3.5 w-3.5 text-amber-300" />
+                    ) : item.type === "OTHER" ? (
+                      <Ticket className="h-3.5 w-3.5 text-[#FBBF24]" />
+                    ) : (
+                      <Zap className="h-3.5 w-3.5 text-primary" />
+                    )}
+                    <div>
+                      <p className="text-[11px] font-black">{item.name}</p>
+                      <p className="text-[9px] text-muted-foreground">
+                        {item.type.replace("_", " ")} ·{" "}
+                        {priceLabel(item.priceWei, item.priceAsset, isFreePlay)}
+                      </p>
                     </div>
                   </div>
-                )
-              )}
+                  <div className="flex gap-1">
+                    {!item.owned ? (
+                      <button
+                        type="button"
+                        disabled={busy || buyItem.isPending}
+                        onClick={() => buyItem.mutate(item)}
+                        className="rounded-md bg-primary px-2 py-1 text-[9px] font-black uppercase text-black"
+                      >
+                        Buy
+                      </button>
+                    ) : item.type === "OTHER" ? (
+                      <span className="rounded-md bg-white/10 px-2 py-1 text-[9px] font-black uppercase text-white/50">
+                        Owned
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        disabled={item.equipped || equipItem.isPending}
+                        onClick={() => equipItem.mutate(item.id)}
+                        className={cn(
+                          "rounded-md px-2 py-1 text-[9px] font-black uppercase",
+                          item.equipped ? "bg-white/10 text-white/50" : "bg-white/15 text-white"
+                        )}
+                      >
+                        {item.equipped ? "On" : "Equip"}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {tab === "gallery" && (
+            <div className="space-y-3">
+              <p className="text-center text-[9px] font-black uppercase tracking-widest text-primary/80">
+                Your gallery
+              </p>
+
+              <div>
+                <p className="mb-1.5 flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-white/55">
+                  <Music2 className="h-3 w-3" />
+                  Music
+                </p>
+                {ownedTracks.length === 0 ? (
+                  <p className="rounded-lg border border-dashed border-white/10 px-2 py-3 text-center text-[10px] font-bold text-muted-foreground">
+                    No tracks owned yet
+                  </p>
+                ) : (
+                  <div className="space-y-1.5">
+                    {ownedTracks.map((track) => (
+                      <div
+                        key={track.id}
+                        className="flex items-center justify-between gap-2 rounded-lg border border-white/10 px-2 py-2"
+                      >
+                        <div className="min-w-0">
+                          <p className="truncate text-[11px] font-black">{track.title}</p>
+                          <p className="text-[9px] text-muted-foreground">
+                            {track.equipped ? "Equipped" : track.tier}
+                          </p>
+                        </div>
+                        <div className="flex shrink-0 gap-1">
+                          {track.url ? (
+                            <button
+                              type="button"
+                              onClick={() => togglePreview(track)}
+                              className="flex h-7 w-7 items-center justify-center rounded-md bg-white/10 text-white"
+                              aria-label={playingTrackId === track.id ? "Pause" : "Play"}
+                            >
+                              {playingTrackId === track.id ? (
+                                <Pause className="h-3 w-3" strokeWidth={2.5} />
+                              ) : (
+                                <Play className="h-3 w-3" strokeWidth={2.5} />
+                              )}
+                            </button>
+                          ) : null}
+                          <button
+                            type="button"
+                            disabled={track.equipped || equipMusic.isPending}
+                            onClick={() => equipMusic.mutate(track.id)}
+                            className={cn(
+                              "rounded-md px-2 py-1 text-[9px] font-black uppercase",
+                              track.equipped ? "bg-white/10 text-white/50" : "bg-white/15 text-white"
+                            )}
+                          >
+                            {track.equipped ? "On" : "Equip"}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <p className="mb-1.5 flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-white/55">
+                  <Images className="h-3 w-3" />
+                  Collections
+                </p>
+                {ownedItems.length === 0 ? (
+                  <p className="rounded-lg border border-dashed border-white/10 px-2 py-3 text-center text-[10px] font-bold text-muted-foreground">
+                    No collections owned yet
+                  </p>
+                ) : (
+                  <div className="space-y-1.5">
+                    {ownedItems.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between gap-2 rounded-lg border border-white/10 px-2 py-2"
+                      >
+                        <div className="flex items-center gap-2">
+                          {item.type === "SPEED_SHIELDER" ? (
+                            <Shield className="h-3.5 w-3.5 text-amber-300" />
+                          ) : item.type === "OTHER" ? (
+                            <Ticket className="h-3.5 w-3.5 text-[#FBBF24]" />
+                          ) : (
+                            <Zap className="h-3.5 w-3.5 text-primary" />
+                          )}
+                          <div>
+                            <p className="text-[11px] font-black">{item.name}</p>
+                            <p className="text-[9px] text-muted-foreground">
+                              {item.type.replace("_", " ")}
+                              {typeof item.quantity === "number" && item.quantity > 1
+                                ? ` · x${item.quantity}`
+                                : ""}
+                              {item.equipped ? " · Equipped" : ""}
+                            </p>
+                          </div>
+                        </div>
+                        {item.type === "OTHER" ? (
+                          <span className="rounded-md bg-white/10 px-2 py-1 text-[9px] font-black uppercase text-white/50">
+                            Owned
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            disabled={item.equipped || equipItem.isPending}
+                            onClick={() => equipItem.mutate(item.id)}
+                            className={cn(
+                              "rounded-md px-2 py-1 text-[9px] font-black uppercase",
+                              item.equipped ? "bg-white/10 text-white/50" : "bg-white/15 text-white"
+                            )}
+                          >
+                            {item.equipped ? "On" : "Equip"}
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>

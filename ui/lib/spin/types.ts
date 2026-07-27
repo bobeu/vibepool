@@ -14,10 +14,15 @@ export type HuntPlan = {
 
 export type HuntLoadout = {
   rpmMultiplier: number;
+  wheelRpm?: number;
+  speedShielderQty?: number;
+  quickBuzzerQty?: number;
   buzzerTapBonus: number;
   musicTrackId: string | null;
   musicUrl: string | null;
   itemSlugs: string[];
+  nextShielderPriceWei?: string;
+  nextBuzzerPriceWei?: string;
 };
 
 export type HuntSession = {

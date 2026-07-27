@@ -1274,6 +1274,10 @@ exports.Prisma.SpinConfigScalarFieldEnum = {
   maxBubbleCashWei: 'maxBubbleCashWei',
   maxCashPerSpinWei: 'maxCashPerSpinWei',
   baseWheelRpm: 'baseWheelRpm',
+  speedShielderBasePriceWei: 'speedShielderBasePriceWei',
+  quickBuzzerBasePriceWei: 'quickBuzzerBasePriceWei',
+  rpmReductionPerShielder: 'rpmReductionPerShielder',
+  minWheelRpm: 'minWheelRpm',
   metadata: 'metadata',
   updatedAt: 'updatedAt',
   createdAt: 'createdAt'
@@ -1319,6 +1323,7 @@ exports.Prisma.UserInventoryItemScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   itemId: 'itemId',
+  quantity: 'quantity',
   equipped: 'equipped',
   createdAt: 'createdAt'
 };

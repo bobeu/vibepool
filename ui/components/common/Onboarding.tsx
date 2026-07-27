@@ -41,7 +41,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
     if (slide < 2) setSlide((s) => s + 1);
   };
 
-  const handleLaunchApp = async () => {
+  const handleStartGame = async () => {
     setLaunching(true);
     try {
       // Connected wallets sync via WalletSessionSync; guests get a free-play session.
@@ -72,26 +72,32 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
         <div className="flex-1 flex flex-col justify-center items-center my-4 space-y-6">
           <div className="relative w-full max-w-[270px] aspect-[4/3]">
-            <div className="absolute -top-4 -right-2 rotate-[12deg] bg-[#62E2F8] border-4 border-black text-black font-black px-3 py-1 text-xs uppercase shadow-[3px_3px_0_rgba(0,0,0,1)] rounded-xl z-20">
-              UH OH!
+            <div className="absolute -top-4 -right-2 rotate-[12deg] bg-[#E91E8C] border-4 border-black text-white font-black px-3 py-1 text-xs uppercase shadow-[3px_3px_0_rgba(0,0,0,1)] rounded-xl z-20">
+              CASH GAME
             </div>
-            <div className="w-full h-full rounded-2xl border-4 border-black bg-white shadow-[6px_6px_0_rgba(0,0,0,1)] overflow-hidden relative">
-              <Image
-                src="/prediction.png"
-                alt="Prediction Game"
-                fill
-                className="object-cover"
-                priority
-              />
+            <div className="w-full h-full rounded-2xl border-4 border-black bg-gradient-to-br from-[#62E2F8] via-white to-[#FBBF24] shadow-[6px_6px_0_rgba(0,0,0,1)] overflow-hidden relative flex items-center justify-center">
+              <div className="relative h-24 w-24 overflow-hidden rounded-2xl border-4 border-black bg-primary shadow-[4px_4px_0_rgba(0,0,0,1)]">
+                <Image src="/logo.png" alt="Bubble Spin" fill className="object-cover" priority />
+              </div>
+              <div className="absolute bottom-3 left-3 right-3 rounded-xl border-2 border-black bg-black/80 px-3 py-2 text-center">
+                <p className="text-[10px] font-black uppercase tracking-widest text-primary">
+                  Burst · Bank · Cash out
+                </p>
+              </div>
             </div>
           </div>
 
           <div className="text-center space-y-3 px-2 max-w-sm">
             <h1 className="font-black uppercase italic leading-none tracking-tight text-3xl">
-              WELCOME TO NEXORA
+              BUBBLE SPIN
             </h1>
+            <p className="text-[10px] font-black text-black/50 uppercase tracking-widest">
+              Spin Hunt · Real USDm Rewards
+            </p>
             <p className="text-xs font-bold leading-relaxed text-black/80">
-              Forecast CELO token price volatility and earn rewards in skill-based prediction tournaments built for MiniPay.
+              Burst bubbles from the Spin button for real cash rewards (USDm).
+              Speed Shielder slows the wheel (−2 RPM each). Quick Buzzer makes
+              tough bubbles easier (fewer taps). This is the core cash game.
             </p>
           </div>
         </div>
@@ -127,25 +133,36 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
         <div className="flex-1 flex flex-col justify-center items-center my-4 space-y-6">
           <div className="relative w-full max-w-[270px] aspect-[4/3]">
-            <div className="absolute -top-4 -right-2 rotate-[12deg] bg-[#E91E8C] border-4 border-black text-white font-black px-3 py-1 text-xs uppercase shadow-[3px_3px_0_rgba(0,0,0,1)] rounded-xl z-20">
-              LET&apos;S GO!
+            <div className="absolute -top-4 -right-2 rotate-[12deg] bg-[#FBBF24] border-4 border-black text-black font-black px-3 py-1 text-xs uppercase shadow-[3px_3px_0_rgba(0,0,0,1)] rounded-xl z-20">
+              EARN XP
             </div>
-            <div className="w-full h-full rounded-2xl border-4 border-black bg-white shadow-[6px_6px_0_rgba(0,0,0,1)] overflow-hidden relative">
-              <Image
-                src="/arena.png"
-                alt="Head-to-Head Arena"
-                fill
-                className="object-cover"
-              />
+            <div className="w-full h-full rounded-2xl border-4 border-black bg-white shadow-[6px_6px_0_rgba(0,0,0,1)] overflow-hidden relative grid grid-cols-2">
+              <div className="relative border-r-2 border-black">
+                <Image
+                  src="/prediction.png"
+                  alt="Prediction"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="relative">
+                <Image
+                  src="/arena.png"
+                  alt="Arena"
+                  fill
+                  className="object-cover"
+                />
+              </div>
             </div>
           </div>
 
           <div className="text-center space-y-3 px-2 max-w-sm">
             <h1 className="font-black uppercase italic leading-none tracking-tight text-3xl">
-              COMPETE IN LIVE 1V1 DUELS
+              PREDICTION &amp; ARENA
             </h1>
             <p className="text-xs font-bold leading-relaxed text-black/80">
-              Challenge players in skill-based Arena matches. Outsmart your opponent — predict the move and win.
+              Prediction and Arena earn XP — not Spin cash. Convert that XP into
+              Spin slots for Bubble Spin, then chase real USDm rewards.
             </p>
           </div>
         </div>
@@ -163,7 +180,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
     );
   }
 
-  // Slide 3: Connect (optional) + Launch App
+  // Slide 3: Connect (optional) + Start game
   return (
     <div className="absolute inset-0 z-[200] flex flex-col justify-between bg-white p-6 text-black select-none overflow-y-auto">
       <div className="flex justify-between items-center w-full">
@@ -219,7 +236,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
 
         <button
           type="button"
-          onClick={handleLaunchApp}
+          onClick={handleStartGame}
           disabled={launching}
           className={cn(
             "w-full py-3.5 rounded-2xl text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all disabled:opacity-60",
@@ -228,7 +245,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
               : "bg-[#FBBF24] hover:bg-[#f5b40a]"
           )}
         >
-          {launching ? "Starting…" : isConnected ? "Launch App" : "Try Free Play"}
+          {launching ? "Starting…" : "Start game"}
         </button>
 
         {!isConnected && (

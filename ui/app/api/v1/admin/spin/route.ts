@@ -38,6 +38,10 @@ export const POST = async (req: NextRequest) =>
           maxBubbleCashWei: String(body.maxBubbleCashWei ?? "1000000000000000"),
           maxCashPerSpinWei: String(body.maxCashPerSpinWei ?? "50000000000000000"),
           baseWheelRpm: Number(body.baseWheelRpm ?? 100),
+          speedShielderBasePriceWei: String(body.speedShielderBasePriceWei ?? "2000000000000000"),
+          quickBuzzerBasePriceWei: String(body.quickBuzzerBasePriceWei ?? "2000000000000000"),
+          rpmReductionPerShielder: Number(body.rpmReductionPerShielder ?? 2),
+          minWheelRpm: Number(body.minWheelRpm ?? 40),
         },
         update: {
           ...(body.treasuryBps != null ? { treasuryBps: Number(body.treasuryBps) } : {}),
@@ -49,6 +53,16 @@ export const POST = async (req: NextRequest) =>
           ...(body.maxBubbleCashWei != null ? { maxBubbleCashWei: String(body.maxBubbleCashWei) } : {}),
           ...(body.maxCashPerSpinWei != null ? { maxCashPerSpinWei: String(body.maxCashPerSpinWei) } : {}),
           ...(body.baseWheelRpm != null ? { baseWheelRpm: Number(body.baseWheelRpm) } : {}),
+          ...(body.speedShielderBasePriceWei != null
+            ? { speedShielderBasePriceWei: String(body.speedShielderBasePriceWei) }
+            : {}),
+          ...(body.quickBuzzerBasePriceWei != null
+            ? { quickBuzzerBasePriceWei: String(body.quickBuzzerBasePriceWei) }
+            : {}),
+          ...(body.rpmReductionPerShielder != null
+            ? { rpmReductionPerShielder: Number(body.rpmReductionPerShielder) }
+            : {}),
+          ...(body.minWheelRpm != null ? { minWheelRpm: Number(body.minWheelRpm) } : {}),
         },
       });
       await auditAdminAction(wallet, "upsert_spin_config", "spin", cfg.id);

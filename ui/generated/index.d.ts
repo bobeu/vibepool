@@ -121980,6 +121980,8 @@ export namespace Prisma {
     xpCostPerSpin: number | null
     spinDurationSec: number | null
     baseWheelRpm: number | null
+    rpmReductionPerShielder: number | null
+    minWheelRpm: number | null
   }
 
   export type SpinConfigSumAggregateOutputType = {
@@ -121987,6 +121989,8 @@ export namespace Prisma {
     xpCostPerSpin: number | null
     spinDurationSec: number | null
     baseWheelRpm: number | null
+    rpmReductionPerShielder: number | null
+    minWheelRpm: number | null
   }
 
   export type SpinConfigMinAggregateOutputType = {
@@ -122001,6 +122005,10 @@ export namespace Prisma {
     maxBubbleCashWei: string | null
     maxCashPerSpinWei: string | null
     baseWheelRpm: number | null
+    speedShielderBasePriceWei: string | null
+    quickBuzzerBasePriceWei: string | null
+    rpmReductionPerShielder: number | null
+    minWheelRpm: number | null
     updatedAt: Date | null
     createdAt: Date | null
   }
@@ -122017,6 +122025,10 @@ export namespace Prisma {
     maxBubbleCashWei: string | null
     maxCashPerSpinWei: string | null
     baseWheelRpm: number | null
+    speedShielderBasePriceWei: string | null
+    quickBuzzerBasePriceWei: string | null
+    rpmReductionPerShielder: number | null
+    minWheelRpm: number | null
     updatedAt: Date | null
     createdAt: Date | null
   }
@@ -122033,6 +122045,10 @@ export namespace Prisma {
     maxBubbleCashWei: number
     maxCashPerSpinWei: number
     baseWheelRpm: number
+    speedShielderBasePriceWei: number
+    quickBuzzerBasePriceWei: number
+    rpmReductionPerShielder: number
+    minWheelRpm: number
     metadata: number
     updatedAt: number
     createdAt: number
@@ -122045,6 +122061,8 @@ export namespace Prisma {
     xpCostPerSpin?: true
     spinDurationSec?: true
     baseWheelRpm?: true
+    rpmReductionPerShielder?: true
+    minWheelRpm?: true
   }
 
   export type SpinConfigSumAggregateInputType = {
@@ -122052,6 +122070,8 @@ export namespace Prisma {
     xpCostPerSpin?: true
     spinDurationSec?: true
     baseWheelRpm?: true
+    rpmReductionPerShielder?: true
+    minWheelRpm?: true
   }
 
   export type SpinConfigMinAggregateInputType = {
@@ -122066,6 +122086,10 @@ export namespace Prisma {
     maxBubbleCashWei?: true
     maxCashPerSpinWei?: true
     baseWheelRpm?: true
+    speedShielderBasePriceWei?: true
+    quickBuzzerBasePriceWei?: true
+    rpmReductionPerShielder?: true
+    minWheelRpm?: true
     updatedAt?: true
     createdAt?: true
   }
@@ -122082,6 +122106,10 @@ export namespace Prisma {
     maxBubbleCashWei?: true
     maxCashPerSpinWei?: true
     baseWheelRpm?: true
+    speedShielderBasePriceWei?: true
+    quickBuzzerBasePriceWei?: true
+    rpmReductionPerShielder?: true
+    minWheelRpm?: true
     updatedAt?: true
     createdAt?: true
   }
@@ -122098,6 +122126,10 @@ export namespace Prisma {
     maxBubbleCashWei?: true
     maxCashPerSpinWei?: true
     baseWheelRpm?: true
+    speedShielderBasePriceWei?: true
+    quickBuzzerBasePriceWei?: true
+    rpmReductionPerShielder?: true
+    minWheelRpm?: true
     metadata?: true
     updatedAt?: true
     createdAt?: true
@@ -122202,6 +122234,10 @@ export namespace Prisma {
     maxBubbleCashWei: string
     maxCashPerSpinWei: string
     baseWheelRpm: number
+    speedShielderBasePriceWei: string
+    quickBuzzerBasePriceWei: string
+    rpmReductionPerShielder: number
+    minWheelRpm: number
     metadata: JsonValue | null
     updatedAt: Date
     createdAt: Date
@@ -122238,6 +122274,10 @@ export namespace Prisma {
     maxBubbleCashWei?: boolean
     maxCashPerSpinWei?: boolean
     baseWheelRpm?: boolean
+    speedShielderBasePriceWei?: boolean
+    quickBuzzerBasePriceWei?: boolean
+    rpmReductionPerShielder?: boolean
+    minWheelRpm?: boolean
     metadata?: boolean
     updatedAt?: boolean
     createdAt?: boolean
@@ -122255,6 +122295,10 @@ export namespace Prisma {
     maxBubbleCashWei?: boolean
     maxCashPerSpinWei?: boolean
     baseWheelRpm?: boolean
+    speedShielderBasePriceWei?: boolean
+    quickBuzzerBasePriceWei?: boolean
+    rpmReductionPerShielder?: boolean
+    minWheelRpm?: boolean
     metadata?: boolean
     updatedAt?: boolean
     createdAt?: boolean
@@ -122272,6 +122316,10 @@ export namespace Prisma {
     maxBubbleCashWei?: boolean
     maxCashPerSpinWei?: boolean
     baseWheelRpm?: boolean
+    speedShielderBasePriceWei?: boolean
+    quickBuzzerBasePriceWei?: boolean
+    rpmReductionPerShielder?: boolean
+    minWheelRpm?: boolean
     metadata?: boolean
     updatedAt?: boolean
     createdAt?: boolean
@@ -122289,12 +122337,16 @@ export namespace Prisma {
     maxBubbleCashWei?: boolean
     maxCashPerSpinWei?: boolean
     baseWheelRpm?: boolean
+    speedShielderBasePriceWei?: boolean
+    quickBuzzerBasePriceWei?: boolean
+    rpmReductionPerShielder?: boolean
+    minWheelRpm?: boolean
     metadata?: boolean
     updatedAt?: boolean
     createdAt?: boolean
   }
 
-  export type SpinConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "treasuryBps" | "entryFeeWei" | "entryAsset" | "xpCostPerSpin" | "spinDurationSec" | "minBubbleCashWei" | "maxBubbleCashWei" | "maxCashPerSpinWei" | "baseWheelRpm" | "metadata" | "updatedAt" | "createdAt", ExtArgs["result"]["spinConfig"]>
+  export type SpinConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "key" | "treasuryBps" | "entryFeeWei" | "entryAsset" | "xpCostPerSpin" | "spinDurationSec" | "minBubbleCashWei" | "maxBubbleCashWei" | "maxCashPerSpinWei" | "baseWheelRpm" | "speedShielderBasePriceWei" | "quickBuzzerBasePriceWei" | "rpmReductionPerShielder" | "minWheelRpm" | "metadata" | "updatedAt" | "createdAt", ExtArgs["result"]["spinConfig"]>
 
   export type $SpinConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SpinConfig"
@@ -122311,6 +122363,19 @@ export namespace Prisma {
       maxBubbleCashWei: string
       maxCashPerSpinWei: string
       baseWheelRpm: number
+      /**
+       * First Speed Shielder purchase price (USDm wei). Default 0.002 USDm.
+       */
+      speedShielderBasePriceWei: string
+      /**
+       * First Quick Buzzer purchase price (USDm wei). Default 0.002 USDm.
+       */
+      quickBuzzerBasePriceWei: string
+      /**
+       * Each owned Speed Shielder reduces wheel RPM by this amount.
+       */
+      rpmReductionPerShielder: number
+      minWheelRpm: number
       metadata: Prisma.JsonValue | null
       updatedAt: Date
       createdAt: Date
@@ -122748,6 +122813,10 @@ export namespace Prisma {
     readonly maxBubbleCashWei: FieldRef<"SpinConfig", 'String'>
     readonly maxCashPerSpinWei: FieldRef<"SpinConfig", 'String'>
     readonly baseWheelRpm: FieldRef<"SpinConfig", 'Int'>
+    readonly speedShielderBasePriceWei: FieldRef<"SpinConfig", 'String'>
+    readonly quickBuzzerBasePriceWei: FieldRef<"SpinConfig", 'String'>
+    readonly rpmReductionPerShielder: FieldRef<"SpinConfig", 'Int'>
+    readonly minWheelRpm: FieldRef<"SpinConfig", 'Int'>
     readonly metadata: FieldRef<"SpinConfig", 'Json'>
     readonly updatedAt: FieldRef<"SpinConfig", 'DateTime'>
     readonly createdAt: FieldRef<"SpinConfig", 'DateTime'>
@@ -126569,14 +126638,25 @@ export namespace Prisma {
 
   export type AggregateUserInventoryItem = {
     _count: UserInventoryItemCountAggregateOutputType | null
+    _avg: UserInventoryItemAvgAggregateOutputType | null
+    _sum: UserInventoryItemSumAggregateOutputType | null
     _min: UserInventoryItemMinAggregateOutputType | null
     _max: UserInventoryItemMaxAggregateOutputType | null
+  }
+
+  export type UserInventoryItemAvgAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type UserInventoryItemSumAggregateOutputType = {
+    quantity: number | null
   }
 
   export type UserInventoryItemMinAggregateOutputType = {
     id: string | null
     userId: string | null
     itemId: string | null
+    quantity: number | null
     equipped: boolean | null
     createdAt: Date | null
   }
@@ -126585,6 +126665,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     itemId: string | null
+    quantity: number | null
     equipped: boolean | null
     createdAt: Date | null
   }
@@ -126593,16 +126674,26 @@ export namespace Prisma {
     id: number
     userId: number
     itemId: number
+    quantity: number
     equipped: number
     createdAt: number
     _all: number
   }
 
 
+  export type UserInventoryItemAvgAggregateInputType = {
+    quantity?: true
+  }
+
+  export type UserInventoryItemSumAggregateInputType = {
+    quantity?: true
+  }
+
   export type UserInventoryItemMinAggregateInputType = {
     id?: true
     userId?: true
     itemId?: true
+    quantity?: true
     equipped?: true
     createdAt?: true
   }
@@ -126611,6 +126702,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     itemId?: true
+    quantity?: true
     equipped?: true
     createdAt?: true
   }
@@ -126619,6 +126711,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     itemId?: true
+    quantity?: true
     equipped?: true
     createdAt?: true
     _all?: true
@@ -126662,6 +126755,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: UserInventoryItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserInventoryItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserInventoryItemMinAggregateInputType
@@ -126692,6 +126797,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserInventoryItemCountAggregateInputType | true
+    _avg?: UserInventoryItemAvgAggregateInputType
+    _sum?: UserInventoryItemSumAggregateInputType
     _min?: UserInventoryItemMinAggregateInputType
     _max?: UserInventoryItemMaxAggregateInputType
   }
@@ -126700,9 +126807,12 @@ export namespace Prisma {
     id: string
     userId: string
     itemId: string
+    quantity: number
     equipped: boolean
     createdAt: Date
     _count: UserInventoryItemCountAggregateOutputType | null
+    _avg: UserInventoryItemAvgAggregateOutputType | null
+    _sum: UserInventoryItemSumAggregateOutputType | null
     _min: UserInventoryItemMinAggregateOutputType | null
     _max: UserInventoryItemMaxAggregateOutputType | null
   }
@@ -126725,6 +126835,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     itemId?: boolean
+    quantity?: boolean
     equipped?: boolean
     createdAt?: boolean
     user?: boolean | UserProfileDefaultArgs<ExtArgs>
@@ -126735,6 +126846,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     itemId?: boolean
+    quantity?: boolean
     equipped?: boolean
     createdAt?: boolean
     user?: boolean | UserProfileDefaultArgs<ExtArgs>
@@ -126745,6 +126857,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     itemId?: boolean
+    quantity?: boolean
     equipped?: boolean
     createdAt?: boolean
     user?: boolean | UserProfileDefaultArgs<ExtArgs>
@@ -126755,11 +126868,12 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     itemId?: boolean
+    quantity?: boolean
     equipped?: boolean
     createdAt?: boolean
   }
 
-  export type UserInventoryItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "itemId" | "equipped" | "createdAt", ExtArgs["result"]["userInventoryItem"]>
+  export type UserInventoryItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "itemId" | "quantity" | "equipped" | "createdAt", ExtArgs["result"]["userInventoryItem"]>
   export type UserInventoryItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserProfileDefaultArgs<ExtArgs>
     item?: boolean | SpinCollectionItemDefaultArgs<ExtArgs>
@@ -126783,6 +126897,7 @@ export namespace Prisma {
       id: string
       userId: string
       itemId: string
+      quantity: number
       equipped: boolean
       createdAt: Date
     }, ExtArgs["result"]["userInventoryItem"]>
@@ -127213,6 +127328,7 @@ export namespace Prisma {
     readonly id: FieldRef<"UserInventoryItem", 'String'>
     readonly userId: FieldRef<"UserInventoryItem", 'String'>
     readonly itemId: FieldRef<"UserInventoryItem", 'String'>
+    readonly quantity: FieldRef<"UserInventoryItem", 'Int'>
     readonly equipped: FieldRef<"UserInventoryItem", 'Boolean'>
     readonly createdAt: FieldRef<"UserInventoryItem", 'DateTime'>
   }
@@ -132671,6 +132787,10 @@ export namespace Prisma {
     maxBubbleCashWei: 'maxBubbleCashWei',
     maxCashPerSpinWei: 'maxCashPerSpinWei',
     baseWheelRpm: 'baseWheelRpm',
+    speedShielderBasePriceWei: 'speedShielderBasePriceWei',
+    quickBuzzerBasePriceWei: 'quickBuzzerBasePriceWei',
+    rpmReductionPerShielder: 'rpmReductionPerShielder',
+    minWheelRpm: 'minWheelRpm',
     metadata: 'metadata',
     updatedAt: 'updatedAt',
     createdAt: 'createdAt'
@@ -132728,6 +132848,7 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     itemId: 'itemId',
+    quantity: 'quantity',
     equipped: 'equipped',
     createdAt: 'createdAt'
   };
@@ -141215,6 +141336,10 @@ export namespace Prisma {
     maxBubbleCashWei?: StringFilter<"SpinConfig"> | string
     maxCashPerSpinWei?: StringFilter<"SpinConfig"> | string
     baseWheelRpm?: IntFilter<"SpinConfig"> | number
+    speedShielderBasePriceWei?: StringFilter<"SpinConfig"> | string
+    quickBuzzerBasePriceWei?: StringFilter<"SpinConfig"> | string
+    rpmReductionPerShielder?: IntFilter<"SpinConfig"> | number
+    minWheelRpm?: IntFilter<"SpinConfig"> | number
     metadata?: JsonNullableFilter<"SpinConfig">
     updatedAt?: DateTimeFilter<"SpinConfig"> | Date | string
     createdAt?: DateTimeFilter<"SpinConfig"> | Date | string
@@ -141232,6 +141357,10 @@ export namespace Prisma {
     maxBubbleCashWei?: SortOrder
     maxCashPerSpinWei?: SortOrder
     baseWheelRpm?: SortOrder
+    speedShielderBasePriceWei?: SortOrder
+    quickBuzzerBasePriceWei?: SortOrder
+    rpmReductionPerShielder?: SortOrder
+    minWheelRpm?: SortOrder
     metadata?: SortOrderInput | SortOrder
     updatedAt?: SortOrder
     createdAt?: SortOrder
@@ -141252,6 +141381,10 @@ export namespace Prisma {
     maxBubbleCashWei?: StringFilter<"SpinConfig"> | string
     maxCashPerSpinWei?: StringFilter<"SpinConfig"> | string
     baseWheelRpm?: IntFilter<"SpinConfig"> | number
+    speedShielderBasePriceWei?: StringFilter<"SpinConfig"> | string
+    quickBuzzerBasePriceWei?: StringFilter<"SpinConfig"> | string
+    rpmReductionPerShielder?: IntFilter<"SpinConfig"> | number
+    minWheelRpm?: IntFilter<"SpinConfig"> | number
     metadata?: JsonNullableFilter<"SpinConfig">
     updatedAt?: DateTimeFilter<"SpinConfig"> | Date | string
     createdAt?: DateTimeFilter<"SpinConfig"> | Date | string
@@ -141269,6 +141402,10 @@ export namespace Prisma {
     maxBubbleCashWei?: SortOrder
     maxCashPerSpinWei?: SortOrder
     baseWheelRpm?: SortOrder
+    speedShielderBasePriceWei?: SortOrder
+    quickBuzzerBasePriceWei?: SortOrder
+    rpmReductionPerShielder?: SortOrder
+    minWheelRpm?: SortOrder
     metadata?: SortOrderInput | SortOrder
     updatedAt?: SortOrder
     createdAt?: SortOrder
@@ -141294,6 +141431,10 @@ export namespace Prisma {
     maxBubbleCashWei?: StringWithAggregatesFilter<"SpinConfig"> | string
     maxCashPerSpinWei?: StringWithAggregatesFilter<"SpinConfig"> | string
     baseWheelRpm?: IntWithAggregatesFilter<"SpinConfig"> | number
+    speedShielderBasePriceWei?: StringWithAggregatesFilter<"SpinConfig"> | string
+    quickBuzzerBasePriceWei?: StringWithAggregatesFilter<"SpinConfig"> | string
+    rpmReductionPerShielder?: IntWithAggregatesFilter<"SpinConfig"> | number
+    minWheelRpm?: IntWithAggregatesFilter<"SpinConfig"> | number
     metadata?: JsonNullableWithAggregatesFilter<"SpinConfig">
     updatedAt?: DateTimeWithAggregatesFilter<"SpinConfig"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"SpinConfig"> | Date | string
@@ -141539,6 +141680,7 @@ export namespace Prisma {
     id?: UuidFilter<"UserInventoryItem"> | string
     userId?: UuidFilter<"UserInventoryItem"> | string
     itemId?: UuidFilter<"UserInventoryItem"> | string
+    quantity?: IntFilter<"UserInventoryItem"> | number
     equipped?: BoolFilter<"UserInventoryItem"> | boolean
     createdAt?: DateTimeFilter<"UserInventoryItem"> | Date | string
     user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -141549,6 +141691,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     itemId?: SortOrder
+    quantity?: SortOrder
     equipped?: SortOrder
     createdAt?: SortOrder
     user?: UserProfileOrderByWithRelationInput
@@ -141563,6 +141706,7 @@ export namespace Prisma {
     NOT?: UserInventoryItemWhereInput | UserInventoryItemWhereInput[]
     userId?: UuidFilter<"UserInventoryItem"> | string
     itemId?: UuidFilter<"UserInventoryItem"> | string
+    quantity?: IntFilter<"UserInventoryItem"> | number
     equipped?: BoolFilter<"UserInventoryItem"> | boolean
     createdAt?: DateTimeFilter<"UserInventoryItem"> | Date | string
     user?: XOR<UserProfileScalarRelationFilter, UserProfileWhereInput>
@@ -141573,11 +141717,14 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     itemId?: SortOrder
+    quantity?: SortOrder
     equipped?: SortOrder
     createdAt?: SortOrder
     _count?: UserInventoryItemCountOrderByAggregateInput
+    _avg?: UserInventoryItemAvgOrderByAggregateInput
     _max?: UserInventoryItemMaxOrderByAggregateInput
     _min?: UserInventoryItemMinOrderByAggregateInput
+    _sum?: UserInventoryItemSumOrderByAggregateInput
   }
 
   export type UserInventoryItemScalarWhereWithAggregatesInput = {
@@ -141587,6 +141734,7 @@ export namespace Prisma {
     id?: UuidWithAggregatesFilter<"UserInventoryItem"> | string
     userId?: UuidWithAggregatesFilter<"UserInventoryItem"> | string
     itemId?: UuidWithAggregatesFilter<"UserInventoryItem"> | string
+    quantity?: IntWithAggregatesFilter<"UserInventoryItem"> | number
     equipped?: BoolWithAggregatesFilter<"UserInventoryItem"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"UserInventoryItem"> | Date | string
   }
@@ -150133,6 +150281,10 @@ export namespace Prisma {
     maxBubbleCashWei?: string
     maxCashPerSpinWei?: string
     baseWheelRpm?: number
+    speedShielderBasePriceWei?: string
+    quickBuzzerBasePriceWei?: string
+    rpmReductionPerShielder?: number
+    minWheelRpm?: number
     metadata?: NullableJsonNullValueInput | InputJsonValue
     updatedAt?: Date | string
     createdAt?: Date | string
@@ -150150,6 +150302,10 @@ export namespace Prisma {
     maxBubbleCashWei?: string
     maxCashPerSpinWei?: string
     baseWheelRpm?: number
+    speedShielderBasePriceWei?: string
+    quickBuzzerBasePriceWei?: string
+    rpmReductionPerShielder?: number
+    minWheelRpm?: number
     metadata?: NullableJsonNullValueInput | InputJsonValue
     updatedAt?: Date | string
     createdAt?: Date | string
@@ -150167,6 +150323,10 @@ export namespace Prisma {
     maxBubbleCashWei?: StringFieldUpdateOperationsInput | string
     maxCashPerSpinWei?: StringFieldUpdateOperationsInput | string
     baseWheelRpm?: IntFieldUpdateOperationsInput | number
+    speedShielderBasePriceWei?: StringFieldUpdateOperationsInput | string
+    quickBuzzerBasePriceWei?: StringFieldUpdateOperationsInput | string
+    rpmReductionPerShielder?: IntFieldUpdateOperationsInput | number
+    minWheelRpm?: IntFieldUpdateOperationsInput | number
     metadata?: NullableJsonNullValueInput | InputJsonValue
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -150184,6 +150344,10 @@ export namespace Prisma {
     maxBubbleCashWei?: StringFieldUpdateOperationsInput | string
     maxCashPerSpinWei?: StringFieldUpdateOperationsInput | string
     baseWheelRpm?: IntFieldUpdateOperationsInput | number
+    speedShielderBasePriceWei?: StringFieldUpdateOperationsInput | string
+    quickBuzzerBasePriceWei?: StringFieldUpdateOperationsInput | string
+    rpmReductionPerShielder?: IntFieldUpdateOperationsInput | number
+    minWheelRpm?: IntFieldUpdateOperationsInput | number
     metadata?: NullableJsonNullValueInput | InputJsonValue
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -150201,6 +150365,10 @@ export namespace Prisma {
     maxBubbleCashWei?: string
     maxCashPerSpinWei?: string
     baseWheelRpm?: number
+    speedShielderBasePriceWei?: string
+    quickBuzzerBasePriceWei?: string
+    rpmReductionPerShielder?: number
+    minWheelRpm?: number
     metadata?: NullableJsonNullValueInput | InputJsonValue
     updatedAt?: Date | string
     createdAt?: Date | string
@@ -150218,6 +150386,10 @@ export namespace Prisma {
     maxBubbleCashWei?: StringFieldUpdateOperationsInput | string
     maxCashPerSpinWei?: StringFieldUpdateOperationsInput | string
     baseWheelRpm?: IntFieldUpdateOperationsInput | number
+    speedShielderBasePriceWei?: StringFieldUpdateOperationsInput | string
+    quickBuzzerBasePriceWei?: StringFieldUpdateOperationsInput | string
+    rpmReductionPerShielder?: IntFieldUpdateOperationsInput | number
+    minWheelRpm?: IntFieldUpdateOperationsInput | number
     metadata?: NullableJsonNullValueInput | InputJsonValue
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -150235,6 +150407,10 @@ export namespace Prisma {
     maxBubbleCashWei?: StringFieldUpdateOperationsInput | string
     maxCashPerSpinWei?: StringFieldUpdateOperationsInput | string
     baseWheelRpm?: IntFieldUpdateOperationsInput | number
+    speedShielderBasePriceWei?: StringFieldUpdateOperationsInput | string
+    quickBuzzerBasePriceWei?: StringFieldUpdateOperationsInput | string
+    rpmReductionPerShielder?: IntFieldUpdateOperationsInput | number
+    minWheelRpm?: IntFieldUpdateOperationsInput | number
     metadata?: NullableJsonNullValueInput | InputJsonValue
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -150500,6 +150676,7 @@ export namespace Prisma {
 
   export type UserInventoryItemCreateInput = {
     id?: string
+    quantity?: number
     equipped?: boolean
     createdAt?: Date | string
     user: UserProfileCreateNestedOneWithoutSpinInventoryInput
@@ -150510,12 +150687,14 @@ export namespace Prisma {
     id?: string
     userId: string
     itemId: string
+    quantity?: number
     equipped?: boolean
     createdAt?: Date | string
   }
 
   export type UserInventoryItemUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
     equipped?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserProfileUpdateOneRequiredWithoutSpinInventoryNestedInput
@@ -150526,6 +150705,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
     equipped?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -150534,12 +150714,14 @@ export namespace Prisma {
     id?: string
     userId: string
     itemId: string
+    quantity?: number
     equipped?: boolean
     createdAt?: Date | string
   }
 
   export type UserInventoryItemUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
     equipped?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -150548,6 +150730,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
     equipped?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -156900,6 +157083,10 @@ export namespace Prisma {
     maxBubbleCashWei?: SortOrder
     maxCashPerSpinWei?: SortOrder
     baseWheelRpm?: SortOrder
+    speedShielderBasePriceWei?: SortOrder
+    quickBuzzerBasePriceWei?: SortOrder
+    rpmReductionPerShielder?: SortOrder
+    minWheelRpm?: SortOrder
     metadata?: SortOrder
     updatedAt?: SortOrder
     createdAt?: SortOrder
@@ -156910,6 +157097,8 @@ export namespace Prisma {
     xpCostPerSpin?: SortOrder
     spinDurationSec?: SortOrder
     baseWheelRpm?: SortOrder
+    rpmReductionPerShielder?: SortOrder
+    minWheelRpm?: SortOrder
   }
 
   export type SpinConfigMaxOrderByAggregateInput = {
@@ -156924,6 +157113,10 @@ export namespace Prisma {
     maxBubbleCashWei?: SortOrder
     maxCashPerSpinWei?: SortOrder
     baseWheelRpm?: SortOrder
+    speedShielderBasePriceWei?: SortOrder
+    quickBuzzerBasePriceWei?: SortOrder
+    rpmReductionPerShielder?: SortOrder
+    minWheelRpm?: SortOrder
     updatedAt?: SortOrder
     createdAt?: SortOrder
   }
@@ -156940,6 +157133,10 @@ export namespace Prisma {
     maxBubbleCashWei?: SortOrder
     maxCashPerSpinWei?: SortOrder
     baseWheelRpm?: SortOrder
+    speedShielderBasePriceWei?: SortOrder
+    quickBuzzerBasePriceWei?: SortOrder
+    rpmReductionPerShielder?: SortOrder
+    minWheelRpm?: SortOrder
     updatedAt?: SortOrder
     createdAt?: SortOrder
   }
@@ -156949,6 +157146,8 @@ export namespace Prisma {
     xpCostPerSpin?: SortOrder
     spinDurationSec?: SortOrder
     baseWheelRpm?: SortOrder
+    rpmReductionPerShielder?: SortOrder
+    minWheelRpm?: SortOrder
   }
 
   export type EnumSpinMusicTierFilter<$PrismaModel = never> = {
@@ -157131,14 +157330,20 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     itemId?: SortOrder
+    quantity?: SortOrder
     equipped?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type UserInventoryItemAvgOrderByAggregateInput = {
+    quantity?: SortOrder
   }
 
   export type UserInventoryItemMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     itemId?: SortOrder
+    quantity?: SortOrder
     equipped?: SortOrder
     createdAt?: SortOrder
   }
@@ -157147,8 +157352,13 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     itemId?: SortOrder
+    quantity?: SortOrder
     equipped?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type UserInventoryItemSumOrderByAggregateInput = {
+    quantity?: SortOrder
   }
 
   export type EnumSpinSessionStatusFilter<$PrismaModel = never> = {
@@ -165161,6 +165371,7 @@ export namespace Prisma {
 
   export type UserInventoryItemCreateWithoutUserInput = {
     id?: string
+    quantity?: number
     equipped?: boolean
     createdAt?: Date | string
     item: SpinCollectionItemCreateNestedOneWithoutOwnersInput
@@ -165169,6 +165380,7 @@ export namespace Prisma {
   export type UserInventoryItemUncheckedCreateWithoutUserInput = {
     id?: string
     itemId: string
+    quantity?: number
     equipped?: boolean
     createdAt?: Date | string
   }
@@ -166594,6 +166806,7 @@ export namespace Prisma {
     id?: UuidFilter<"UserInventoryItem"> | string
     userId?: UuidFilter<"UserInventoryItem"> | string
     itemId?: UuidFilter<"UserInventoryItem"> | string
+    quantity?: IntFilter<"UserInventoryItem"> | number
     equipped?: BoolFilter<"UserInventoryItem"> | boolean
     createdAt?: DateTimeFilter<"UserInventoryItem"> | Date | string
   }
@@ -183912,6 +184125,7 @@ export namespace Prisma {
 
   export type UserInventoryItemCreateWithoutItemInput = {
     id?: string
+    quantity?: number
     equipped?: boolean
     createdAt?: Date | string
     user: UserProfileCreateNestedOneWithoutSpinInventoryInput
@@ -183920,6 +184134,7 @@ export namespace Prisma {
   export type UserInventoryItemUncheckedCreateWithoutItemInput = {
     id?: string
     userId: string
+    quantity?: number
     equipped?: boolean
     createdAt?: Date | string
   }
@@ -185894,6 +186109,7 @@ export namespace Prisma {
   export type UserInventoryItemCreateManyUserInput = {
     id?: string
     itemId: string
+    quantity?: number
     equipped?: boolean
     createdAt?: Date | string
   }
@@ -187347,6 +187563,7 @@ export namespace Prisma {
 
   export type UserInventoryItemUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
     equipped?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     item?: SpinCollectionItemUpdateOneRequiredWithoutOwnersNestedInput
@@ -187355,6 +187572,7 @@ export namespace Prisma {
   export type UserInventoryItemUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
     equipped?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -187362,6 +187580,7 @@ export namespace Prisma {
   export type UserInventoryItemUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     itemId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
     equipped?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -188775,12 +188994,14 @@ export namespace Prisma {
   export type UserInventoryItemCreateManyItemInput = {
     id?: string
     userId: string
+    quantity?: number
     equipped?: boolean
     createdAt?: Date | string
   }
 
   export type UserInventoryItemUpdateWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
     equipped?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserProfileUpdateOneRequiredWithoutSpinInventoryNestedInput
@@ -188789,6 +189010,7 @@ export namespace Prisma {
   export type UserInventoryItemUncheckedUpdateWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
     equipped?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -188796,6 +189018,7 @@ export namespace Prisma {
   export type UserInventoryItemUncheckedUpdateManyWithoutItemInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    quantity?: IntFieldUpdateOperationsInput | number
     equipped?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
