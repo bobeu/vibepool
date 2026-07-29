@@ -109,10 +109,10 @@ export function SpinWheelPanel({
         className={cn(
           "absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2",
           "h-[84px] w-[84px] rounded-full border-4 border-black font-black uppercase text-sm",
-          "shadow-[4px_4px_0_rgba(0,0,0,1)] transition-transform",
+          "shadow-[4px_4px_0_rgba(0,0,0,1)] transition-[transform,box-shadow] duration-100",
           spinDisabled
             ? "cursor-not-allowed bg-zinc-700 text-white/50"
-            : "bg-primary text-black hover:scale-[1.04] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)]"
+            : "bg-primary text-black hover:scale-[1.04] active:scale-[0.97] active:shadow-[2px_2px_0_rgba(0,0,0,1)]"
         )}
         aria-label={spinLabel}
       >

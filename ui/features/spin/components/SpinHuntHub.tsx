@@ -20,6 +20,7 @@ type CatalogItem = {
   id: string;
   name: string;
   type: string;
+  slug?: string;
   priceWei: string;
   priceAsset: string;
   itemId: `0x${string}`;
@@ -98,8 +99,12 @@ export function SpinHuntHub() {
   const available = Number(data?.balance?.available ?? 0);
   const canMockWithdraw = Boolean(isFreePlay && walletSummary?.canWithdraw);
   const catalogItems = (loadoutSummary?.items ?? []) as CatalogItem[];
-  const speedShielderItem = catalogItems.find((item) => item.type === "SPEED_SHIELDER");
-  const quickBuzzerItem = catalogItems.find((item) => item.type === "BUZZER");
+  const speedShielderItem =
+    catalogItems.find((item) => item.type === "SPEED_SHIELDER") ??
+    catalogItems.find((item) => item.slug === "speed-shielder-1");
+  const quickBuzzerItem =
+    catalogItems.find((item) => item.type === "BUZZER") ??
+    catalogItems.find((item) => item.slug === "buzzer-1");
   const rpm =
     session?.rpm ??
     loadoutSummary?.loadout?.wheelRpm ??
@@ -409,11 +414,17 @@ export function SpinHuntHub() {
   }, [pendingStartMode, session, showReward]);
 
   const launchPendingStart = () => {
+    if (startTicket.isPending || startPaid.isPending || applyBoostMutation.isPending) return;
     if (pendingStartMode === "ticket") {
       startTicket.mutate();
       return;
     }
     if (pendingStartMode === "paid") {
+      if (!isConnected) {
+        setError("Connect wallet to pay entry");
+        showToast("Connect wallet to pay entry");
+        return;
+      }
       startPaid.mutate();
     }
   };
@@ -437,8 +448,18 @@ export function SpinHuntHub() {
     <div className="grid grid-cols-2 gap-2">
       <button
         type="button"
-        disabled={!speedShielderItem || applyBoostMutation.isPending || paying}
-        onClick={() => applyBoostMutation.mutate("SPEED_SHIELDER")}
+        disabled={applyBoostMutation.isPending || startTicket.isPending || startPaid.isPending}
+        onClick={() => {
+          if (!speedShielderItem) {
+            showToast("Speed Shielder unavailable — refresh and try again");
+            return;
+          }
+          if (!isFreePlay && !isConnected && speedShielderItem.priceWei !== "0") {
+            showToast("Connect wallet to buy Speed Shielder");
+            return;
+          }
+          applyBoostMutation.mutate("SPEED_SHIELDER");
+        }}
         className="rounded-2xl border-4 border-black bg-[#FBBF24] px-2 py-3 text-[10px] font-black uppercase leading-tight text-black shadow-[4px_4px_0_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-white/50"
       >
         <span className="mb-1 flex items-center justify-center gap-1">
@@ -448,8 +469,18 @@ export function SpinHuntHub() {
       </button>
       <button
         type="button"
-        disabled={!quickBuzzerItem || applyBoostMutation.isPending || paying}
-        onClick={() => applyBoostMutation.mutate("BUZZER")}
+        disabled={applyBoostMutation.isPending || startTicket.isPending || startPaid.isPending}
+        onClick={() => {
+          if (!quickBuzzerItem) {
+            showToast("Quick Buzzer unavailable — refresh and try again");
+            return;
+          }
+          if (!isFreePlay && !isConnected && quickBuzzerItem.priceWei !== "0") {
+            showToast("Connect wallet to buy Quick Buzzer");
+            return;
+          }
+          applyBoostMutation.mutate("BUZZER");
+        }}
         className="rounded-2xl border-4 border-black bg-primary px-2 py-3 text-[10px] font-black uppercase leading-tight text-black shadow-[4px_4px_0_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-white/50"
       >
         <span className="mb-1 flex items-center justify-center gap-1">
@@ -496,7 +527,7 @@ export function SpinHuntHub() {
   return (
     <div>
       {pendingStartMode && (
-        <div className="fixed inset-0 z-[105] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[185] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm">
           <div className="w-full max-w-sm rounded-[28px] border-4 border-primary bg-zinc-950 p-6 text-center shadow-[0_0_48px_rgba(98,226,248,0.25)]">
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-primary/80">
               Spin Hunt ready
@@ -516,10 +547,10 @@ export function SpinHuntHub() {
               <button
                 type="button"
                 onClick={launchPendingStart}
-                disabled={startTicket.isPending || startPaid.isPending || paying}
+                disabled={startTicket.isPending || startPaid.isPending || applyBoostMutation.isPending}
                 className="w-full rounded-2xl border-4 border-black bg-primary py-3 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-white/50"
               >
-                Start hunt
+                {startTicket.isPending || startPaid.isPending ? "Starting…" : "Start hunt"}
               </button>
               <button
                 type="button"

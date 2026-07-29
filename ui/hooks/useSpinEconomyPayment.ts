@@ -314,7 +314,10 @@ export function useSpinEconomyPayment() {
     payEntry,
     purchaseItem,
     createSessionRef,
-    busy: busy || receipt.isLoading,
+    // Only treat receipt wait as busy when we actually submitted a tx.
+    // wagmi can report isLoading=true with an undefined hash when a wallet
+    // is connected, which previously disabled Start Hunt / boost buttons.
+    busy: busy || Boolean(pendingHash && receipt.isLoading),
     error,
     preferredAsset,
     miniPay,

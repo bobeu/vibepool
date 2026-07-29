@@ -29,6 +29,7 @@ import { Onboarding } from "@/components/common/Onboarding";
 import type { NavKey } from "@/types";
 
 const ONBOARDING_HIDE_KEY = "nexora_onboarding_hide";
+const ONBOARDING_SESSION_DISMISS_KEY = "nexora_onboarding_session_dismiss";
 
 // ─── Icon Maps ────────────────────────────────────────────────────────────────
 
@@ -71,6 +72,8 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
     localStorage.removeItem("nexora_onboarding_done");
     localStorage.removeItem("vibepool_onboarding_done");
     setOnboardingHidden(localStorage.getItem(ONBOARDING_HIDE_KEY) === "true");
+    // AppShell remounts per page — keep Start Game dismiss for this tab session.
+    setOnboardingDismissed(sessionStorage.getItem(ONBOARDING_SESSION_DISMISS_KEY) === "true");
     setOnboardingChecked(true);
   }, []);
 
@@ -100,6 +103,7 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
   const showOnboarding = !onboardingHidden && !onboardingDismissed;
 
   const handleOnboardingComplete = () => {
+    sessionStorage.setItem(ONBOARDING_SESSION_DISMISS_KEY, "true");
     setOnboardingDismissed(true);
     router.push("/spin");
   };
@@ -108,11 +112,13 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
     if (showOnboarding || !onboardingHidden) {
       // Currently visible (or would be) — hide permanently until user reopens guide
       localStorage.setItem(ONBOARDING_HIDE_KEY, "true");
+      sessionStorage.setItem(ONBOARDING_SESSION_DISMISS_KEY, "true");
       setOnboardingHidden(true);
       setOnboardingDismissed(true);
     } else {
       // Hidden — show guide again
       localStorage.setItem(ONBOARDING_HIDE_KEY, "false");
+      sessionStorage.removeItem(ONBOARDING_SESSION_DISMISS_KEY);
       setOnboardingHidden(false);
       setOnboardingDismissed(false);
     }
