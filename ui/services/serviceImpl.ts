@@ -551,6 +551,7 @@ export class SpinService implements ISpinService {
 
   async getAvailableSpins(wallet: string): Promise<Record<string, unknown>> {
     const userId = await resolveUserId(wallet);
+    await spinEngine.ensureWelcomeSpins(userId);
     await spinEngine.ensureDailyFreeSpin(userId);
     return spinEngine.getSpinBalance(userId);
   }

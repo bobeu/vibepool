@@ -3,12 +3,12 @@
 import { cn } from "@/utils/format";
 
 const SEGMENTS = [
-  { label: "25 USDT", icon: "T", color: "#16C784", darkColor: "#0f9962", textColor: "#fff" },
-  { label: "500 XP", icon: "XP", color: "#62E2F8", darkColor: "#189AB4", textColor: "#000" },
-  { label: "10 USDC", icon: "S", color: "#1E90FF", darkColor: "#1565C0", textColor: "#fff" },
-  { label: "5 USDm", icon: "M", color: "#FF9F1C", darkColor: "#C06000", textColor: "#000" },
-  { label: "100 XP", icon: "XP", color: "#2DD4BF", darkColor: "#0F766E", textColor: "#000" },
-  { label: "0.5 CELO", icon: "C", color: "#FBBF24", darkColor: "#B45309", textColor: "#000" },
+  { label: "🫧", color: "#16C784", darkColor: "#0f9962", textColor: "#fff" },
+  { label: "⚡", color: "#62E2F8", darkColor: "#189AB4", textColor: "#000" },
+  { label: "💎", color: "#1E90FF", darkColor: "#1565C0", textColor: "#fff" },
+  { label: "🔥", color: "#FF9F1C", darkColor: "#C06000", textColor: "#000" },
+  { label: "🎯", color: "#2DD4BF", darkColor: "#0F766E", textColor: "#000" },
+  { label: "✨", color: "#FBBF24", darkColor: "#B45309", textColor: "#000" },
 ] as const;
 
 const TOTAL = SEGMENTS.length;
@@ -91,10 +91,7 @@ export function SpinWheelPanel({
                 y={labelPos.y}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                fontSize="10.5"
-                fontWeight="900"
-                fontFamily="Space Grotesk, sans-serif"
-                fill={seg.textColor}
+                fontSize="22"
                 transform={`rotate(${mid}, ${labelPos.x}, ${labelPos.y})`}
               >
                 {seg.label}

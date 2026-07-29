@@ -64,6 +64,20 @@ export class SpinEngine implements ISpinEngine {
     return true;
   }
 
+  /** Grant 2 welcome spins to brand-new users who have never received any spins. */
+  async ensureWelcomeSpins(userId: string): Promise<boolean> {
+    const any = await prisma().spinLedger.findFirst({
+      where: { userId, spinType: "WELCOME" as any },
+    });
+    if (any) return false;
+
+    for (let i = 0; i < 2; i++) {
+      await this.grantSpin(userId, "WELCOME", "NEW_USER_WELCOME_SPIN");
+    }
+    logger.info("Welcome spins granted", { userId, count: 2 });
+    return true;
+  }
+
   /** Grant one DAILY free spin if the user has not received one today. */
   async ensureDailyFreeSpin(userId: string): Promise<boolean> {
     const today = new Date();

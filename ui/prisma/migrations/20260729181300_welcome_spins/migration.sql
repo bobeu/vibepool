@@ -1,0 +1,2 @@
+-- Add WELCOME to SpinType enum
+ALTER TYPE "SpinType" ADD VALUE IF NOT EXISTS 'WELCOME';
