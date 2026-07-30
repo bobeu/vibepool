@@ -16,12 +16,16 @@ import {
 } from "lucide-react";
 import { authFetch, startFreePlaySession } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
+import { useEnsureSession } from "@/hooks/useEnsureSession";
 import { cn } from "@/utils/format";
 
 export function PredictHub() {
-  const { session, isLoading: authLoading, isFreePlay } = useAuth();
+  const { session, isLoading: authLoading, isFreePlay, refreshSession } = useAuth();
+  const { isConnected } = useEnsureSession();
   const queryClient = useQueryClient();
   const [mode, setMode] = useState<"manual" | "ai">("manual");
+  const [starting, setStarting] = useState(false);
+  const [startError, setStartError] = useState<string | null>(null);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["predictions"],
@@ -60,7 +64,25 @@ export function PredictHub() {
   const roundId    = tournament?.id ?? 35;
   const playerCount = tournament?.participantCount ?? 21;
 
-  if (authLoading || isLoading) {
+  const handleStartFreePlay = async () => {
+    setStarting(true);
+    setStartError(null);
+    try {
+      const ok = await startFreePlaySession();
+      if (!ok) {
+        setStartError("Could not start free play — try again");
+        return;
+      }
+      await refreshSession();
+      await queryClient.invalidateQueries({ queryKey: ["predictions"] });
+    } catch (e) {
+      setStartError(e instanceof Error ? e.message : "Free play failed");
+    } finally {
+      setStarting(false);
+    }
+  };
+
+  if (authLoading || (session && isLoading)) {
     return (
       <div className="space-y-4">
         <div className="h-44 rounded-2xl border-2 border-white/10 bg-zinc-900/80 animate-pulse" />
@@ -87,13 +109,13 @@ export function PredictHub() {
         </div>
         <button
           type="button"
-          onClick={async () => {
-            await startFreePlaySession();
-          }}
-          className="w-full max-w-xs mx-auto py-3.5 rounded-2xl bg-[#FBBF24] text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)]"
+          disabled={starting}
+          onClick={() => void handleStartFreePlay()}
+          className="w-full max-w-xs mx-auto py-3.5 rounded-2xl bg-[#FBBF24] text-black font-black uppercase text-sm border-4 border-black shadow-[4px_4px_0_rgba(0,0,0,1)] disabled:opacity-60"
         >
-          Start Free Play
+          {starting ? "Starting…" : "Start Free Play"}
         </button>
+        {startError && <p className="text-sm font-bold text-red-400">{startError}</p>}
       </div>
     );
   }
@@ -109,7 +131,7 @@ export function PredictHub() {
 
   return (
     <div className="space-y-4">
-      {isFreePlay && (
+      {isFreePlay && !isConnected && (
         <div className="rounded-xl border-2 border-[#FBBF24]/50 bg-[#FBBF24]/10 px-3 py-2 text-center">
           <p className="text-[10px] font-black uppercase tracking-widest text-[#FBBF24]">
             Free Play · Practice round · No funds at risk

@@ -15,9 +15,13 @@ type TabId = "global" | "friends" | "season";
 
 interface LBEntry {
   userId?: string;
+  wallet?: string;
   user?: { username?: string | null; avatar?: string | null };
   xp: number;
+  spins?: number;
+  points?: number;
   rank?: number;
+  isSpinner?: boolean;
 }
 
 // ─── Countdown Timer ──────────────────────────────────────────────────────────
@@ -262,11 +266,18 @@ export default function LeaderboardPage() {
                       )}
                     </p>
                   </div>
-                  <div className="flex items-center gap-1 flex-shrink-0">
-                    <Trophy className="w-3 h-3 text-secondary" />
-                    <p className="text-xs font-black tabular-nums">
-                      {(entry.xp ?? 0).toLocaleString()} XP
-                    </p>
+                  <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
+                    <div className="flex items-center gap-1">
+                      <Trophy className="w-3 h-3 text-secondary" />
+                      <p className="text-xs font-black tabular-nums">
+                        {(entry.xp ?? 0).toLocaleString()} XP
+                      </p>
+                    </div>
+                    {(entry.spins ?? 0) > 0 || entry.isSpinner ? (
+                      <p className="text-[9px] font-bold uppercase text-primary">
+                        Spinner · {entry.spins ?? 0}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
               );

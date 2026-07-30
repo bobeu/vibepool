@@ -21,7 +21,7 @@ import {
   ListChecks,
 } from "lucide-react";
 import { LevelProgress } from "@/components/ui/LevelProgress";
-import { authFetch, isFreePlaySession, startFreePlaySession } from "@/lib/auth/client";
+import { authFetch, startFreePlaySession } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
 import { cn } from "@/utils/format";
 
@@ -124,6 +124,7 @@ export function HomeHub() {
 
   const topPlayers: any[] = leaderboard?.leaderboard?.slice(0, 3) ?? [];
   const username =
+    profile?.profile?.username ??
     profile?.username ??
     (address ? `${address.slice(0, 6)}…${address.slice(-4)}` : isFreePlay ? "Guest Player" : "Player");
 
@@ -139,7 +140,7 @@ export function HomeHub() {
     <div className="space-y-4">
 
       {/* ── Free Play banner (MiniPay: try before funds) ── */}
-      {(isFreePlay || isFreePlaySession() || (!session && !isConnected && !authLoading)) && (
+      {(isFreePlay && !isConnected) || (!session && !isConnected && !authLoading) ? (
         <div className="rounded-2xl border-4 border-black bg-[#FBBF24] text-black p-4 shadow-[4px_4px_0_rgba(0,0,0,1)] space-y-3">
           <div>
             <p className="text-[10px] font-black uppercase tracking-widest text-black/60">Practice Mode</p>
@@ -174,7 +175,7 @@ export function HomeHub() {
             </button>
           </div>
         </div>
-      )}
+      ) : null}
 
       {/* ── Hero Banner ── */}
       <div className="relative rounded-2xl overflow-hidden border-2 border-white/10 bg-gradient-to-br from-zinc-900 to-zinc-950">

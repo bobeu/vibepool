@@ -3,12 +3,16 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AppShell } from "@/components/layout/AppShell";
 import { MissionCard } from "@/components/ui/MissionCard";
-import { authFetch } from "@/lib/auth/client";
+import { authFetch, startFreePlaySession } from "@/lib/auth/client";
+import { useAuth } from "@/lib/auth/useAuth";
+import { useEnsureSession } from "@/hooks/useEnsureSession";
 
 export default function MissionsPage() {
   const queryClient = useQueryClient();
+  const { refreshSession } = useAuth();
+  const { ready, session } = useEnsureSession();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["missions"],
     queryFn: async () => {
       const res = await authFetch("/api/missions");
@@ -16,6 +20,7 @@ export default function MissionsPage() {
       return res.json();
     },
     staleTime: 15_000,
+    enabled: ready,
   });
 
   const claimMutation = useMutation({
@@ -33,7 +38,7 @@ export default function MissionsPage() {
     },
   });
 
-  if (isLoading) {
+  if (!ready || isLoading) {
     return (
       <AppShell activeNav="home">
         <div className="space-y-3">
@@ -48,11 +53,18 @@ export default function MissionsPage() {
   if (error) {
     return (
       <AppShell activeNav="home">
-        <div className="flex flex-col items-center justify-center py-20 text-center">
+        <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
           <p className="text-destructive text-sm font-medium">Failed to load missions</p>
           <button
-            onClick={() => window.location.reload()}
-            className="mt-4 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold"
+            type="button"
+            onClick={async () => {
+              if (!session) {
+                await startFreePlaySession();
+                await refreshSession();
+              }
+              await refetch();
+            }}
+            className="mt-2 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold"
           >
             Retry
           </button>

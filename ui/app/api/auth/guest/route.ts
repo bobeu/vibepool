@@ -17,13 +17,14 @@ export const POST = async (req: NextRequest) => {
     }
 
     const wallet = createGuestWallet();
+    const { FREEPLAY_MAX_SPINS } = await import("@/lib/spin/freePlay");
     const user = await prisma().userProfile.create({
       data: {
         wallet,
         username: "Guest Player",
         xp: 0,
         points: 0,
-        spins: 5,
+        spins: FREEPLAY_MAX_SPINS,
         level: 1,
         totalActivity: 0,
         status: "ACTIVE",
@@ -35,7 +36,7 @@ export const POST = async (req: NextRequest) => {
       data: {
         userId: user.id,
         spinType: "EVENT",
-        amount: 5,
+        amount: FREEPLAY_MAX_SPINS,
         reason: "FREE_PLAY_WELCOME",
       },
     });
@@ -52,7 +53,7 @@ export const POST = async (req: NextRequest) => {
         expiresAt,
         isGuest: true,
         freePlay: true,
-        spins: 5,
+        spins: FREEPLAY_MAX_SPINS,
         message: "Free play session ready — no funds required.",
       },
       201

@@ -10,8 +10,9 @@ import { useSpinEconomyPayment } from "@/hooks/useSpinEconomyPayment";
 import { useUIStore } from "@/store/uiStore";
 import { isSpinPayAsset } from "@/lib/spin/economy";
 import { assetDecimals } from "@/lib/tokens/celoAssets";
-import { FREEPLAY_SPIN_PACKS } from "@/lib/spin/freePlay";
+import { canRefillOrBuyDemoSpins, FREEPLAY_SPIN_PACKS } from "@/lib/spin/freePlay";
 import { cn } from "@/utils/format";
+import { useAccount } from "wagmi";
 
 type Tab = "music" | "collections" | "spins" | "gallery";
 
@@ -65,12 +66,15 @@ export function SpinLoadoutPanel() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const queryClient = useQueryClient();
   const { isFreePlay } = useAuth();
+  const { address, isConnected: wagmiConnected } = useAccount();
   const showToast = useUIStore((s) => s.showToast);
   const { purchaseItem, busy, preferredAsset, isConnected } = useSpinEconomyPayment();
   const hasToken = Boolean(getAccessToken());
+  const inFreeMode = Boolean(isFreePlay && !wagmiConnected && !isConnected);
+  const canManageSpins = Boolean(address && canRefillOrBuyDemoSpins(address));
 
   const musicQuery = useQuery({
-    queryKey: ["spin-music"],
+    queryKey: ["spin-music", hasToken],
     queryFn: async () => {
       const res = await authFetch("/api/spin/music");
       if (!res.ok) {
@@ -80,10 +84,11 @@ export function SpinLoadoutPanel() {
       return res.json();
     },
     enabled: open && hasToken,
+    retry: 1,
   });
 
   const collectionsQuery = useQuery({
-    queryKey: ["spin-collections"],
+    queryKey: ["spin-collections", hasToken],
     queryFn: async () => {
       const res = await authFetch("/api/spin/collections");
       if (!res.ok) {
@@ -93,6 +98,7 @@ export function SpinLoadoutPanel() {
       return res.json();
     },
     enabled: open && hasToken,
+    retry: 1,
   });
 
   useEffect(() => {
@@ -152,15 +158,15 @@ export function SpinLoadoutPanel() {
   const buyMusic = useMutation({
     mutationFn: async (track: MusicTrack) => {
       setError(null);
-      if (isFreePlay || track.owned || track.tier === "FREE" || track.priceWei === "0") {
+      if (inFreeMode || track.owned || track.tier === "FREE" || track.priceWei === "0") {
         const res = await authFetch(
-          isFreePlay && track.tier !== "FREE" && track.priceWei !== "0"
+          inFreeMode && track.tier !== "FREE" && track.priceWei !== "0"
             ? "/api/spin/freeplay"
             : "/api/spin/music",
           {
             method: "POST",
             body: JSON.stringify(
-              isFreePlay && track.tier !== "FREE" && track.priceWei !== "0"
+              inFreeMode && track.tier !== "FREE" && track.priceWei !== "0"
                 ? { action: "purchaseMusic", trackId: track.id }
                 : { action: "purchase", trackId: track.id }
             ),
@@ -209,13 +215,13 @@ export function SpinLoadoutPanel() {
   const buyItem = useMutation({
     mutationFn: async (item: CollectionItem) => {
       setError(null);
-      if (isFreePlay || item.owned || item.priceWei === "0") {
+      if (inFreeMode || item.owned || item.priceWei === "0") {
         const res = await authFetch(
-          isFreePlay && item.priceWei !== "0" ? "/api/spin/freeplay" : "/api/spin/collections",
+          inFreeMode && item.priceWei !== "0" ? "/api/spin/freeplay" : "/api/spin/collections",
           {
             method: "POST",
             body: JSON.stringify(
-              isFreePlay && item.priceWei !== "0"
+              inFreeMode && item.priceWei !== "0"
                 ? { action: "purchaseItem", itemId: item.id }
                 : { action: "purchase", itemId: item.id, free: true }
             ),
@@ -290,9 +296,11 @@ export function SpinLoadoutPanel() {
   const ownedTracks = tracks.filter((t) => t.owned);
   const ownedItems = items.filter((i) => i.owned);
 
-  const tabs: Tab[] = isFreePlay
+  const tabs: Tab[] = canManageSpins
     ? ["collections", "spins", "music", "gallery"]
-    : ["music", "collections", "gallery"];
+    : inFreeMode
+      ? ["collections", "music", "gallery"]
+      : ["music", "collections", "gallery"];
 
   return (
     <div className="mt-3">
@@ -310,9 +318,14 @@ export function SpinLoadoutPanel() {
 
       {open && (
         <div className="mt-2 rounded-xl border border-white/10 bg-zinc-900/90 p-2.5">
-          {isFreePlay && (
+          {inFreeMode && (
             <p className="mb-2 text-center text-[9px] font-bold uppercase tracking-widest text-[#FBBF24]">
               Free play — buys are simulated, no wallet txs
+            </p>
+          )}
+          {canManageSpins && (
+            <p className="mb-2 text-center text-[9px] font-bold uppercase tracking-widest text-primary">
+              Authorized tester — unlimited spin refill enabled
             </p>
           )}
 
@@ -356,7 +369,7 @@ export function SpinLoadoutPanel() {
             </p>
           )}
 
-          {tab === "spins" && isFreePlay && (
+          {tab === "spins" && canManageSpins && (
             <div className="space-y-1.5">
               <button
                 type="button"
@@ -364,7 +377,7 @@ export function SpinLoadoutPanel() {
                 onClick={() => refillSpins.mutate()}
                 className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-black bg-[#FBBF24] py-2 text-[10px] font-black uppercase text-black shadow-[2px_2px_0_rgba(0,0,0,1)]"
               >
-                {refillSpins.isPending ? "Refilling…" : "Refill spins to 5 (demo)"}
+                {refillSpins.isPending ? "Refilling…" : "Refill spins (unlimited tester)"}
               </button>
               {FREEPLAY_SPIN_PACKS.map((pack) => (
                 <div
@@ -406,7 +419,7 @@ export function SpinLoadoutPanel() {
                   <div className="min-w-0">
                     <p className="truncate text-[11px] font-black">{track.title}</p>
                     <p className="text-[9px] text-muted-foreground">
-                      {track.tier} · {priceLabel(track.priceWei, track.priceAsset, isFreePlay)}
+                      {track.tier} · {priceLabel(track.priceWei, track.priceAsset, inFreeMode)}
                     </p>
                   </div>
                   <div className="flex shrink-0 gap-1">
@@ -476,7 +489,7 @@ export function SpinLoadoutPanel() {
                       <p className="text-[11px] font-black">{item.name}</p>
                       <p className="text-[9px] text-muted-foreground">
                         {item.type.replace("_", " ")} ·{" "}
-                        {priceLabel(item.priceWei, item.priceAsset, isFreePlay)}
+                        {priceLabel(item.priceWei, item.priceAsset, inFreeMode)}
                       </p>
                     </div>
                   </div>

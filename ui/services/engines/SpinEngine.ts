@@ -76,17 +76,18 @@ export class SpinEngine implements ISpinEngine {
     return true;
   }
 
-  /** Grant 2 welcome spins to brand-new users who have never received any spins. */
+  /** Grant welcome spins to brand-new pay-mode users (once). */
   async ensureWelcomeSpins(userId: string): Promise<boolean> {
     const any = await prisma().spinLedger.findFirst({
       where: { userId, spinType: "WELCOME" as any },
     });
     if (any) return false;
 
-    for (let i = 0; i < 2; i++) {
+    const { PAY_MODE_MAX_WELCOME_SPINS } = await import("@/lib/spin/freePlay");
+    for (let i = 0; i < PAY_MODE_MAX_WELCOME_SPINS; i++) {
       await this.grantSpin(userId, "WELCOME", "NEW_USER_WELCOME_SPIN");
     }
-    logger.info("Welcome spins granted", { userId, count: 2 });
+    logger.info("Welcome spins granted", { userId, count: PAY_MODE_MAX_WELCOME_SPINS });
     return true;
   }
 

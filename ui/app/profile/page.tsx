@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import { useAccount } from "wagmi";
 import { AppShell } from "@/components/layout/AppShell";
 import { LevelProgress } from "@/components/ui/LevelProgress";
 import { GlassContainer } from "@/components/hero/GlassContainer";
 import { SectionDivider } from "@/components/hero/SectionDivider";
-import { authFetch } from "@/lib/auth/client";
+import { authFetch, startFreePlaySession } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
+import { useEnsureSession } from "@/hooks/useEnsureSession";
 import { container, item } from "@/lib/motion/variants";
 
 const url = (path: string) => {
@@ -18,9 +20,13 @@ const url = (path: string) => {
 
 export default function ProfilePage() {
   const queryClient = useQueryClient();
-  const { session } = useAuth();
+  const { session, refreshSession } = useAuth();
+  const { address, isConnected } = useAccount();
+  const { ready } = useEnsureSession();
 
-  const { data: profile, isLoading: profileLoading } = useQuery({
+  const hasAccess = Boolean(session || (ready && address));
+
+  const { data: profilePayload, isLoading: profileLoading } = useQuery({
     queryKey: ["profile"],
     queryFn: async () => {
       const res = await authFetch("/api/profile");
@@ -28,9 +34,10 @@ export default function ProfilePage() {
       return res.json();
     },
     staleTime: 15_000,
-    enabled: !!session,
+    enabled: hasAccess,
     retry: false,
   });
+  const profile = profilePayload?.profile ?? profilePayload;
 
   const { data: identity, isLoading: identityLoading } = useQuery({
     queryKey: ["profile", "identity"],
@@ -40,7 +47,7 @@ export default function ProfilePage() {
       return res.json();
     },
     staleTime: 15_000,
-    enabled: !!session,
+    enabled: hasAccess,
     retry: false,
   });
 
@@ -52,7 +59,7 @@ export default function ProfilePage() {
       return res.json();
     },
     staleTime: 15_000,
-    enabled: !!session,
+    enabled: hasAccess,
     retry: false,
   });
 
@@ -64,7 +71,7 @@ export default function ProfilePage() {
       return res.json();
     },
     staleTime: 15_000,
-    enabled: !!session,
+    enabled: hasAccess,
     retry: false,
   });
 
@@ -76,7 +83,7 @@ export default function ProfilePage() {
       return res.json();
     },
     staleTime: 15_000,
-    enabled: !!session,
+    enabled: hasAccess,
     retry: false,
   });
 
@@ -88,7 +95,7 @@ export default function ProfilePage() {
       return res.json();
     },
     staleTime: 15_000,
-    enabled: !!session,
+    enabled: hasAccess,
     retry: false,
   });
 
@@ -111,7 +118,7 @@ export default function ProfilePage() {
       };
     },
     staleTime: 15_000,
-    enabled: !!session,
+    enabled: hasAccess,
     retry: false,
   });
 
@@ -123,7 +130,7 @@ export default function ProfilePage() {
       return res.json();
     },
     staleTime: 15_000,
-    enabled: !!session,
+    enabled: hasAccess,
     retry: false,
   });
 
@@ -149,11 +156,27 @@ export default function ProfilePage() {
     },
   });
 
-  if (!session) {
+  if (!hasAccess) {
     return (
       <AppShell activeNav="profile">
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <p className="text-muted-foreground text-sm">Connect your wallet to view your profile.</p>
+        <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
+          <p className="text-muted-foreground text-sm">
+            {isConnected
+              ? "Confirm the sign-in message in your wallet to load your profile."
+              : "Connect your wallet or start free play to view your profile."}
+          </p>
+          {!isConnected && (
+            <button
+              type="button"
+              onClick={async () => {
+                const ok = await startFreePlaySession();
+                if (ok) await refreshSession();
+              }}
+              className="rounded-xl border-4 border-black bg-[#FBBF24] px-4 py-2 text-sm font-black uppercase text-black shadow-[3px_3px_0_rgba(0,0,0,1)]"
+            >
+              Start Free Play
+            </button>
+          )}
         </div>
       </AppShell>
     );
@@ -171,7 +194,7 @@ export default function ProfilePage() {
               <div className="space-y-1">
                 <h1 className="text-xl font-bold">{identity?.displayName ?? profile?.username ?? "Player"}</h1>
                 <p className="text-xs text-muted-foreground font-mono">
-                  {session?.wallet?.slice(0, 6)}...{session?.wallet?.slice(-4)}
+                  {(session?.wallet ?? address)?.slice(0, 6)}...{(session?.wallet ?? address)?.slice(-4)}
                 </p>
                 {identity?.selectedTitle && (
                   <span className="inline-block px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">

@@ -11,10 +11,12 @@ import { useUIStore } from "@/store/uiStore";
 import { assetDecimals } from "@/lib/tokens/celoAssets";
 import { isSpinPayAsset } from "@/lib/spin/economy";
 import { unlockSpinAudio } from "@/lib/audio/spinSounds";
+import { canRefillOrBuyDemoSpins } from "@/lib/spin/freePlay";
 import type { HuntLoadout, HuntSession, PublicBubble } from "@/lib/spin/types";
 import { BubbleArena } from "./BubbleArena";
 import { SpinLoadoutPanel } from "./SpinLoadoutPanel";
 import { SLICE_DEG, TOTAL, SpinWheelPanel } from "./SpinWheelPanel";
+import { useAccount } from "wagmi";
 
 type CatalogItem = {
   id: string;
@@ -42,6 +44,7 @@ function formatCash(amountWei: string, asset: string) {
 export function SpinHuntHub() {
   const queryClient = useQueryClient();
   const { isFreePlay, isLoading: authLoading, refreshSession } = useAuth();
+  const { address, isConnected: wagmiConnected } = useAccount();
   const showToast = useUIStore((s) => s.showToast);
   const {
     payEntry,
@@ -51,6 +54,11 @@ export function SpinHuntHub() {
     feeLabel,
     isConnected,
   } = useSpinEconomyPayment();
+
+  // Free mode only while disconnected; connecting switches to pay mode.
+  const inFreeMode = Boolean(isFreePlay && !wagmiConnected && !isConnected);
+  const canAdminRefill = Boolean(address && canRefillOrBuyDemoSpins(address));
+  const showRefill = canAdminRefill;
 
   const [session, setSession] = useState<HuntSession | null>(null);
   const [hunting, setHunting] = useState(false);
@@ -108,7 +116,7 @@ export function SpinHuntHub() {
   });
 
   const available = Number(data?.balance?.available ?? 0);
-  const canMockWithdraw = Boolean(isFreePlay && walletSummary?.canWithdraw);
+  const canMockWithdraw = Boolean(inFreeMode && walletSummary?.canWithdraw);
   const catalogItems = (loadoutSummary?.items ?? []) as CatalogItem[];
   const speedShielderItem =
     catalogItems.find((item) => item.type === "SPEED_SHIELDER") ??
@@ -298,13 +306,13 @@ export function SpinHuntHub() {
       const item = type === "SPEED_SHIELDER" ? speedShielderItem : quickBuzzerItem;
       if (!item) throw new Error(type === "SPEED_SHIELDER" ? "Speed Shielder not found" : "Quick Buzzer not found");
 
-      if (isFreePlay || item.priceWei === "0") {
+      if (inFreeMode || item.priceWei === "0") {
         const res = await authFetch(
-          isFreePlay && item.priceWei !== "0" ? "/api/spin/freeplay" : "/api/spin/collections",
+          inFreeMode && item.priceWei !== "0" ? "/api/spin/freeplay" : "/api/spin/collections",
           {
             method: "POST",
             body: JSON.stringify(
-              isFreePlay && item.priceWei !== "0"
+              inFreeMode && item.priceWei !== "0"
                 ? { action: "purchaseItem", itemId: item.id }
                 : { action: "purchase", itemId: item.id, free: true }
             ),
@@ -448,8 +456,12 @@ export function SpinHuntHub() {
       setPendingStartMode("ticket");
       return;
     }
-    if (isFreePlay) {
-      setError("No spins left — tap Try again to refill");
+    if (inFreeMode) {
+      setError(
+        showRefill
+          ? "No spins left — tap Refill"
+          : "No free spins left (max 5). Connect a wallet to play in pay mode."
+      );
       return;
     }
     setPendingStartMode("paid");
@@ -465,7 +477,7 @@ export function SpinHuntHub() {
             showToast("Speed Shielder unavailable — refresh and try again");
             return;
           }
-          if (!isFreePlay && !isConnected && speedShielderItem.priceWei !== "0") {
+          if (!inFreeMode && !isConnected && speedShielderItem.priceWei !== "0") {
             showToast("Connect wallet to buy Speed Shielder");
             return;
           }
@@ -486,7 +498,7 @@ export function SpinHuntHub() {
             showToast("Quick Buzzer unavailable — refresh and try again");
             return;
           }
-          if (!isFreePlay && !isConnected && quickBuzzerItem.priceWei !== "0") {
+          if (!inFreeMode && !isConnected && quickBuzzerItem.priceWei !== "0") {
             showToast("Connect wallet to buy Quick Buzzer");
             return;
           }
@@ -597,7 +609,7 @@ export function SpinHuntHub() {
             <p className="mb-5 text-[11px] font-bold text-white/70">
               Round total banked from burst bubbles
             </p>
-            {isFreePlay && BigInt(cashEarnedWei || "0") > 0n && (
+            {inFreeMode && BigInt(cashEarnedWei || "0") > 0n && (
               <button
                 type="button"
                 onClick={() => {
@@ -629,10 +641,17 @@ export function SpinHuntHub() {
         </p>
       </div>
 
-      {isFreePlay && (
+      {inFreeMode && (
         <div className="mb-3 rounded-xl border-2 border-[#FBBF24]/50 bg-[#FBBF24]/10 px-3 py-2 text-center">
           <p className="text-[10px] font-black uppercase tracking-widest text-[#FBBF24]">
-            Free Play · Mock shop & withdraw · No funds at risk
+            Free Play · Max 5 spins · No funds at risk
+          </p>
+        </div>
+      )}
+      {!inFreeMode && isConnected && (
+        <div className="mb-3 rounded-xl border-2 border-primary/40 bg-primary/10 px-3 py-2 text-center">
+          <p className="text-[10px] font-black uppercase tracking-widest text-primary">
+            Pay mode · Welcome spins (max 3) then entry fee
           </p>
         </div>
       )}
@@ -648,7 +667,7 @@ export function SpinHuntHub() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {isFreePlay && (
+          {showRefill && (
             <button
               type="button"
               onClick={() => refillSpins.mutate()}
@@ -660,12 +679,12 @@ export function SpinHuntHub() {
           )}
           <div className="text-right">
             <p className="text-[9px] font-black uppercase text-white/50">
-              {isFreePlay ? "Demo claimable" : "Hunt cash"}
+              {inFreeMode ? "Demo claimable" : "Hunt cash"}
             </p>
             <p className="flex items-center justify-end gap-1 text-sm font-black text-primary">
               <Zap className="h-3.5 w-3.5" strokeWidth={2.5} />
               {formatCash(
-                isFreePlay ? String(walletSummary?.totalWei ?? cashEarnedWei) : cashEarnedWei,
+                inFreeMode ? String(walletSummary?.totalWei ?? cashEarnedWei) : cashEarnedWei,
                 cashAsset
               )}
             </p>
@@ -778,13 +797,17 @@ export function SpinHuntHub() {
         <>
           <p className="mt-3 text-center text-[10px] font-bold text-muted-foreground">
             {available > 0
-              ? "Tap center Spin to start a free hunt"
-              : isFreePlay
-                ? "No spins left — tap Refill or Try again below"
+              ? inFreeMode
+                ? "Tap center Spin to start a free hunt"
+                : "Tap Spin — uses a welcome spin or paid entry"
+              : inFreeMode
+                ? showRefill
+                  ? "No spins left — tap Refill"
+                  : "Free spins used up (max 5). Connect wallet for pay mode."
                 : `No free spins — entry ${feeLabel} via SpinEconomy`}
           </p>
 
-          {isFreePlay && (
+          {showRefill && (
             <button
               type="button"
               onClick={() => refillSpins.mutate()}
@@ -792,11 +815,7 @@ export function SpinHuntHub() {
               className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border-4 border-black bg-[#FBBF24] py-3.5 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)]"
             >
               <RotateCcw className="h-4 w-4" strokeWidth={2.5} />
-              {refillSpins.isPending
-                ? "Refilling…"
-                : available <= 0
-                  ? "Try again · Refill spins"
-                  : "Top up spins (demo)"}
+              {refillSpins.isPending ? "Refilling…" : "Refill spins (tester)"}
             </button>
           )}
           <SpinLoadoutPanel />

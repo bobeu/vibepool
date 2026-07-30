@@ -7,8 +7,6 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function requireDatabaseUrl(): string {
-  // Prefer pooled URL on Prisma Postgres; fall back to DATABASE_URL.
-  // Dynamic lookup so Next.js does not inline a build-time .env value.
   const connectionString =
     process.env["DATABASE_URL_POOLED"]?.trim() ||
     process.env["DATABASE_URL"]?.trim();

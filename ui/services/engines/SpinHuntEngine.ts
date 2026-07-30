@@ -572,6 +572,18 @@ export class SpinHuntEngine implements IEngine {
       wheel: null,
     });
 
+    // Give a small XP bump so spin players surface on the live leaderboard.
+    await prisma().userProfile.update({
+      where: { id: input.userId },
+      data: { xp: { increment: 10 }, totalActivity: { increment: 1 } },
+    });
+    try {
+      const { LeaderboardService } = await import("@/services/LeaderboardService");
+      await new LeaderboardService().upsertDailyPlayer(input.userId);
+    } catch {
+      // Leaderboard upsert is best-effort; hunt finish must still succeed.
+    }
+
     return {
       success: true,
       sessionId: session.id,

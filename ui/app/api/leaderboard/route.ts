@@ -12,9 +12,13 @@ function normalizeEntries(entries: Record<string, unknown>[]) {
   return entries.map((entry, index) => ({
     ...entry,
     userId: entry.userId ?? entry.wallet,
+    wallet: entry.wallet,
     user: { username: entry.username ?? "Player" },
     xp: entry.xp ?? 0,
+    points: entry.points ?? 0,
+    spins: entry.spins ?? 0,
     rank: entry.rank ?? index + 1,
+    isSpinner: Boolean(entry.isSpinner || (Number(entry.spins ?? 0) > 0)),
   }));
 }
 
