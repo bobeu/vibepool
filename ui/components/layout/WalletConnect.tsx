@@ -6,7 +6,6 @@ import { useWallet } from '@/hooks/useWallet';
 import { useBalance } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { isWalletConnectConfigured } from '@/lib/wagmi';
-import { useUIStore } from '@/store/uiStore';
 
 function detectMiniPay(): boolean {
   if (typeof window === 'undefined') return false;
@@ -19,7 +18,6 @@ export const WalletConnect: React.FC = () => {
     isConnected,
     isConnecting,
   } = useWallet();
-  const showToast = useUIStore((s) => s.showToast);
 
   // Fetch native CELO balance
   const { data: balanceData, isLoading: balanceLoading } = useBalance({
