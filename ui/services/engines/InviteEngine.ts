@@ -33,7 +33,7 @@ export class InviteEngine implements IInviteEngine {
 
   private async resolveId(wallet: string): Promise<string | null> {
     const user = await prisma().userProfile.findUnique({
-      where: { wallet },
+      where: { wallet: wallet.toLowerCase() },
       select: { id: true },
     });
     return user?.id ?? null;

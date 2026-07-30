@@ -4,13 +4,16 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { AppShell } from "@/components/layout/AppShell";
 import { authFetch } from "@/lib/auth/client";
+import { useEnsureSession } from "@/hooks/useEnsureSession";
 import { BrutalCard } from "@/components/ui/BrutalCard";
 
 export default function RewardsPage() {
   const queryClient = useQueryClient();
+  const { ready } = useEnsureSession();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["rewards"],
+    enabled: ready,
     queryFn: async () => {
       const res = await authFetch("/api/rewards");
       if (!res.ok) throw new Error("Failed to fetch rewards");

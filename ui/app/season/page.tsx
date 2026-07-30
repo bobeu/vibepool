@@ -6,6 +6,8 @@ import { motion } from "framer-motion";
 import { AppShell } from "@/components/layout/AppShell";
 import { GlassContainer } from "@/components/hero/GlassContainer";
 import { CountdownTimer } from "@/components/ui/CountdownTimer";
+import { authFetch } from "@/lib/auth/client";
+import { useEnsureSession } from "@/hooks/useEnsureSession";
 import { container, item } from "@/lib/motion/variants";
 
 type SeasonData = {
@@ -28,10 +30,12 @@ type SeasonData = {
 };
 
 export default function SeasonPage() {
+  const { ready } = useEnsureSession();
   const { data, isLoading, error } = useQuery<SeasonData>({
     queryKey: ["season"],
+    enabled: ready,
     queryFn: async () => {
-      const res = await fetch("/api/seasons");
+      const res = await authFetch("/api/seasons");
       if (!res.ok) throw new Error("Failed to load season");
       return res.json();
     },

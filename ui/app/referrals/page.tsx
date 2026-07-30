@@ -8,17 +8,21 @@ import { GlassContainer } from "@/components/hero/GlassContainer";
 import { SectionDivider } from "@/components/hero/SectionDivider";
 import { Button } from "@/components/ui/button";
 import { BrutalCard } from "@/components/ui/BrutalCard";
+import { authFetch } from "@/lib/auth/client";
+import { useEnsureSession } from "@/hooks/useEnsureSession";
 import { container, item } from "@/lib/motion/variants";
 
 const MILESTONES = ["REGISTERED", "FIRST_PREDICTION", "FIRST_TOURNAMENT", "THIRD_ACTIVE_DAY", "FIRST_REWARD"] as const;
 
 export default function ReferralsPage() {
   const queryClient = useQueryClient();
+  const { ready } = useEnsureSession();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["referrals"],
+    enabled: ready,
     queryFn: async () => {
-      const res = await fetch("/api/referrals");
+      const res = await authFetch("/api/referrals");
       if (!res.ok) throw new Error("Failed to load referrals");
       return res.json();
     },
@@ -27,8 +31,9 @@ export default function ReferralsPage() {
 
   const { data: invites } = useQuery({
     queryKey: ["invites"],
+    enabled: ready,
     queryFn: async () => {
-      const res = await fetch("/api/invites");
+      const res = await authFetch("/api/invites");
       if (!res.ok) throw new Error("Failed to load invites");
       return res.json();
     },
@@ -37,9 +42,8 @@ export default function ReferralsPage() {
 
   const generateMutation = useMutation({
     mutationFn: async (type: string) => {
-      const res = await fetch("/api/invites", {
+      const res = await authFetch("/api/invites", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type }),
       });
       if (!res.ok) throw new Error("Failed to generate invite");
@@ -50,9 +54,8 @@ export default function ReferralsPage() {
 
   const claimMutation = useMutation({
     mutationFn: async (rewardId: string) => {
-      const res = await fetch("/api/referrals", {
+      const res = await authFetch("/api/referrals", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ rewardId }),
       });
       if (!res.ok) throw new Error("Failed to claim");
@@ -155,11 +158,14 @@ export default function ReferralsPage() {
           <SectionDivider label="Invite Friends" />
           <GlassContainer className="p-4 space-y-3">
             <div className="flex flex-wrap gap-2">
-              <Button className="neobrutal-card" onClick={() => generateMutation.mutate("INVITE_CODE")}>Generate Code</Button>
-              <Button variant="outline" className="neobrutal-card" onClick={() => generateMutation.mutate("DEEP_LINK")}>Deep Link</Button>
-              <Button variant="outline" className="neobrutal-card" onClick={() => generateMutation.mutate("QR")}>QR Code</Button>
-              <Button variant="outline" className="neobrutal-card" onClick={() => generateMutation.mutate("MINIPAY")}>MiniPay</Button>
+              <Button className="neobrutal-card" onClick={() => generateMutation.mutate("INVITE_CODE")} disabled={generateMutation.isPending || !ready}>Generate Code</Button>
+              <Button variant="outline" className="neobrutal-card" onClick={() => generateMutation.mutate("DEEP_LINK")} disabled={generateMutation.isPending || !ready}>Deep Link</Button>
+              <Button variant="outline" className="neobrutal-card" onClick={() => generateMutation.mutate("QR")} disabled={generateMutation.isPending || !ready}>QR Code</Button>
+              <Button variant="outline" className="neobrutal-card" onClick={() => generateMutation.mutate("MINIPAY")} disabled={generateMutation.isPending || !ready}>MiniPay</Button>
             </div>
+            {generateMutation.isError && (
+              <p className="text-xs text-destructive">Could not generate invite. Try again after session loads.</p>
+            )}
             {inviteList.length > 0 && (
               <div className="space-y-2">
                 {inviteList.map((i) => (

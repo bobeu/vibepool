@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { AppShell } from "@/components/layout/AppShell";
 import { GlassContainer } from "@/components/hero/GlassContainer";
 import { SectionDivider } from "@/components/hero/SectionDivider";
+import { authFetch } from "@/lib/auth/client";
+import { useEnsureSession } from "@/hooks/useEnsureSession";
 import { container, item } from "@/lib/motion/variants";
 
 type AchievementItem = {
@@ -44,11 +46,13 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 export default function AchievementsPage() {
   const queryClient = useQueryClient();
+  const { ready } = useEnsureSession();
 
   const { data, isLoading, error } = useQuery<AchievementsResponse>({
     queryKey: ["achievements"],
+    enabled: ready,
     queryFn: async () => {
-      const res = await fetch("/api/achievements");
+      const res = await authFetch("/api/achievements");
       if (!res.ok) throw new Error("Failed to fetch achievements");
       return res.json() as Promise<AchievementsResponse>;
     },
@@ -57,7 +61,7 @@ export default function AchievementsPage() {
 
   const evaluateMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/api/achievements", { method: "POST" });
+      const res = await authFetch("/api/achievements", { method: "POST" });
       if (!res.ok) throw new Error("Failed to evaluate achievements");
       return res.json();
     },

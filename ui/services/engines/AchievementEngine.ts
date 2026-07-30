@@ -77,24 +77,35 @@ export class AchievementEngine implements IAchievementEngine {
   }
 
   async getAchievements(userId: string): Promise<Record<string, unknown>[]> {
-    const userAchievements = await prisma().userAchievement.findMany({
-      where: { userId },
-      include: { achievement: true },
-      orderBy: { createdAt: "desc" },
-    });
+    const [catalog, userAchievements] = await Promise.all([
+      prisma().achievement.findMany({
+        where: { active: true },
+        orderBy: [{ category: "asc" }, { createdAt: "asc" }],
+      }),
+      prisma().userAchievement.findMany({
+        where: { userId },
+      }),
+    ]);
 
-    return userAchievements.map((ua) => ({
-      id: ua.id,
-      achievementId: ua.achievementId,
-      title: ua.achievement.title,
-      description: ua.achievement.description,
-      category: ua.achievement.category,
-      rarity: ua.achievement.rarity,
-      progress: ua.progress,
-      target: ua.target,
-      unlocked: ua.unlocked,
-      unlockedAt: ua.unlockedAt,
-    }));
+    const progressByAchievement = new Map(
+      userAchievements.map((ua) => [ua.achievementId, ua]),
+    );
+
+    return catalog.map((achievement) => {
+      const ua = progressByAchievement.get(achievement.id);
+      return {
+        id: ua?.id ?? achievement.id,
+        achievementId: achievement.id,
+        title: achievement.title,
+        description: achievement.description,
+        category: achievement.category,
+        rarity: achievement.rarity,
+        progress: ua?.progress ?? 0,
+        target: ua?.target ?? 1,
+        unlocked: ua?.unlocked ?? false,
+        unlockedAt: ua?.unlockedAt ?? null,
+      };
+    });
   }
 
   async getAchievementProgress(userId: string, achievementId: string): Promise<Record<string, unknown>> {
