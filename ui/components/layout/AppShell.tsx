@@ -172,24 +172,25 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
         <NavigationProgress />
       </Suspense>
 
-      {/* Page content — only this region scrolls; dock stays pinned in the frame */}
-      <main className="flex-1 overflow-y-auto no-scrollbar min-h-0 px-4 py-4 pb-28 relative z-10">
+      {/* Page content scrolls; dock stays in the shell bottom (flex, not viewport-fixed) */}
+      <main className="relative z-10 min-h-0 flex-1 overflow-y-auto overscroll-contain no-scrollbar px-4 py-4">
         {children}
       </main>
 
-      {/* Bottom Dock — absolute to the phone/mobile shell, not the browser viewport */}
-      <BottomDock pathname={pathname} activeNav={activeNav} />
-
-      {/* Guide toggle — inside the same frame as the dock */}
-      <button
-        type="button"
-        onClick={handleGuideToggle}
-        aria-label={guideLabel}
-        title={guideLabel}
-        className="absolute bottom-24 right-4 z-[100] flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-black bg-[#FBBF24] text-black shadow-[3px_3px_0_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all"
-      >
-        <BookOpen className="w-5 h-5" strokeWidth={2.5} />
-      </button>
+      {/* Bottom Dock — in-flow at the bottom of the mobile/phone shell */}
+      <div className="relative z-40 shrink-0">
+        <BottomDock pathname={pathname} activeNav={activeNav} />
+        {/* Guide toggle — sits above the dock, still inside the shell */}
+        <button
+          type="button"
+          onClick={handleGuideToggle}
+          aria-label={guideLabel}
+          title={guideLabel}
+          className="absolute bottom-[calc(100%+0.5rem)] right-4 z-[100] flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-black bg-[#FBBF24] text-black shadow-[3px_3px_0_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all"
+        >
+          <BookOpen className="w-5 h-5" strokeWidth={2.5} />
+        </button>
+      </div>
     </>
   );
 
@@ -204,15 +205,15 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
         </div>
       )}
 
-      {/* ── MOBILE: full screen ── */}
-      <div className="md:hidden flex flex-col min-h-screen bg-background text-foreground relative overflow-hidden">
+      {/* ── MOBILE: full screen shell (dvh so dock stays on-screen) ── */}
+      <div className="md:hidden relative flex h-dvh max-h-dvh flex-col overflow-hidden bg-background text-foreground">
         {/* Background texture */}
         <div
           className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-30 z-0"
           style={{ backgroundImage: "url('/backgrounddark.png')" }}
         />
         <div className="absolute inset-0 bg-[linear-gradient(to_right,hsl(var(--border)/0.08)_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--border)/0.08)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none z-0" />
-        <div className="relative z-10 flex flex-col flex-1 min-h-0">
+        <div className="relative z-10 flex min-h-0 flex-1 flex-col">
           {appContent}
         </div>
       </div>
@@ -289,7 +290,7 @@ function BottomDock({
   activeNav: NavKey;
 }) {
   return (
-    <nav className="absolute bottom-4 left-3 right-3 z-40">
+    <nav className="shrink-0 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-1">
       <div className="bg-zinc-950/95 border-2 border-white/10 rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.7)] backdrop-blur-sm px-2 py-1">
         <ul className="flex justify-around">
           {MOBILE_NAV_ITEMS.map((item) => {
