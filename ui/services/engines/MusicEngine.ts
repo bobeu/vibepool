@@ -70,18 +70,18 @@ export class MusicEngine implements IEngine {
         where: { title: track.title },
       });
       if (existing) {
-        // Keep catalog URLs pointed at self-hosted loops (repairs older broken seeds).
-        if (existing.url !== track.url || existing.artist !== track.artist) {
-          await prisma().spinMusicTrack.update({
-            where: { id: existing.id },
-            data: {
-              url: track.url,
-              artist: track.artist,
-              durationSec: track.durationSec,
-              active: true,
-            },
-          });
-        }
+        await prisma().spinMusicTrack.update({
+          where: { id: existing.id },
+          data: {
+            url: track.url,
+            artist: track.artist,
+            durationSec: track.durationSec,
+            tier: track.tier,
+            priceWei: track.priceWei,
+            priceAsset: track.priceAsset,
+            active: true,
+          },
+        });
         continue;
       }
       await prisma().spinMusicTrack.create({ data: track });

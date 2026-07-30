@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowDownToLine, RotateCcw, Shield, Ticket, X, Zap } from "lucide-react";
 import { formatUnits } from "viem";
-import { authFetch } from "@/lib/auth/client";
+import { authFetch, getAccessToken, startFreePlaySession } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
 import { useSpinEconomyPayment } from "@/hooks/useSpinEconomyPayment";
 import { useUIStore } from "@/store/uiStore";
@@ -41,7 +41,7 @@ function formatCash(amountWei: string, asset: string) {
 
 export function SpinHuntHub() {
   const queryClient = useQueryClient();
-  const { isFreePlay } = useAuth();
+  const { isFreePlay, isLoading: authLoading, refreshSession } = useAuth();
   const showToast = useUIStore((s) => s.showToast);
   const {
     payEntry,
@@ -66,6 +66,14 @@ export function SpinHuntHub() {
   const prevRotation = useRef(0);
   const huntTimer = useRef<number | null>(null);
 
+  useEffect(() => {
+    if (authLoading || isConnected) return;
+    if (getAccessToken()) return;
+    void startFreePlaySession().then((ok) => {
+      if (ok) void refreshSession();
+    });
+  }, [authLoading, isConnected, refreshSession]);
+
   const { data, isLoading } = useQuery({
     queryKey: ["spin-hunt-config"],
     queryFn: async () => {
@@ -74,6 +82,7 @@ export function SpinHuntHub() {
       return res.json();
     },
     staleTime: 15_000,
+    enabled: !authLoading && Boolean(getAccessToken()),
   });
 
   const { data: loadoutSummary } = useQuery({
@@ -84,6 +93,7 @@ export function SpinHuntHub() {
       return res.json();
     },
     staleTime: 10_000,
+    enabled: !authLoading && Boolean(getAccessToken()),
   });
 
   const { data: walletSummary } = useQuery({
@@ -94,6 +104,7 @@ export function SpinHuntHub() {
       return res.json();
     },
     staleTime: 5_000,
+    enabled: !authLoading && Boolean(getAccessToken()),
   });
 
   const available = Number(data?.balance?.available ?? 0);
@@ -637,6 +648,16 @@ export function SpinHuntHub() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          {isFreePlay && (
+            <button
+              type="button"
+              onClick={() => refillSpins.mutate()}
+              disabled={refillSpins.isPending}
+              className="rounded-xl border-2 border-black bg-[#FBBF24] px-2.5 py-1.5 text-[9px] font-black uppercase text-black shadow-[2px_2px_0_rgba(0,0,0,1)]"
+            >
+              {refillSpins.isPending ? "…" : "Refill"}
+            </button>
+          )}
           <div className="text-right">
             <p className="text-[9px] font-black uppercase text-white/50">
               {isFreePlay ? "Demo claimable" : "Hunt cash"}
@@ -759,11 +780,11 @@ export function SpinHuntHub() {
             {available > 0
               ? "Tap center Spin to start a free hunt"
               : isFreePlay
-                ? "No spins left — refill to keep testing"
+                ? "No spins left — tap Refill or Try again below"
                 : `No free spins — entry ${feeLabel} via SpinEconomy`}
           </p>
 
-          {isFreePlay && available <= 0 && (
+          {isFreePlay && (
             <button
               type="button"
               onClick={() => refillSpins.mutate()}
@@ -771,10 +792,13 @@ export function SpinHuntHub() {
               className="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border-4 border-black bg-[#FBBF24] py-3.5 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_rgba(0,0,0,1)]"
             >
               <RotateCcw className="h-4 w-4" strokeWidth={2.5} />
-              {refillSpins.isPending ? "Refilling…" : "Try again"}
+              {refillSpins.isPending
+                ? "Refilling…"
+                : available <= 0
+                  ? "Try again · Refill spins"
+                  : "Top up spins (demo)"}
             </button>
           )}
-
           <SpinLoadoutPanel />
         </>
       )}

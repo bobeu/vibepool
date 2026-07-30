@@ -1,6 +1,10 @@
 import { http } from "wagmi";
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import { celo } from "wagmi/chains";
+import {
+  isWalletConnectConfigured,
+  resolveWalletConnectProjectId,
+} from "@/lib/walletConnectProject";
 
 export const isMiniPay = (): boolean => {
   if (typeof window === "undefined") return false;
@@ -10,9 +14,7 @@ export const isMiniPay = (): boolean => {
 /** MiniPay + Nexora run on Celo mainnet only. */
 export const wagmiConfig = getDefaultConfig({
   appName: "Nexora",
-  projectId:
-    process.env.NEXT_PUBLIC_WALLETCONNECT_ID ??
-    "444e8c9b1c9d0a1e5f2b2c3d4e5f6a7",
+  projectId: resolveWalletConnectProjectId(),
   appDescription: "Skill-based competitive Web3 gaming on Celo",
   appUrl: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3001",
   appIcon: "/logo.png",
@@ -25,6 +27,8 @@ export const wagmiConfig = getDefaultConfig({
     [celo.id]: http(process.env.NEXT_PUBLIC_ALCHEMY_CELO_MAINNET_API || "https://forno.celo.org"),
   },
 });
+
+export { isWalletConnectConfigured };
 
 declare module "wagmi" {
   interface Register {

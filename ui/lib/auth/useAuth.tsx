@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { authFetch, clearTokens, getAccessToken, getRefreshToken } from "@/lib/auth/client";
+import { authFetch, clearTokens, getAccessToken, getRefreshToken, isFreePlaySession } from "@/lib/auth/client";
 
 interface Session {
   wallet: string;
@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     window.dispatchEvent(new Event("nexora:session"));
   }, []);
 
-  const isFreePlay = Boolean(session?.freePlay || session?.isGuest);
+  const isFreePlay = Boolean(session?.freePlay || session?.isGuest || isFreePlaySession());
 
   return (
     <AuthContext.Provider value={{ session, isLoading, isFreePlay, refreshSession, logout }}>

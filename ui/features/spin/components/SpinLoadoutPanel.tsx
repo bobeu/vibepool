@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatUnits } from "viem";
 import { Images, Music2, Pause, Play, Shield, Ticket, Zap } from "lucide-react";
-import { authFetch } from "@/lib/auth/client";
+import { authFetch, getAccessToken } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
 import { useSpinEconomyPayment } from "@/hooks/useSpinEconomyPayment";
 import { useUIStore } from "@/store/uiStore";
@@ -67,25 +67,32 @@ export function SpinLoadoutPanel() {
   const { isFreePlay } = useAuth();
   const showToast = useUIStore((s) => s.showToast);
   const { purchaseItem, busy, preferredAsset, isConnected } = useSpinEconomyPayment();
+  const hasToken = Boolean(getAccessToken());
 
   const musicQuery = useQuery({
     queryKey: ["spin-music"],
     queryFn: async () => {
       const res = await authFetch("/api/spin/music");
-      if (!res.ok) throw new Error("Failed to load music");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || "Failed to load music");
+      }
       return res.json();
     },
-    enabled: open,
+    enabled: open && hasToken,
   });
 
   const collectionsQuery = useQuery({
     queryKey: ["spin-collections"],
     queryFn: async () => {
       const res = await authFetch("/api/spin/collections");
-      if (!res.ok) throw new Error("Failed to load collections");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || "Failed to load collections");
+      }
       return res.json();
     },
-    enabled: open,
+    enabled: open && hasToken,
   });
 
   useEffect(() => {
@@ -261,6 +268,23 @@ export function SpinLoadoutPanel() {
     onError: (e: Error) => setError(e.message),
   });
 
+  const refillSpins = useMutation({
+    mutationFn: async () => {
+      const res = await authFetch("/api/spin/freeplay", {
+        method: "POST",
+        body: JSON.stringify({ action: "refillSpins" }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || "Could not refill spins");
+      return body;
+    },
+    onSuccess: (body) => {
+      invalidate();
+      showToast(body.message || "Spins refilled");
+    },
+    onError: (e: Error) => setError(e.message),
+  });
+
   const tracks = (musicQuery.data?.tracks ?? []) as MusicTrack[];
   const items = (collectionsQuery.data?.items ?? []) as CollectionItem[];
   const ownedTracks = tracks.filter((t) => t.owned);
@@ -314,9 +338,34 @@ export function SpinLoadoutPanel() {
           </div>
 
           {error && <p className="mb-2 text-[10px] font-bold text-red-400">{error}</p>}
+          {!hasToken && (
+            <p className="mb-2 text-center text-[10px] font-bold text-amber-300">
+              Starting free-play session…
+            </p>
+          )}
+          {(musicQuery.isLoading || collectionsQuery.isLoading) && (
+            <p className="mb-2 text-center text-[10px] font-bold text-muted-foreground">
+              Loading shop…
+            </p>
+          )}
+          {(musicQuery.isError || collectionsQuery.isError) && (
+            <p className="mb-2 text-center text-[10px] font-bold text-red-400">
+              {(musicQuery.error as Error | undefined)?.message ||
+                (collectionsQuery.error as Error | undefined)?.message ||
+                "Shop failed to load"}
+            </p>
+          )}
 
           {tab === "spins" && isFreePlay && (
             <div className="space-y-1.5">
+              <button
+                type="button"
+                disabled={refillSpins.isPending}
+                onClick={() => refillSpins.mutate()}
+                className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-black bg-[#FBBF24] py-2 text-[10px] font-black uppercase text-black shadow-[2px_2px_0_rgba(0,0,0,1)]"
+              >
+                {refillSpins.isPending ? "Refilling…" : "Refill spins to 5 (demo)"}
+              </button>
               {FREEPLAY_SPIN_PACKS.map((pack) => (
                 <div
                   key={pack.id}
@@ -344,6 +393,11 @@ export function SpinLoadoutPanel() {
 
           {tab === "music" && (
             <div className="space-y-1.5">
+              {!musicQuery.isLoading && tracks.length === 0 && (
+                <p className="rounded-lg border border-dashed border-white/10 px-2 py-3 text-center text-[10px] font-bold text-muted-foreground">
+                  No music tracks loaded yet
+                </p>
+              )}
               {tracks.map((track) => (
                 <div
                   key={track.id}
@@ -400,6 +454,11 @@ export function SpinLoadoutPanel() {
 
           {tab === "collections" && (
             <div className="space-y-1.5">
+              {!collectionsQuery.isLoading && items.length === 0 && (
+                <p className="rounded-lg border border-dashed border-white/10 px-2 py-3 text-center text-[10px] font-bold text-muted-foreground">
+                  No collection items loaded yet
+                </p>
+              )}
               {items.map((item) => (
                 <div
                   key={item.id}
