@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/auth/session";
+import { isGuestWallet } from "@/lib/auth/guest";
 import { logger } from "@/lib/logging";
 import { eventBus } from "./EventBus";
 import { SecureRandomProvider } from "./SecureRandomProvider";
@@ -7,6 +8,7 @@ import type { ISpinEngine, IRandomProvider } from "./interfaces";
 export class SpinEngine implements ISpinEngine {
   name = "SpinEngine";
   private randomProvider = new SecureRandomProvider();
+  private static LEGACY_NON_FREE_AUTO_REASONS = new Set(["WELCOME_SPINS", "DAILY_FREE_SPIN"]);
 
   async execute(input: Record<string, unknown>): Promise<Record<string, unknown>> {
     return input;
@@ -41,10 +43,20 @@ export class SpinEngine implements ISpinEngine {
   async consumeSpin(userId: string): Promise<boolean> {
     const profile = await prisma().userProfile.findUnique({
       where: { id: userId },
+      select: { id: true, wallet: true, spins: true },
     });
 
     if (!profile || profile.spins <= 0) {
       return false;
+    }
+
+    // Policy guard: for non-free wallets, ignore legacy auto-grants that were
+    // previously issued by old login/daily behavior.
+    if (typeof profile.wallet === "string" && !isGuestWallet(profile.wallet)) {
+      const allowed = await this.getNonFreeEffectiveSpins(userId);
+      if (allowed <= 0) {
+        return false;
+      }
     }
 
     await prisma().userProfile.update({
@@ -100,6 +112,7 @@ export class SpinEngine implements ISpinEngine {
   async getSpinBalance(userId: string): Promise<{ available: number; daily: number; lifetime: number }> {
     const profile = await prisma().userProfile.findUnique({
       where: { id: userId },
+      select: { id: true, wallet: true, spins: true },
     });
 
     if (!profile) {
@@ -124,10 +137,35 @@ export class SpinEngine implements ISpinEngine {
       },
     });
 
+    const available =
+      typeof profile.wallet === "string" && !isGuestWallet(profile.wallet)
+        ? await this.getNonFreeEffectiveSpins(userId)
+        : profile.spins;
+
     return {
-      available: profile.spins,
+      available,
       daily: dailySpins,
       lifetime: lifetimeSpins,
     };
+  }
+
+  private async getNonFreeEffectiveSpins(userId: string): Promise<number> {
+    const rows = await prisma().spinLedger.findMany({
+      where: { userId },
+      select: { amount: true, reason: true },
+    });
+
+    let effective = 0;
+    for (const row of rows) {
+      const amount = Number(row.amount ?? 0);
+      if (
+        amount > 0 &&
+        SpinEngine.LEGACY_NON_FREE_AUTO_REASONS.has(String(row.reason ?? ""))
+      ) {
+        continue;
+      }
+      effective += amount;
+    }
+    return Math.max(0, effective);
   }
 }
