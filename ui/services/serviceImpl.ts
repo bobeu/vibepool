@@ -32,6 +32,7 @@ import { eventBus } from "@/services/engines/EventBus";
 import { getSchedulerEngine } from "@/services/schedulerRegistry";
 import { isRuntimeEnabled } from "@/lib/runtime/productionConfig";
 import { resolveUserId } from "@/lib/auth/resolveUser";
+import { isGuestWallet } from "@/lib/auth/guest";
 import { getBlockchainSyncService } from "@/lib/blockchain/client";
 import { trackBetaEvent, trackRetentionOnLogin } from "@/lib/telemetry/betaEvents";
 import type {
@@ -551,8 +552,10 @@ export class SpinService implements ISpinService {
 
   async getAvailableSpins(wallet: string): Promise<Record<string, unknown>> {
     const userId = await resolveUserId(wallet);
-    await spinEngine.ensureWelcomeSpins(userId);
-    await spinEngine.ensureDailyFreeSpin(userId);
+    // Free-play guests can use refill flow; non-free wallets get one-time welcome spins only.
+    if (!isGuestWallet(wallet)) {
+      await spinEngine.ensureWelcomeSpins(userId);
+    }
     return spinEngine.getSpinBalance(userId);
   }
 
