@@ -7,19 +7,15 @@ import { cn } from "@/utils/format";
 type WheelSegment = {
   id: number;
   icon: LucideIcon;
-  gradId: string;
-  colorStart: string;
-  colorEnd: string;
-  textColor: string;
 };
 
 const SEGMENTS: readonly WheelSegment[] = [
-  { id: 0, icon: Coins, gradId: "gradGreen", colorStart: "#34D399", colorEnd: "#059669", textColor: "#ffffff" },
-  { id: 1, icon: Zap, gradId: "gradCyan", colorStart: "#22D3EE", colorEnd: "#0891B2", textColor: "#ffffff" },
-  { id: 2, icon: Gem, gradId: "gradIndigo", colorStart: "#818CF8", colorEnd: "#4F46E5", textColor: "#ffffff" },
-  { id: 3, icon: Flame, gradId: "gradRed", colorStart: "#F87171", colorEnd: "#DC2626", textColor: "#ffffff" },
-  { id: 4, icon: Target, gradId: "gradTeal", colorStart: "#2DD4BF", colorEnd: "#0D9488", textColor: "#ffffff" },
-  { id: 5, icon: Trophy, gradId: "gradGold", colorStart: "#FBBF24", colorEnd: "#D97706", textColor: "#ffffff" },
+  { id: 0, icon: Coins },
+  { id: 1, icon: Zap },
+  { id: 2, icon: Gem },
+  { id: 3, icon: Flame },
+  { id: 4, icon: Target },
+  { id: 5, icon: Trophy },
 ] as const;
 
 const TOTAL = SEGMENTS.length;
@@ -61,18 +57,6 @@ export function SpinWheelPanel({
 
   return (
     <div className="relative mx-auto h-[300px] w-[300px]">
-      {/* Decorative outer glow ring */}
-      <div
-        className={cn(
-          "absolute inset-0 rounded-full",
-          hunting
-            ? "shadow-[0_0_48px_18px_rgba(98,226,248,0.22)]"
-            : "shadow-[0_0_20px_8px_rgba(98,226,248,0.08)]",
-          "transition-shadow duration-700"
-        )}
-        aria-hidden
-      />
-
       {/* Spinning wheel SVG */}
       <svg
         width="300"
@@ -86,30 +70,11 @@ export function SpinWheelPanel({
             ? undefined
             : "transform 3.2s cubic-bezier(0.17, 0.67, 0.12, 0.99)",
           animationDuration: hunting ? `${spinSeconds}s` : undefined,
-          filter: "drop-shadow(0 8px 28px rgba(0,0,0,0.55))",
         }}
         aria-hidden
       >
-        <defs>
-          <radialGradient id="goldRingHunt" cx="50%" cy="30%" r="60%">
-            <stop offset="0%" stopColor="#F5D76E" />
-            <stop offset="100%" stopColor="#8B6914" />
-          </radialGradient>
-          <radialGradient id="hubHunt" cx="35%" cy="30%" r="70%">
-            <stop offset="0%" stopColor="#1a1a1a" />
-            <stop offset="100%" stopColor="#050505" />
-          </radialGradient>
-          {/* Custom gradients for segments */}
-          {SEGMENTS.map((seg) => (
-            <linearGradient id={seg.gradId} key={seg.gradId} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor={seg.colorStart} />
-              <stop offset="100%" stopColor={seg.colorEnd} />
-            </linearGradient>
-          ))}
-        </defs>
-
-        {/* Outer gold ring */}
-        <circle cx={CX} cy={CY} r={R + 8} fill="url(#goldRingHunt)" />
+        {/* Uncoloured outline; the wheel remains transparent. */}
+        <circle cx={CX} cy={CY} r={R + 8} fill="none" stroke="currentColor" strokeWidth="3" />
 
         {/* Wheel segments */}
         {SEGMENTS.map((seg, i) => {
@@ -119,15 +84,20 @@ export function SpinWheelPanel({
           const labelPos = polarToCartesian(CX, CY, R * 0.65, mid);
           const Icon = seg.icon;
           return (
-            <g key={seg.gradId}>
-              <path d={describeSlice(CX, CY, R, start, end)} fill={`url(#${seg.gradId})`} />
+            <g key={seg.id}>
+              <path
+                d={describeSlice(CX, CY, R, start, end)}
+                fill="transparent"
+                stroke="currentColor"
+                strokeWidth="1"
+              />
               {/* Segment separator lines */}
               <line
                 x1={CX}
                 y1={CY}
                 x2={polarToCartesian(CX, CY, R, start).x}
                 y2={polarToCartesian(CX, CY, R, start).y}
-                stroke="rgba(0,0,0,0.15)"
+                stroke="currentColor"
                 strokeWidth="1.5"
               />
               <foreignObject
@@ -137,18 +107,16 @@ export function SpinWheelPanel({
                 height="28"
                 transform={`rotate(${mid}, ${labelPos.x}, ${labelPos.y})`}
               >
-                <div className="flex h-full w-full items-center justify-center text-white">
-                  <Icon className="h-6 w-6 stroke-[3.5px] drop-shadow-[0_1.5px_3px_rgba(0,0,0,0.5)]" />
+                <div className="flex h-full w-full items-center justify-center">
+                  <Icon className="h-6 w-6 stroke-[3.5px]" />
                 </div>
               </foreignObject>
             </g>
           );
         })}
 
-        {/* Dark hub circle — the button sits on top of this visually */}
-        <circle cx={CX} cy={CY} r={50} fill="url(#hubHunt)" />
-        {/* Hub rim highlight */}
-        <circle cx={CX} cy={CY} r={50} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="2" />
+        {/* Transparent hub outline; coloured Start button sits above it. */}
+        <circle cx={CX} cy={CY} r={50} fill="transparent" stroke="currentColor" strokeWidth="2" />
       </svg>
 
       {/* Center clickable button — overlaid on hub, does not rotate */}

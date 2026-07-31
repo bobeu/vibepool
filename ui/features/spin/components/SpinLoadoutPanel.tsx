@@ -30,6 +30,7 @@ type MusicTrack = {
 
 type CollectionItem = {
   id: string;
+  slug?: string;
   name: string;
   type: string;
   priceWei: string;
@@ -38,6 +39,7 @@ type CollectionItem = {
   owned: boolean;
   equipped: boolean;
   quantity?: number;
+  effect?: { grantSpins?: number };
 };
 
 function priceLabel(priceWei: string, asset: string, freePlay: boolean) {
@@ -100,6 +102,17 @@ export function SpinLoadoutPanel() {
     },
     enabled: open && hasToken,
     retry: 1,
+  });
+
+  const conversionQuery = useQuery({
+    queryKey: ["spin-conversion"],
+    queryFn: async () => {
+      const res = await authFetch("/api/spin/convert");
+      if (!res.ok) throw new Error("Failed to load XP balance");
+      return res.json() as Promise<{ xp: number; cost: number; canConvert: boolean }>;
+    },
+    enabled: open && hasToken,
+    staleTime: 10_000,
   });
 
   useEffect(() => {
@@ -216,7 +229,7 @@ export function SpinLoadoutPanel() {
   const buyItem = useMutation({
     mutationFn: async (item: CollectionItem) => {
       setError(null);
-      if (inFreeMode || item.owned || item.priceWei === "0") {
+      if (inFreeMode || item.priceWei === "0") {
         const res = await authFetch(
           inFreeMode && item.priceWei !== "0" ? "/api/spin/freeplay" : "/api/spin/collections",
           {
@@ -250,7 +263,7 @@ export function SpinLoadoutPanel() {
     onSuccess: (body) => {
       invalidate();
       if (body?.grantedSpins) {
-        showToast(`+${body.grantedSpins} spins added (demo)`);
+        showToast(`+${body.grantedSpins} spins added`);
       } else if (body?.mock) {
         showToast("Demo purchase complete — no funds spent");
       }
@@ -301,6 +314,7 @@ export function SpinLoadoutPanel() {
     },
     onSuccess: (body) => {
       invalidate();
+      queryClient.invalidateQueries({ queryKey: ["spin-conversion"] });
       showToast(body.message || "1 Spin added from XP!");
     },
     onError: (e: Error) => setError(e.message),
@@ -327,6 +341,10 @@ export function SpinLoadoutPanel() {
   const items = (collectionsQuery.data?.items ?? []) as CollectionItem[];
   const ownedTracks = tracks.filter((t) => t.owned);
   const ownedItems = items.filter((i) => i.owned);
+  const spinPackItem = items.find((i) => i.slug === "spin-capacity-5");
+  const conversionCost = conversionQuery.data?.cost ?? 100;
+  const availableXp = conversionQuery.data?.xp ?? 0;
+  const canConvertXp = conversionQuery.data?.canConvert ?? false;
 
   const tabs: Tab[] = canManageSpins
     ? ["collections", "spins", "music", "gallery"]
@@ -401,19 +419,43 @@ export function SpinLoadoutPanel() {
 
           {tab === "spins" && (
             <div className="space-y-1.5">
-              {/* XP to Spin Conversion - always shown */}
+              {/* XP to Spin Conversion */}
               <div className="mb-3 rounded-lg border border-amber-400/40 bg-amber-400/10 px-3 py-2.5">
                 <p className="text-[10px] font-black uppercase tracking-widest text-amber-300 mb-1">Convert XP → Spin</p>
-                <p className="text-[9px] text-muted-foreground mb-2">100 XP = 1 Spin Ticket</p>
+                <p className="text-[9px] text-muted-foreground mb-2">
+                  {conversionCost} XP = 1 Spin Ticket · You have {availableXp} XP
+                </p>
                 <button
                   type="button"
-                  disabled={convertXp.isPending}
+                  disabled={convertXp.isPending || conversionQuery.isLoading || !canConvertXp}
                   onClick={() => convertXp.mutate()}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-amber-400 py-2 text-[10px] font-black uppercase text-black"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-amber-400 py-2 text-[10px] font-black uppercase text-black disabled:cursor-not-allowed disabled:opacity-40"
                 >
-                  {convertXp.isPending ? "Converting…" : "Convert 100 XP → 1 Spin"}
+                  {convertXp.isPending
+                    ? "Converting…"
+                    : `Convert ${conversionCost} XP → 1 Spin`}
                 </button>
               </div>
+              {!inFreeMode && spinPackItem && (
+                <div className="mb-3 flex items-center justify-between gap-3 rounded-lg border border-primary/30 bg-primary/5 px-3 py-2.5">
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-primary">
+                      Buy {spinPackItem.effect?.grantSpins ?? 5} Spins
+                    </p>
+                    <p className="text-[9px] text-muted-foreground">
+                      Smart-contract purchase · {priceLabel(spinPackItem.priceWei, spinPackItem.priceAsset, false)}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    disabled={busy || buyItem.isPending || !isConnected}
+                    onClick={() => buyItem.mutate(spinPackItem)}
+                    className="shrink-0 rounded-md bg-primary px-3 py-2 text-[9px] font-black uppercase text-black disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    {buyItem.isPending ? "Buying…" : isConnected ? "Buy" : "Connect"}
+                  </button>
+                </div>
+              )}
               {canManageSpins && (
                 <>
                   <button

@@ -2,7 +2,7 @@ import { createHash, randomBytes } from "crypto";
 import { keccak256, toBytes, toHex } from "viem";
 import { prisma } from "@/lib/auth/session";
 import { logger } from "@/lib/logging";
-import { creditSpinReward } from "@/lib/blockchain/spinVault";
+import { creditSpinReward, readVaultCanWithdraw } from "@/lib/blockchain/spinVault";
 import { verifySpinEntry } from "@/lib/blockchain/verifySpinEntry";
 import {
   defaultEntryFee,
@@ -472,19 +472,37 @@ export class SpinHuntEngine implements IEngine {
       orderBy: { createdAt: "desc" },
     })) as PendingRewardRow[];
 
+    const guest = isGuestWallet(wallet);
     const byAsset: Record<string, { amountWei: string; canWithdraw: boolean }> = {};
     for (const row of rows) {
+      // Connected wallets can only withdraw rewards that reached the vault.
+      if (!guest && row.status !== "CREDITED_ONCHAIN") continue;
       const prev = BigInt(byAsset[row.asset]?.amountWei ?? "0");
       byAsset[row.asset] = {
         amountWei: (prev + BigInt(row.amountWei)).toString(),
-        // Free-play: always show withdraw when owed. Real wallets still need vault liquidity (Phase 3).
-        canWithdraw: isGuestWallet(wallet) ? true : true,
+        canWithdraw: guest,
       };
     }
 
-    const totalWei = rows.reduce((sum: bigint, r: PendingRewardRow) => sum + BigInt(r.amountWei), 0n);
+    if (!guest) {
+      await Promise.all(
+        Object.entries(byAsset).map(async ([asset, summary]) => {
+          if (!isSpinPayAsset(asset)) return;
+          summary.canWithdraw = await readVaultCanWithdraw(
+            wallet,
+            asset,
+            BigInt(summary.amountWei)
+          );
+        })
+      );
+    }
+
+    const totalWei = Object.values(byAsset).reduce(
+      (sum, row) => sum + BigInt(row.amountWei),
+      0n
+    );
     return {
-      freePlay: isGuestWallet(wallet),
+      freePlay: guest,
       rows: rows.map((r: PendingRewardRow) => ({
         id: r.id,
         asset: r.asset,
@@ -494,8 +512,36 @@ export class SpinHuntEngine implements IEngine {
       })),
       byAsset,
       totalWei: totalWei.toString(),
-      canWithdraw: totalWei > 0n && isGuestWallet(wallet),
+      canWithdraw:
+        totalWei > 0n && Object.values(byAsset).some((row) => row.canWithdraw),
     };
+  }
+
+  async recordOnchainWithdraw(input: {
+    userId: string;
+    asset: SpinPayAsset;
+    amountWei: bigint;
+    txHash: string;
+  }) {
+    const rows = (await prisma().spinRewardPending.findMany({
+      where: {
+        userId: input.userId,
+        asset: input.asset,
+        status: "CREDITED_ONCHAIN",
+      },
+      orderBy: { createdAt: "asc" },
+    })) as PendingRewardRow[];
+
+    const total = rows.reduce((sum, row) => sum + BigInt(row.amountWei), 0n);
+    if (total !== input.amountWei) {
+      throw new Error("Withdraw amount no longer matches claimable rewards");
+    }
+
+    await prisma().spinRewardPending.updateMany({
+      where: { id: { in: rows.map((row) => row.id) } },
+      data: { status: "WITHDRAWN", withdrawTxHash: input.txHash },
+    });
+    return { success: true, withdrawn: rows.length, txHash: input.txHash };
   }
 
   /** Free-play only: clear claimable rows and notify — no chain transfer. */

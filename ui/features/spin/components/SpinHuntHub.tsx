@@ -55,6 +55,7 @@ export function SpinHuntHub() {
   const {
     payEntry,
     purchaseItem,
+    withdrawPrize,
     busy: paying,
     preferredAsset,
     feeLabel,
@@ -121,7 +122,16 @@ export function SpinHuntHub() {
   });
 
   const available = Number(data?.balance?.available ?? 0);
-  const canMockWithdraw = Boolean(inFreeMode && walletSummary?.canWithdraw);
+  const withdrawable = Object.entries(
+    (walletSummary?.byAsset ?? {}) as Record<
+      string,
+      { amountWei: string; canWithdraw: boolean }
+    >
+  ).find(
+    ([asset, summary]) =>
+      isSpinPayAsset(asset) && summary.canWithdraw && BigInt(summary.amountWei || "0") > 0n
+  );
+  const canWithdraw = Boolean(walletSummary?.canWithdraw && (inFreeMode || withdrawable));
   const catalogItems = (loadoutSummary?.items ?? []) as CatalogItem[];
   const speedShielderItem =
     catalogItems.find((item) => item.type === "SPEED_SHIELDER") ??
@@ -377,7 +387,25 @@ export function SpinHuntHub() {
 
   const withdrawMutation = useMutation({
     mutationFn: async () => {
-      const res = await authFetch("/api/spin/withdraw", { method: "POST" });
+      let payload: Record<string, string> | undefined;
+      if (!inFreeMode) {
+        if (!withdrawable) throw new Error("No on-chain reward is ready to withdraw");
+        const [asset, summary] = withdrawable;
+        if (!isSpinPayAsset(asset)) throw new Error("Invalid withdraw asset");
+        const withdrawn = await withdrawPrize({
+          asset,
+          amountWei: BigInt(summary.amountWei),
+        });
+        payload = {
+          txHash: withdrawn.hash,
+          asset,
+          amountWei: summary.amountWei,
+        };
+      }
+      const res = await authFetch("/api/spin/withdraw", {
+        method: "POST",
+        body: payload ? JSON.stringify(payload) : undefined,
+      });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(body.error || "Withdraw failed");
       return body;
@@ -615,7 +643,7 @@ export function SpinHuntHub() {
               <p className="mb-5 text-[11px] font-bold text-white/70">
                 Round total banked from burst bubbles
               </p>
-              {inFreeMode && BigInt(cashEarnedWei || "0") > 0n && (
+            {canWithdraw && (
                 <button
                   type="button"
                   onClick={() => {
@@ -626,7 +654,7 @@ export function SpinHuntHub() {
                   className="mb-2 flex w-full items-center justify-center gap-2 rounded-2xl border-4 border-black bg-[#FBBF24] py-3.5 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)]"
                 >
                   <ArrowDownToLine className="h-4 w-4" strokeWidth={2.5} />
-                  Withdraw (demo)
+                {inFreeMode ? "Withdraw (demo)" : "Withdraw reward"}
                 </button>
               )}
               <button
@@ -696,14 +724,14 @@ export function SpinHuntHub() {
               )}
             </p>
           </div>
-          {canMockWithdraw && (
+          {canWithdraw && (
             <button
               type="button"
               onClick={() => withdrawMutation.mutate()}
               disabled={withdrawMutation.isPending}
               className="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-black bg-primary text-black shadow-[2px_2px_0_rgba(0,0,0,1)]"
               aria-label="Withdraw"
-              title="Successful withdraw (demo)"
+              title={inFreeMode ? "Withdraw demo reward" : "Withdraw on-chain reward"}
             >
               <ArrowDownToLine className="h-4 w-4" strokeWidth={2.5} />
             </button>

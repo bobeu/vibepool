@@ -166,6 +166,14 @@ export class CollectionEngine implements IEngine {
     }
 
     const freeOrGuest = requiredWei === 0n || isGuestWallet(input.wallet) || item.priceWei === "0";
+    const effect = (item.effect ?? {}) as { grantSpins?: number };
+    const grantedSpins =
+      typeof effect.grantSpins === "number" && effect.grantSpins > 0
+        ? effect.grantSpins
+        : 0;
+    const purchaseReason = input.txHash
+      ? `SPIN_PACK_PURCHASE:${input.txHash.toLowerCase()}`
+      : `FREEPLAY_ITEM_${item.slug}`;
 
     if (!freeOrGuest) {
       if (!input.txHash) throw new Error("Purchase requires on-chain txHash");
@@ -177,6 +185,15 @@ export class CollectionEngine implements IEngine {
         expectedAsset: asset as SpinPayAsset,
         minAmountWei: requiredWei,
       });
+
+      // Reject transaction replay before changing inventory or spin balance.
+      if (grantedSpins > 0) {
+        const used = await prisma().spinLedger.findFirst({
+          where: { reason: purchaseReason },
+          select: { id: true },
+        });
+        if (used) throw new Error("This spin purchase transaction was already redeemed");
+      }
     }
 
     const inv = await prisma().userInventoryItem.upsert({
@@ -211,15 +228,28 @@ export class CollectionEngine implements IEngine {
       }
     }
 
-    const effect = (item.effect ?? {}) as { grantSpins?: number };
-    let grantedSpins = 0;
-    if (isGuestWallet(input.wallet) && typeof effect.grantSpins === "number" && effect.grantSpins > 0) {
-      const { SpinEngine } = await import("./SpinEngine");
-      const spins = new SpinEngine();
-      for (let i = 0; i < effect.grantSpins; i++) {
-        await spins.grantSpin(input.userId, "EVENT", `FREEPLAY_ITEM_${item.slug}`);
-      }
-      grantedSpins = effect.grantSpins;
+    if (grantedSpins > 0) {
+      await prisma().$transaction(async (tx) => {
+        const alreadyRedeemed = await tx.spinLedger.findFirst({
+          where: { reason: purchaseReason },
+          select: { id: true },
+        });
+        if (alreadyRedeemed) {
+          throw new Error("This spin purchase transaction was already redeemed");
+        }
+        await tx.userProfile.update({
+          where: { id: input.userId },
+          data: { spins: { increment: grantedSpins } },
+        });
+        await tx.spinLedger.create({
+          data: {
+            userId: input.userId,
+            spinType: freeOrGuest ? "EVENT" : "PURCHASE",
+            amount: grantedSpins,
+            reason: purchaseReason,
+          },
+        });
+      }, { isolationLevel: "Serializable" });
     }
 
     const fresh = await prisma().userInventoryItem.findUnique({ where: { id: inv.id } });

@@ -246,6 +246,16 @@ export default function ProfilePage() {
             <h2 className="text-lg font-bold uppercase tracking-tight">Identity</h2>
           </div>
           <GlassContainer className="p-4 space-y-3">
+            {identityLoading && (
+              <div className="h-10 animate-pulse rounded-xl bg-muted/50" />
+            )}
+            {!identityLoading &&
+              (titles?.titles?.length ?? 0) === 0 &&
+              (badges?.badges?.length ?? 0) === 0 && (
+                <p className="py-3 text-center text-xs text-muted-foreground">
+                  No titles or badges unlocked yet.
+                </p>
+              )}
             <div className="flex flex-wrap gap-2">
               {titles?.titles?.map((t: any) => (
                 <span

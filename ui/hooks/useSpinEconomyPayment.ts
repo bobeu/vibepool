@@ -19,6 +19,7 @@ import {
   defaultEntryFee,
   getSpinEconomyAddress,
   getSpinHuntChainId,
+  getSpinPrizeVaultAddress,
   preferredEntryAsset,
   type SpinPayAsset,
 } from "@/lib/spin/economy";
@@ -310,9 +311,43 @@ export function useSpinEconomyPayment() {
     ]
   );
 
+  /** User withdraws a reward already credited to SpinPrizeVault. */
+  const withdrawPrize = useCallback(
+    async (opts: { asset: SpinPayAsset; amountWei: bigint }) => {
+      setError(null);
+      setBusy(true);
+      try {
+        if (!isConnected || !address) throw new Error("Connect wallet to withdraw");
+        await ensureChain();
+        const vault = getSpinPrizeVaultAddress();
+        if (vault === ZERO_ADDRESS) throw new Error("SpinPrizeVault not configured");
+        const abi = CONTRACTS.SpinPrizeVault?.abi;
+        if (!abi?.length) throw new Error("SpinPrizeVault ABI missing");
+
+        const hash = await writeContractAsync({
+          address: vault,
+          abi,
+          functionName: "withdraw",
+          args: [assetAddress(opts.asset), opts.amountWei],
+          chainId: targetChainId,
+        });
+        setPendingHash(hash);
+        return { hash, asset: opts.asset, amountWei: opts.amountWei.toString() };
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "Withdraw failed";
+        setError(msg);
+        throw e;
+      } finally {
+        setBusy(false);
+      }
+    },
+    [address, ensureChain, isConnected, targetChainId, writeContractAsync]
+  );
+
   return {
     payEntry,
     purchaseItem,
+    withdrawPrize,
     createSessionRef,
     // Only treat receipt wait as busy when we actually submitted a tx.
     // wagmi can report isLoading=true with an undefined hash when a wallet
