@@ -16,6 +16,7 @@ import type { HuntLoadout, HuntSession, PublicBubble } from "@/lib/spin/types";
 import { BubbleArena } from "./BubbleArena";
 import { SpinLoadoutPanel } from "./SpinLoadoutPanel";
 import { SLICE_DEG, TOTAL, SpinWheelPanel } from "./SpinWheelPanel";
+import { AppOverlay } from "@/components/layout/AppOverlay";
 import { useAccount } from "wagmi";
 
 type CatalogItem = {
@@ -554,86 +555,90 @@ export function SpinHuntHub() {
   return (
     <div>
       {pendingStartMode && (
-        <div className="fixed inset-0 z-[185] flex items-end justify-center bg-black/80 p-4 pb-8 backdrop-blur-sm">
-          <div className="w-full max-w-sm rounded-[32px] border border-white/10 bg-zinc-950/95 p-6 text-center shadow-[0_0_60px_rgba(98,226,248,0.2)] ring-2 ring-primary/30">
-            {/* Header */}
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary/70">Spin Hunt</p>
-                <p className="text-2xl font-black tabular-nums text-white">{rpm} RPM</p>
+        <AppOverlay>
+          <div className="absolute inset-0 z-[185] flex items-end justify-center bg-black/80 p-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] backdrop-blur-sm">
+            <div className="w-full max-w-sm rounded-[32px] border border-white/10 bg-zinc-950/95 p-6 text-center shadow-[0_0_60px_rgba(98,226,248,0.2)] ring-2 ring-primary/30">
+              {/* Header */}
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary/70">Spin Hunt</p>
+                  <p className="text-2xl font-black tabular-nums text-white">{rpm} RPM</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => { setPendingStartMode(null); setApplyInfo(null); }}
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white/60"
+                >
+                  <X className="h-4 w-4" strokeWidth={2.5} />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => { setPendingStartMode(null); setApplyInfo(null); }}
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white/60"
-              >
-                <X className="h-4 w-4" strokeWidth={2.5} />
-              </button>
-            </div>
 
-            <p className="mb-4 text-sm font-bold text-white/70 text-left">
-              Optionally apply boosts before hunt. Speed Shielder slows the wheel (-2 RPM each). Quick Buzzer reduces taps needed to burst bubbles.
-            </p>
+              <p className="mb-4 text-sm font-bold text-white/70 text-left">
+                Optionally apply boosts before hunt. Speed Shielder slows the wheel (-2 RPM each). Quick Buzzer reduces taps needed to burst bubbles.
+              </p>
 
-            {applyInfoBlurb}
+              {applyInfoBlurb}
 
-            <div className="mt-5 flex flex-col gap-3">
-              {boostActions}
-              <button
-                type="button"
-                onClick={launchPendingStart}
-                disabled={startTicket.isPending || startPaid.isPending || applyBoostMutation.isPending}
-                className="w-full rounded-2xl border-4 border-black bg-primary py-3 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-white/50"
-              >
-                {startTicket.isPending || startPaid.isPending ? "Starting…" : "Start hunt"}
-              </button>
+              <div className="mt-5 flex flex-col gap-3">
+                {boostActions}
+                <button
+                  type="button"
+                  onClick={launchPendingStart}
+                  disabled={startTicket.isPending || startPaid.isPending || applyBoostMutation.isPending}
+                  className="w-full rounded-2xl border-4 border-black bg-primary py-3 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-white/50"
+                >
+                  {startTicket.isPending || startPaid.isPending ? "Starting…" : "Start hunt"}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </AppOverlay>
       )}
 
       {showReward && reward && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4">
-          <div className="relative w-full max-w-xs rounded-3xl border-4 border-primary bg-zinc-900 p-8 text-center shadow-[0_0_40px_rgba(98,226,248,0.35),6px_6px_0_rgba(0,0,0,1)]">
-            <button
-              type="button"
-              onClick={() => setShowReward(false)}
-              className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10"
-            >
-              <X className="h-4 w-4 text-white" strokeWidth={2.5} />
-            </button>
-            <p className="mb-1 text-xs font-black uppercase tracking-widest text-white/60">
-              Hunt complete
-            </p>
-            <p className="mb-2 font-black uppercase italic text-3xl leading-none text-primary">
-              {reward}
-            </p>
-            <p className="mb-5 text-[11px] font-bold text-white/70">
-              Round total banked from burst bubbles
-            </p>
-            {inFreeMode && BigInt(cashEarnedWei || "0") > 0n && (
+        <AppOverlay>
+          <div className="absolute inset-0 z-[100] flex items-center justify-center bg-black/70 p-4">
+            <div className="relative w-full max-w-xs rounded-3xl border-4 border-primary bg-zinc-900 p-8 text-center shadow-[0_0_40px_rgba(98,226,248,0.35),6px_6px_0_rgba(0,0,0,1)]">
               <button
                 type="button"
-                onClick={() => {
-                  setShowReward(false);
-                  withdrawMutation.mutate();
-                }}
-                disabled={withdrawMutation.isPending}
-                className="mb-2 flex w-full items-center justify-center gap-2 rounded-2xl border-4 border-black bg-[#FBBF24] py-3.5 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)]"
+                onClick={() => setShowReward(false)}
+                className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10"
               >
-                <ArrowDownToLine className="h-4 w-4" strokeWidth={2.5} />
-                Withdraw (demo)
+                <X className="h-4 w-4 text-white" strokeWidth={2.5} />
               </button>
-            )}
-            <button
-              type="button"
-              onClick={() => setShowReward(false)}
-              className="w-full rounded-2xl border-4 border-black bg-primary py-3.5 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)]"
-            >
-              Continue
-            </button>
+              <p className="mb-1 text-xs font-black uppercase tracking-widest text-white/60">
+                Hunt complete
+              </p>
+              <p className="mb-2 font-black uppercase italic text-3xl leading-none text-primary">
+                {reward}
+              </p>
+              <p className="mb-5 text-[11px] font-bold text-white/70">
+                Round total banked from burst bubbles
+              </p>
+              {inFreeMode && BigInt(cashEarnedWei || "0") > 0n && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowReward(false);
+                    withdrawMutation.mutate();
+                  }}
+                  disabled={withdrawMutation.isPending}
+                  className="mb-2 flex w-full items-center justify-center gap-2 rounded-2xl border-4 border-black bg-[#FBBF24] py-3.5 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)]"
+                >
+                  <ArrowDownToLine className="h-4 w-4" strokeWidth={2.5} />
+                  Withdraw (demo)
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => setShowReward(false)}
+                className="w-full rounded-2xl border-4 border-black bg-primary py-3.5 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)]"
+              >
+                Continue
+              </button>
+            </div>
           </div>
-        </div>
+        </AppOverlay>
       )}
 
       <div className="mb-4 text-center">
@@ -718,70 +723,72 @@ export function SpinHuntHub() {
       </div>
 
       {session && (hunting || finishing) && (
-        <div className="fixed inset-0 z-[95] bg-black/80 backdrop-blur-sm">
-          {session.loadout?.musicUrl ? (
-            <audio src={session.loadout.musicUrl} autoPlay loop preload="auto" className="hidden" />
-          ) : null}
-          <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
-            {/* Wheel sits under the bubble layer so bursts stay clickable. */}
-            <div className="pointer-events-none relative z-10 flex flex-col items-center">
-              <SpinWheelPanel
-                rotation={rotation}
-                hunting={hunting}
+        <AppOverlay>
+          <div className="absolute inset-0 z-[95] bg-black/80 backdrop-blur-sm">
+            {session.loadout?.musicUrl ? (
+              <audio src={session.loadout.musicUrl} autoPlay loop preload="auto" className="hidden" />
+            ) : null}
+            <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
+              {/* Wheel sits under the bubble layer so bursts stay clickable. */}
+              <div className="pointer-events-none relative z-10 flex flex-col items-center">
+                <SpinWheelPanel
+                  rotation={rotation}
+                  hunting={hunting}
+                  rpm={rpm}
+                  spinDisabled
+                  spinLabel={spinLabel}
+                  onSpin={() => undefined}
+                />
+                <p className="mt-4 rounded-full border border-white/10 bg-zinc-950/75 px-4 py-2 text-[10px] font-black uppercase tracking-[0.28em] text-white/65">
+                  {finishing ? "Locking round…" : "Pop bubbles before they escape"}
+                </p>
+              </div>
+
+              <BubbleArena
+                bubbles={session.plan.bubbles}
+                startedAtMs={new Date(session.startedAt).getTime()}
+                durationMs={session.plan.durationMs}
+                emitOffsetY={-42}
                 rpm={rpm}
-                spinDisabled
-                spinLabel={spinLabel}
-                onSpin={() => undefined}
+                disabled={finishing}
+                onBurst={(bubble, taps, elapsedMs) =>
+                  hitMutation.mutateAsync({ bubble, taps, elapsedMs })
+                }
               />
-              <p className="mt-4 rounded-full border border-white/10 bg-zinc-950/75 px-4 py-2 text-[10px] font-black uppercase tracking-[0.28em] text-white/65">
-                {finishing ? "Locking round…" : "Pop bubbles before they escape"}
-              </p>
-            </div>
 
-            <BubbleArena
-              bubbles={session.plan.bubbles}
-              startedAtMs={new Date(session.startedAt).getTime()}
-              durationMs={session.plan.durationMs}
-              emitOffsetY={-42}
-              rpm={rpm}
-              disabled={finishing}
-              onBurst={(bubble, taps, elapsedMs) =>
-                hitMutation.mutateAsync({ bubble, taps, elapsedMs })
-              }
-            />
-
-            <div className="pointer-events-none absolute inset-x-0 top-0 z-[80] px-4 py-4">
-              <div className="mx-auto flex w-full max-w-5xl items-start justify-between gap-3">
-                <div className="rounded-2xl border border-white/10 bg-zinc-950/80 px-4 py-3">
-                  <p className="text-[10px] font-black uppercase tracking-[0.28em] text-primary/80">
-                    Bubble mode
-                  </p>
-                  <p className="mt-1 text-sm font-black uppercase text-white">
-                    {finishing ? "Counting your burst total…" : "Bubbles emit from Spin · tap to burst"}
-                  </p>
-                  <p className="mt-2 text-lg font-black tabular-nums text-primary">{rpm} RPM</p>
-                </div>
-                <div className="pointer-events-auto flex max-w-[220px] flex-col items-end gap-2">
-                  {boostActions}
-                  <div className="rounded-2xl border border-white/10 bg-zinc-950/80 px-4 py-3 text-right">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-white/55">
-                      Bursting now
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-[80] px-4 py-4">
+                <div className="mx-auto flex w-full max-w-5xl items-start justify-between gap-3">
+                  <div className="rounded-2xl border border-white/10 bg-zinc-950/80 px-4 py-3">
+                    <p className="text-[10px] font-black uppercase tracking-[0.28em] text-primary/80">
+                      Bubble mode
                     </p>
-                    <p className="text-lg font-black text-primary">
-                      {formatCash(cashEarnedWei, cashAsset)}
+                    <p className="mt-1 text-sm font-black uppercase text-white">
+                      {finishing ? "Counting your burst total…" : "Bubbles emit from Spin · tap to burst"}
                     </p>
+                    <p className="mt-2 text-lg font-black tabular-nums text-primary">{rpm} RPM</p>
+                  </div>
+                  <div className="pointer-events-auto flex max-w-[220px] flex-col items-end gap-2">
+                    {boostActions}
+                    <div className="rounded-2xl border border-white/10 bg-zinc-950/80 px-4 py-3 text-right">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-white/55">
+                        Bursting now
+                      </p>
+                      <p className="text-lg font-black text-primary">
+                        {formatCash(cashEarnedWei, cashAsset)}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {applyInfoBlurb ? (
-              <div className="pointer-events-none absolute inset-x-4 top-28 z-[85] mx-auto max-w-md">
-                {applyInfoBlurb}
-              </div>
-            ) : null}
+              {applyInfoBlurb ? (
+                <div className="pointer-events-none absolute inset-x-4 top-28 z-[85] mx-auto max-w-md">
+                  {applyInfoBlurb}
+                </div>
+              ) : null}
+            </div>
           </div>
-        </div>
+        </AppOverlay>
       )}
 
       {!hunting && (

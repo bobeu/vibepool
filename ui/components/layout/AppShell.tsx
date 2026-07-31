@@ -191,6 +191,15 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
           <Compass className="w-5 h-5" strokeWidth={2.5} />
         </button>
       </div>
+
+      {/*
+        Overlay host above the dock stacking context. Spin Hunt / reward modals
+        portal here so they cover the full shell including bottom nav.
+      */}
+      <div
+        id="nexora-overlay-root"
+        className="pointer-events-none absolute inset-0 z-[60] [&>*]:pointer-events-auto"
+      />
     </>
   );
 
