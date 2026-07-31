@@ -51,6 +51,14 @@ function requestIdFor(parts: string): `0x${string}` {
   return keccak256(toBytes(parts));
 }
 
+interface PendingRewardRow {
+  id: string;
+  asset: string;
+  amountWei: string;
+  status: string;
+  source: string;
+}
+
 export class SpinHuntEngine implements IEngine {
   name = "SpinHuntEngine";
   private spinEngine = new SpinEngine();
@@ -150,13 +158,15 @@ export class SpinHuntEngine implements IEngine {
   private publicPlan(plan: BubblePlan): { durationMs: number; bubbles: PublicBubble[] } {
     return {
       durationMs: plan.durationMs,
-      bubbles: plan.bubbles.map(({ id, spawnAtMs, lifetimeMs, tapsRequired, x, pathSeed }) => ({
+      bubbles: plan.bubbles.map(({ id, spawnAtMs, lifetimeMs, tapsRequired, x, pathSeed, amountWei, asset }) => ({
         id,
         spawnAtMs,
         lifetimeMs,
         tapsRequired,
         x,
         pathSeed,
+        amountWei,
+        asset,
       })),
     };
   }
@@ -451,15 +461,16 @@ export class SpinHuntEngine implements IEngine {
     });
   }
 
+
   /** Aggregated mock/real claimable rows still open for withdraw UI. */
   async getClaimableSummary(wallet: string, userId: string) {
-    const rows = await prisma().spinRewardPending.findMany({
+    const rows = (await prisma().spinRewardPending.findMany({
       where: {
         userId,
         status: { in: ["PENDING_SYNC", "CREDITED_ONCHAIN"] },
       },
       orderBy: { createdAt: "desc" },
-    });
+    })) as PendingRewardRow[];
 
     const byAsset: Record<string, { amountWei: string; canWithdraw: boolean }> = {};
     for (const row of rows) {
@@ -471,10 +482,10 @@ export class SpinHuntEngine implements IEngine {
       };
     }
 
-    const totalWei = rows.reduce((sum, r) => sum + BigInt(r.amountWei), 0n);
+    const totalWei = rows.reduce((sum: bigint, r: PendingRewardRow) => sum + BigInt(r.amountWei), 0n);
     return {
       freePlay: isGuestWallet(wallet),
-      rows: rows.map((r) => ({
+      rows: rows.map((r: PendingRewardRow) => ({
         id: r.id,
         asset: r.asset,
         amountWei: r.amountWei,
@@ -493,19 +504,19 @@ export class SpinHuntEngine implements IEngine {
       throw new Error("Mock withdraw is only available in free play");
     }
 
-    const rows = await prisma().spinRewardPending.findMany({
+    const rows = (await prisma().spinRewardPending.findMany({
       where: {
         userId,
         status: { in: ["PENDING_SYNC", "CREDITED_ONCHAIN"] },
       },
-    });
+    })) as PendingRewardRow[];
 
     if (rows.length === 0) {
       return { success: false, message: "Nothing to withdraw" };
     }
 
     await prisma().spinRewardPending.deleteMany({
-      where: { id: { in: rows.map((r) => r.id) } },
+      where: { id: { in: rows.map((r: PendingRewardRow) => r.id) } },
     });
 
     const { NotificationEngine } = await import("./NotificationEngine");

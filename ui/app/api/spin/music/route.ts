@@ -30,6 +30,11 @@ export const POST = async (req: NextRequest) => {
         return jsonResponse(result);
       }
 
+      if (action === "remove") {
+        const result = await musicEngine.remove(userId, trackId);
+        return jsonResponse(result);
+      }
+
       const result = await musicEngine.purchase({
         wallet,
         userId,

@@ -18,6 +18,8 @@ type Props = {
   startedAtMs: number;
   durationMs: number;
   disabled?: boolean;
+  /** Current wheel RPM — used to scale bubble flight speed/distance. */
+  rpm?: number;
   /** Pixels above the arena center — top edge of the Spin hub button (~42). */
   emitOffsetY?: number;
   onBurst: (bubble: PublicBubble, taps: number, elapsedMs: number) => Promise<BurstResult | void>;
@@ -47,6 +49,7 @@ export function BubbleArena({
   startedAtMs,
   durationMs,
   disabled,
+  rpm = 100,
   emitOffsetY = -42,
   onBurst,
   onBurstError,
@@ -99,11 +102,13 @@ export function BubbleArena({
         {live.map((b) => {
           const age = elapsed - b.spawnAtMs;
           const t = Math.min(1, age / Math.max(b.lifetimeMs, 1));
+          // Scale flight distance and drift by rpm — faster wheel = bubbles fly further
+          const speedFactor = Math.max(0.4, rpm / 100);
           // Fan out from the Spin button top in all directions, with a slight upward bias.
           const angle = ((b.pathSeed % 360) * Math.PI) / 180 - Math.PI / 2;
-          const distance = 8 + t * (120 + b.x * 1.8);
-          const driftX = Math.sin((b.pathSeed % 97) + t * 7) * 14;
-          const driftY = Math.cos((b.pathSeed % 83) + t * 6) * 10;
+          const distance = (8 + t * (120 + b.x * 1.8)) * speedFactor;
+          const driftX = Math.sin((b.pathSeed % 97) + t * 7) * 14 * speedFactor;
+          const driftY = Math.cos((b.pathSeed % 83) + t * 6) * 10 * speedFactor;
           const x = Math.cos(angle) * distance + driftX;
           const y = Math.sin(angle) * distance + driftY;
           const scale = 0.88 + Math.sin(t * Math.PI) * 0.22;
@@ -123,10 +128,14 @@ export function BubbleArena({
                 playBubbleBurst();
 
                 const flyoutId = `${b.id}-${Date.now()}`;
-                // Optimistic placeholder until the server returns the real amount.
+                // Optimistic label from bubble data (if available), update with real amount later.
+                const optimisticLabel =
+                  (b as any).amountWei && (b as any).asset
+                    ? formatBurstAmount((b as any).amountWei, (b as any).asset)
+                    : "…";
                 setFlyouts((prev) => [
                   ...prev,
-                  { id: flyoutId, label: "…", x, y },
+                  { id: flyoutId, label: optimisticLabel, x, y },
                 ]);
 
                 void onBurst(b, next, elapsed)
@@ -163,7 +172,7 @@ export function BubbleArena({
                   });
               }}
               className={cn(
-                "pointer-events-auto absolute h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/55",
+                "pointer-events-auto absolute h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/55",
                 "bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.65),rgba(98,226,248,0.4)_45%,rgba(24,154,180,0.85))]",
                 "shadow-[0_0_24px_rgba(98,226,248,0.45)] active:scale-90",
                 "z-[55] cursor-pointer touch-manipulation",

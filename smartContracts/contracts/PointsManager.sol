@@ -6,11 +6,12 @@ import { SharedErrors } from "./SharedErrors.sol";
 import { SharedEvents } from "./SharedEvents.sol";
 import { LevelMath } from "./libraries/LevelMath.sol";
 import { IPointsManager } from "./interfaces/IPointsManager.sol";
+import { MultiOwnable } from "./MultiOwnable.sol";
 
 /// @title PointsManager
 /// @notice On-chain verification layer for player profiles, XP, points, spins, and reward claims
 /// @dev Backend-authorized only. Never allows self-editing.
-contract PointsManager is AccessControl, IPointsManager {
+contract PointsManager is AccessControl, IPointsManager, MultiOwnable {
     bytes32 public constant BACKEND_ROLE = keccak256("BACKEND_ROLE");
 
     /// @notice Mapping of player address to profile
@@ -42,12 +43,14 @@ contract PointsManager is AccessControl, IPointsManager {
     /// @notice Initializes the PointsManager with associated contracts
     /// @param _activityRegistry Address of the ActivityRegistry contract
     /// @param _spinRewardManager Address of the SpinRewardManager contract
-    constructor(address _activityRegistry, address _spinRewardManager) {
+    constructor(address _activityRegistry, address _spinRewardManager, address[] memory initialOwners) MultiOwnable(initialOwners) {
         activityRegistry = _activityRegistry;
         spinRewardManager = _spinRewardManager;
 
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(BACKEND_ROLE, msg.sender);
+        for (uint256 i = 0; i < initialOwners.length; i++) {
+            _grantRole(DEFAULT_ADMIN_ROLE, initialOwners[i]);
+            _grantRole(BACKEND_ROLE, initialOwners[i]);
+        }
     }
 
     /// @notice Grants XP to a player and auto-updates level

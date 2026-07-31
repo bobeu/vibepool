@@ -24,7 +24,8 @@ describe("Vibepool Foundation Contracts", function () {
       await asset.write.mint([owner.account.address, parseEther("10000")]);
 
       rewardTreasury = await viem.deployContract("contracts/RewardTreasury.sol:RewardTreasury", [
-        zeroAddress
+        zeroAddress,
+        [owner.account.address]
       ]);
 
       await rewardTreasury.write.grantRole([
@@ -185,7 +186,8 @@ describe("Vibepool Foundation Contracts", function () {
 
       pointsManager = await viem.deployContract("contracts/PointsManager.sol:PointsManager", [
         zeroAddress,
-        zeroAddress
+        zeroAddress,
+        [owner.account.address]
       ]);
 
       await pointsManager.write.grantRole([await pointsManager.read.BACKEND_ROLE(), backend.account.address], { account: owner.account });
@@ -293,7 +295,7 @@ describe("Vibepool Foundation Contracts", function () {
       const viem = hre.viem;
       [owner, backend, user] = await viem.getWalletClients();
 
-      activityRegistry = await viem.deployContract("contracts/ActivityRegistry.sol:ActivityRegistry");
+      activityRegistry = await viem.deployContract("contracts/ActivityRegistry.sol:ActivityRegistry", [[owner.account.address]]);
 
       await activityRegistry.write.grantRole([await activityRegistry.read.BACKEND_ROLE(), backend.account.address], { account: owner.account });
     });
@@ -369,7 +371,7 @@ describe("Vibepool Foundation Contracts", function () {
       const viem = hre.viem;
       [owner, backend, user] = await viem.getWalletClients();
 
-      spinRewardManager = await viem.deployContract("contracts/SpinRewardManager.sol:SpinRewardManager");
+      spinRewardManager = await viem.deployContract("contracts/SpinRewardManager.sol:SpinRewardManager", [[owner.account.address]]);
 
       await spinRewardManager.write.grantRole([await spinRewardManager.read.BACKEND_ROLE(), backend.account.address], { account: owner.account });
     });
@@ -424,6 +426,49 @@ describe("Vibepool Foundation Contracts", function () {
 
       const stats = await spinRewardManager.read.spinStatistics();
       expect(stats.totalSpinsGranted).to.equal(10n);
+    });
+  });
+
+  describe("MultiOwnable", function () {
+    let treasury: any;
+    let owner: any, user: any, newOwner: any;
+
+    beforeEach(async function () {
+      const viem = hre.viem;
+      [owner, user, newOwner] = await viem.getWalletClients();
+      treasury = await viem.deployContract("contracts/RewardTreasury.sol:RewardTreasury", [
+        zeroAddress,
+        [owner.account.address]
+      ]);
+    });
+
+    it("Should allow owner to add new owner", async function () {
+      await treasury.write.addOwner([newOwner.account.address], { account: owner.account });
+      expect(await treasury.read.isOwner([newOwner.account.address])).to.equal(true);
+    });
+
+    it("Should reject non-owner trying to add owner", async function () {
+      await expect(
+        treasury.write.addOwner([newOwner.account.address], { account: user.account })
+      ).to.be.rejected;
+    });
+
+    it("Should allow owner to remove other owner", async function () {
+      await treasury.write.addOwner([newOwner.account.address], { account: owner.account });
+      await treasury.write.removeOwner([newOwner.account.address], { account: owner.account });
+      expect(await treasury.read.isOwner([newOwner.account.address])).to.equal(false);
+    });
+
+    it("Should reject removing sole owner", async function () {
+      await expect(
+        treasury.write.removeOwner([owner.account.address], { account: owner.account })
+      ).to.be.rejected;
+    });
+
+    it("Should allow renouncing ownership if count > 1", async function () {
+      await treasury.write.addOwner([newOwner.account.address], { account: owner.account });
+      await treasury.write.renounceOwnership({ account: owner.account });
+      expect(await treasury.read.isOwner([owner.account.address])).to.equal(false);
     });
   });
 });

@@ -16,17 +16,30 @@ export class LeaderboardService implements ILeaderboardService {
     const snapshots = await prisma().leaderboardSnapshot.findMany({
       where: { snapshotTime: { gte: startOfDay } },
       include: { user: true },
-      orderBy: { rank: "asc" },
-      take: limit,
     });
 
     if (snapshots.length > 0) {
-      return snapshots.map((s) => ({
-        rank: s.rank,
+      const userMap = new Map<string, typeof snapshots[number]>();
+      for (const s of snapshots) {
+        const existing = userMap.get(s.userId);
+        if (!existing || s.xp > existing.xp || (s.xp === existing.xp && s.points > existing.points)) {
+          userMap.set(s.userId, s);
+        }
+      }
+
+      const sorted = Array.from(userMap.values()).sort((a, b) => {
+        if (b.xp !== a.xp) return b.xp - a.xp;
+        if (b.points > a.points) return 1;
+        if (b.points < a.points) return -1;
+        return 0;
+      });
+
+      return sorted.slice(0, limit).map((s, idx) => ({
+        rank: idx + 1,
         wallet: s.user.wallet,
-        username: s.user.username,
+        username: s.user.username ?? (isGuestWallet(s.user.wallet) ? "Guest Spinner" : null),
         xp: s.xp,
-        points: s.user.points,
+        points: s.points,
         spins: s.user.spins,
         predictionAccuracy: s.predictionAccuracy,
         source: "snapshot",

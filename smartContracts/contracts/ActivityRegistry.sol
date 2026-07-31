@@ -5,11 +5,12 @@ import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol"
 import { SharedErrors } from "./SharedErrors.sol";
 import { SharedEvents } from "./SharedEvents.sol";
 import { IActivityRegistry } from "./interfaces/IActivityRegistry.sol";
+import { MultiOwnable } from "./MultiOwnable.sol";
 
 /// @title ActivityRegistry
 /// @notice Minimal on-chain activity history with streak tracking
 /// @dev Backend-authorized only. No historical arrays, only aggregate statistics.
-contract ActivityRegistry is AccessControl, IActivityRegistry {
+contract ActivityRegistry is AccessControl, IActivityRegistry, MultiOwnable {
     bytes32 public constant BACKEND_ROLE = keccak256("BACKEND_ROLE");
 
     /// @notice Mapping of player address to activity profile
@@ -27,9 +28,11 @@ contract ActivityRegistry is AccessControl, IActivityRegistry {
     }
 
     /// @notice Initializes the ActivityRegistry
-    constructor() {
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(BACKEND_ROLE, msg.sender);
+    constructor(address[] memory initialOwners) MultiOwnable(initialOwners) {
+        for (uint256 i = 0; i < initialOwners.length; i++) {
+            _grantRole(DEFAULT_ADMIN_ROLE, initialOwners[i]);
+            _grantRole(BACKEND_ROLE, initialOwners[i]);
+        }
     }
 
     /// @notice Records activity for a player and updates streak

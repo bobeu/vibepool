@@ -550,17 +550,25 @@ export function SpinHuntHub() {
   return (
     <div>
       {pendingStartMode && (
-        <div className="fixed inset-0 z-[185] flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-sm rounded-[28px] border-4 border-primary bg-zinc-950 p-6 text-center shadow-[0_0_48px_rgba(98,226,248,0.25)]">
-            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-primary/80">
-              Spin Hunt ready
-            </p>
-            <p className="mt-2 text-3xl font-black tabular-nums text-primary">{rpm} RPM</p>
-            <h3 className="mt-2 text-2xl font-black uppercase italic text-white">
-              Boost your wheel
-            </h3>
-            <p className="mt-3 text-sm font-bold text-white/70">
-              Apply a Speed Shielder to calm RPM, or a Quick Buzzer to crack tough bubbles faster.
+        <div className="fixed inset-0 z-[185] flex items-end justify-center bg-black/80 p-4 pb-8 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-[32px] border border-white/10 bg-zinc-950/95 p-6 text-center shadow-[0_0_60px_rgba(98,226,248,0.2)] ring-2 ring-primary/30">
+            {/* Header */}
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary/70">Spin Hunt</p>
+                <p className="text-2xl font-black tabular-nums text-white">{rpm} RPM</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => { setPendingStartMode(null); setApplyInfo(null); }}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-white/60"
+              >
+                <X className="h-4 w-4" strokeWidth={2.5} />
+              </button>
+            </div>
+
+            <p className="mb-4 text-sm font-bold text-white/70 text-left">
+              Optionally apply boosts before hunt. Speed Shielder slows the wheel (-2 RPM each). Quick Buzzer reduces taps needed to burst bubbles.
             </p>
 
             {applyInfoBlurb}
@@ -574,16 +582,6 @@ export function SpinHuntHub() {
                 className="w-full rounded-2xl border-4 border-black bg-primary py-3 text-sm font-black uppercase text-black shadow-[4px_4px_0_rgba(0,0,0,1)] disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-white/50"
               >
                 {startTicket.isPending || startPaid.isPending ? "Starting…" : "Start hunt"}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setPendingStartMode(null);
-                  setApplyInfo(null);
-                }}
-                className="text-xs font-black uppercase tracking-widest text-white/55"
-              >
-                Back
               </button>
             </div>
           </div>
@@ -705,12 +703,6 @@ export function SpinHuntHub() {
       </div>
 
       <div className="mb-2 flex flex-col items-center">
-        <div className="relative mb-1 flex w-full max-w-[280px] items-end justify-center">
-          <p className="absolute left-0 bottom-1 text-sm font-black tabular-nums text-primary">
-            {rpm} RPM
-          </p>
-          <div className="mb-[-4px] z-10 h-0 w-0 border-l-[10px] border-r-[10px] border-b-[22px] border-l-transparent border-r-transparent border-b-yellow-400" />
-        </div>
         <SpinWheelPanel
           rotation={rotation}
           hunting={hunting}
@@ -729,12 +721,6 @@ export function SpinHuntHub() {
           <div className="relative flex h-full w-full items-center justify-center overflow-hidden">
             {/* Wheel sits under the bubble layer so bursts stay clickable. */}
             <div className="pointer-events-none relative z-10 flex flex-col items-center">
-              <div className="relative mb-1 flex w-full min-w-[240px] items-end justify-center">
-                <p className="absolute left-0 bottom-1 text-sm font-black tabular-nums text-primary">
-                  {rpm} RPM
-                </p>
-                <div className="mb-[-4px] h-0 w-0 border-l-[10px] border-r-[10px] border-b-[22px] border-l-transparent border-r-transparent border-b-yellow-400" />
-              </div>
               <SpinWheelPanel
                 rotation={rotation}
                 hunting={hunting}
@@ -753,6 +739,7 @@ export function SpinHuntHub() {
               startedAtMs={new Date(session.startedAt).getTime()}
               durationMs={session.plan.durationMs}
               emitOffsetY={-42}
+              rpm={rpm}
               disabled={finishing}
               onBurst={(bubble, taps, elapsedMs) =>
                 hitMutation.mutateAsync({ bubble, taps, elapsedMs })

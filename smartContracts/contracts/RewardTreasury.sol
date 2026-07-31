@@ -9,11 +9,12 @@ import { SharedErrors } from "./SharedErrors.sol";
 import { SharedEvents } from "./SharedEvents.sol";
 import { TransferHelper } from "./libraries/TransferHelper.sol";
 import { IRewardTreasury } from "./interfaces/IRewardTreasury.sol";
+import { MultiOwnable } from "./MultiOwnable.sol";
 
 /// @title RewardTreasury
 /// @notice Central vault for all Vibepool reward funds. Supports CELO and ERC20 assets.
 /// @dev Follows Checks-Effects-Interactions pattern with ReentrancyGuard and Pausable.
-contract RewardTreasury is IRewardTreasury, AccessControl, ReentrancyGuard, Pausable {
+contract RewardTreasury is IRewardTreasury, AccessControl, ReentrancyGuard, Pausable, MultiOwnable {
     using SafeERC20 for IERC20;
 
     bytes32 public constant TREASURY_MANAGER_ROLE = keccak256("TREASURY_MANAGER_ROLE");
@@ -55,13 +56,15 @@ contract RewardTreasury is IRewardTreasury, AccessControl, ReentrancyGuard, Paus
 
     /// @notice Initializes the treasury with CELO as the default supported asset
     /// @param _nativeAsset The native asset address (CELO, typically address(0))
-    constructor(address _nativeAsset) {
+    constructor(address _nativeAsset, address[] memory initialOwners) MultiOwnable(initialOwners) {
         nativeAsset = _nativeAsset;
 
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(TREASURY_MANAGER_ROLE, msg.sender);
-        _grantRole(REWARD_MANAGER_ROLE, msg.sender);
-        _grantRole(PAUSER_ROLE, msg.sender);
+        for (uint256 i = 0; i < initialOwners.length; i++) {
+            _grantRole(DEFAULT_ADMIN_ROLE, initialOwners[i]);
+            _grantRole(TREASURY_MANAGER_ROLE, initialOwners[i]);
+            _grantRole(REWARD_MANAGER_ROLE, initialOwners[i]);
+            _grantRole(PAUSER_ROLE, initialOwners[i]);
+        }
 
         assets[nativeAsset] = AssetInfo({
             assetAddress: nativeAsset,
@@ -186,7 +189,7 @@ contract RewardTreasury is IRewardTreasury, AccessControl, ReentrancyGuard, Paus
     }
 
     /// @notice Enables a new asset for deposits and payouts
-    function enableAsset(address asset, string calldata symbol, uint8 decimals) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function enableAsset(address asset, string calldata symbol, uint8 decimals) external onlyOwner {
         if (asset == address(0)) revert SharedErrors.InvalidAddress();
         if (assets[asset].assetAddress != address(0)) revert SharedErrors.AssetAlreadyExists();
 
@@ -202,7 +205,7 @@ contract RewardTreasury is IRewardTreasury, AccessControl, ReentrancyGuard, Paus
     }
 
     /// @notice Disables an asset
-    function disableAsset(address asset) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function disableAsset(address asset) external onlyOwner {
         if (assets[asset].assetAddress == address(0)) revert SharedErrors.AssetNotFound();
 
         assets[asset].enabled = false;

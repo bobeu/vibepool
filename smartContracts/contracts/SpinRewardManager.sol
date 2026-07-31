@@ -5,11 +5,12 @@ import { AccessControl } from "@openzeppelin/contracts/access/AccessControl.sol"
 import { SharedErrors } from "./SharedErrors.sol";
 import { SharedEvents } from "./SharedEvents.sol";
 import { ISpinRewardManager } from "./interfaces/ISpinRewardManager.sol";
+import { MultiOwnable } from "./MultiOwnable.sol";
 
 /// @title SpinRewardManager
 /// @notice On-chain accounting for spin tickets and rewards
 /// @dev Backend-authorized only. Wheel logic remains off-chain.
-contract SpinRewardManager is AccessControl, ISpinRewardManager {
+contract SpinRewardManager is AccessControl, ISpinRewardManager, MultiOwnable {
     bytes32 public constant BACKEND_ROLE = keccak256("BACKEND_ROLE");
 
     /// @notice Mapping of player address to spin profile
@@ -27,9 +28,11 @@ contract SpinRewardManager is AccessControl, ISpinRewardManager {
     }
 
     /// @notice Initializes the SpinRewardManager
-    constructor() {
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(BACKEND_ROLE, msg.sender);
+    constructor(address[] memory initialOwners) MultiOwnable(initialOwners) {
+        for (uint256 i = 0; i < initialOwners.length; i++) {
+            _grantRole(DEFAULT_ADMIN_ROLE, initialOwners[i]);
+            _grantRole(BACKEND_ROLE, initialOwners[i]);
+        }
     }
 
     /// @notice Grants spin tickets to a player

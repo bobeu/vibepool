@@ -291,6 +291,37 @@ export function SpinLoadoutPanel() {
     onError: (e: Error) => setError(e.message),
   });
 
+  const convertXp = useMutation({
+    mutationFn: async () => {
+      const res = await authFetch("/api/spin/convert", { method: "POST" });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || "XP conversion failed");
+      return body;
+    },
+    onSuccess: (body) => {
+      invalidate();
+      showToast(body.message || "1 Spin added from XP!");
+    },
+    onError: (e: Error) => setError(e.message),
+  });
+
+  const removeMusic = useMutation({
+    mutationFn: async (trackId: string) => {
+      const res = await authFetch("/api/spin/music", {
+        method: "POST",
+        body: JSON.stringify({ action: "remove", trackId }),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || "Remove failed");
+      return body;
+    },
+    onSuccess: () => {
+      invalidate();
+      showToast("Track removed from gallery");
+    },
+    onError: (e: Error) => setError(e.message),
+  });
+
   const tracks = (musicQuery.data?.tracks ?? []) as MusicTrack[];
   const items = (collectionsQuery.data?.items ?? []) as CollectionItem[];
   const ownedTracks = tracks.filter((t) => t.owned);
@@ -298,9 +329,7 @@ export function SpinLoadoutPanel() {
 
   const tabs: Tab[] = canManageSpins
     ? ["collections", "spins", "music", "gallery"]
-    : inFreeMode
-      ? ["collections", "music", "gallery"]
-      : ["music", "collections", "gallery"];
+    : ["spins", "collections", "music", "gallery"];
 
   return (
     <div className="mt-3">
@@ -369,38 +398,55 @@ export function SpinLoadoutPanel() {
             </p>
           )}
 
-          {tab === "spins" && canManageSpins && (
+          {tab === "spins" && (
             <div className="space-y-1.5">
-              <button
-                type="button"
-                disabled={refillSpins.isPending}
-                onClick={() => refillSpins.mutate()}
-                className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-black bg-[#FBBF24] py-2 text-[10px] font-black uppercase text-black shadow-[2px_2px_0_rgba(0,0,0,1)]"
-              >
-                {refillSpins.isPending ? "Refilling…" : "Refill spins (unlimited tester)"}
-              </button>
-              {FREEPLAY_SPIN_PACKS.map((pack) => (
-                <div
-                  key={pack.id}
-                  className="flex items-center justify-between gap-2 rounded-lg border border-white/10 px-2 py-2"
+              {/* XP to Spin Conversion - always shown */}
+              <div className="mb-3 rounded-lg border border-amber-400/40 bg-amber-400/10 px-3 py-2.5">
+                <p className="text-[10px] font-black uppercase tracking-widest text-amber-300 mb-1">Convert XP → Spin</p>
+                <p className="text-[9px] text-muted-foreground mb-2">100 XP = 1 Spin Ticket</p>
+                <button
+                  type="button"
+                  disabled={convertXp.isPending}
+                  onClick={() => convertXp.mutate()}
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-amber-400 py-2 text-[10px] font-black uppercase text-black"
                 >
-                  <div className="flex items-center gap-2">
-                    <Ticket className="h-3.5 w-3.5 text-primary" />
-                    <div>
-                      <p className="text-[11px] font-black">{pack.label}</p>
-                      <p className="text-[9px] text-muted-foreground">Demo · {pack.mockPrice}</p>
-                    </div>
-                  </div>
+                  {convertXp.isPending ? "Converting…" : "Convert 100 XP → 1 Spin"}
+                </button>
+              </div>
+              {canManageSpins && (
+                <>
                   <button
                     type="button"
-                    disabled={buySpins.isPending}
-                    onClick={() => buySpins.mutate(pack.id)}
-                    className="rounded-md bg-primary px-2 py-1 text-[9px] font-black uppercase text-black"
+                    disabled={refillSpins.isPending}
+                    onClick={() => refillSpins.mutate()}
+                    className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg border-2 border-black bg-[#FBBF24] py-2 text-[10px] font-black uppercase text-black shadow-[2px_2px_0_rgba(0,0,0,1)]"
                   >
-                    Get
+                    {refillSpins.isPending ? "Refilling…" : "Refill spins (unlimited tester)"}
                   </button>
-                </div>
-              ))}
+                  {FREEPLAY_SPIN_PACKS.map((pack) => (
+                    <div
+                      key={pack.id}
+                      className="flex items-center justify-between gap-2 rounded-lg border border-white/10 px-2 py-2"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Ticket className="h-3.5 w-3.5 text-primary" />
+                        <div>
+                          <p className="text-[11px] font-black">{pack.label}</p>
+                          <p className="text-[9px] text-muted-foreground">Demo · {pack.mockPrice}</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        disabled={buySpins.isPending}
+                        onClick={() => buySpins.mutate(pack.id)}
+                        className="rounded-md bg-primary px-2 py-1 text-[9px] font-black uppercase text-black"
+                      >
+                        Get
+                      </button>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
           )}
 
@@ -580,6 +626,16 @@ export function SpinLoadoutPanel() {
                           >
                             {track.equipped ? "On" : "Equip"}
                           </button>
+                          {track.tier !== "FREE" && (
+                            <button
+                              type="button"
+                              disabled={removeMusic.isPending}
+                              onClick={() => removeMusic.mutate(track.id)}
+                              className="rounded-md bg-red-500/20 px-2 py-1 text-[9px] font-black uppercase text-red-400"
+                            >
+                              Remove
+                            </button>
+                          )}
                         </div>
                       </div>
                     ))}

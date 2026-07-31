@@ -155,6 +155,16 @@ export class ResultEngine implements IResultEngine {
       auditHash,
     });
 
+    try {
+      const { LeaderboardService } = await import("../LeaderboardService");
+      const lbs = new LeaderboardService();
+      for (const p of scored) {
+        await lbs.upsertDailyPlayer(p.userId);
+      }
+    } catch (err) {
+      console.error("Leaderboard upsert failed in ResultEngine:", err);
+    }
+
     return { matchId, status: completedStatus, winnerId: winner?.userId ?? null, isDraw, ratingUpdates, auditHash };
   }
 

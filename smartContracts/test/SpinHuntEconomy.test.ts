@@ -76,13 +76,15 @@ describe("SpinEconomy + SpinPrizeVault", function () {
     await usdm.write.mint([user.account.address, parseEther("1000")]);
     await usdc.write.mint([user.account.address, parseUnits("1000", 6)]);
 
-    treasury = await viem.deployContract("contracts/RewardTreasury.sol:RewardTreasury", [zeroAddress]);
-    vault = await viem.deployContract("contracts/SpinPrizeVault.sol:SpinPrizeVault", [zeroAddress]);
+    treasury = await viem.deployContract("contracts/RewardTreasury.sol:RewardTreasury", [zeroAddress, [owner.account.address]]);
+    vault = await viem.deployContract("contracts/SpinPrizeVault.sol:SpinPrizeVault", [zeroAddress, [owner.account.address]]);
     economy = await viem.deployContract("contracts/SpinEconomy.sol:SpinEconomy", [
       zeroAddress,
       treasury.address,
       vault.address,
       7000,
+      zeroAddress,
+      [owner.account.address],
     ]);
 
     await treasury.write.enableAsset([usdm.address, "USDm", 18], { account: owner.account });
@@ -105,8 +107,8 @@ describe("SpinEconomy + SpinPrizeVault", function () {
 
     const treasuryBal = await treasury.read.treasuryBalance();
     const vaultBal = await vault.read.liquidBalance([zeroAddress]);
-    expect(treasuryBal).to.equal(parseEther("0.7"));
-    expect(vaultBal).to.equal(parseEther("0.3"));
+    expect(treasuryBal).to.equal(parseEther("1"));
+    expect(vaultBal).to.equal(0n);
   });
 
   it("splits USDm purchase via contract (not raw transfer)", async function () {
@@ -116,8 +118,8 @@ describe("SpinEconomy + SpinPrizeVault", function () {
       account: user.account,
     });
 
-    expect(await treasury.read.assetBalance([usdm.address])).to.equal(parseEther("7"));
-    expect(await vault.read.liquidBalance([usdm.address])).to.equal(parseEther("3"));
+    expect(await treasury.read.assetBalance([usdm.address])).to.equal(parseEther("10"));
+    expect(await vault.read.liquidBalance([usdm.address])).to.equal(0n);
   });
 
   it("credits reward and allows withdraw when liquid", async function () {
@@ -180,8 +182,8 @@ describe("SpinEconomy + SpinPrizeVault", function () {
       { account: user.account }
     );
 
-    expect(await treasury.read.assetBalance([usdm.address])).to.equal(parseEther("3.5"));
-    expect(await vault.read.liquidBalance([usdm.address])).to.equal(parseEther("1.5"));
+    expect(await treasury.read.assetBalance([usdm.address])).to.equal(parseEther("5"));
+    expect(await vault.read.liquidBalance([usdm.address])).to.equal(0n);
   });
 
   it("purchaseItemWithPermit is a single tx (no prior approve)", async function () {
@@ -201,7 +203,7 @@ describe("SpinEconomy + SpinPrizeVault", function () {
       { account: user.account }
     );
 
-    expect(await treasury.read.assetBalance([usdc.address])).to.equal(parseUnits("14", 6));
-    expect(await vault.read.liquidBalance([usdc.address])).to.equal(parseUnits("6", 6));
+    expect(await treasury.read.assetBalance([usdc.address])).to.equal(parseUnits("20", 6));
+    expect(await vault.read.liquidBalance([usdc.address])).to.equal(0n);
   });
 });

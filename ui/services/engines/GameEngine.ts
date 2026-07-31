@@ -51,7 +51,7 @@ export class GameEngine implements IGameEngine {
       );
 
       const settings = await prisma().settings.findMany();
-      const settingsMap = Object.fromEntries(settings.map((s) => [s.key, s.value]));
+      const settingsMap = Object.fromEntries(settings.map((s: { key: string; value: string }) => [s.key, s.value]));
 
       const scored = await this.scoringEngine.calculateScores(predictions, settingsMap);
       const ranked = await this.rankingEngine.rankPlayers(
@@ -66,20 +66,7 @@ export class GameEngine implements IGameEngine {
 
       const settlementResults = await this.settlementEngine.processPendingRewards(100);
 
-      const snapshotOps = ranked.map((player) =>
-        prisma().leaderboardSnapshot.create({
-          data: {
-            tournamentId,
-            userId: player.userId as string,
-            rank: (player.rank as number) || 0,
-            xp: 0,
-            points: 0,
-            predictionAccuracy: (player.accuracy as number) || undefined,
-            snapshotTime: new Date(),
-          },
-        })
-      );
-
+      const snapshotOps = [];
       const updateOps = [];
       for (const player of ranked) {
         const xpAwarded = this.xpRewardEngine.calculateXP(settingsMap, {
@@ -94,12 +81,31 @@ export class GameEngine implements IGameEngine {
         });
 
         if (profile) {
+          const pointsAwarded = Math.round((player.totalScore as number) ?? 0);
+          const newXp = profile.xp + xpAwarded;
+          const newPoints = Number(profile.points) + pointsAwarded;
+
           updateOps.push(
             prisma().userProfile.update({
               where: { id: player.userId as string },
               data: {
                 xp: { increment: xpAwarded },
+                points: { increment: pointsAwarded },
                 currentRank: player.rank as number,
+              },
+            })
+          );
+
+          snapshotOps.push(
+            prisma().leaderboardSnapshot.create({
+              data: {
+                tournamentId,
+                userId: player.userId as string,
+                rank: (player.rank as number) || 0,
+                xp: newXp,
+                points: newPoints,
+                predictionAccuracy: (player.accuracy as number) || undefined,
+                snapshotTime: new Date(),
               },
             })
           );

@@ -9,11 +9,13 @@ import { IERC20Permit } from "@openzeppelin/contracts/token/ERC20/extensions/IER
 import { SharedErrors } from "./SharedErrors.sol";
 import { ISpinEconomy } from "./interfaces/ISpinEconomy.sol";
 import { IRewardTreasury } from "./interfaces/IRewardTreasury.sol";
+import { IPointsManager } from "./interfaces/IPointsManager.sol";
+import { MultiOwnable } from "./MultiOwnable.sol";
 
 /// @title SpinEconomy
-/// @notice Contract-only entry fees and item purchases; splits to treasury + SpinPrizeVault.
+/// @notice Contract-only entry fees and item purchases; forwards 100% to treasury.
 /// @dev ERC20 users can call *WithPermit (OpenZeppelin IERC20Permit / EIP-2612) for a single tx.
-contract SpinEconomy is ISpinEconomy, AccessControl, ReentrancyGuard, Pausable {
+contract SpinEconomy is ISpinEconomy, AccessControl, ReentrancyGuard, Pausable, MultiOwnable {
     using SafeERC20 for IERC20;
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
@@ -21,7 +23,10 @@ contract SpinEconomy is ISpinEconomy, AccessControl, ReentrancyGuard, Pausable {
     address public immutable nativeAsset;
     address public treasury;
     address public prizeVault;
-    uint16 public treasuryBps; // e.g. 7000 = 70%
+    uint16 public treasuryBps; // preserved for interface compatibility, set to 10_000 internally
+
+    address public pointsManager;
+    uint256 public pointsReward; // Amount of XP & Points awarded per item purchase
 
     mapping(address => bool) public assetEnabled;
     mapping(address => uint8) public assetDecimals;
@@ -32,24 +37,34 @@ contract SpinEconomy is ISpinEconomy, AccessControl, ReentrancyGuard, Pausable {
         _;
     }
 
-    constructor(address _nativeAsset, address _treasury, address _prizeVault, uint16 _treasuryBps) {
+    constructor(
+        address _nativeAsset,
+        address _treasury,
+        address _prizeVault,
+        uint16 _treasuryBps,
+        address _pointsManager,
+        address[] memory initialOwners
+    ) MultiOwnable(initialOwners) {
         if (_treasury == address(0) || _prizeVault == address(0)) revert SharedErrors.InvalidAddress();
         if (_treasuryBps > 10_000) revert SharedErrors.InvalidInput();
 
         nativeAsset = _nativeAsset;
         treasury = _treasury;
         prizeVault = _prizeVault;
-        treasuryBps = _treasuryBps;
+        treasuryBps = 10_000; // Force 100% to treasury
+        pointsManager = _pointsManager;
 
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(PAUSER_ROLE, msg.sender);
+        for (uint256 i = 0; i < initialOwners.length; i++) {
+            _grantRole(DEFAULT_ADMIN_ROLE, initialOwners[i]);
+            _grantRole(PAUSER_ROLE, initialOwners[i]);
+        }
 
         assetEnabled[_nativeAsset] = true;
         assetDecimals[_nativeAsset] = 18;
         assetList.push(_nativeAsset);
     }
 
-    function enableAsset(address asset, uint8 decimals_) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function enableAsset(address asset, uint8 decimals_) external onlyOwner {
         if (asset == address(0)) revert SharedErrors.InvalidAddress();
         if (assetEnabled[asset]) revert SharedErrors.AssetAlreadyExists();
         assetEnabled[asset] = true;
@@ -57,22 +72,30 @@ contract SpinEconomy is ISpinEconomy, AccessControl, ReentrancyGuard, Pausable {
         assetList.push(asset);
     }
 
-    function setTreasuryBps(uint16 bps) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setTreasuryBps(uint16 bps) external onlyOwner {
         if (bps > 10_000) revert SharedErrors.InvalidInput();
         treasuryBps = bps;
         emit SplitUpdated(bps);
     }
 
-    function setTreasury(address t) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setTreasury(address t) external onlyOwner {
         if (t == address(0)) revert SharedErrors.InvalidAddress();
         treasury = t;
         emit TreasuryUpdated(t);
     }
 
-    function setPrizeVault(address v) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setPrizeVault(address v) external onlyOwner {
         if (v == address(0)) revert SharedErrors.InvalidAddress();
         prizeVault = v;
         emit VaultUpdated(v);
+    }
+
+    function setPointsReward(uint256 _pointsReward) external onlyOwner {
+        pointsReward = _pointsReward;
+    }
+
+    function setPointsManager(address _pointsManager) external onlyOwner {
+        pointsManager = _pointsManager;
     }
 
     function payEntry(address asset, uint256 amount, bytes32 sessionRef)
@@ -83,9 +106,8 @@ contract SpinEconomy is ISpinEconomy, AccessControl, ReentrancyGuard, Pausable {
         onlyEnabledAsset(asset)
     {
         amount = _intake(asset, amount);
-        (uint256 toTreasury, uint256 toVault) = _split(amount);
-        _forward(asset, toTreasury, toVault);
-        emit EntryPaid(msg.sender, asset, amount, toTreasury, toVault, sessionRef);
+        _forward(asset, amount, 0);
+        emit EntryPaid(msg.sender, asset, amount, amount, 0, sessionRef);
     }
 
     function purchaseItem(bytes32 itemId, address asset, uint256 amount)
@@ -97,9 +119,16 @@ contract SpinEconomy is ISpinEconomy, AccessControl, ReentrancyGuard, Pausable {
     {
         if (itemId == bytes32(0)) revert SharedErrors.InvalidInput();
         amount = _intake(asset, amount);
-        (uint256 toTreasury, uint256 toVault) = _split(amount);
-        _forward(asset, toTreasury, toVault);
-        emit ItemPurchased(msg.sender, itemId, asset, amount, toTreasury, toVault);
+        _forward(asset, amount, 0);
+
+        if (pointsManager != address(0) && pointsReward > 0) {
+            bytes32 xpReq = keccak256(abi.encodePacked(msg.sender, itemId, block.timestamp, "XP"));
+            bytes32 ptsReq = keccak256(abi.encodePacked(msg.sender, itemId, block.timestamp, "PTS"));
+            IPointsManager(pointsManager).grantXP(msg.sender, pointsReward, xpReq);
+            IPointsManager(pointsManager).grantPoints(msg.sender, pointsReward, ptsReq);
+        }
+
+        emit ItemPurchased(msg.sender, itemId, asset, amount, amount, 0);
     }
 
     /// @inheritdoc ISpinEconomy
@@ -116,9 +145,8 @@ contract SpinEconomy is ISpinEconomy, AccessControl, ReentrancyGuard, Pausable {
         if (amount == 0) revert SharedErrors.InvalidAmount();
         _permit(asset, amount, deadline, v, r, s);
         amount = _intake(asset, amount);
-        (uint256 toTreasury, uint256 toVault) = _split(amount);
-        _forward(asset, toTreasury, toVault);
-        emit EntryPaid(msg.sender, asset, amount, toTreasury, toVault, sessionRef);
+        _forward(asset, amount, 0);
+        emit EntryPaid(msg.sender, asset, amount, amount, 0, sessionRef);
     }
 
     /// @inheritdoc ISpinEconomy
@@ -136,9 +164,16 @@ contract SpinEconomy is ISpinEconomy, AccessControl, ReentrancyGuard, Pausable {
         if (amount == 0) revert SharedErrors.InvalidAmount();
         _permit(asset, amount, deadline, v, r, s);
         amount = _intake(asset, amount);
-        (uint256 toTreasury, uint256 toVault) = _split(amount);
-        _forward(asset, toTreasury, toVault);
-        emit ItemPurchased(msg.sender, itemId, asset, amount, toTreasury, toVault);
+        _forward(asset, amount, 0);
+
+        if (pointsManager != address(0) && pointsReward > 0) {
+            bytes32 xpReq = keccak256(abi.encodePacked(msg.sender, itemId, block.timestamp, "XP"));
+            bytes32 ptsReq = keccak256(abi.encodePacked(msg.sender, itemId, block.timestamp, "PTS"));
+            IPointsManager(pointsManager).grantXP(msg.sender, pointsReward, xpReq);
+            IPointsManager(pointsManager).grantPoints(msg.sender, pointsReward, ptsReq);
+        }
+
+        emit ItemPurchased(msg.sender, itemId, asset, amount, amount, 0);
     }
 
     function _permit(address asset, uint256 amount, uint256 deadline, uint8 v, bytes32 r, bytes32 s) private {
@@ -154,11 +189,6 @@ contract SpinEconomy is ISpinEconomy, AccessControl, ReentrancyGuard, Pausable {
         if (msg.value != 0) revert SharedErrors.InvalidInput();
         IERC20(asset).safeTransferFrom(msg.sender, address(this), amount);
         return amount;
-    }
-
-    function _split(uint256 amount) private view returns (uint256 toTreasury, uint256 toVault) {
-        toTreasury = (amount * treasuryBps) / 10_000;
-        toVault = amount - toTreasury;
     }
 
     function _forward(address asset, uint256 toTreasury, uint256 toVault) private {

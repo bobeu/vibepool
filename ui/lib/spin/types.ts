@@ -5,6 +5,8 @@ export type PublicBubble = {
   tapsRequired: number;
   x: number;
   pathSeed: number;
+  amountWei?: string;
+  asset?: string;
 };
 
 export type HuntPlan = {

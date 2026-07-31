@@ -605,7 +605,8 @@ export const SpinType: {
   DAILY: 'DAILY',
   REWARD: 'REWARD',
   PURCHASE: 'PURCHASE',
-  EVENT: 'EVENT'
+  EVENT: 'EVENT',
+  WELCOME: 'WELCOME'
 };
 
 export type SpinType = (typeof SpinType)[keyof typeof SpinType]

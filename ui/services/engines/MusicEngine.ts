@@ -90,6 +90,19 @@ export class MusicEngine implements IEngine {
 
   async listCatalog(userId: string) {
     await this.ensureSeedCatalog();
+
+    // Lazy FREE track initialization: ensure all active FREE tracks are in user inventory
+    const freeTracks = await prisma().spinMusicTrack.findMany({
+      where: { active: true, tier: "FREE" },
+    });
+    for (const track of freeTracks) {
+      await prisma().userMusicInventory.upsert({
+        where: { userId_trackId: { userId, trackId: track.id } },
+        create: { userId, trackId: track.id, equipped: false },
+        update: {},
+      });
+    }
+
     const [tracks, owned] = await Promise.all([
       prisma().spinMusicTrack.findMany({
         where: { active: true },
@@ -97,8 +110,8 @@ export class MusicEngine implements IEngine {
       }),
       prisma().userMusicInventory.findMany({ where: { userId } }),
     ]);
-    const ownedMap = new Map(owned.map((o) => [o.trackId, o]));
-    return tracks.map((t) => {
+    const ownedMap = new Map(owned.map((o: any) => [o.trackId, o]));
+    return tracks.map((t: any) => {
       const inv = ownedMap.get(t.id);
       return {
         id: t.id,
@@ -111,7 +124,7 @@ export class MusicEngine implements IEngine {
         durationSec: t.durationSec,
         itemId: musicItemId(t.id),
         owned: t.tier === "FREE" || Boolean(inv),
-        equipped: Boolean(inv?.equipped),
+        equipped: Boolean((inv as any)?.equipped),
       };
     });
   }
@@ -190,17 +203,64 @@ export class MusicEngine implements IEngine {
     return { success: true, equippedTrackId: trackId };
   }
 
+  async remove(userId: string, trackId: string) {
+    const track = await prisma().spinMusicTrack.findUnique({ where: { id: trackId } });
+    if (!track) throw new Error("Track not found");
+    if (track.tier === "FREE") throw new Error("Free tracks cannot be removed from gallery");
+    await prisma().userMusicInventory.deleteMany({
+      where: { userId, trackId },
+    });
+    return { success: true };
+  }
+
   async getEquipped(userId: string) {
     await this.ensureSeedCatalog();
+
+    // Lazy FREE track initialization: ensure all active FREE tracks are in user inventory
+    const freeTracks = await prisma().spinMusicTrack.findMany({
+      where: { active: true, tier: "FREE" },
+    });
+    for (const track of freeTracks) {
+      await prisma().userMusicInventory.upsert({
+        where: { userId_trackId: { userId, trackId: track.id } },
+        create: { userId, trackId: track.id, equipped: false },
+        update: {},
+      });
+    }
+
     const equipped = await prisma().userMusicInventory.findFirst({
       where: { userId, equipped: true },
       include: { track: true },
     });
     if (equipped) return equipped.track;
-    return prisma().spinMusicTrack.findFirst({
-      where: { active: true, tier: "FREE" },
-      orderBy: { createdAt: "asc" },
+
+    // Fall back to any owned track (gallery random)
+    const anyOwned = await prisma().userMusicInventory.findFirst({
+      where: { userId },
+      include: { track: true },
     });
+    if (anyOwned) {
+      await prisma().userMusicInventory.update({
+        where: { id: anyOwned.id },
+        data: { equipped: true },
+      });
+      return anyOwned.track;
+    }
+
+    // Final fallback: random FREE track
+    const free = await prisma().spinMusicTrack.findMany({
+      where: { active: true, tier: "FREE" },
+    });
+    if (free.length > 0) {
+      const selected = free[Math.floor(Math.random() * free.length)];
+      await prisma().userMusicInventory.upsert({
+        where: { userId_trackId: { userId, trackId: selected.id } },
+        create: { userId, trackId: selected.id, equipped: true },
+        update: { equipped: true },
+      });
+      return selected;
+    }
+    return null;
   }
 }
 

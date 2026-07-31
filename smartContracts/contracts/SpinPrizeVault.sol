@@ -8,10 +8,11 @@ import { SafeERC20, IERC20 } from "@openzeppelin/contracts/token/ERC20/utils/Saf
 import { SharedErrors } from "./SharedErrors.sol";
 import { TransferHelper } from "./libraries/TransferHelper.sol";
 import { ISpinPrizeVault } from "./interfaces/ISpinPrizeVault.sol";
+import { MultiOwnable } from "./MultiOwnable.sol";
 
 /// @title SpinPrizeVault
 /// @notice Holds Spin Hunt prize liquidity; DB_MANAGER credits claimable balances; users withdraw when liquid.
-contract SpinPrizeVault is ISpinPrizeVault, AccessControl, ReentrancyGuard, Pausable {
+contract SpinPrizeVault is ISpinPrizeVault, AccessControl, ReentrancyGuard, Pausable, MultiOwnable {
     using SafeERC20 for IERC20;
 
     bytes32 public constant DB_MANAGER_ROLE = keccak256("DB_MANAGER_ROLE");
@@ -37,11 +38,14 @@ contract SpinPrizeVault is ISpinPrizeVault, AccessControl, ReentrancyGuard, Paus
         _;
     }
 
-    constructor(address _nativeAsset) {
+    constructor(address _nativeAsset, address[] memory initialOwners) MultiOwnable(initialOwners) {
         nativeAsset = _nativeAsset;
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(DB_MANAGER_ROLE, msg.sender);
-        _grantRole(PAUSER_ROLE, msg.sender);
+
+        for (uint256 i = 0; i < initialOwners.length; i++) {
+            _grantRole(DEFAULT_ADMIN_ROLE, initialOwners[i]);
+            _grantRole(DB_MANAGER_ROLE, initialOwners[i]);
+            _grantRole(PAUSER_ROLE, initialOwners[i]);
+        }
 
         assetEnabled[_nativeAsset] = true;
         assetDecimals[_nativeAsset] = 18;
@@ -51,7 +55,7 @@ contract SpinPrizeVault is ISpinPrizeVault, AccessControl, ReentrancyGuard, Paus
 
     function enableAsset(address asset, string calldata symbol, uint8 decimals_)
         external
-        onlyRole(DEFAULT_ADMIN_ROLE)
+        onlyOwner
     {
         if (asset == address(0)) revert SharedErrors.InvalidAddress();
         if (assetEnabled[asset]) revert SharedErrors.AssetAlreadyExists();
@@ -61,7 +65,7 @@ contract SpinPrizeVault is ISpinPrizeVault, AccessControl, ReentrancyGuard, Paus
         assetList.push(asset);
     }
 
-    function disableAsset(address asset) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function disableAsset(address asset) external onlyOwner {
         if (!assetEnabled[asset]) revert SharedErrors.AssetNotFound();
         if (asset == nativeAsset) revert SharedErrors.InvalidInput();
         assetEnabled[asset] = false;

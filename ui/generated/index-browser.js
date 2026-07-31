@@ -1451,7 +1451,8 @@ exports.SpinType = exports.$Enums.SpinType = {
   DAILY: 'DAILY',
   REWARD: 'REWARD',
   PURCHASE: 'PURCHASE',
-  EVENT: 'EVENT'
+  EVENT: 'EVENT',
+  WELCOME: 'WELCOME'
 };
 
 exports.ActivityType = exports.$Enums.ActivityType = {

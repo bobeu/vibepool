@@ -17,7 +17,7 @@ import {
   Signal,
   Wifi,
   Battery,
-  BookOpen,
+  Compass,
 } from "lucide-react";
 import { MOBILE_NAV_ITEMS } from "@/config/navigation";
 import { WalletConnect } from "@/components/layout/WalletConnect";
@@ -188,7 +188,7 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
           title={guideLabel}
           className="absolute bottom-[calc(100%+0.5rem)] right-4 z-[100] flex h-12 w-12 items-center justify-center rounded-2xl border-2 border-black bg-[#FBBF24] text-black shadow-[3px_3px_0_rgba(0,0,0,1)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[2px_2px_0_rgba(0,0,0,1)] transition-all"
         >
-          <BookOpen className="w-5 h-5" strokeWidth={2.5} />
+          <Compass className="w-5 h-5" strokeWidth={2.5} />
         </button>
       </div>
     </>

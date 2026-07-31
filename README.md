@@ -1,4 +1,4 @@
-# Vibepool 2.0
+# Vibepool 2.0 (Nexora)
 
 Skill-based competitive Web3 gaming on Celo. Built for MiniPay and daily mobile play.
 
@@ -11,29 +11,27 @@ Skill-based competitive Web3 gaming on Celo. Built for MiniPay and daily mobile 
 ## Getting Started
 
 1. Install dependencies:
-   ```bash
+  ```bash
    cd ui
    npm install
    # or
    bun install
-   ```
-
+  ```
 2. Copy `.env.example` to `.env.local` inside `ui/` and fill in values.
-
 3. Run database migrations (Prompt 2):
-   ```bash
+  ```bash
    cd ui
    npm run db:generate
    npm run db:push
-   ```
-
+  ```
 4. Start dev server:
-   ```bash
+  ```bash
    cd ui
    npm run dev
-   ```
+  ```
+5. Open [http://localhost:3001](http://localhost:3001)
 
-5. Open http://localhost:3001
+
 
 ## Project Structure
 
@@ -58,6 +56,8 @@ vibepool/
     docs/         — Architecture documentation
 ```
 
+
+
 ## Scripts
 
 Run these from inside `ui/` unless noted otherwise.
@@ -73,9 +73,12 @@ Run these from inside `ui/` unless noted otherwise.
 - `npm run db:studio` — Open Prisma Studio
 
 From `smartContracts/`:
+
 - `npm run compile` — Compile contracts
 - `npm run test` — Run tests
 - `npm run sync` — Sync contract ABIs and addresses to `ui/lib/contracts`
+
+
 
 ## Status
 

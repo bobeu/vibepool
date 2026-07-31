@@ -53,9 +53,21 @@ const config: HardhatUserConfig = {
       default: 0,
       42220: `privatekey://${process.env.KEY_FAR || process.env.PRIVATE_KEY}`,
     },
+    owner1: {
+      default: 1,
+      42220: `${process.env.ROUTE || ''}`,
+    },
+    owner2: {
+      default: 2,
+      42220: `privatekey://${process.env.TREASURY || ''}`,
+    },
+    owner3: {
+      default: 3,
+      42220: `${process.env.DB_MANAGER || process.env.BACKEND_SIGNER}`,
+    },
     feeReceiver: {
       default: 0,
-      42220: `privatekey://${process.env.TREASURE || process.env.KEY_FAR}`,
+      42220: `privatekey://${process.env.TREASURY || process.env.KEY_FAR}`,
     },
     oracleAddress: {
       default: 0,

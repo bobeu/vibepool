@@ -12,18 +12,24 @@ const USDT = "0x48065fbbe25f71c9282ddf5e1cd6d6a887483d5e";
 const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const { deployments, getNamedAccounts, network } = hre;
   const { deploy, log, execute, get } = deployments;
-  const { deployer } = await getNamedAccounts();
+  const { deployer, owner1, owner2, owner3 } = await getNamedAccounts();
 
   if (network.name !== "hardhat" && network.config.chainId !== 42220) {
     throw new Error(`Refuse to deploy on ${network.name} — Celo mainnet (42220) only`);
   }
 
+  let owners = Array.from([deployer, owner1, owner2, owner3]);
+  console.log("Owners", owners);
+  
+  if(owners.includes(zeroAddress) || owners.includes('')) {
+    throw new Error('Owners array contain invalid address');
+  }
   const confirmations = hre.network.live ? 5 : 1;
 
   log("Deploying RewardTreasury...");
   const treasury = await deploy("RewardTreasury", {
     from: deployer,
-    args: [zeroAddress],
+    args: [zeroAddress, owners],
     log: true,
     waitConfirmations: confirmations,
   });
@@ -31,7 +37,7 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   log("Deploying ActivityRegistry...");
   const activity = await deploy("ActivityRegistry", {
     from: deployer,
-    args: [],
+    args: [owners],
     log: true,
     waitConfirmations: confirmations,
   });
@@ -39,7 +45,7 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   log("Deploying SpinRewardManager...");
   const spin = await deploy("SpinRewardManager", {
     from: deployer,
-    args: [],
+    args: [owners],
     log: true,
     waitConfirmations: confirmations,
   });
@@ -47,7 +53,7 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   log("Deploying PointsManager...");
   const points = await deploy("PointsManager", {
     from: deployer,
-    args: [activity.address, spin.address],
+    args: [activity.address, spin.address, owners],
     log: true,
     waitConfirmations: confirmations,
   });
@@ -55,7 +61,7 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   log("Deploying SpinPrizeVault...");
   const vault = await deploy("SpinPrizeVault", {
     from: deployer,
-    args: [zeroAddress],
+    args: [zeroAddress, owners],
     log: true,
     waitConfirmations: confirmations,
   });
@@ -64,16 +70,20 @@ const deploy: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   log("Deploying SpinEconomy...");
   const economy = await deploy("SpinEconomy", {
     from: deployer,
-    args: [zeroAddress, treasury.address, vault.address, treasuryBps],
+    args: [zeroAddress, treasury.address, vault.address, treasuryBps, points.address, owners],
     log: true,
     waitConfirmations: confirmations,
   });
 
+  log("Granting BACKEND_ROLE of PointsManager to SpinEconomy...");
+  const backendRole = await deployments.read("PointsManager", "BACKEND_ROLE");
+  await execute("PointsManager", { from: deployer, log: true }, "grantRole", backendRole, economy.address);
+
   if (network.config.chainId === 42220 || network.name === "hardhat") {
     const assets: Array<{ addr: string; symbol: string; decimals: number }> = [
-      { addr: process.env.SUPPORTED_ASSET_USDM || USDM, symbol: "USDm", decimals: 18 },
-      { addr: process.env.SUPPORTED_ASSET_USDC || USDC, symbol: "USDC", decimals: 6 },
-      { addr: process.env.SUPPORTED_ASSET_USDT || USDT, symbol: "USDT", decimals: 6 },
+      { addr:  USDM, symbol: "USDm", decimals: 18 },
+      { addr: USDC, symbol: "USDC", decimals: 6 },
+      { addr: USDT, symbol: "USDT", decimals: 6 },
     ];
 
     for (const a of assets) {

@@ -728,6 +728,7 @@ enum SpinType {
   REWARD
   PURCHASE
   EVENT
+  WELCOME
 }
 
 enum MissionCategory {
