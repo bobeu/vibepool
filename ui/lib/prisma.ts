@@ -7,6 +7,8 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function requireDatabaseUrl(): string {
+  // Prefer pooled URL on Prisma Postgres; fall back to DATABASE_URL.
+  // Dynamic lookup so Next.js does not inline a build-time .env value.
   const connectionString =
     process.env["DATABASE_URL_POOLED"]?.trim() ||
     process.env["DATABASE_URL"]?.trim();
@@ -18,16 +20,27 @@ function requireDatabaseUrl(): string {
   return connectionString;
 }
 
-/** Shared Prisma Client singleton for server-side code only. */
-export const prismaClient =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    adapter: new PrismaPg({ connectionString: requireDatabaseUrl() }),
+function createPrismaClient(): PrismaClient {
+  return new PrismaClient({
+    adapter: new PrismaPg({
+      connectionString: requireDatabaseUrl(),
+      // Serverless instances handle few concurrent queries each, so keep pools
+      // small and let idle sockets stay warm between invocations.
+      max: 5,
+      idleTimeoutMillis: 30_000,
+      connectionTimeoutMillis: 15_000,
+    }),
   });
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prismaClient;
 }
+
+/**
+ * Shared Prisma Client singleton for server-side code only.
+ * Cached on globalThis in every environment so route handlers that land in
+ * separate bundles reuse one connection pool instead of opening one each.
+ */
+export const prismaClient = globalForPrisma.prisma ?? createPrismaClient();
+
+globalForPrisma.prisma = prismaClient;
 
 /** Backward-compatible accessor used across engines as `prisma()`. */
 export function prisma(): PrismaClient {

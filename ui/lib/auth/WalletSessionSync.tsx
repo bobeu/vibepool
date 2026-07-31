@@ -2,7 +2,13 @@
 
 import { useAccount, useSignMessage } from "wagmi";
 import { useEffect, useRef } from "react";
-import { clearTokens, getAccessToken, isFreePlaySession, setTokens } from "@/lib/auth/client";
+import {
+  clearTokens,
+  getAccessToken,
+  isFreePlaySession,
+  setTokens,
+  validateAccessToken,
+} from "@/lib/auth/client";
 
 export function WalletSessionSync() {
   const { address, isConnected } = useAccount();
@@ -19,13 +25,16 @@ export function WalletSessionSync() {
       return;
     }
 
-    // Upgrade from free-play guest → real wallet when user connects.
-    if (getAccessToken() && !isFreePlaySession()) return;
     if (syncing.current) return;
 
     syncing.current = true;
     (async () => {
       try {
+        // Upgrade from free-play guest → real wallet when user connects, and
+        // re-sign when a stored wallet token has expired server-side.
+        const hasWalletToken = Boolean(getAccessToken()) && !isFreePlaySession();
+        if (hasWalletToken && (await validateAccessToken())) return;
+
         const timestamp = Date.now();
         const wallet = address.toLowerCase();
         const message = `Sign in to NEXORA\nWallet: ${wallet}\nTimestamp: ${timestamp}`;

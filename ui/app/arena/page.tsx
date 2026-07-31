@@ -10,12 +10,11 @@ import { GlassContainer } from "@/components/hero/GlassContainer";
 import { SectionDivider } from "@/components/hero/SectionDivider";
 import { Button } from "@/components/ui/button";
 import { BrutalCard } from "@/components/ui/BrutalCard";
-import { authFetch, getAccessToken, startFreePlaySession } from "@/lib/auth/client";
+import { authFetch } from "@/lib/auth/client";
 import { container, item } from "@/lib/motion/variants";
 import { useSkillBoostPayment } from "@/hooks/useSkillBoostPayment";
 import { useUIStore } from "@/store/uiStore";
 import { useEnsureSession } from "@/hooks/useEnsureSession";
-import { useAuth } from "@/lib/auth/useAuth";
 
 type ArenaHome = {
   name: string;
@@ -48,7 +47,6 @@ type ArenaHome = {
 export default function ArenaPage() {
   const queryClient = useQueryClient();
   const showToast = useUIStore((s) => s.showToast);
-  const { refreshSession } = useAuth();
   const { ready } = useEnsureSession();
   const [view, setView] = useState<"home" | "queue" | "match" | "result">("home");
   const [activeMatchId, setActiveMatchId] = useState<string | null>(null);
@@ -80,10 +78,6 @@ export default function ArenaPage() {
   const { data, isLoading, error, refetch } = useQuery<ArenaHome>({
     queryKey: ["arena"],
     queryFn: async () => {
-      if (!getAccessToken()) {
-        await startFreePlaySession();
-        await refreshSession();
-      }
       const res = await authFetch("/api/arena");
       if (!res.ok) throw new Error("Failed to load arena");
       return res.json();

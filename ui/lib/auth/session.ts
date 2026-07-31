@@ -23,34 +23,41 @@ export async function verifyWalletSignature(
 export async function createSession(
   db: PrismaClient,
   wallet: string,
-  meta?: { userAgent?: string; ip?: string }
+  meta?: { userAgent?: string; ip?: string; userId?: string }
 ): Promise<{ accessToken: string; refreshToken: string; expiresAt: Date }> {
   const normalized = wallet.toLowerCase();
-  const user = await db.userProfile.findUnique({ where: { wallet: normalized } });
-  if (!user) throw new Error("User not found");
+  // Callers that just created the profile pass userId to skip a round trip.
+  let userId = meta?.userId;
+  if (!userId) {
+    const user = await db.userProfile.findUnique({
+      where: { wallet: normalized },
+      select: { id: true },
+    });
+    if (!user) throw new Error("User not found");
+    userId = user.id;
+  }
 
   const token = generateSecureToken(32);
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
-  const session = await db.session.create({
+  await db.session.create({
     data: {
-      userId: user.id,
+      userId,
       wallet: normalized,
       refreshToken: token,
       expiresAt,
       revoked: false,
       userAgent: meta?.userAgent,
       ip: meta?.ip,
+      tokenRecord: {
+        create: {
+          token,
+          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          revoked: false,
+        },
+      },
     },
-  });
-
-  await db.refreshToken.create({
-    data: {
-      sessionId: session.id,
-      token,
-      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-      revoked: false,
-    },
+    select: { id: true },
   });
 
   return { accessToken: token, refreshToken: token, expiresAt };

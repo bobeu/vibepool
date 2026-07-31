@@ -1,7 +1,12 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { authFetch, clearTokens, getAccessToken, getRefreshToken } from "@/lib/auth/client";
+import {
+  authFetch,
+  clearTokens,
+  getAccessToken,
+  refreshAccessToken,
+} from "@/lib/auth/client";
 
 interface Session {
   wallet: string;
@@ -37,14 +42,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(false);
       return;
     }
-    const res = await authFetch("/api/auth/session");
-    if (res.ok) {
-      const data = await res.json();
-      setSession(data.session ?? null);
-    } else {
+    try {
+      const res = await authFetch("/api/auth/session");
+      if (res.ok) {
+        const data = await res.json();
+        setSession(data.session ?? null);
+      } else {
+        // Stored credentials are dead; drop them so bootstrap can mint a new session.
+        clearTokens();
+        setSession(null);
+      }
+    } catch {
       setSession(null);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -54,14 +66,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const interval = setInterval(() => {
       if (!session?.expiresAt) return;
       const expires = new Date(session.expiresAt).getTime();
-      if (Date.now() > expires - 60_000) {
-        authFetch("/api/auth/refresh", {
-          method: "POST",
-          body: JSON.stringify({ refreshToken: getRefreshToken() }),
-        })
-          .then((res) => res.ok && refreshSession())
-          .catch(() => {});
-      }
+      if (Date.now() < expires - 60_000) return;
+      void refreshAccessToken().then((ok) => {
+        if (ok) return refreshSession();
+        clearTokens();
+        setSession(null);
+      });
     }, 30_000);
     return () => {
       clearInterval(interval);

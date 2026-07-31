@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatUnits } from "viem";
 import { Images, Music2, Pause, Play, Shield, Ticket, Zap } from "lucide-react";
-import { authFetch, getAccessToken } from "@/lib/auth/client";
+import { authFetch } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
 import { useSpinEconomyPayment } from "@/hooks/useSpinEconomyPayment";
 import { useUIStore } from "@/store/uiStore";
@@ -65,11 +65,12 @@ export function SpinLoadoutPanel() {
   const [playingTrackId, setPlayingTrackId] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const queryClient = useQueryClient();
-  const { isFreePlay } = useAuth();
+  const { isFreePlay, session } = useAuth();
   const { address, isConnected: wagmiConnected } = useAccount();
   const showToast = useUIStore((s) => s.showToast);
   const { purchaseItem, busy, preferredAsset, isConnected } = useSpinEconomyPayment();
-  const hasToken = Boolean(getAccessToken());
+  // Gate on the verified session, not a stored token, so expired creds don't 401.
+  const hasToken = Boolean(session);
   const inFreeMode = Boolean(isFreePlay && !wagmiConnected && !isConnected);
   const canManageSpins = Boolean(address && canRefillOrBuyDemoSpins(address));
 

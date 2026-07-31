@@ -2,13 +2,16 @@
 
 import { useEffect, useRef } from "react";
 import { useAccount } from "wagmi";
-import { getAccessToken, isFreePlaySession, startFreePlaySession } from "@/lib/auth/client";
+import { startFreePlaySession } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
 
 /**
  * Ensures a JWT session exists for API calls.
  * - Wallet connected → WalletSessionSync handles SIWE login
  * - Wallet disconnected → start guest free-play session
+ *
+ * Bootstrap keys off the verified session rather than a stored token: an expired
+ * token would otherwise look like a valid session and 401 every request.
  */
 export function useEnsureSession() {
   const { isConnected } = useAccount();
@@ -16,8 +19,7 @@ export function useEnsureSession() {
   const starting = useRef(false);
 
   useEffect(() => {
-    if (isLoading || isConnected) return;
-    if (getAccessToken() && (session || isFreePlaySession())) return;
+    if (isLoading || isConnected || session) return;
     if (starting.current) return;
     starting.current = true;
     void startFreePlaySession()
@@ -34,6 +36,6 @@ export function useEnsureSession() {
     isLoading,
     isFreePlay: Boolean(isFreePlay && !isConnected),
     isConnected,
-    ready: !isLoading && Boolean(session || getAccessToken()),
+    ready: !isLoading && Boolean(session),
   };
 }

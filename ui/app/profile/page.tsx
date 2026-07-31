@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useAccount } from "wagmi";
@@ -23,8 +24,27 @@ export default function ProfilePage() {
   const { session, refreshSession } = useAuth();
   const { address, isConnected } = useAccount();
   const { ready } = useEnsureSession();
+  const [startingFreePlay, setStartingFreePlay] = useState(false);
+  const [freePlayError, setFreePlayError] = useState<string | null>(null);
 
-  const hasAccess = Boolean(session || (ready && address));
+  const hasAccess = Boolean(session) || (ready && Boolean(address));
+
+  const handleStartFreePlay = async () => {
+    setStartingFreePlay(true);
+    setFreePlayError(null);
+    try {
+      const ok = await startFreePlaySession({ force: true });
+      if (!ok) {
+        setFreePlayError("Could not start free play. Please try again.");
+        return;
+      }
+      await refreshSession();
+    } catch {
+      setFreePlayError("Could not start free play. Please try again.");
+    } finally {
+      setStartingFreePlay(false);
+    }
+  };
 
   const { data: profilePayload, isLoading: profileLoading } = useQuery({
     queryKey: ["profile"],
@@ -166,16 +186,19 @@ export default function ProfilePage() {
               : "Connect your wallet or start free play to view your profile."}
           </p>
           {!isConnected && (
-            <button
-              type="button"
-              onClick={async () => {
-                const ok = await startFreePlaySession();
-                if (ok) await refreshSession();
-              }}
-              className="rounded-xl border-4 border-black bg-[#FBBF24] px-4 py-2 text-sm font-black uppercase text-black shadow-[3px_3px_0_rgba(0,0,0,1)]"
-            >
-              Start Free Play
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={handleStartFreePlay}
+                disabled={startingFreePlay}
+                className="rounded-xl border-4 border-black bg-[#FBBF24] px-4 py-2 text-sm font-black uppercase text-black shadow-[3px_3px_0_rgba(0,0,0,1)] disabled:opacity-60"
+              >
+                {startingFreePlay ? "Starting…" : "Start Free Play"}
+              </button>
+              {freePlayError && (
+                <p className="text-xs font-medium text-destructive">{freePlayError}</p>
+              )}
+            </>
           )}
         </div>
       </AppShell>

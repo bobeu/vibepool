@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowDownToLine, RotateCcw, Shield, Ticket, X, Zap } from "lucide-react";
 import { formatUnits } from "viem";
-import { authFetch, getAccessToken, startFreePlaySession } from "@/lib/auth/client";
+import { authFetch, startFreePlaySession } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
 import { useSpinEconomyPayment } from "@/hooks/useSpinEconomyPayment";
 import { useUIStore } from "@/store/uiStore";
@@ -43,7 +43,12 @@ function formatCash(amountWei: string, asset: string) {
 
 export function SpinHuntHub() {
   const queryClient = useQueryClient();
-  const { isFreePlay, isLoading: authLoading, refreshSession } = useAuth();
+  const {
+    isFreePlay,
+    isLoading: authLoading,
+    refreshSession,
+    session: authSession,
+  } = useAuth();
   const { address, isConnected: wagmiConnected } = useAccount();
   const showToast = useUIStore((s) => s.showToast);
   const {
@@ -75,12 +80,11 @@ export function SpinHuntHub() {
   const huntTimer = useRef<number | null>(null);
 
   useEffect(() => {
-    if (authLoading || isConnected) return;
-    if (getAccessToken()) return;
+    if (authLoading || isConnected || authSession) return;
     void startFreePlaySession().then((ok) => {
       if (ok) void refreshSession();
     });
-  }, [authLoading, isConnected, refreshSession]);
+  }, [authLoading, isConnected, authSession, refreshSession]);
 
   const { data, isLoading } = useQuery({
     queryKey: ["spin-hunt-config"],
@@ -90,7 +94,7 @@ export function SpinHuntHub() {
       return res.json();
     },
     staleTime: 15_000,
-    enabled: !authLoading && Boolean(getAccessToken()),
+    enabled: !authLoading && Boolean(authSession),
   });
 
   const { data: loadoutSummary } = useQuery({
@@ -101,7 +105,7 @@ export function SpinHuntHub() {
       return res.json();
     },
     staleTime: 10_000,
-    enabled: !authLoading && Boolean(getAccessToken()),
+    enabled: !authLoading && Boolean(authSession),
   });
 
   const { data: walletSummary } = useQuery({
@@ -112,7 +116,7 @@ export function SpinHuntHub() {
       return res.json();
     },
     staleTime: 5_000,
-    enabled: !authLoading && Boolean(getAccessToken()),
+    enabled: !authLoading && Boolean(authSession),
   });
 
   const available = Number(data?.balance?.available ?? 0);
@@ -418,7 +422,7 @@ export function SpinHuntHub() {
     if (finishing) return "…";
     if (hunting) return "Burst";
     if (startTicket.isPending || startPaid.isPending || paying) return "…";
-    return "Spin";
+    return "Start";
   }, [finishing, hunting, paying, startPaid.isPending, startTicket.isPending]);
 
   useEffect(() => {
