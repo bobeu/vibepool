@@ -21,12 +21,16 @@ import {
 } from "lucide-react";
 import { MOBILE_NAV_ITEMS } from "@/config/navigation";
 import { WalletConnect } from "@/components/layout/WalletConnect";
+import { NotificationsPanel } from "@/components/layout/NotificationsPanel";
 import { cn } from "@/utils/format";
 import { useUIStore } from "@/store/uiStore";
 import { UnlockAnimationToast } from "@/components/social/UnlockAnimationToast";
 import { NavigationProgress } from "@/components/layout/NavigationProgress";
 import { Onboarding } from "@/components/common/Onboarding";
 import type { NavKey } from "@/types";
+import { authFetch } from "@/lib/auth/client";
+import { useAuth } from "@/lib/auth/useAuth";
+import { useQuery } from "@tanstack/react-query";
 
 const ONBOARDING_HIDE_KEY = "nexora_onboarding_hide";
 const ONBOARDING_SESSION_DISMISS_KEY = "nexora_onboarding_session_dismiss";
@@ -59,12 +63,43 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
   const pathname = usePathname();
   const router = useRouter();
   const { toastMessage, clearToast } = useUIStore();
+  const { session } = useAuth();
   // Hide flag persists across refreshes; dismissed is session-only (Start game).
   const [onboardingHidden, setOnboardingHidden] = useState(false);
   const [onboardingDismissed, setOnboardingDismissed] = useState(false);
   const [onboardingChecked, setOnboardingChecked] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [currentTime, setCurrentTime] = useState("9:41");
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+
+  const { data: notificationFeed } = useQuery({
+    queryKey: ["notifications"],
+    queryFn: async () => {
+      const res = await authFetch("/api/notifications");
+      if (!res.ok) return { notifications: [] };
+      return res.json();
+    },
+    staleTime: 20_000,
+    enabled: Boolean(session),
+  });
+
+  const { data: walletSummary } = useQuery({
+    queryKey: ["spin-wallet"],
+    queryFn: async () => {
+      const res = await authFetch("/api/spin/wallet");
+      if (!res.ok) return null;
+      return res.json();
+    },
+    staleTime: 15_000,
+    enabled: Boolean(session),
+  });
+
+  const hasUnread =
+    Boolean(notificationFeed?.notifications?.length) ||
+    Boolean(
+      walletSummary?.canWithdraw ||
+        (walletSummary?.totalWei && BigInt(walletSummary.totalWei || "0") > 0n)
+    );
 
   useEffect(() => {
     setMounted(true);
@@ -153,17 +188,22 @@ export function AppShell({ children, activeNav, spinLayout = false }: AppShellPr
         <div className="flex items-center gap-2">
           <button
             type="button"
+            onClick={() => setNotificationsOpen(true)}
             className="relative p-1.5 border-2 border-white/20 bg-zinc-900/80 rounded-xl flex-shrink-0"
             aria-label="Notifications"
           >
             <Bell className="w-4 h-4" strokeWidth={2.5} />
-            <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full" />
+            {hasUnread ? (
+              <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full" />
+            ) : null}
           </button>
           <div className="flex-shrink-0 max-w-[140px] overflow-hidden">
             <WalletConnect />
           </div>
         </div>
       </header>
+
+      <NotificationsPanel open={notificationsOpen} onClose={() => setNotificationsOpen(false)} />
 
       {/* Unlock animation */}
       <UnlockAnimationToast />

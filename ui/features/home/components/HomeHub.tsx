@@ -19,11 +19,14 @@ import {
   Target,
   Crown,
   ListChecks,
+  Landmark,
 } from "lucide-react";
 import { LevelProgress } from "@/components/ui/LevelProgress";
 import { authFetch, startFreePlaySession } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
 import { cn } from "@/utils/format";
+import { useState } from "react";
+import { FundVaultModal } from "@/features/home/components/FundVaultModal";
 
 // ─── Action tiles config ──────────────────────────────────────────────────────
 
@@ -31,7 +34,7 @@ const ACTION_TILES = [
   {
     href: "/prediction",
     label: "Predict",
-    sub: "CELO Volatility\nEarn Yield",
+    sub: "Higher or Lower\nCELO Price",
     icon: Sparkles,
     image: "/prediction.png",
     bg: "bg-[#FBBF24]",
@@ -89,6 +92,7 @@ export function HomeHub() {
   const router = useRouter();
   const { address, isConnected } = useAccount();
   const { session, isFreePlay, isLoading: authLoading } = useAuth();
+  const [fundOpen, setFundOpen] = useState(false);
 
   const { data: profile } = useQuery({
     queryKey: ["profile"],
@@ -279,6 +283,29 @@ export function HomeHub() {
           );
         })}
       </div>
+
+      {/* ── Fund prize vault ── */}
+      <button
+        type="button"
+        onClick={() => setFundOpen(true)}
+        className="flex w-full items-center gap-3 rounded-2xl border-2 border-primary/30 bg-primary/10 px-3 py-3 text-left transition-colors hover:bg-primary/15 active:scale-[0.99]"
+      >
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-black bg-primary shadow-[2px_2px_0_rgba(0,0,0,1)]">
+          <Landmark className="h-4 w-4 text-black" strokeWidth={2.5} />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-black uppercase tracking-widest text-primary">
+            Community vault
+          </p>
+          <p className="text-xs font-black uppercase text-white">Fund Spin Prize Vault</p>
+          <p className="mt-0.5 text-[10px] font-bold text-white/55">
+            Top up CELO, USDm, USDC, or USDT so rewards stay claimable.
+          </p>
+        </div>
+        <ChevronRight className="h-4 w-4 shrink-0 text-primary" strokeWidth={2.5} />
+      </button>
+
+      <FundVaultModal open={fundOpen} onClose={() => setFundOpen(false)} />
 
       {/* ── TODAY Tiles ── */}
       <section>

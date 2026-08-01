@@ -7,6 +7,7 @@ import { verifySpinEntry } from "@/lib/blockchain/verifySpinEntry";
 import {
   defaultEntryFee,
   isSpinPayAsset,
+  scaleSpinAmountToAsset,
   type SpinPayAsset,
 } from "@/lib/spin/economy";
 import type { IEngine } from "./interfaces";
@@ -118,9 +119,12 @@ export class SpinHuntEngine implements IEngine {
     const cashAsset = isSpinPayAsset(cfg.entryAsset) ? cfg.entryAsset : "USDm";
     const configuredMin = BigInt(cfg.minBubbleCashWei || "0");
     const configuredMax = BigInt(cfg.maxBubbleCashWei || "0");
-    const minBubble = freePlay ? FREE_PLAY_MIN_BUBBLE_WEI : configuredMin;
-    const maxBubble = freePlay ? FREE_PLAY_MAX_BUBBLE_WEI : configuredMax;
-    const maxSpin = BigInt(cfg.maxCashPerSpinWei || "0");
+    const minBubble18 = freePlay ? FREE_PLAY_MIN_BUBBLE_WEI : configuredMin;
+    const maxBubble18 = freePlay ? FREE_PLAY_MAX_BUBBLE_WEI : configuredMax;
+    const maxSpin18 = BigInt(cfg.maxCashPerSpinWei || "0");
+    const minBubble = scaleSpinAmountToAsset(minBubble18, cashAsset);
+    const maxBubble = scaleSpinAmountToAsset(maxBubble18, cashAsset);
+    const maxSpin = scaleSpinAmountToAsset(maxSpin18, cashAsset);
     const count = 8 + Math.floor(rng() * 5); // 8–12 bubbles
     const bubbles: InternalBubble[] = [];
     let allocated = 0n;
@@ -178,6 +182,8 @@ export class SpinHuntEngine implements IEngine {
     entryTxHash?: string;
     sessionRef?: `0x${string}`;
     entryAsset?: SpinPayAsset;
+    /** Preferred reward currency for ticket / free spins. */
+    rewardAsset?: SpinPayAsset;
   }): Promise<Record<string, unknown>> {
     const cfg = await this.getOrCreateConfig();
     const active = await prisma().spinSession.findFirst({
@@ -272,6 +278,12 @@ export class SpinHuntEngine implements IEngine {
     const loadout = await collectionEngine.resolveLoadout(input.userId);
     // 64 hex chars — fits SpinSession.serverSeed @db.VarChar(64) (0x-prefixed would be 66).
     const serverSeed = randomBytes(32).toString("hex");
+    const sessionAssetRaw =
+      entryAsset ||
+      input.rewardAsset ||
+      input.entryAsset ||
+      cfg.entryAsset;
+    const sessionAsset = isSpinPayAsset(sessionAssetRaw) ? sessionAssetRaw : "USDm";
     const plan = this.buildBubblePlan(
       serverSeed,
       {
@@ -279,7 +291,7 @@ export class SpinHuntEngine implements IEngine {
         minBubbleCashWei: cfg.minBubbleCashWei,
         maxBubbleCashWei: cfg.maxBubbleCashWei,
         maxCashPerSpinWei: cfg.maxCashPerSpinWei,
-        entryAsset: entryAsset || cfg.entryAsset,
+        entryAsset: sessionAsset,
       },
       loadout,
       isGuestWallet(input.wallet)
@@ -293,12 +305,12 @@ export class SpinHuntEngine implements IEngine {
         userId: input.userId,
         status: "ACTIVE",
         entryTxHash,
-        entryAsset,
+        entryAsset: entryAsset || sessionAsset,
         serverSeed,
         loadout: loadout as object,
         bubblePlan: JSON.parse(JSON.stringify(plan)),
         cashEarnedWei: "0",
-        cashAsset: isSpinPayAsset(cfg.entryAsset) ? cfg.entryAsset : "USDm",
+        cashAsset: sessionAsset,
         expiresAt,
       },
     });
@@ -378,23 +390,26 @@ export class SpinHuntEngine implements IEngine {
 
     const earned = BigInt(session.cashEarnedWei) + BigInt(bubble.amountWei);
     const cfg = await this.getOrCreateConfig();
-    const capped =
-      BigInt(cfg.maxCashPerSpinWei) > 0n && earned > BigInt(cfg.maxCashPerSpinWei)
-        ? BigInt(cfg.maxCashPerSpinWei)
-        : earned;
+    const cashAsset = isSpinPayAsset(bubble.asset)
+      ? bubble.asset
+      : isSpinPayAsset(session.cashAsset)
+        ? session.cashAsset
+        : "USDm";
+    const maxSpin = scaleSpinAmountToAsset(BigInt(cfg.maxCashPerSpinWei || "0"), cashAsset);
+    const capped = maxSpin > 0n && earned > maxSpin ? maxSpin : earned;
 
     await prisma().spinSession.update({
       where: { id: session.id },
-      data: { cashEarnedWei: capped.toString(), cashAsset: bubble.asset },
+      data: { cashEarnedWei: capped.toString(), cashAsset },
     });
 
     return {
       success: true,
       bubbleId: bubble.id,
       amountWei: bubble.amountWei,
-      asset: bubble.asset,
+      asset: cashAsset,
       cashEarnedWei: capped.toString(),
-      cashAsset: bubble.asset,
+      cashAsset,
     };
   }
 

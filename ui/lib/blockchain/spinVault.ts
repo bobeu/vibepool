@@ -101,3 +101,20 @@ export async function readVaultCanWithdraw(
     return false;
   }
 }
+
+/** Unreserved vault holdings for an asset (on-chain liquidBalance). */
+export async function readVaultLiquidBalance(asset: SpinPayAsset): Promise<bigint | null> {
+  const vault = CONTRACTS.SpinPrizeVault;
+  if (!vault?.address || vault.address === ZERO_ADDRESS || !vault.abi) return null;
+  try {
+    const publicClient = createPublicClient({ chain: celo, transport: http(rpcUrl()) });
+    return (await publicClient.readContract({
+      address: vault.address as `0x${string}`,
+      abi: vault.abi as Abi,
+      functionName: "liquidBalance",
+      args: [assetAddress(asset)],
+    })) as bigint;
+  } catch {
+    return null;
+  }
+}

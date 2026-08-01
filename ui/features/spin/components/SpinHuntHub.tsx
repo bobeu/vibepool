@@ -8,7 +8,7 @@ import { authFetch, startFreePlaySession } from "@/lib/auth/client";
 import { useAuth } from "@/lib/auth/useAuth";
 import { useSpinEconomyPayment } from "@/hooks/useSpinEconomyPayment";
 import { useUIStore } from "@/store/uiStore";
-import { assetDecimals } from "@/lib/tokens/celoAssets";
+import { assetDecimals, type SpinPayAsset } from "@/lib/tokens/celoAssets";
 import { isSpinPayAsset } from "@/lib/spin/economy";
 import { unlockSpinAudio } from "@/lib/audio/spinSounds";
 import { canRefillOrBuyDemoSpins } from "@/lib/spin/freePlay";
@@ -18,6 +18,10 @@ import { SpinLoadoutPanel } from "./SpinLoadoutPanel";
 import { SLICE_DEG, TOTAL, SpinWheelPanel } from "./SpinWheelPanel";
 import { AppOverlay } from "@/components/layout/AppOverlay";
 import { useAccount } from "wagmi";
+import { cn } from "@/utils/format";
+
+const REWARD_ASSETS: SpinPayAsset[] = ["CELO", "USDm", "USDC", "USDT"];
+const REWARD_ASSET_KEY = "nexora_spin_reward_asset";
 
 type CatalogItem = {
   id: string;
@@ -42,6 +46,17 @@ function formatCash(amountWei: string, asset: string) {
   }
 }
 
+function readStoredRewardAsset(fallback: SpinPayAsset): SpinPayAsset {
+  if (typeof window === "undefined") return fallback;
+  try {
+    const raw = localStorage.getItem(REWARD_ASSET_KEY);
+    if (raw && isSpinPayAsset(raw)) return raw;
+  } catch {
+    /* ignore */
+  }
+  return fallback;
+}
+
 export function SpinHuntHub() {
   const queryClient = useQueryClient();
   const {
@@ -58,7 +73,7 @@ export function SpinHuntHub() {
     withdrawPrize,
     busy: paying,
     preferredAsset,
-    feeLabel,
+    feeLabelFor,
     isConnected,
   } = useSpinEconomyPayment();
 
@@ -67,10 +82,11 @@ export function SpinHuntHub() {
   const canAdminRefill = Boolean(address && canRefillOrBuyDemoSpins(address));
   const showRefill = canAdminRefill;
 
+  const [selectedAsset, setSelectedAsset] = useState<SpinPayAsset>(preferredAsset);
   const [session, setSession] = useState<HuntSession | null>(null);
   const [hunting, setHunting] = useState(false);
   const [cashEarnedWei, setCashEarnedWei] = useState("0");
-  const [cashAsset, setCashAsset] = useState("USDm");
+  const [cashAsset, setCashAsset] = useState<string>(preferredAsset);
   const [rotation, setRotation] = useState(0);
   const [finishing, setFinishing] = useState(false);
   const [reward, setReward] = useState<string | null>(null);
@@ -80,6 +96,16 @@ export function SpinHuntHub() {
   const [applyInfo, setApplyInfo] = useState<"SPEED_SHIELDER" | "BUZZER" | null>(null);
   const prevRotation = useRef(0);
   const huntTimer = useRef<number | null>(null);
+
+  useEffect(() => {
+    setSelectedAsset(readStoredRewardAsset(preferredAsset));
+  }, [preferredAsset]);
+
+  useEffect(() => {
+    if (!hunting && !session) setCashAsset(selectedAsset);
+  }, [hunting, selectedAsset, session]);
+
+  const feeLabel = feeLabelFor(selectedAsset);
 
   useEffect(() => {
     if (authLoading || isConnected || authSession) return;
@@ -120,6 +146,24 @@ export function SpinHuntHub() {
     staleTime: 5_000,
     enabled: !authLoading && Boolean(authSession),
   });
+
+  const { data: vaultStatus, isFetching: vaultStatusLoading } = useQuery({
+    queryKey: ["spin-vault-status", selectedAsset],
+    queryFn: async () => {
+      const res = await authFetch(`/api/spin/vault-status?asset=${selectedAsset}`);
+      if (!res.ok) return { asset: selectedAsset, sufficient: true, checked: false };
+      return res.json() as Promise<{ asset: string; sufficient: boolean; checked: boolean }>;
+    },
+    staleTime: 8_000,
+    refetchInterval: 20_000,
+    enabled: !authLoading && Boolean(authSession) && !inFreeMode,
+  });
+
+  const vaultReady = inFreeMode || vaultStatus?.sufficient !== false;
+  const reserveNotice =
+    !inFreeMode && vaultStatus?.sufficient === false
+      ? `${selectedAsset} prize reserve is too low right now. Pick another currency or wait for a vault top-up.`
+      : null;
 
   const available = Number(data?.balance?.available ?? 0);
   const withdrawable = Object.entries(
@@ -220,9 +264,15 @@ export function SpinHuntHub() {
 
   const startTicket = useMutation({
     mutationFn: async () => {
+      if (!inFreeMode && !vaultReady) {
+        throw new Error(reserveNotice || "Prize reserve unavailable");
+      }
       const res = await authFetch("/api/spins/session/start", {
         method: "POST",
-        body: JSON.stringify({ useTicket: true }),
+        body: JSON.stringify({
+          useTicket: true,
+          rewardAsset: selectedAsset,
+        }),
       });
       const body = await res.json().catch(() => ({}));
       if (res.status === 402 || body.code === "ENTRY_REQUIRED") {
@@ -258,7 +308,8 @@ export function SpinHuntHub() {
   const startPaid = useMutation({
     mutationFn: async () => {
       if (!isConnected) throw new Error("Connect wallet to pay entry");
-      const paid = await payEntry({ asset: preferredAsset });
+      if (!vaultReady) throw new Error(reserveNotice || "Prize reserve unavailable");
+      const paid = await payEntry({ asset: selectedAsset });
       const res = await authFetch("/api/spins/session/start", {
         method: "POST",
         body: JSON.stringify({
@@ -266,6 +317,7 @@ export function SpinHuntHub() {
           entryTxHash: paid.hash,
           sessionRef: paid.sessionRef,
           entryAsset: paid.asset,
+          rewardAsset: paid.asset,
         }),
       });
       const body = await res.json().catch(() => ({}));
@@ -339,7 +391,7 @@ export function SpinHuntHub() {
       }
 
       if (!isConnected) throw new Error("Connect wallet to buy");
-      const asset = isSpinPayAsset(item.priceAsset) ? item.priceAsset : preferredAsset;
+      const asset = isSpinPayAsset(item.priceAsset) ? item.priceAsset : selectedAsset;
       const paid = await purchaseItem({
         itemId: item.itemId,
         asset,
@@ -485,6 +537,11 @@ export function SpinHuntHub() {
     if (busy || pendingStartMode) return;
     void unlockSpinAudio();
     setError(null);
+    if (!inFreeMode && !vaultReady) {
+      setError(reserveNotice || "Prize reserve unavailable for this currency");
+      showToast(reserveNotice || "Prize reserve unavailable");
+      return;
+    }
     if (available > 0) {
       setPendingStartMode("ticket");
       return;
@@ -691,6 +748,57 @@ export function SpinHuntHub() {
         </div>
       )}
 
+      {!hunting && (
+        <div className="mb-3 rounded-2xl border-2 border-white/10 bg-zinc-900/80 p-3">
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <p className="text-[9px] font-black uppercase tracking-widest text-white/50">
+              Reward currency
+            </p>
+            {vaultStatusLoading ? (
+              <p className="text-[9px] font-bold uppercase text-white/40">Checking reserve…</p>
+            ) : reserveNotice ? (
+              <p className="text-[9px] font-bold uppercase text-amber-300">Reserve low</p>
+            ) : (
+              <p className="text-[9px] font-bold uppercase text-primary">Ready</p>
+            )}
+          </div>
+          <div className="grid grid-cols-4 gap-1.5">
+            {REWARD_ASSETS.map((asset) => (
+              <button
+                key={asset}
+                type="button"
+                disabled={busy || !!pendingStartMode}
+                onClick={() => {
+                  setSelectedAsset(asset);
+                  try {
+                    localStorage.setItem(REWARD_ASSET_KEY, asset);
+                  } catch {
+                    /* ignore */
+                  }
+                  setError(null);
+                }}
+                className={cn(
+                  "rounded-xl border-2 px-1 py-2 text-[10px] font-black uppercase transition-all",
+                  selectedAsset === asset
+                    ? "border-black bg-primary text-black shadow-[2px_2px_0_rgba(0,0,0,1)]"
+                    : "border-white/15 bg-zinc-950 text-white/70 hover:border-white/30"
+                )}
+              >
+                {asset}
+              </button>
+            ))}
+          </div>
+          {reserveNotice ? (
+            <p className="mt-2 text-[10px] font-bold leading-relaxed text-amber-300">{reserveNotice}</p>
+          ) : (
+            <p className="mt-2 text-[10px] font-bold text-white/45">
+              Bubbles and claimable rewards pay in {selectedAsset}
+              {!inFreeMode ? ` · entry ${feeLabel}` : ""}.
+            </p>
+          )}
+        </div>
+      )}
+
       <div className="mb-4 flex items-center justify-between rounded-2xl border-2 border-white/10 bg-zinc-900/80 p-3 shadow-[0_2px_10px_rgba(0,0,0,0.3)]">
         <div className="flex items-center gap-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-primary/40 bg-primary/20">
@@ -714,13 +822,13 @@ export function SpinHuntHub() {
           )}
           <div className="text-right">
             <p className="text-[9px] font-black uppercase text-white/50">
-              {inFreeMode ? "Demo claimable" : "Hunt cash"}
+              Claimable {isSpinPayAsset(cashAsset) ? cashAsset : selectedAsset}
             </p>
             <p className="flex items-center justify-end gap-1 text-sm font-black text-primary">
               <Zap className="h-3.5 w-3.5" strokeWidth={2.5} />
               {formatCash(
                 inFreeMode ? String(walletSummary?.totalWei ?? cashEarnedWei) : cashEarnedWei,
-                cashAsset
+                isSpinPayAsset(cashAsset) ? cashAsset : selectedAsset
               )}
             </p>
           </div>
@@ -744,7 +852,7 @@ export function SpinHuntHub() {
           rotation={rotation}
           hunting={hunting}
           rpm={rpm}
-          spinDisabled={busy || !!pendingStartMode}
+          spinDisabled={busy || !!pendingStartMode || (!inFreeMode && !vaultReady)}
           spinLabel={spinLabel}
           onSpin={handleSpin}
         />

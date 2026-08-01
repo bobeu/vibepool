@@ -344,10 +344,78 @@ export function useSpinEconomyPayment() {
     [address, ensureChain, isConnected, targetChainId, writeContractAsync]
   );
 
+  /** Anyone can top up prize liquidity on SpinPrizeVault.fund. */
+  const fundVault = useCallback(
+    async (opts: { asset: SpinPayAsset; amountWei: bigint }) => {
+      setError(null);
+      setBusy(true);
+      try {
+        if (!isConnected || !address) throw new Error("Connect wallet to fund the vault");
+        if (opts.amountWei <= 0n) throw new Error("Amount must be greater than zero");
+        await ensureChain();
+        const vault = getSpinPrizeVaultAddress();
+        if (vault === ZERO_ADDRESS) throw new Error("SpinPrizeVault not configured");
+        const abi = CONTRACTS.SpinPrizeVault?.abi;
+        if (!abi?.length) throw new Error("SpinPrizeVault ABI missing");
+
+        const token = assetAddress(opts.asset) as `0x${string}`;
+        let hash: Hash;
+
+        if (opts.asset === "CELO") {
+          hash = await writeContractAsync({
+            address: vault,
+            abi,
+            functionName: "fund",
+            args: [token, opts.amountWei],
+            value: opts.amountWei,
+            chainId: targetChainId,
+          });
+        } else {
+          const allowance = await readAllowance(token, address, vault);
+          if (allowance < opts.amountWei) {
+            await writeContractAsync({
+              address: token,
+              abi: erc20Abi,
+              functionName: "approve",
+              args: [vault, opts.amountWei],
+              chainId: targetChainId,
+            });
+          }
+          hash = await writeContractAsync({
+            address: vault,
+            abi,
+            functionName: "fund",
+            args: [token, opts.amountWei],
+            chainId: targetChainId,
+          });
+        }
+
+        setPendingHash(hash);
+        return { hash, asset: opts.asset, amountWei: opts.amountWei.toString() };
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "Vault funding failed";
+        setError(msg);
+        throw e;
+      } finally {
+        setBusy(false);
+      }
+    },
+    [address, ensureChain, isConnected, targetChainId, writeContractAsync]
+  );
+
+  const feeLabelFor = useCallback((asset: SpinPayAsset) => {
+    if (asset === "USDm") return "0.01 USDm";
+    if (asset === "CELO") return "0.05 CELO";
+    if (asset === "USDC") return "0.01 USDC";
+    if (asset === "USDT") return "0.01 USDT";
+    return `entry ${asset}`;
+  }, []);
+
   return {
     payEntry,
     purchaseItem,
     withdrawPrize,
+    fundVault,
     createSessionRef,
     // Only treat receipt wait as busy when we actually submitted a tx.
     // wagmi can report isLoading=true with an undefined hash when a wallet
@@ -356,12 +424,8 @@ export function useSpinEconomyPayment() {
     error,
     preferredAsset,
     miniPay,
-    feeLabel:
-      preferredAsset === "USDm"
-        ? "0.01 USDm"
-        : preferredAsset === "CELO"
-          ? "0.05 CELO"
-          : `entry ${preferredAsset}`,
+    feeLabel: feeLabelFor(preferredAsset),
+    feeLabelFor,
     isConnected,
   };
 }

@@ -44,5 +44,17 @@ export function isSpinPayAsset(value: string): value is SpinPayAsset {
   return value in CELO_ASSETS;
 }
 
+/**
+ * SpinConfig bubble/cap amounts are stored as 18-decimal human equivalents.
+ * Scale into the selected asset's native units (e.g. USDC 6 decimals).
+ */
+export function scaleSpinAmountToAsset(amount18: bigint, asset: SpinPayAsset): bigint {
+  const decimals = CELO_ASSETS[asset].decimals;
+  if (decimals === 18) return amount18;
+  if (decimals > 18) return amount18 * 10n ** BigInt(decimals - 18);
+  const divisor = 10n ** BigInt(18 - decimals);
+  return amount18 / divisor;
+}
+
 export { assetAddress, CELO_ASSETS };
 export type { SpinPayAsset };

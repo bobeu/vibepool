@@ -12,6 +12,13 @@ export const POST = async (req: NextRequest) => {
       const userId = await resolveUserId(wallet);
       const useTicket = body.useTicket !== false && !body.entryTxHash;
 
+      const parsedAsset =
+        body.entryAsset && isSpinPayAsset(String(body.entryAsset))
+          ? body.entryAsset
+          : body.rewardAsset && isSpinPayAsset(String(body.rewardAsset))
+            ? body.rewardAsset
+            : undefined;
+
       const result = await spinHuntEngine.startSession({
         wallet,
         userId,
@@ -22,6 +29,7 @@ export const POST = async (req: NextRequest) => {
           body.entryAsset && isSpinPayAsset(String(body.entryAsset))
             ? body.entryAsset
             : undefined,
+        rewardAsset: parsedAsset,
       });
 
       const status = (result as { success?: boolean }).success === false ? 402 : 201;
